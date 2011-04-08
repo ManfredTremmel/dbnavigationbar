@@ -1,0 +1,241 @@
+/**
+ * This file is part of DBNavigationBar.
+ *
+ * RiPhone is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ * 
+ * RiPhone is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with RiPhone.  If not, see <http://www.gnu.org/licenses/>
+ * 
+ * 
+ * Copyright (c) 2011 Manfred Tremmel
+ *
+ * --
+ *	Name		Date		Change
+ */
+package de.knightsoft.DBNavigationBar.server;
+
+import de.knightsoft.DBNavigationBar.shared.Constants;
+
+
+
+/**
+ *
+ * The <code>DataBaseDepending</code> class contains database specific
+ * SQL strings. It supports MySQL and MSSQL at the moment
+ *
+ * @author Manfred Tremmel
+ * @version 1.0.0, 2011-01-02
+ */
+public class DataBaseDepending {
+    private final static String[] DBSaveHeadStart =
+    	{
+    		"#\n\n"
+    		+	"SET NAMES utf8;\n\n"
+			+	"DROP DATABASE IF EXISTS iphone;\n\n"
+			+	"CREATE DATABASE iphone;\n\n"
+			+	"USE iphone;\n\n",
+
+			"#\n\n"
+    	};
+
+	protected int dbnumber;
+	protected static final String[][] JDBCClass =
+		{	
+			{"MySQL", Constants.JDBCClassMySQL, Constants.JDBCClassMySQL_OLD},
+			{"MSSQL", Constants.JDBCClassMSSQL}
+		};
+
+	protected static final String[] SQLTimeNow =
+		{	
+			"NOW()",
+			"GETDATE()"
+		};
+
+	protected static final String[] SQLTimeOutdate =
+		{	
+			"(NOW() - INTERVAL 1 SECOND)",
+			"DATEADD(second, -1, GETDATE())"
+		};
+
+	/**
+     * Konstruktor
+     * 
+     * @param JDBCClassToUse
+     *            JDBC driver class to use
+     * @exception Exception if the JDBCClassToUse is not supported 
+     */
+    public DataBaseDepending(String JDBCClassToUse
+    		) throws Exception {
+    	dbnumber	=	-1;
+    	if( Constants.JDBCClassMySQL_OLD.equalsIgnoreCase(JDBCClassToUse) )
+    		JDBCClassToUse	=	Constants.JDBCClassMySQL;	
+    	for( int i = 0; i < JDBCClass.length && dbnumber == -1; i++ ) {
+    		for( int j = 0; j < JDBCClass[i].length && dbnumber == -1; j++) {
+    			if( JDBCClassToUse.equals( JDBCClass[i][j] ) )
+    				dbnumber	=	i;
+    		}
+    	}
+    	if( dbnumber == -1 )
+    		throw new Exception("This JDBCClass is not Supported");
+    }
+
+    /**
+     * The <code>getJDBCClass</code> class returns the name of the JDBC Class
+     * 
+     * @return name of the JDBC Class
+     */
+    public String getJDBCClass(
+    		) {
+        return JDBCClass[dbnumber][1];
+    }
+
+    /**
+     * The <code>getSQLTimeNow</code> class returns the SQL function used
+     * to get current date/time for the currently used database
+     * 
+     * @return SQL function
+     */
+    public String getSQLTimeNow(
+    		) {
+        return SQLTimeNow[dbnumber];
+    }
+
+    /**
+     * The <code>getSQLTimeOutdate</code> class returns SQL function to get
+     * current date/time - one second to outdate entries 
+     * 
+     * @return SQL function
+     */
+    public String getSQLTimeOutdate(
+    		) {
+        return SQLTimeOutdate[dbnumber];
+    }
+
+    /**
+     * The <code>getSQLDiffFromNow</code> class returns SQL function to get
+     * the difference from a given date/time to now in days
+     * 
+     * @param compareField
+     *            field to compare with current date
+     * @return SQL function
+     */
+    public String getSQLDiffFromNow( String compareField
+			) {
+		String Returnstring	=	null;
+		switch( dbnumber ) {
+			case 0:
+				Returnstring	=	"TO_DAYS(NOW()) - TO_DAYS(" + compareField + ")";
+				break;
+			default:
+				Returnstring	=	"DATEDIFF (day, " + compareField + ", GETDATE())";
+				break;
+		}
+		return Returnstring;
+	};
+
+    /**
+     * The <code>getSQLDiffFromNow</code> class returns SQL function to
+     * encrypt passwords if database can do, otherwise fieldname is unchanged
+     * 
+     * @param encryptField
+     *            field to encrypt
+     * @return SQL function
+     */
+    public String getSQLPassword( String encryptField
+			) {
+		String Returnstring	=	null;
+		switch( dbnumber ) {
+			case 0:
+				Returnstring	=	"OLD_PASSWORD(" + encryptField + ")";
+				break;
+			default:
+				Returnstring	=	 encryptField;
+				break;
+		}
+		return Returnstring;
+	};
+
+	/**
+     * The <code>concatStrings</code> class returns SQL function to
+     * concatinate strings
+     * 
+     * @param StringTab
+     *            Table of Strings to concatinate
+     * @return SQL function
+     */
+	public String concatStrings( String[] StringTab
+			) {
+		StringBuffer Returnstring	=	new StringBuffer();
+		int i;
+		switch( dbnumber ) {
+			case 0:
+	    		Returnstring.append("CONCAT(");
+	    		for( i = 0; i < StringTab.length; i++) {
+	    			if( i > 0 )
+	    				Returnstring.append(", ");
+    				Returnstring.append(StringTab[i]);
+	    		}
+	    		Returnstring.append(')');
+	    		break;
+	    	case 1:
+	    		Returnstring.append('(');
+	    		for( i = 0; i < StringTab.length; i++) {
+	    			if( i > 0 )
+	    				Returnstring.append(" + ");
+    				Returnstring.append(StringTab[i]);
+	    		}
+	    		Returnstring.append(')');
+	    		break;
+	    	default:
+	    		Returnstring.append('(');
+	    		for( i = 0; i < StringTab.length; i++) {
+	    			if( i > 0 )
+	    				Returnstring.append(" || ");
+    				Returnstring.append(StringTab[i]);
+	    		}
+	    		Returnstring.append(')');
+	    		break;
+    	}
+    	return Returnstring.toString();
+	};
+
+    /**
+     * The <code>getSQLBoolean</code> class returns SQL entry for boolean
+     * fields
+     * 
+     * @param booleanField
+     *            field to transform
+     * @return SQL field
+     */
+    public String getSQLBoolean( boolean booleanField
+			) {
+		String Returnstring	=	null;
+		switch( dbnumber ) {
+			case 0:
+				Returnstring	=	( booleanField ? "'1'" : "'0'");
+				break;
+			default:
+				Returnstring	=	( booleanField ? "1" : "0");
+				break;
+		}
+		return Returnstring;
+	};
+
+    /**
+     * The <code>getDBSaveHeadStart</code> class returns the DBSaveHeadStart String
+     * 
+     * @return DBSaveHeadStart String
+     */
+    public String getDBSaveHeadStart(
+    		) {
+        return DBSaveHeadStart[0];
+    }
+}

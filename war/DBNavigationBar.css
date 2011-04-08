@@ -1,0 +1,56 @@
+/** Add css rules here for your application. */
+
+.gwt-Button[disabled] {
+  color: #888;
+}
+
+.gwt-PushButton-up,
+.gwt-PushButton-up-hovering,
+.gwt-PushButton-up-disabled,
+.gwt-PushButton-down,
+.gwt-PushButton-down-hovering,
+.gwt-PushButton-down-disabled,
+.gwt-ToggleButton-up,
+.gwt-ToggleButton-up-hovering,
+.gwt-ToggleButton-up-disabled,
+.gwt-ToggleButton-down,
+.gwt-ToggleButton-down-hovering,
+.gwt-ToggleButton-down-disabled {
+  visibility: visible;
+  border-width:0px;
+  margin: 0;
+  padding: 3px 5px;
+  background: transparent;
+}
+.gwt-PushButton-up,
+.gwt-PushButton-down,
+.gwt-PushButton-down-hovering,
+.gwt-ToggleButton-up {
+  cursor: pointer;
+  cursor: hand;
+}
+.gwt-PushButton-up-hovering,
+.gwt-ToggleButton-up-hovering,
+.gwt-ToggleButton-down-hovering {
+  background-color:#b0e0e6;
+  cursor: pointer;
+  cursor: hand;
+}
+.gwt-ToggleButton-down {
+  background-color:green;
+  cursor: pointer;
+  cursor: hand;
+}
+
+.gwt-PushButton-down-disabled,
+.gwt-PushButton-up-disabled,
+.gwt-ToggleButton-down-disabled {
+  cursor: default;
+  visibility: hidden;
+}
+.PANELSTYLE {
+  border-style: solid;
+  border-width: thin;
+  border-collapse: collapse;
+  border-color: #b0c4de;
+}
