@@ -137,9 +137,9 @@ public abstract class DBHeadTemplate<E extends DomainHeadDataBase> extends DBHea
 	 * 			compare method for search ("<", "<=", "=", ">", ">=" or "like")
 	 * @param SearchFieldEntry
 	 * 			value to search for
-	 * @param PhoneNumberVGL
+	 * @param DBKeyVGL
 	 * 			compare method of phone number ("<", "<=", "=", ">", ">=" or "like")
-	 * @param PhoneNumber
+	 * @param DBKey
 	 * 			comparison number
 	 * @return SQL-String
 	 * @throws Exception 

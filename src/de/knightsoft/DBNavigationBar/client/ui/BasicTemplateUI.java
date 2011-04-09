@@ -45,8 +45,6 @@ public abstract class BasicTemplateUI<F extends Parent> extends Composite {
 	 * 
 	 * @param parentwidget
 	 * 		the parent widget, where this frame is displayed
-	 * @param widgetlist
-	 * 		list of widgets to display
 	 */
 	public BasicTemplateUI(
 			F parentwidget) {

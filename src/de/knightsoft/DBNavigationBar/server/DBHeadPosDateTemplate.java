@@ -65,7 +65,7 @@ public abstract class DBHeadPosDateTemplate<E extends DomainHeadPosDataBase>
      * @param insertHeadSQL
      * @param PosDataBaseTableName
      * @param PosKeyfieldName
-     * @param PosinsertHeadSQL
+     * @param insertPosSQL
      * @throws UnexpectedException
      */
     public DBHeadPosDateTemplate(
@@ -131,7 +131,7 @@ public abstract class DBHeadPosDateTemplate<E extends DomainHeadPosDataBase>
 
 	/**
 	 * <code>fillInsertPos</code> fills the parameters of the insert prepared statement
-	 * @param insertHeadSQLStatement
+	 * @param insertPosSQLStatement
 	 * @param Mandator
 	 * @param User
 	 * @param SaveEntry
@@ -149,7 +149,7 @@ public abstract class DBHeadPosDateTemplate<E extends DomainHeadPosDataBase>
 	/**
 	 * <code>fillPosFromResultSet</code> set the fields in thisEntry from
 	 * the given resultSet
-	 * @param resultHead
+	 * @param resultPos
 	 * 			ResultSet to read Entries from
 	 * @param thisEntry
 	 * 			Entry to fill

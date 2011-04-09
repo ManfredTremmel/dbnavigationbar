@@ -59,7 +59,7 @@ public abstract class DBHead2PosDateTemplate<E extends DomainHead2PosDataBase>
      * Constructor, set up database connection
      * 
      * @param LookUpDataBase
- 	 * @param SessionUser,
+ 	 * @param SessionUser
      * @param DataBaseTableName
      * @param KeyfieldName
      * @param insertHeadSQL
@@ -143,12 +143,12 @@ public abstract class DBHead2PosDateTemplate<E extends DomainHead2PosDataBase>
 
 	/**
 	 * <code>fillInsertPos</code> fills the parameters of the insert prepared statement
-	 * @param insertHeadSQLStatement
+	 * @param insertPos2SQLStatement
 	 * @param Mandator
 	 * @param User
 	 * @param SaveEntry
 	 * @param Delete
-	 * @param PosNumber
+	 * @param Pos2Number
 	 */
 	protected abstract void fillInsertPos2(
 			PreparedStatement insertPos2SQLStatement,

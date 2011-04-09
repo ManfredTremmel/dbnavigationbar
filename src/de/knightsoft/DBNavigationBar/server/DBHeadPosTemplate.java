@@ -60,7 +60,7 @@ public abstract class DBHeadPosTemplate<E extends DomainHeadPosDataBase>
      * Constructor, set up database connection
      * 
      * @param LookUpDataBase
- 	 * @param SessionUser,
+ 	 * @param SessionUser
      * @param DataBaseTableName
      * @param KeyfieldName
      * @param insertHeadSQL
@@ -128,7 +128,7 @@ public abstract class DBHeadPosTemplate<E extends DomainHeadPosDataBase>
 
 	/**
 	 * <code>fillUpdatePos</code> fills the parameters of the update prepared statement
-	 * @param updateHeadSQLStatement
+	 * @param updatePosSQLStatement
 	 * @param Mandator
 	 * @param User
 	 * @param SaveEntry
@@ -145,7 +145,7 @@ public abstract class DBHeadPosTemplate<E extends DomainHeadPosDataBase>
 
 	/**
 	 * <code>fillInsertPos</code> fills the parameters of the insert prepared statement
-	 * @param insertHeadSQLStatement
+	 * @param insertPosSQLStatement
 	 * @param Mandator
 	 * @param User
 	 * @param SaveEntry
@@ -163,7 +163,7 @@ public abstract class DBHeadPosTemplate<E extends DomainHeadPosDataBase>
 	/**
 	 * <code>fillPosFromResultSet</code> set the fields in thisEntry from
 	 * the given resultSet
-	 * @param resultHead
+	 * @param resultPos
 	 * 			ResultSet to read Entries from
 	 * @param thisEntry
 	 * 			Entry to fill

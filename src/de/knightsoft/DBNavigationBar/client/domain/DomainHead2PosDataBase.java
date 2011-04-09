@@ -109,7 +109,7 @@ public abstract class DomainHead2PosDataBase extends DomainHeadPosDataBase imple
 	/**
 	 * equals compares two entries
 	 * 
-	 * @param vglEntry entry to compare with entry of this class
+	 * @param obj entry to compare with entry of this class
 	 * @return true if both contain the same entries, otherwise false
 	 */
 	@Override

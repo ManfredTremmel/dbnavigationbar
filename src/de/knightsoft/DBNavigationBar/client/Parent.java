@@ -258,7 +258,6 @@ public abstract class Parent implements EntryPoint {
 	/**
 	 * Create the logo
 	 * 
-	 * @param constants the constant values to use
 	 * @param navVPanel to add the logo
 	 */
 	protected void setupNavPanelLogo(
@@ -289,7 +288,7 @@ public abstract class Parent implements EntryPoint {
 	/**
 	 * Create the title bar at the top of the application.
 	 * 
-	 * @param constants the constant values to use
+	 * @param navVPanel the panel to add the navTree
 	 * @param navTree to add
 	 */
 	protected void setupNavPanelTree(
