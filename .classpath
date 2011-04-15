@@ -3,6 +3,15 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
-	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
+	<classpathentry kind="lib" path="/home/manfred/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.2.0.v201103311225/gwt-2.2.0/gwt-user.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/home/manfred/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.2.0.v201103311225/gwt-2.2.0/doc/javadoc/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/manfred/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.2.0.v201103311225/gwt-2.2.0/gwt-dev.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/home/manfred/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.2.0.v201103311225/gwt-2.2.0/doc/javadoc/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
