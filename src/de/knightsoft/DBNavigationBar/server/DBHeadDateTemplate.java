@@ -968,15 +968,4 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 			CurrentEntry	=	null;
 		return CurrentEntry;
 	}
-
-
-
-	/**
-	 * Redefine checkPermutationStrongName, it doesn't work correctly in gwt 2.1 when
-	 * the request is put from a widget
-	 * 
-	 * @see com.google.gwt.user.server.rpc.RemoteServiceServlet#checkPermutationStrongName()
-	 */
-	protected void checkPermutationStrongName() throws SecurityException {
-	}
 }
