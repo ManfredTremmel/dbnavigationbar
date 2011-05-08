@@ -23,6 +23,7 @@
 package de.knightsoft.DBNavigationBar.client.domain;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 
 /**
@@ -71,16 +72,7 @@ public abstract class DomainHeadPosDataBase extends DomainHeadDataBase implement
 	 */
 	public boolean equals(DomainHeadPosDataBase vglEntry) {
 		boolean isequal		=	super.equals(vglEntry);
-		if( isequal ) {
-			String[] PosKeys	=	this.getKeyPos();
-			String[] VGLPosKeys	=	vglEntry.getKeyPos();
-			if( (PosKeys == null ? 0 : PosKeys.length) == (VGLPosKeys == null ? 0 : VGLPosKeys.length)) {
-				for(int pos = 0; (pos < (PosKeys == null ? 0 : PosKeys.length)) && isequal; pos++) {
-					isequal	&=	this.equalsPosition(vglEntry, pos, pos);
-				}
-			} else
-				isequal	=	false;
-		}
+		isequal	&=	Arrays.equals(this.getKeyPos(), vglEntry.getKeyPos());
 		return isequal;
 	}
 
