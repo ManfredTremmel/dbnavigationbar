@@ -72,7 +72,7 @@ public abstract class DomainHeadPosDataBase extends DomainHeadDataBase implement
 	 */
 	public boolean equals(DomainHeadPosDataBase vglEntry) {
 		boolean isequal		=	super.equals(vglEntry);
-		isequal	&=	Arrays.equals(this.getKeyPos(), vglEntry.getKeyPos());
+		isequal	&=	Arrays.equals(this.getKeyPos(), (vglEntry == null ? null : vglEntry.getKeyPos()));
 		return isequal;
 	}
 

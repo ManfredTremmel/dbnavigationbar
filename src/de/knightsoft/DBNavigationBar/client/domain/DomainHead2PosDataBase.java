@@ -72,7 +72,7 @@ public abstract class DomainHead2PosDataBase extends DomainHeadPosDataBase imple
 	 */
 	public boolean equals(DomainHead2PosDataBase vglEntry) {
 		boolean isequal		=	super.equals(vglEntry);
-		isequal	&=	Arrays.equals(this.getKeyPos2(), vglEntry.getKeyPos2());
+		isequal	&=	Arrays.equals(this.getKeyPos2(), (vglEntry == null ? null : vglEntry.getKeyPos2()));
 		return isequal;
 	}
 
