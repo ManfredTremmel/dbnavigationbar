@@ -51,65 +51,68 @@ public abstract class DBHeadPosTemplate<E extends DomainHeadPosDataBase>
 	 */
 	private static final long serialVersionUID = -8763724693538834151L;
 
-	protected String readPosSQL			= null;
-    protected String invalidatePosSQL		= null;
-    protected String insertPosSQL			= null;
-    protected String updatePosSQL			= null;
+	protected final String readPosSQL;
+    protected final String invalidatePosSQL;
+    protected final String insertPosSQL;
+    protected final String updatePosSQL;
 
     /**
      * Constructor, set up database connection
      * 
-     * @param LookUpDataBase
- 	 * @param SessionUser
-     * @param DataBaseTableName
-     * @param KeyfieldName
+     * @param type - class instance of E
+     * @param lookUpDataBase
+ 	 * @param sessionUser
+     * @param dataBaseTableName
+     * @param keyFieldName
      * @param insertHeadSQL
      * @param updateHeadSQL
-     * @param PosDataBaseTableName
-     * @param PosKeyfieldName
+     * @param posDataBaseTableName
+     * @param posKeyfieldName
      * @param insertPosSQL
      * @param updatePosSQL
      * @throws UnexpectedException
      */
     public DBHeadPosTemplate(
-       		String LookUpDataBase,
-       		String SessionUser,
-    		String DataBaseTableName,
-    		String KeyfieldName,
+    		Class<E> type,
+       		String lookUpDataBase,
+       		String sessionUser,
+    		String dataBaseTableName,
+    		String keyFieldName,
     		String insertHeadSQL,
     		String updateHeadSQL,
-    		String PosDataBaseTableName,
-    		String PosKeyfieldName,
+    		String posDataBaseTableName,
+    		String posKeyfieldName,
     		String insertPosSQL,
     		String updatePosSQL
     		) throws UnexpectedException {
-		super( LookUpDataBase,
-	       		SessionUser,
-				DataBaseTableName,
-				KeyfieldName,
+		super(	type,
+				lookUpDataBase,
+	       		sessionUser,
+				dataBaseTableName,
+				keyFieldName,
 				insertHeadSQL,
 				updateHeadSQL);
-		Connection ThisDataBase		=	null;
+		Connection thisDataBase		=	null;
 
 		try {
 			// connect to database
 			InitialContext ic		=	new InitialContext();
-	        DataSource lDataSource	=	(DataSource)ic.lookup(LookUpDataBase);
-	        ThisDataBase			=	lDataSource.getConnection();
+	        DataSource lDataSource	=	(DataSource)ic.lookup(lookUpDataBase);
+	        thisDataBase			=	lDataSource.getConnection();
 			ic.close();
 
 			this.readPosSQL		=	
           		  "SELECT * "
-    		  	+ "FROM   " + PosDataBaseTableName + " "
+    		  	+ "FROM   " + posDataBaseTableName + " "
   				+ "WHERE  " + Constants.DBFieldGlobalMandator + " = ? "
-  				+ "  AND  " + KeyfieldName + " = ? ;";
+  				+ "  AND  " + keyFieldName + " = ? ;";
 
 
     		this.invalidatePosSQL		=
-				  "DELETE FROM " + PosDataBaseTableName + " "
+				  "DELETE FROM " + posDataBaseTableName + " "
 				+ "WHERE  " + Constants.DBFieldGlobalMandator + " = ? "
-	    		+ "  AND  " + KeyfieldName + " = ? "
-	    		+ "  AND  " + PosKeyfieldName + " = ? ;";
+	    		+ "  AND  " + keyFieldName + " = ? "
+	    		+ "  AND  " + posKeyfieldName + " = ? ;";
 
     		this.insertPosSQL		=	insertPosSQL;
     		this.updatePosSQL		=	updatePosSQL;
@@ -118,10 +121,10 @@ public abstract class DBHeadPosTemplate<E extends DomainHeadPosDataBase>
 			throw new UnexpectedException( e.toString(), e.getCause() );
 		} finally {
 			try {
-				if( ThisDataBase != null )
-					ThisDataBase.close();
+				if( thisDataBase != null )
+					thisDataBase.close();
 			} catch (SQLException e) {
-				// ignore
+				throw new RuntimeException(e);
 			}
 		}
 	}
@@ -129,36 +132,36 @@ public abstract class DBHeadPosTemplate<E extends DomainHeadPosDataBase>
 	/**
 	 * <code>fillUpdatePos</code> fills the parameters of the update prepared statement
 	 * @param updatePosSQLStatement
-	 * @param Mandator
-	 * @param User
-	 * @param SaveEntry
-	 * @param PosNumber
+	 * @param mandator
+	 * @param user
+	 * @param saveEntry
+	 * @param posNumber
 	 */
 	protected abstract void fillUpdatePos(
 			PreparedStatement updatePosSQLStatement,
-			int Mandator,
-			String User,
-			E SaveEntry,
-			int PosNumber) throws SQLException;
+			int mandator,
+			String user,
+			E saveEntry,
+			int posNumber) throws SQLException;
 
 
 
 	/**
 	 * <code>fillInsertPos</code> fills the parameters of the insert prepared statement
 	 * @param insertPosSQLStatement
-	 * @param Mandator
-	 * @param User
-	 * @param SaveEntry
-	 * @param Delete
-	 * @param PosNumber
+	 * @param mandator
+	 * @param user
+	 * @param saveEntry
+	 * @param delete
+	 * @param posNumber
 	 */
 	protected abstract void fillInsertPos(
 			PreparedStatement insertPosSQLStatement,
-			int Mandator,
-			String User,
-			E SaveEntry,
-			boolean Delete,
-			int PosNumber) throws SQLException;
+			int mandator,
+			String user,
+			E saveEntry,
+			boolean delete,
+			int posNumber) throws SQLException;
 
 	/**
 	 * <code>fillPosFromResultSet</code> set the fields in thisEntry from
@@ -175,86 +178,86 @@ public abstract class DBHeadPosTemplate<E extends DomainHeadPosDataBase>
 	/**
 	 * <code>deleteEntry</code> deletes one entry from database
 	 * 
-	 * @param CurrentEntry
+	 * @param currentEntry
 	 */
-	public E deleteEntry(String CurrentEntry) {
-		E	ResultValue	=	null;				
+	public E deleteEntry(String currentEntry) {
+		E	resultValue	=	null;				
 		if( this.getUser() !=	null ) {
-			int Mandator	=	this.getUser().getMandator();
-			String User		=	this.getUser().getUser();
-			Connection ThisDataBase =	null;
+			int mandator	=	this.getUser().getMandator();
+			String user		=	this.getUser().getUser();
+			Connection thisDataBase =	null;
 			PreparedStatement invalidateHeadSQLStatement	=	null;
 			PreparedStatement invalidatePosSQLStatement		=	null;
 
 			try {
 				// connect to database
 				InitialContext ic		=	new InitialContext();
-		        DataSource lDataSource	=	(DataSource)ic.lookup(LookUpDataBase);
-		        ThisDataBase			=	lDataSource.getConnection();
+		        DataSource lDataSource	=	(DataSource)ic.lookup(lookUpDataBase);
+		        thisDataBase			=	lDataSource.getConnection();
 				ic.close();
 
 				if( allowedToChange() ) {
-					E DBEntry	=	this.readEntry(CurrentEntry);
+					E dbEntry	=	this.readEntry(currentEntry);
 					// invalidate head number
 					if(invalidateHeadSQL != null) {
-						invalidateHeadSQLStatement	=	ThisDataBase.prepareStatement(invalidateHeadSQL);
+						invalidateHeadSQLStatement	=	thisDataBase.prepareStatement(invalidateHeadSQL);
 	        			invalidateHeadSQLStatement.clearParameters();
-	        			invalidateHeadSQLStatement.setInt(1, Mandator);
-	        			invalidateHeadSQLStatement.setString(2, CurrentEntry);
+	        			invalidateHeadSQLStatement.setInt(1, mandator);
+	        			invalidateHeadSQLStatement.setString(2, currentEntry);
 	        			invalidateHeadSQLStatement.executeUpdate();
-		        		this.insertEntry( ThisDataBase, Mandator, User, DBEntry, true);
+		        		this.insertEntry( thisDataBase, mandator, user, dbEntry, true);
 					}
 
-					invalidatePosSQLStatement		=	ThisDataBase.prepareStatement(invalidatePosSQL);
-					for(int i = 0; i < (DBEntry.getKeyPos() == null ? 0 : DBEntry.getKeyPos().length); i++ ) {
+					invalidatePosSQLStatement		=	thisDataBase.prepareStatement(invalidatePosSQL);
+					for(int i = 0; i < (dbEntry.getKeyPos() == null ? 0 : dbEntry.getKeyPos().length); i++ ) {
 						invalidatePosSQLStatement.clearParameters();
-						invalidatePosSQLStatement.setInt(1, Mandator);
-						invalidatePosSQLStatement.setString(2, CurrentEntry);
-						invalidatePosSQLStatement.setString(3, DBEntry.getKeyPos()[i]);
+						invalidatePosSQLStatement.setInt(1, mandator);
+						invalidatePosSQLStatement.setString(2, currentEntry);
+						invalidatePosSQLStatement.setString(3, dbEntry.getKeyPos()[i]);
 						invalidatePosSQLStatement.executeUpdate();
-						this.insertPositionEntry(ThisDataBase, Mandator, User, DBEntry, true, i);
+						this.insertPositionEntry(thisDataBase, mandator, user, dbEntry, true, i);
 					}
 				}
-				ResultValue	= readNextEntry(CurrentEntry);
+				resultValue	= readNextEntry(currentEntry);
 	        } catch( Exception e ) {
-	        	ResultValue	=	null;
+	        	resultValue	=	null;
 			} finally {
 				try {
 					if( invalidatePosSQLStatement != null )
 						invalidatePosSQLStatement.close();
 					if( invalidateHeadSQLStatement != null )
 						invalidateHeadSQLStatement.close();
-					if( ThisDataBase != null )
-						ThisDataBase.close();
+					if( thisDataBase != null )
+						thisDataBase.close();
 				} catch (SQLException e) {
 					// ignore
 				}
 			}
 		}
-		return ResultValue;
+		return resultValue;
 	}
 
 
 	/**
 	 * <code>insertPositionEntry</code> inserts a position into the database
-	 * @param ThisDataBase 
-	 * @param Mandator
-	 * @param User
-	 * @param SaveEntry
-	 * @param Delete
-	 * @param PosNumber
+	 * @param thisDataBase 
+	 * @param mandator
+	 * @param user
+	 * @param saveEntry
+	 * @param delete
+	 * @param posNumber
 	 * @return effected database entries (should always be 1)
 	 * @throws SQLException
 	 */
-	protected int insertPositionEntry( Connection ThisDataBase, int Mandator, String User, E SaveEntry,
-			boolean Delete, int PosNumber
+	protected int insertPositionEntry( Connection thisDataBase, int mandator, String user, E saveEntry,
+			boolean delete, int posNumber
 			) throws SQLException {
 		int num = -1;
 		PreparedStatement insertPosSQLStatement		=	null;
 		try {
-			insertPosSQLStatement		=	ThisDataBase.prepareStatement(insertPosSQL);
+			insertPosSQLStatement		=	thisDataBase.prepareStatement(insertPosSQL);
 			insertPosSQLStatement.clearParameters();
-			this.fillInsertPos(insertPosSQLStatement, Mandator, User, SaveEntry, Delete, PosNumber);
+			this.fillInsertPos(insertPosSQLStatement, mandator, user, saveEntry, delete, posNumber);
 			num =  insertPosSQLStatement.executeUpdate();
 		} catch( SQLException e ) {
 			throw e;
@@ -270,27 +273,27 @@ public abstract class DBHeadPosTemplate<E extends DomainHeadPosDataBase>
 	 * <code>readOneEntry</code> is used to read a given entry
 	 * from database
 	 * 
-	 * @param ThisDataBase
+	 * @param thisDataBase
 	 * 			Database Connection
-	 * @param Mandator
+	 * @param mandator
 	 * 			mandator is a keyfield
-	 * @param Entry
+	 * @param entry
 	 * 			the Entry to read
 	 * @param thisEntry
 	 * 			structure to be filled
 	 * @return the filled structure
 	 * @throws SQLException
 	 */
-	protected E readOneEntry(Connection ThisDataBase, int Mandator, String Entry, E thisEntry) {
+	protected E readOneEntry(Connection thisDataBase, int mandator, String entry, E thisEntry) {
 		PreparedStatement readPosSQLStatement	=	null;
 		try {
-			super.readOneEntry(ThisDataBase, Mandator, Entry, thisEntry);
+			super.readOneEntry(thisDataBase, mandator, entry, thisEntry);
 
 			if( thisEntry != null && thisEntry.getKeyCur() != null ) {
-				readPosSQLStatement	=	ThisDataBase.prepareStatement(readPosSQL);
+				readPosSQLStatement	=	thisDataBase.prepareStatement(readPosSQL);
 				readPosSQLStatement.clearParameters();
-				readPosSQLStatement.setInt(1, Mandator);
-				readPosSQLStatement.setString(2, Entry);
+				readPosSQLStatement.setInt(1, mandator);
+				readPosSQLStatement.setString(2, entry);
 				ResultSet resultPos	=	readPosSQLStatement.executeQuery();
 				thisEntry = fillPosFromResultSet(resultPos, thisEntry);
 				resultPos.close();
@@ -311,110 +314,110 @@ public abstract class DBHeadPosTemplate<E extends DomainHeadPosDataBase>
 	/**
 	 * <code>saveEntry</code> saves or inserts a entry to database
 	 * 
-	 * @param CurrentEntry
+	 * @param currentEntry
 	 * 			entry that has to be saved
 	 */
-	public E saveEntry(E CurrentEntry) {
+	public E saveEntry(E currentEntry) {
 		if( this.getUser() !=	null ) {
-			int Mandator	=	this.getUser().getMandator();
-			String User		=	this.getUser().getUser();
-			String SaveKeyString	=	CurrentEntry.getKeyCur();
-			if( SaveKeyString == null || "".equals(SaveKeyString) )
-				SaveKeyString		=	CurrentEntry.getKeyNew();
-			Connection ThisDataBase =	null;
+			int mandator	=	this.getUser().getMandator();
+			String user		=	this.getUser().getUser();
+			String saveKeyString	=	currentEntry.getKeyCur();
+			if( saveKeyString == null || "".equals(saveKeyString) )
+				saveKeyString		=	currentEntry.getKeyNew();
+			Connection thisDataBase =	null;
 			PreparedStatement updateHeadSQLStatement		=	null;
 			PreparedStatement invalidatePosSQLStatement		=	null;
 			PreparedStatement updatePosSQLStatement			=	null;
 
 			try {
 				if( allowedToChange() ) {
-					E DBEntry = createInstance();
+					E dbEntry = createInstance();
 					// connect to database
 					InitialContext ic		=	new InitialContext();
-			        DataSource lDataSource	=	(DataSource)ic.lookup(LookUpDataBase);
-			        ThisDataBase			=	lDataSource.getConnection();
+			        DataSource lDataSource	=	(DataSource)ic.lookup(lookUpDataBase);
+			        thisDataBase			=	lDataSource.getConnection();
 					ic.close();
 
-					DBEntry	=	readOneEntry( ThisDataBase, Mandator, SaveKeyString, DBEntry );
-					if((DBEntry != null) && (DBEntry.getKeyCur() == null))
-						DBEntry	=	null;
+					dbEntry	=	readOneEntry( thisDataBase, mandator, saveKeyString, dbEntry );
+					if((dbEntry != null) && (dbEntry.getKeyCur() == null))
+						dbEntry	=	null;
 
-					if( DBEntry	==	null ) {
+					if( dbEntry	==	null ) {
 						// new Entry, insert a new one 
-						this.insertEntry( ThisDataBase, Mandator, User, CurrentEntry, false);
-						for( int i = 0; i < (CurrentEntry.getKeyPos() == null ?  0 : CurrentEntry.getKeyPos().length); i++) {
-							this.insertPositionEntry(ThisDataBase, Mandator, User, CurrentEntry, false, i);
+						this.insertEntry( thisDataBase, mandator, user, currentEntry, false);
+						for( int i = 0; i < (currentEntry.getKeyPos() == null ?  0 : currentEntry.getKeyPos().length); i++) {
+							this.insertPositionEntry(thisDataBase, mandator, user, currentEntry, false, i);
 						}
 					} else {
 						// Entry already exists, update it, if necessary
-						if( !CurrentEntry.equals( DBEntry ) ) {
-							if( !CurrentEntry.equalsEntry(DBEntry) && (updateHeadSQL != null) ) {
+						if( !currentEntry.equals( dbEntry ) ) {
+							if( !currentEntry.equalsEntry(dbEntry) && (updateHeadSQL != null) ) {
 								// Invalidate old entry
-								updateHeadSQLStatement	=	ThisDataBase.prepareStatement(updateHeadSQL);
+								updateHeadSQLStatement	=	thisDataBase.prepareStatement(updateHeadSQL);
 								updateHeadSQLStatement.clearParameters();
-								this.fillUpdateHead(updateHeadSQLStatement, Mandator, User, CurrentEntry);
+								this.fillUpdateHead(updateHeadSQLStatement, mandator, user, currentEntry);
 								updateHeadSQLStatement.executeUpdate();
 
-			        			CurrentEntry.setKeyCur(SaveKeyString);
+			        			currentEntry.setKeyCur(saveKeyString);
 							}
 
 							// Positions
-							invalidatePosSQLStatement		=	ThisDataBase.prepareStatement(invalidatePosSQL);
-							updatePosSQLStatement			=	ThisDataBase.prepareStatement(updatePosSQL);
+							invalidatePosSQLStatement		=	thisDataBase.prepareStatement(invalidatePosSQL);
+							updatePosSQLStatement			=	thisDataBase.prepareStatement(updatePosSQL);
 							// Take a look if position differ and invalidate old
 				        	for(int i = 0;
-				        		i < (((DBEntry == null) || (DBEntry.getKeyPos() == null)) ? 0 : DBEntry.getKeyPos().length);
+				        		i < (((dbEntry == null) || (dbEntry.getKeyPos() == null)) ? 0 : dbEntry.getKeyPos().length);
 				        		i++ ) {
 				        		boolean isremoved	=	true;
 				        		for( int j = 0;
-				        			j < (CurrentEntry.getKeyPos() == null ?  0 : CurrentEntry.getKeyPos().length) && isremoved;
+				        			j < (currentEntry.getKeyPos() == null ?  0 : currentEntry.getKeyPos().length) && isremoved;
 				        			j++ ) {
-				        			if( DBEntry.getKeyPos()[i].equals(CurrentEntry.getKeyPos()[j]) )
+				        			if( dbEntry.getKeyPos()[i].equals(currentEntry.getKeyPos()[j]) )
 				        				isremoved	=	false;
 				        		}
 				        		if( isremoved ) {
 									invalidatePosSQLStatement.clearParameters();
-									invalidatePosSQLStatement.setInt(1, Mandator);
-									invalidatePosSQLStatement.setString(2, SaveKeyString);
-									invalidatePosSQLStatement.setString(3, DBEntry.getKeyPos()[i]);
+									invalidatePosSQLStatement.setInt(1, mandator);
+									invalidatePosSQLStatement.setString(2, saveKeyString);
+									invalidatePosSQLStatement.setString(3, dbEntry.getKeyPos()[i]);
 									invalidatePosSQLStatement.executeUpdate();
-									this.insertPositionEntry(ThisDataBase, Mandator, User, DBEntry, true, i);
+									this.insertPositionEntry(thisDataBase, mandator, user, dbEntry, true, i);
 									// Invalidate old entry
 				        		}
 				        	}
 							// Take a look if position differ, update them und insert new
 				        	for(int i = 0;
-				        		i < (CurrentEntry.getKeyPos() == null ?  0 : CurrentEntry.getKeyPos().length);
+				        		i < (currentEntry.getKeyPos() == null ?  0 : currentEntry.getKeyPos().length);
 				        		i++ ) {
 				        		boolean isnew	=	true;
 				            	for(int j = 0;
-				            		j < (((DBEntry == null) || (DBEntry.getKeyPos() == null)) ? 0 : DBEntry.getKeyPos().length) && isnew;
+				            		j < (((dbEntry == null) || (dbEntry.getKeyPos() == null)) ? 0 : dbEntry.getKeyPos().length) && isnew;
 				            		j++ ) {
-				        			if( DBEntry.getKeyPos()[j].equals(CurrentEntry.getKeyPos()[i]) ) {
+				        			if( dbEntry.getKeyPos()[j].equals(currentEntry.getKeyPos()[i]) ) {
 				        				isnew	=	false;
 				        				// Entry already exists, look for changes
-										if( !CurrentEntry.equalsPosition(DBEntry, i, j) ) {
+										if( !currentEntry.equalsPosition(dbEntry, i, j) ) {
 											// Invalidate old entry
 											updatePosSQLStatement.clearParameters();
-											this.fillUpdatePos(updatePosSQLStatement, Mandator, User, CurrentEntry, i);
+											this.fillUpdatePos(updatePosSQLStatement, mandator, user, currentEntry, i);
 											updatePosSQLStatement.executeUpdate();
 										}
 				        			}
 				            	}
 				        		if( isnew ) {
 				                	// Insert new position
-									this.insertPositionEntry(ThisDataBase, Mandator, User, CurrentEntry, false, i);
+									this.insertPositionEntry(thisDataBase, mandator, user, currentEntry, false, i);
 				        		}
 							}
 						}
 					}
 					
-					CurrentEntry.setKeyCur(SaveKeyString);
-					this.FillMinMax(ThisDataBase, Mandator, CurrentEntry);
-					CurrentEntry	=	readOneEntry( ThisDataBase, Mandator, SaveKeyString, CurrentEntry );
+					currentEntry.setKeyCur(saveKeyString);
+					this.FillMinMax(thisDataBase, mandator, currentEntry);
+					currentEntry	=	readOneEntry( thisDataBase, mandator, saveKeyString, currentEntry );
 				}
 			} catch (Exception e) {
-				CurrentEntry	=	null;
+				currentEntry	=	null;
 			} finally {
 				try {
 					if( updateHeadSQLStatement != null )
@@ -423,15 +426,15 @@ public abstract class DBHeadPosTemplate<E extends DomainHeadPosDataBase>
 						invalidatePosSQLStatement.close();
 					if( updatePosSQLStatement != null )
 						updatePosSQLStatement.close();
-					if( ThisDataBase != null )
-						ThisDataBase.close();
+					if( thisDataBase != null )
+						thisDataBase.close();
 				} catch (SQLException e) {
 					// ignore
 				}
 			}
 		} else
-			CurrentEntry	=	null;
-		return CurrentEntry;
+			currentEntry	=	null;
+		return currentEntry;
 	}
 
 }

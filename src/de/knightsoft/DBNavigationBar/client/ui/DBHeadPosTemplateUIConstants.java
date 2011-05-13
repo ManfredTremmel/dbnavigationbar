@@ -33,7 +33,7 @@ import com.google.gwt.i18n.client.Constants;
  * @version 1.0.0, 2011-02-19
  */
 public interface DBHeadPosTemplateUIConstants extends Constants {
-	String Function();
-	String AddPositionButton();
-	String DoubleEntryError();
+	String function();
+	String addPositionButton();
+	String doubleEntryError();
 }

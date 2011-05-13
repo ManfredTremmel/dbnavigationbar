@@ -100,7 +100,7 @@ public abstract class BasicTemplateUI<F extends Parent> extends Composite {
 			//this.myNavigationBar.enableAllButtons();
 			this.parentwidget.mainPanel.clear();
 			this.parentwidget.mainPanel.add(this);
-			setFocusOnFirstWidget();
+			this.setFocusOnFirstWidget();
 			matches	=	true;
 			History.newItem("page=" + this.getMenuText());
 		}

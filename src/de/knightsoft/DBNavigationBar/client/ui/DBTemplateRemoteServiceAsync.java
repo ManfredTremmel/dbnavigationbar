@@ -35,16 +35,16 @@ import de.knightsoft.DBNavigationBar.client.domain.DomainHeadDataBase;
  * @version 1.0.0, 2011-02-13
  */
 public abstract interface DBTemplateRemoteServiceAsync<E extends DomainHeadDataBase> {
-	void saveEntry(E CurrentEntry, AsyncCallback<E> callback);
-	void deleteEntry(String CurrentEntry, AsyncCallback<E> callback);
-	void readEntry(String Entry, AsyncCallback<E> callback);
+	void saveEntry(E currentEntry, AsyncCallback<E> callback);
+	void deleteEntry(String currentEntry, AsyncCallback<E> callback);
+	void readEntry(String entry, AsyncCallback<E> callback);
 	void readFirstEntry(AsyncCallback<E> callback);
-	void readPreviousEntry(String CurrentEntry, AsyncCallback<E> callback);
-	void readNextEntry(String CurrentEntry, AsyncCallback<E> callback);
+	void readPreviousEntry(String currentEntry, AsyncCallback<E> callback);
+	void readNextEntry(String currentEntry, AsyncCallback<E> callback);
 	void readLastEntry(AsyncCallback<E> callback);
-	void findFirstEntry(String SearchField, String SearchMethodeEntry, String SearchFieldEntry, AsyncCallback<E> callback);
-	void findPreviousEntry(String SearchField, String SearchMethodeEntry, String SearchFieldEntry, String CurrentEntry, AsyncCallback<E> callback);
-	void findNextEntry(String SearchField, String SearchMethodeEntry, String SearchFieldEntry, String CurrentEntry, AsyncCallback<E> callback);
-	void findLastEntry(String SearchField, String SearchMethodeEntry, String SearchFieldEntry, AsyncCallback<E> callback);
+	void findFirstEntry(String searchField, String searchMethodeEntry, String searchFieldEntry, AsyncCallback<E> callback);
+	void findPreviousEntry(String searchField, String searchMethodeEntry, String searchFieldEntry, String currentEntry, AsyncCallback<E> callback);
+	void findNextEntry(String searchField, String searchMethodeEntry, String searchFieldEntry, String currentEntry, AsyncCallback<E> callback);
+	void findLastEntry(String searchField, String searchMethodeEntry, String searchFieldEntry, AsyncCallback<E> callback);
 
 }

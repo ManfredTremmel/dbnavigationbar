@@ -35,7 +35,7 @@ import de.knightsoft.DBNavigationBar.shared.Constants;
  * @version 1.0.0, 2011-01-02
  */
 public class DataBaseDepending {
-    private final static String[] DBSaveHeadStart =
+    private final static String[] DB_SAVE_HEAD_START =
     	{
     		"#\n\n"
     		+	"SET NAMES utf8;\n\n"
@@ -47,19 +47,19 @@ public class DataBaseDepending {
     	};
 
 	protected int dbnumber;
-	protected static final String[][] JDBCClass =
+	protected static final String[][] JDBC_CLASS =
 		{	
 			{"MySQL", Constants.JDBCClassMySQL, Constants.JDBCClassMySQL_OLD},
 			{"MSSQL", Constants.JDBCClassMSSQL}
 		};
 
-	protected static final String[] SQLTimeNow =
+	protected static final String[] SQL_TIME_NOW =
 		{	
 			"NOW()",
 			"GETDATE()"
 		};
 
-	protected static final String[] SQLTimeOutdate =
+	protected static final String[] SQL_TIME_OUTDATE =
 		{	
 			"(NOW() - INTERVAL 1 SECOND)",
 			"DATEADD(second, -1, GETDATE())"
@@ -68,23 +68,23 @@ public class DataBaseDepending {
 	/**
      * Konstruktor
      * 
-     * @param JDBCClassToUse
+     * @param jdbcClassToUse
      *            JDBC driver class to use
      * @exception Exception if the JDBCClassToUse is not supported 
      */
-    public DataBaseDepending(String JDBCClassToUse
+    public DataBaseDepending(String jdbcClassToUse
     		) throws Exception {
     	dbnumber	=	-1;
-    	if( Constants.JDBCClassMySQL_OLD.equalsIgnoreCase(JDBCClassToUse) )
-    		JDBCClassToUse	=	Constants.JDBCClassMySQL;	
-    	for( int i = 0; i < JDBCClass.length && dbnumber == -1; i++ ) {
-    		for( int j = 0; j < JDBCClass[i].length && dbnumber == -1; j++) {
-    			if( JDBCClassToUse.equals( JDBCClass[i][j] ) )
+    	if( Constants.JDBCClassMySQL_OLD.equalsIgnoreCase(jdbcClassToUse) )
+    		jdbcClassToUse	=	Constants.JDBCClassMySQL;	
+    	for( int i = 0; i < JDBC_CLASS.length && dbnumber == -1; i++ ) {
+    		for( int j = 0; j < JDBC_CLASS[i].length && dbnumber == -1; j++) {
+    			if( jdbcClassToUse.equals( JDBC_CLASS[i][j] ) )
     				dbnumber	=	i;
     		}
     	}
     	if( dbnumber == -1 )
-    		throw new Exception("This JDBCClass is not Supported");
+    		throw new Exception("This JDBC_CLASS is not Supported");
     }
 
     /**
@@ -94,7 +94,7 @@ public class DataBaseDepending {
      */
     public String getJDBCClass(
     		) {
-        return JDBCClass[dbnumber][1];
+        return JDBC_CLASS[dbnumber][1];
     }
 
     /**
@@ -105,7 +105,7 @@ public class DataBaseDepending {
      */
     public String getSQLTimeNow(
     		) {
-        return SQLTimeNow[dbnumber];
+        return SQL_TIME_NOW[dbnumber];
     }
 
     /**
@@ -116,7 +116,7 @@ public class DataBaseDepending {
      */
     public String getSQLTimeOutdate(
     		) {
-        return SQLTimeOutdate[dbnumber];
+        return SQL_TIME_OUTDATE[dbnumber];
     }
 
     /**
@@ -129,16 +129,16 @@ public class DataBaseDepending {
      */
     public String getSQLDiffFromNow( String compareField
 			) {
-		String Returnstring	=	null;
+		String returnString	=	null;
 		switch( dbnumber ) {
 			case 0:
-				Returnstring	=	"TO_DAYS(NOW()) - TO_DAYS(" + compareField + ")";
+				returnString	=	"TO_DAYS(NOW()) - TO_DAYS(" + compareField + ")";
 				break;
 			default:
-				Returnstring	=	"DATEDIFF (day, " + compareField + ", GETDATE())";
+				returnString	=	"DATEDIFF (day, " + compareField + ", GETDATE())";
 				break;
 		}
-		return Returnstring;
+		return returnString;
 	};
 
     /**
@@ -151,16 +151,16 @@ public class DataBaseDepending {
      */
     public String getSQLPassword( String encryptField
 			) {
-		String Returnstring	=	null;
+		String returnString	=	null;
 		switch( dbnumber ) {
 			case 0:
-				Returnstring	=	"OLD_PASSWORD(" + encryptField + ")";
+				returnString	=	"OLD_PASSWORD(" + encryptField + ")";
 				break;
 			default:
-				Returnstring	=	 encryptField;
+				returnString	=	 encryptField;
 				break;
 		}
-		return Returnstring;
+		return returnString;
 	};
 
 	/**
@@ -173,38 +173,38 @@ public class DataBaseDepending {
      */
 	public String concatStrings( String[] StringTab
 			) {
-		StringBuffer Returnstring	=	new StringBuffer();
+		StringBuffer returnString	=	new StringBuffer();
 		int i;
 		switch( dbnumber ) {
 			case 0:
-	    		Returnstring.append("CONCAT(");
+	    		returnString.append("CONCAT(");
 	    		for( i = 0; i < StringTab.length; i++) {
 	    			if( i > 0 )
-	    				Returnstring.append(", ");
-    				Returnstring.append(StringTab[i]);
+	    				returnString.append(", ");
+    				returnString.append(StringTab[i]);
 	    		}
-	    		Returnstring.append(')');
+	    		returnString.append(')');
 	    		break;
 	    	case 1:
-	    		Returnstring.append('(');
+	    		returnString.append('(');
 	    		for( i = 0; i < StringTab.length; i++) {
 	    			if( i > 0 )
-	    				Returnstring.append(" + ");
-    				Returnstring.append(StringTab[i]);
+	    				returnString.append(" + ");
+    				returnString.append(StringTab[i]);
 	    		}
-	    		Returnstring.append(')');
+	    		returnString.append(')');
 	    		break;
 	    	default:
-	    		Returnstring.append('(');
+	    		returnString.append('(');
 	    		for( i = 0; i < StringTab.length; i++) {
 	    			if( i > 0 )
-	    				Returnstring.append(" || ");
-    				Returnstring.append(StringTab[i]);
+	    				returnString.append(" || ");
+    				returnString.append(StringTab[i]);
 	    		}
-	    		Returnstring.append(')');
+	    		returnString.append(')');
 	    		break;
     	}
-    	return Returnstring.toString();
+    	return returnString.toString();
 	};
 
     /**
@@ -217,25 +217,25 @@ public class DataBaseDepending {
      */
     public String getSQLBoolean( boolean booleanField
 			) {
-		String Returnstring	=	null;
+		String returnString	=	null;
 		switch( dbnumber ) {
 			case 0:
-				Returnstring	=	( booleanField ? "'1'" : "'0'");
+				returnString	=	( booleanField ? "'1'" : "'0'");
 				break;
 			default:
-				Returnstring	=	( booleanField ? "1" : "0");
+				returnString	=	( booleanField ? "1" : "0");
 				break;
 		}
-		return Returnstring;
+		return returnString;
 	};
 
     /**
-     * The <code>getDBSaveHeadStart</code> class returns the DBSaveHeadStart String
+     * The <code>getDBSaveHeadStart</code> class returns the DB_SAVE_HEAD_START String
      * 
-     * @return DBSaveHeadStart String
+     * @return DB_SAVE_HEAD_START String
      */
     public String getDBSaveHeadStart(
     		) {
-        return DBSaveHeadStart[0];
+        return DB_SAVE_HEAD_START[0];
     }
 }

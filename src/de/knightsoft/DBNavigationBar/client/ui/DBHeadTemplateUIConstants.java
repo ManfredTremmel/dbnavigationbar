@@ -34,12 +34,12 @@ import com.google.gwt.i18n.client.Constants;
  */
 public interface DBHeadTemplateUIConstants extends Constants {
 
-	String Title();
-	String MenuEntry();
+	String title();
+	String menuEntry();
 	
-	String SearchErrorMessage();
-	String FormatError();
-	String Empty();
-	String NotFoundInDB();
-	String SavedSuccessfully();
+	String searchErrorMessage();
+	String formatError();
+	String empty();
+	String notFoundInDB();
+	String savedSuccessfully();
 }

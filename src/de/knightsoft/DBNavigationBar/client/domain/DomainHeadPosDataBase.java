@@ -23,7 +23,6 @@
 package de.knightsoft.DBNavigationBar.client.domain;
 
 import java.io.Serializable;
-import java.util.Arrays;
 
 
 /**
@@ -52,10 +51,10 @@ public abstract class DomainHeadPosDataBase extends DomainHeadDataBase implement
 	 * Copy Constructor, creates a new user with the same
 	 * entries as the one who's given as parameter
 	 * 
-	 * @param CopyEntry entry to copy
+	 * @param copyEntry entry to copy
 	 */
-	public DomainHeadPosDataBase(DomainHeadPosDataBase CopyEntry) {
-		super(CopyEntry);
+	public DomainHeadPosDataBase(DomainHeadPosDataBase copyEntry) {
+		super(copyEntry);
 	}
 	/**
 	 * get KeyPos
@@ -72,7 +71,16 @@ public abstract class DomainHeadPosDataBase extends DomainHeadDataBase implement
 	 */
 	public boolean equals(DomainHeadPosDataBase vglEntry) {
 		boolean isequal		=	super.equals(vglEntry);
-		isequal	&=	Arrays.equals(this.getKeyPos(), (vglEntry == null ? null : vglEntry.getKeyPos()));
+		if( isequal ) {
+			String[] posKeys	=	this.getKeyPos();
+			String[] vglPosKeys	=	vglEntry.getKeyPos();
+			if( (posKeys == null ? 0 : posKeys.length) == (vglPosKeys == null ? 0 : vglPosKeys.length)) {
+				for(int pos = 0; (pos < (posKeys == null ? 0 : posKeys.length)) && isequal; pos++) {
+					isequal	&=	this.equalsPosition(vglEntry, pos, pos);
+				}
+			} else
+				isequal	=	false;
+		}
 		return isequal;
 	}
 

@@ -40,36 +40,36 @@ public abstract class DomainHeadDataBase implements Serializable {
 	 */
 	private static final long serialVersionUID = -2178996035568385436L;
 
-	private Boolean IsReadOnly;
-	private String KeyMin;
-	private String KeyMax;
-	private String KeyCur;
+	private Boolean isReadOnly;
+	private String keyMin;
+	private String keyMax;
+	private String keyCur;
 
 	/**
 	 * Constructor, setup a empty entry
 	 */
 	public DomainHeadDataBase() {
 		this.setUpDefaultEntry();
-		this.KeyMin				=	null;
-		this.KeyMax				=	null;
+		this.keyMin				=	null;
+		this.keyMax				=	null;
 	}
 
 	/**
 	 * Copy Constructor, creates a new user with the same
 	 * entries as the one who's given as parameter
 	 * 
-	 * @param CopyEntry entry to copy
+	 * @param copyEntry entry to copy
 	 */
-	public DomainHeadDataBase(DomainHeadDataBase CopyEntry) {
-		if( CopyEntry == null ) {
+	public DomainHeadDataBase(DomainHeadDataBase copyEntry) {
+		if( copyEntry == null ) {
 			this.setUpDefaultEntry();
-			this.KeyMin					=	null;
-			this.KeyMax					=	null;
+			this.keyMin					=	null;
+			this.keyMax					=	null;
 		} else {
-			this.IsReadOnly				=	CopyEntry.IsReadOnly;
-			this.KeyMin					=	CopyEntry.KeyMin;
-			this.KeyMax					=	CopyEntry.KeyMax;
-			this.KeyCur					=	CopyEntry.KeyCur;
+			this.isReadOnly				=	copyEntry.isReadOnly;
+			this.keyMin					=	copyEntry.keyMin;
+			this.keyMax					=	copyEntry.keyMax;
+			this.keyCur					=	copyEntry.keyCur;
 		}
 	}
 	
@@ -77,91 +77,91 @@ public abstract class DomainHeadDataBase implements Serializable {
 	 * Destructor
 	 */
 	protected void finalize() throws Throwable {
-		this.KeyMin				=	null;
-		this.KeyMax				=	null;
+		this.keyMin				=	null;
+		this.keyMax				=	null;
 		setUpDefaultEntry();
 		super.finalize();
 	}
 
 	/**
-	 * get IsReadOnly
+	 * get isReadOnly
 	 * 
-     * @return IsReadOnly
+     * @return isReadOnly
 	 */
 	public boolean getIsReadOnly() {
-		return this.IsReadOnly;
+		return this.isReadOnly;
 	}
 
 	/**
-	 * set IsReadOnly
+	 * set isReadOnly
 	 * 
-     * @param IsReadOnly
+     * @param isReadOnly
 	 */
-	public void setIsReadOnly(boolean IsReadOnly) {
-		this.IsReadOnly = IsReadOnly;
+	public void setIsReadOnly(boolean isReadOnly) {
+		this.isReadOnly = isReadOnly;
 	}
 
 	/**
-	 * set IsReadOnly
+	 * set isReadOnly
 	 * 
-     * @param IsReadOnly
+     * @param isReadOnly
 	 */
-	public void setIsReadOnly(Boolean IsReadOnly) {
-		this.IsReadOnly = IsReadOnly;
+	public void setIsReadOnly(Boolean isReadOnly) {
+		this.isReadOnly = isReadOnly;
 	}
 
 	/**
-	 * get KeyMin
+	 * get keyMin
 	 * 
-     * @return KeyMin
+     * @return keyMin
 	 */
 	public String getKeyMin() {
-		return this.KeyMin;
+		return this.keyMin;
 	}
 
 	/**
-	 * set KeyMin
+	 * set keyMin
 	 * 
-     * @param KeyMin
+     * @param keyMin
 	 */
-	public void setKeyMin(String KeyMin) {
-		this.KeyMin = KeyMin;
+	public void setKeyMin(String keyMin) {
+		this.keyMin = keyMin;
 	}
 
 	/**
-	 * get KeyMax
+	 * get keyMax
 	 * 
-     * @return KeyMax
+     * @return keyMax
 	 */
 	public String getKeyMax() {
-		return this.KeyMax;
+		return this.keyMax;
 	}
 
 	/**
-	 * set KeyMax
+	 * set keyMax
 	 * 
-     * @param KeyMax
+     * @param keyMax
 	 */
-	public void setKeyMax(String KeyMax) {
-		this.KeyMax = KeyMax;
+	public void setKeyMax(String keyMax) {
+		this.keyMax = keyMax;
 	}
 
 	/**
-	 * get KeyCur
+	 * get keyCur
 	 * 
-     * @return KeyCur
+     * @return keyCur
 	 */
 	public String getKeyCur() {
-		return this.KeyCur;
+		return this.keyCur;
 	}
 
 	/**
-	 * set KeyCur
+	 * set keyCur
 	 * 
-     * @param KeyCur
+     * @param keyCur
 	 */
-	public void setKeyCur(String KeyCur) {
-		this.KeyCur = KeyCur;
+	public void setKeyCur(String keyCur) {
+		this.keyCur = keyCur;
 	}
 
 	/**
@@ -172,24 +172,24 @@ public abstract class DomainHeadDataBase implements Serializable {
 
 
 	/**
-	 * equals compares two entries
+	 * stringEquals compares two String entries
 	 * 
 	 * @param thisString a string to compare with vglString
 	 * @param vglString entry to compare with thisString
 	 * @return true if both contain the same entries, otherwise false
 	 */
-	protected boolean StringEquals(String thisString, String vglString) {
+	protected boolean stringEquals(String thisString, String vglString) {
 		return (thisString == null ? "" : thisString).equals((vglString == null ? "" : vglString));
 	}
 
 	/**
-	 * equals compares two entries
+	 * dateEquals compares two Date entries
 	 * 
 	 * @param thisEntry entry to compare with vglEntry
 	 * @param vglEntry entry to compare with thisEntry
 	 * @return true if both contain the same entries, otherwise false
 	 */
-	protected boolean DateEquals(Date thisEntry, Date vglEntry) {
+	protected boolean dateEquals(Date thisEntry, Date vglEntry) {
 		return (thisEntry == null ? "" : thisEntry).equals((vglEntry == null ? "" : vglEntry));
 	}
 
@@ -237,7 +237,7 @@ public abstract class DomainHeadDataBase implements Serializable {
 	 * 
 	 */
 	public void setUpDefaultEntry() {
-		this.IsReadOnly					=	false;
-		this.KeyCur						=	null;
+		this.isReadOnly					=	false;
+		this.keyCur						=	null;
 	}
 }

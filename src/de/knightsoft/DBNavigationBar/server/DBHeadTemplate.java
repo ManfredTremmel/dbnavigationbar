@@ -49,191 +49,274 @@ public abstract class DBHeadTemplate<E extends DomainHeadDataBase> extends DBHea
 	 */
 	private static final long serialVersionUID = 6419810537457908964L;
 
-	protected String updateHeadSQL		= null;
+	protected final String updateHeadSQL;
 
-	/**
-	 * <code>fillUpdateHead</code> fills the parameters of the update prepared statement
-	 * @param updateHeadSQLStatement
-	 * @param Mandator
-	 * @param User
-	 * @param SaveEntry
-	 */
-	protected abstract void fillUpdateHead(
-			PreparedStatement updateHeadSQLStatement,
-			int Mandator,
-			String User,
-			E SaveEntry) throws SQLException;
-
+	
 	/**
      * Constructor, set up database connection
      * 
-     * @param LookUpDataBase
-     * @param SessionUser
-     * @param DataBaseTableName
-     * @param KeyfieldName
+     * @param type - class instance of E
+     * @param lookUpDataBase
+     * @param sessionUser
+     * @param dataBaseTableName
+     * @param keyFieldName
      * @param insertHeadSQL
      * @param updateHeadSQL
      * @throws UnexpectedException
      */
     public DBHeadTemplate(
-       		String LookUpDataBase,
-       		String SessionUser,
-    		String DataBaseTableName,
-    		String KeyfieldName,
+    		Class<E> type,
+       		String lookUpDataBase,
+       		String sessionUser,
+    		String dataBaseTableName,
+    		String keyFieldName,
+    		String insertHeadSQL,
+    		String updateHeadSQL,
+    		String readMinMaxSQL,
+    		String readNextSQL,
+    		String readPrevSQL,
+    		String readHeadSQL,
+    		String invalidateHeadSQL
+    		) throws UnexpectedException {
+		super(
+				type,
+	       		lookUpDataBase,
+	       		sessionUser,
+				dataBaseTableName,
+				keyFieldName,
+				insertHeadSQL,
+
+				(readMinMaxSQL != null ? readMinMaxSQL :
+				"SELECT MIN(" + keyFieldName + ") AS min, " +
+				"       MAX(" + keyFieldName + ") AS max " +
+				"FROM   " + dataBaseTableName + " " +
+				"WHERE  " + Constants.DBFieldGlobalMandator + " = ? ;"),
+
+				(readNextSQL != null ? readNextSQL :
+				"SELECT MIN(" + keyFieldName + ") AS dbnumber " +
+    			"FROM   " + dataBaseTableName + " " +
+  				"WHERE  " + Constants.DBFieldGlobalMandator + " = ? " +
+  				"  AND  " + keyFieldName + " > ? ;"),
+
+  				(readPrevSQL != null ? readPrevSQL :
+  				"SELECT MAX(" + keyFieldName + ") AS dbnumber " +
+  				"FROM   " + dataBaseTableName + " " +
+				"WHERE  " + Constants.DBFieldGlobalMandator + " = ? " +
+				"  AND  " + keyFieldName + " < ? ;"),
+
+				(readHeadSQL != null ? readHeadSQL :
+				"SELECT * " +
+		  	  	"FROM   " + dataBaseTableName + " " +
+				"WHERE  " + Constants.DBFieldGlobalMandator + " = ? " +
+				"  AND  " + keyFieldName + " = ? ;"),
+
+				(insertHeadSQL != null ? insertHeadSQL :
+				"DELETE FROM " + dataBaseTableName + " " +
+				"WHERE  " + Constants.DBFieldGlobalMandator + " = ? " +
+				"  AND  " + keyFieldName + " = ? ;")
+		);
+
+		this.updateHeadSQL		=	updateHeadSQL;
+	}
+
+	/**
+     * Constructor, set up database connection
+     * 
+     * @param type - class instance of E
+     * @param lookUpDataBase
+     * @param sessionUser
+     * @param dataBaseTableName
+     * @param keyFieldName
+     * @param insertHeadSQL
+     * @param updateHeadSQL
+     * @throws UnexpectedException
+     */
+    public DBHeadTemplate(
+    		Class<E> type,
+       		String lookUpDataBase,
+       		String sessionUser,
+    		String dataBaseTableName,
+    		String keyFieldName,
     		String insertHeadSQL,
     		String updateHeadSQL
     		) throws UnexpectedException {
-		super(
-	       		LookUpDataBase,
-	       		SessionUser,
-				DataBaseTableName,
-				KeyfieldName,
-				insertHeadSQL
-		);
+    	this(	type,
+    			lookUpDataBase,
+    			sessionUser,
+    			dataBaseTableName,
+    			keyFieldName,
+    			insertHeadSQL,
+    			updateHeadSQL,
+    			null,
+    			null,
+    			null,
+    			null,
+    			null
+    		);
+    }
 
-		this.readMinMaxSQL		=
-				  "SELECT MIN(" + this.KeyfieldName + ") AS min, "
-				+ "       MAX(" + this.KeyfieldName + ") AS max "
-				+ "FROM   " + this.DataBaseTableName + " "
-				+ "WHERE  " + Constants.DBFieldGlobalMandator + " = ? ;";
+	/**
+     * Constructor, set up database connection
+     * 
+     * @param type - class instance of E
+     * @param lookUpDataBase
+     * @param sessionUser
+     * @param dataBaseTableName
+     * @param keyFieldName
+     * @param insertHeadSQL
+     * @param updateHeadSQL
+     * @throws UnexpectedException
+     */
+    public DBHeadTemplate(
+    		Class<E> type,
+       		String lookUpDataBase,
+       		String sessionUser,
+    		String dataBaseTableName,
+    		String keyFieldName,
+    		String insertHeadSQL,
+    		String updateHeadSQL,
+    		String readHeadSQL
+    		) throws UnexpectedException {
+    	this(	type,
+    			lookUpDataBase,
+    			sessionUser,
+    			dataBaseTableName,
+    			keyFieldName,
+    			insertHeadSQL,
+    			updateHeadSQL,
+    			null,
+    			null,
+    			null,
+    			readHeadSQL,
+    			null
+    		);
+    }
 
-		this.readNextSQL		=
-      		  	  "SELECT MIN(" + this.KeyfieldName + ") AS dbnumber "
-  				+ "FROM   " + this.DataBaseTableName + " "
-				+ "WHERE  " + Constants.DBFieldGlobalMandator + " = ? "
-				+ "  AND  " + this.KeyfieldName + " > ? ;";
-
-		this.readPrevSQL		=
-    		  	  "SELECT MAX(" + this.KeyfieldName + ") AS dbnumber "
-    			+ "FROM   " + this.DataBaseTableName + " "
-  				+ "WHERE  " + Constants.DBFieldGlobalMandator + " = ? "
-  				+ "  AND  " + this.KeyfieldName + " < ? ;";
-
-		this.readHeadSQL		=
-        		  "SELECT * "
-  		  	  	+ "FROM   " + this.DataBaseTableName + " "
-				+ "WHERE  " + Constants.DBFieldGlobalMandator + " = ? "
-				+ "  AND  " + this.KeyfieldName + " = ? ;";
-
-		this.invalidateHeadSQL	=
-				  "DELETE FROM " + this.DataBaseTableName + " "
-				+ "WHERE  " + Constants.DBFieldGlobalMandator + " = ? "
-				+ "  AND  " + this.KeyfieldName + " = ? ;";
-		
-		this.updateHeadSQL		=	updateHeadSQL;
-	}
+	/**
+	 * <code>fillUpdateHead</code> fills the parameters of the update prepared statement
+	 * @param updateHeadSQLStatement
+	 * @param mandator
+	 * @param user
+	 * @param saveEntry
+	 */
+	protected abstract void fillUpdateHead(
+			PreparedStatement updateHeadSQLStatement,
+			int mandator,
+			String user,
+			E saveEntry) throws SQLException;
 
 	/**
 	 * <code>searchSQLSelect</code> setup a part of the sql statment to search for
 	 * a user
 	 * 
-	 * @param ThisDataBase
+	 * @param thisDataBase
 	 * 			Database connection
-	 * @param MinMax
+	 * @param minMax
 	 * 			"MIN" or "MAX" used for PhoneNumber
-	 * @param SearchField
+	 * @param searchField
 	 * 			Field to search for
-	 * @param SearchMethodeEntry
+	 * @param searchMethodeEntry
 	 * 			compare method for search ("<", "<=", "=", ">", ">=" or "like")
-	 * @param SearchFieldEntry
+	 * @param searchFieldEntry
 	 * 			value to search for
-	 * @param DBKeyVGL
+	 * @param dbKeyVGL
 	 * 			compare method of phone number ("<", "<=", "=", ">", ">=" or "like")
-	 * @param DBKey
+	 * @param dbKey
 	 * 			comparison number
 	 * @return SQL-String
 	 * @throws Exception 
 	 */
+    @Override
 	protected String searchSQLSelect(
-			Connection ThisDataBase,
-			String MinMax,
-			String SearchField,
-			String SearchMethodeEntry,
-			String SearchFieldEntry,
-			String DBKeyVGL,
-			String DBKey) throws Exception {
-		int Mandator	 	=	this.getUser().getMandator();
+			Connection thisDataBase,
+			String minMax,
+			String searchField,
+			String searchMethodeEntry,
+			String searchFieldEntry,
+			String dbKeyVGL,
+			String dbKey) throws Exception {
+		int mandator	 	=	this.getUser().getMandator();
 
-		String SQLString =
-    			"SELECT " + MinMax + "(" + this.KeyfieldName + ") AS dbnumber "
-			+	"FROM   " + this.DataBaseTableName + " "
-			+	"WHERE  " + Constants.DBFieldGlobalMandator + " = " + Integer.toString(Mandator) + " "
-			+	" AND   " + this.KeyfieldName + " " + DBKeyVGL + " " + StringToSQL.convertString(DBKey, ThisDataBase.getMetaData().getDatabaseProductName()) + " "
+		String sqlString =
+    			"SELECT " + minMax + "(" + this.keyFieldName + ") AS dbnumber "
+			+	"FROM   " + this.dataBaseTableName + " "
+			+	"WHERE  " + Constants.DBFieldGlobalMandator + " = " + Integer.toString(mandator) + " "
+			+	" AND   " + this.keyFieldName + " " + dbKeyVGL + " " + StringToSQL.convertString(dbKey, thisDataBase.getMetaData().getDatabaseProductName()) + " "
 			+	" AND   ";
 
-		if( "=".equals(SearchMethodeEntry) )
-			SQLString += StringToSQL.SearchString(SearchField, SearchFieldEntry, ThisDataBase.getMetaData().getDatabaseProductName());
-		else if( "like".equals(SearchMethodeEntry) )
-			SQLString += StringToSQL.SearchString(SearchField, "*" + SearchFieldEntry + "*", ThisDataBase.getMetaData().getDatabaseProductName());
+		if( "=".equals(searchMethodeEntry) )
+			sqlString += StringToSQL.SearchString(searchField, searchFieldEntry, thisDataBase.getMetaData().getDatabaseProductName());
+		else if( "like".equals(searchMethodeEntry) )
+			sqlString += StringToSQL.SearchString(searchField, "*" + searchFieldEntry + "*", thisDataBase.getMetaData().getDatabaseProductName());
 		else
-			SQLString += SearchField + " " + SearchMethodeEntry + " " +  StringToSQL.convertString(SearchFieldEntry, ThisDataBase.getMetaData().getDatabaseProductName());
-		return SQLString;
+			sqlString += searchField + " " + searchMethodeEntry + " " +  StringToSQL.convertString(searchFieldEntry, thisDataBase.getMetaData().getDatabaseProductName());
+		return sqlString;
 	}
 
 	/**
 	 * <code>saveEntry</code> saves or inserts a entry to database
 	 * 
-	 * @param CurrentEntry
+	 * @param currentEntry
 	 * 			entry that has to be saved
 	 */
-	public E saveEntry(E CurrentEntry) {
+	public E saveEntry(E currentEntry) {
 		if( this.getUser() !=	null ) {
-			int Mandator	=	this.getUser().getMandator();
-			String User		=	this.getUser().getUser();
-			String SaveKeyString	=	CurrentEntry.getKeyCur();
-			if( SaveKeyString == null || "".equals(SaveKeyString) )
-				SaveKeyString		=	CurrentEntry.getKeyNew();
-			Connection ThisDataBase =	null;
+			int mandator	=	this.getUser().getMandator();
+			String user		=	this.getUser().getUser();
+			String saveKeyString	=	currentEntry.getKeyCur();
+			if( saveKeyString == null || "".equals(saveKeyString) )
+				saveKeyString		=	currentEntry.getKeyNew();
+			Connection thisDataBase =	null;
 			PreparedStatement updateHeadSQLStatement	=	null;
 
 			try {
 				if( allowedToChange() ) {
-					E DBEntry = createInstance();
+					E dbEntry = createInstance();
 					// connect to database
 					InitialContext ic		=	new InitialContext();
-			        DataSource lDataSource	=	(DataSource)ic.lookup(LookUpDataBase);
-			        ThisDataBase			=	lDataSource.getConnection();
+			        DataSource lDataSource	=	(DataSource)ic.lookup(lookUpDataBase);
+			        thisDataBase			=	lDataSource.getConnection();
 					ic.close();
 
-					DBEntry	=	readOneEntry( ThisDataBase, Mandator, SaveKeyString, DBEntry );
-					if((DBEntry != null) && (DBEntry.getKeyCur() == null))
-						DBEntry	=	null;
+					dbEntry	=	readOneEntry( thisDataBase, mandator, saveKeyString, dbEntry );
+					if((dbEntry != null) && (dbEntry.getKeyCur() == null))
+						dbEntry	=	null;
 
-					if( DBEntry	==	null ) {
+					if( dbEntry	==	null ) {
 						// new Entry, insert a new one 
-						this.insertEntry( ThisDataBase, Mandator, User, CurrentEntry, false);
+						this.insertEntry( thisDataBase, mandator, user, currentEntry, false);
 					} else {
 						// Entry already exists, update it, if necessary
-						if( !CurrentEntry.equals( DBEntry ) ) {
-							if( !CurrentEntry.equalsEntry(DBEntry) ) {
+						if( !currentEntry.equals( dbEntry ) ) {
+							if( !currentEntry.equalsEntry(dbEntry) ) {
 								// Invalidate old entry
-								updateHeadSQLStatement	=	ThisDataBase.prepareStatement(updateHeadSQL);
+								updateHeadSQLStatement	=	thisDataBase.prepareStatement(updateHeadSQL);
 								updateHeadSQLStatement.clearParameters();
-								this.fillUpdateHead(updateHeadSQLStatement, Mandator, User, CurrentEntry);
+								this.fillUpdateHead(updateHeadSQLStatement, mandator, user, currentEntry);
 								updateHeadSQLStatement.executeUpdate();
 							}
 						}
 					}
 					
-					CurrentEntry.setKeyCur(SaveKeyString);
-					this.FillMinMax(ThisDataBase, Mandator, CurrentEntry);
-					CurrentEntry	=	readOneEntry( ThisDataBase, Mandator, SaveKeyString, CurrentEntry );
+					currentEntry.setKeyCur(saveKeyString);
+					this.FillMinMax(thisDataBase, mandator, currentEntry);
+					currentEntry	=	readOneEntry( thisDataBase, mandator, saveKeyString, currentEntry );
 				}
 
 			} catch (Exception e) {
-				CurrentEntry	=	null;
+				currentEntry	=	null;
 			} finally {
 				try {
 					if( updateHeadSQLStatement != null )
 						updateHeadSQLStatement.close();
-					if( ThisDataBase != null )
-						ThisDataBase.close();
+					if( thisDataBase != null )
+						thisDataBase.close();
 				} catch (SQLException e) {
 					// ignore
 				}
 			}
 		} else
-			CurrentEntry	=	null;
-		return CurrentEntry;
+			currentEntry	=	null;
+		return currentEntry;
 	}
 }

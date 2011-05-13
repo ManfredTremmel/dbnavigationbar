@@ -43,14 +43,14 @@ public abstract class DomainUser extends DomainHeadPosDataBase implements Serial
 	private static final long serialVersionUID = -2694311776378786793L;
 
 
-	private Boolean UseLDAP;
+	private Boolean useLDAP;
 
-	private int Mandator;
-	private String User;
-	private String Password;
-	private int logon_error_count;
-	private Date logon_error_date;
-	private Date logon_date;
+	private int mandator;
+	private String user;
+	private String password;
+	private int logonErrorCount;
+	private Date logonErrorDate;
+	private Date logonDate;
 
 	/**
 	 * Constructor, setup a empty entry
@@ -63,163 +63,163 @@ public abstract class DomainUser extends DomainHeadPosDataBase implements Serial
 	 * Copy Constructor, creates a new user with the same
 	 * entries as the one who's given as parameter
 	 * 
-	 * @param CopyUser entry to copy
+	 * @param copyUser entry to copy
 	 */
-	public DomainUser(DomainUser CopyUser) {
-		super(CopyUser);
-		if( CopyUser == null ) {
+	public DomainUser(DomainUser copyUser) {
+		super(copyUser);
+		if( copyUser == null ) {
 			this.setUpDefaultUser(1, true, "batch", null);
 		} else {
-			this.UseLDAP				=	CopyUser.UseLDAP;
+			this.useLDAP				=	copyUser.useLDAP;
 
-			this.Mandator				=	CopyUser.Mandator;
-			this.User					=	CopyUser.User;
-			this.Password				=	CopyUser.Password;
-			this.logon_error_count		=	CopyUser.logon_error_count;
-			this.logon_error_date		=	CopyUser.logon_error_date;
-			this.logon_date				=	CopyUser.logon_date;
+			this.mandator				=	copyUser.mandator;
+			this.user					=	copyUser.user;
+			this.password				=	copyUser.password;
+			this.logonErrorCount		=	copyUser.logonErrorCount;
+			this.logonErrorDate			=	copyUser.logonErrorDate;
+			this.logonDate				=	copyUser.logonDate;
 		}
 	}
 
 
 	@Override
 	public String getKeyNew() {
-		return User;
+		return user;
 	}
 
 	/**
-	 * get UseLDAP
+	 * get useLDAP
 	 * 
-     * @return UseLDAP
+     * @return useLDAP
 	 */
 	public Boolean getUseLDAP() {
-		return UseLDAP;
+		return useLDAP;
 	}
 
 	/**
-	 * set UseLDAP
+	 * set useLDAP
 	 * 
-     * @param UseLDAP
+     * @param useLDAP
 	 */
-	public void setUseLDAP(boolean UseLDAP) {
-		this.UseLDAP = UseLDAP;
+	public void setUseLDAP(boolean useLDAP) {
+		this.useLDAP = useLDAP;
 	}
 
 	/**
-	 * set UseLDAP
+	 * set useLDAP
 	 * 
-     * @param UseLDAP
+     * @param useLDAP
 	 */
-	public void setUseLDAP(Boolean UseLDAP) {
-		this.UseLDAP = UseLDAP;
+	public void setUseLDAP(Boolean useLDAP) {
+		this.useLDAP = useLDAP;
 	}
 
 	/**
-	 * get Mandator
+	 * get mandator
 	 * 
-     * @return Mandator
+     * @return mandator
 	 */
 	public int getMandator() {
-		return Mandator;
+		return mandator;
 	}
 
 	/**
-	 * set Mandator
+	 * set mandator
 	 * 
-     * @param Mandator
+     * @param mandator
 	 */
-	public void setMandator(int Mandator) {
-		this.Mandator = Mandator;
+	public void setMandator(int mandator) {
+		this.mandator = mandator;
 	}
 
 	/**
-	 * get User
+	 * get user
 	 * 
-     * @return User
+     * @return user
 	 */
 	public String getUser() {
-		return User;
+		return user;
 	}
 
 	/**
-	 * set User
+	 * set user
 	 * 
-     * @param User
+     * @param user
 	 */
-	public void setUser(String User) {
-		this.User = User;
+	public void setUser(String user) {
+		this.user = user;
 	}
 
 	/**
-	 * get Password
+	 * get password
 	 * 
-     * @return Password
+     * @return password
 	 */
 	public String getPassword() {
-		return Password;
+		return password;
 	}
 
 	/**
-	 * set Password
+	 * set password
 	 * 
-     * @param Password
+     * @param password
 	 */
-	public void setPassword(String Password) {
-		this.Password = Password;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	/**
-	 * get logon_error_count
+	 * get logonErrorCount
 	 * 
-     * @return logon_error_count
+     * @return logonErrorCount
 	 */
-	public int getlogon_error_count() {
-		return logon_error_count;
+	public int getLogonErrorCount() {
+		return logonErrorCount;
 	}
 
 	/**
-	 * set logon_error_count
+	 * set logonErrorCount
 	 * 
-     * @param logon_error_count
+     * @param logonErrorCount
 	 */
-	public void setlogon_error_count(int logon_error_count) {
-		this.logon_error_count = logon_error_count;
+	public void setLogonErrorCount(int logonErrorCount) {
+		this.logonErrorCount = logonErrorCount;
 	}
 
 	/**
-	 * get logon_error_date
+	 * get logonErrorDate
 	 * 
-     * @return logon_error_date
+     * @return logonErrorDate
 	 */
-	public Date getlogon_error_date() {
-		return logon_error_date;
+	public Date getLogonErrorDate() {
+		return logonErrorDate;
 	}
 
 	/**
-	 * set logon_error_date
+	 * set logonErrorDate
 	 * 
-     * @param logon_error_date
+     * @param logonErrorDate
 	 */
-	public void setlogon_error_date(Date logon_error_date) {
-		this.logon_error_date = logon_error_date;
+	public void setLogonErrorDate(Date logonErrorDate) {
+		this.logonErrorDate = logonErrorDate;
 	}
 
 	/**
-	 * get logon_date
+	 * get logonDate
 	 * 
-     * @return logon_date
+     * @return logonDate
 	 */
 	public Date getlogon_date() {
-		return logon_date;
+		return logonDate;
 	}
 
 	/**
-	 * set logon_date
+	 * set logonDate
 	 * 
-     * @param logon_date
+     * @param logonDate
 	 */
-	public void setlogon_date(Date logon_date) {
-		this.logon_date = logon_date;
+	public void setLogonDate(Date logonDate) {
+		this.logonDate = logonDate;
 	}
 
 
@@ -234,9 +234,9 @@ public abstract class DomainUser extends DomainHeadPosDataBase implements Serial
 		if( vglUser == null ) {
 			isequal			=	false;
 		} else {
-			isequal	&=	(this.Mandator == vglUser.Mandator);
-			isequal	&=	StringEquals(this.User, vglUser.User);
-			isequal	&=	StringEquals(this.Password, vglUser.Password);
+			isequal	&=	(this.mandator == vglUser.mandator);
+			isequal	&=	stringEquals(this.user, vglUser.user);
+			isequal	&=	stringEquals(this.password, vglUser.password);
 		}
 
 		return isequal;
@@ -252,44 +252,44 @@ public abstract class DomainUser extends DomainHeadPosDataBase implements Serial
 	/**
 	 * set up a user with default entries
 	 * 
-	 * @param Mandator to set
-	 * @param use_ldap use ldap (true/false)
-	 * @param User name of the user
-	 * @param Password of the user
+	 * @param mandator to set
+	 * @param useLDAP use ldap (true/false)
+	 * @param user name of the user
+	 * @param password of the user
 	 */
-	public void setUpDefaultUser(int Mandator,
-			boolean use_ldap,
-			String User,
-			String Password) {
+	public void setUpDefaultUser(int mandator,
+			boolean useLDAP,
+			String user,
+			String password) {
 		super.setUpDefaultEntry();
 
-		this.UseLDAP			=	use_ldap;
+		this.useLDAP			=	useLDAP;
 
-		this.Mandator			=	Mandator;
-		this.User				=	User;
-		this.Password			=	Password;
-		this.logon_error_count	=	0;;
-		this.logon_error_date	=	null;
-		this.logon_date			=	null;
+		this.mandator			=	mandator;
+		this.user				=	user;
+		this.password			=	password;
+		this.logonErrorCount	=	0;
+		this.logonErrorDate		=	null;
+		this.logonDate			=	null;
 	}
 
 	/**
 	 * set up a initial user
 	 * 
-	 * @param Mandator to set
-	 * @param use_ldap use ldap (true/false)
-	 * @param User name of the user
-	 * @param Password of the user
+	 * @param mandator to set
+	 * @param useLDAP use ldap (true/false)
+	 * @param user name of the user
+	 * @param password of the user
 	 */
-	public void setUpInitUser(int Mandator,
-			boolean use_ldap,
-			String User,
-			String Password) {
+	public void setUpInitUser(int mandator,
+			boolean useLDAP,
+			String user,
+			String password) {
 		this.setUpDefaultUser(
-				Mandator,
-				use_ldap,
-				User,
-				Password);
+				mandator,
+				useLDAP,
+				user,
+				password);
 	}
 
 	/**
@@ -309,7 +309,7 @@ public abstract class DomainUser extends DomainHeadPosDataBase implements Serial
 		final int PRIME = 31;
 		int result = 1;
 		result = PRIME * result
-				+ ((User == null) ? 0 : (Integer.toString(Mandator) + User).hashCode());
+				+ ((user == null) ? 0 : (Integer.toString(mandator) + user).hashCode());
 		return result;
 	}
 }

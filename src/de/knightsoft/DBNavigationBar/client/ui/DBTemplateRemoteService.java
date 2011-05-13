@@ -35,16 +35,16 @@ import de.knightsoft.DBNavigationBar.client.domain.DomainHeadDataBase;
  * @version 1.0.0, 2011-02-13
  */
 public abstract interface DBTemplateRemoteService<E extends DomainHeadDataBase> extends RemoteService {
-	E saveEntry(E CurrentEntry);
-	E deleteEntry(String CurrentEntry);
-	E readEntry(String Entry);
+	E saveEntry(E currentEntry);
+	E deleteEntry(String currentEntry);
+	E readEntry(String entry);
 	E readFirstEntry();
-	E readPreviousEntry(String CurrentEntry);
-	E readNextEntry(String CurrentEntry);
+	E readPreviousEntry(String currentEntry);
+	E readNextEntry(String currentEntry);
 	E readLastEntry();
-	E findFirstEntry(String SearchField, String SearchMethodeEntry, String SearchFieldEntry);
-	E findPreviousEntry(String SearchField, String SearchMethodeEntry, String SearchFieldEntry, String CurrentEntry);
-	E findNextEntry(String SearchField, String SearchMethodeEntry, String SearchFieldEntry, String CurrentEntry);
-	E findLastEntry(String SearchField, String SearchMethodeEntry, String SearchFieldEntry);
+	E findFirstEntry(String searchField, String searchMethodeEntry, String searchFieldEntry);
+	E findPreviousEntry(String searchField, String searchMethodeEntry, String searchFieldEntry, String currentEntry);
+	E findNextEntry(String searchField, String searchMethodeEntry, String searchFieldEntry, String currentEntry);
+	E findLastEntry(String searchField, String searchMethodeEntry, String searchFieldEntry);
 
 }

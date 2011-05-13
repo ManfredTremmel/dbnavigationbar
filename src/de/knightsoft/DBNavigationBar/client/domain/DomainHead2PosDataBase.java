@@ -23,7 +23,6 @@
 package de.knightsoft.DBNavigationBar.client.domain;
 
 import java.io.Serializable;
-import java.util.Arrays;
 
 /**
  * 
@@ -51,10 +50,10 @@ public abstract class DomainHead2PosDataBase extends DomainHeadPosDataBase imple
 	 * Copy Constructor, creates a new user with the same
 	 * entries as the one who's given as parameter
 	 * 
-	 * @param CopyEntry entry to copy
+	 * @param copyEntry entry to copy
 	 */
-	public DomainHead2PosDataBase(DomainHead2PosDataBase CopyEntry) {
-		super(CopyEntry);
+	public DomainHead2PosDataBase(DomainHead2PosDataBase copyEntry) {
+		super(copyEntry);
 	}
 	/**
 	 * get KeyPos2
@@ -72,7 +71,16 @@ public abstract class DomainHead2PosDataBase extends DomainHeadPosDataBase imple
 	 */
 	public boolean equals(DomainHead2PosDataBase vglEntry) {
 		boolean isequal		=	super.equals(vglEntry);
-		isequal	&=	Arrays.equals(this.getKeyPos2(), (vglEntry == null ? null : vglEntry.getKeyPos2()));
+		if( isequal ) {
+			String[] pos2Keys		=	this.getKeyPos2();
+			String[] vglPos2Keys	=	vglEntry.getKeyPos2();
+			if( (pos2Keys == null ? 0 : pos2Keys.length) == (vglPos2Keys == null ? 0 : vglPos2Keys.length)) {
+				for(int pos2 = 0; (pos2 < (pos2Keys == null ? 0 : pos2Keys.length)) && isequal; pos2++) {
+					isequal	&=	this.equalsPosition2(vglEntry, pos2, pos2);
+				}
+			} else
+				isequal	=	false;
+		}
 		return isequal;
 	}
 

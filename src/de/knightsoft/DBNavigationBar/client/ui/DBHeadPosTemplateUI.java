@@ -54,11 +54,11 @@ public abstract class DBHeadPosTemplateUI<E extends DomainHeadPosDataBase, F ext
 
 	protected DBHeadPosTemplateUIConstants constantsPos;
 
-	protected Button NewPositionButton;
+	protected Button newPositionButton;
 	protected VerticalPanel posPanel;
 	protected FlexTable posTable;
 
-	protected int RowToDelete						=	-1;
+	protected int rowToDelete						=	-1;
 
 	protected DialogBox dialogYesNoBox;
 	
@@ -89,8 +89,8 @@ public abstract class DBHeadPosTemplateUI<E extends DomainHeadPosDataBase, F ext
 		if( this.constantsPos == null )
 			this.constantsPos = (DBHeadPosTemplateUIConstants) GWT.create(DBHeadPosTemplateUIConstants.class);
 
-		if( this.NewPositionButton == null )
-			this.NewPositionButton = new Button(constantsPos.AddPositionButton(),
+		if( this.newPositionButton == null )
+			this.newPositionButton = new Button(constantsPos.addPositionButton(),
 				new ClickHandler() {
 					public void onClick(ClickEvent event) {
 						fillPosition(
@@ -174,7 +174,7 @@ public abstract class DBHeadPosTemplateUI<E extends DomainHeadPosDataBase, F ext
 						PushButton sender = (PushButton)event.getSource();
 						for( int i = 1; i < posTable.getRowCount(); i++) {
 							if( ((PushButton)sender).equals( (PushButton)posTable.getWidget(i, (posTable.getCellCount(i) - 1))) ) {
-								RowToDelete = i;
+								rowToDelete = i;
 								dialogYesNoBox.center();
 								dialogYesNoBox.show();
 								i = posTable.getRowCount();
@@ -195,41 +195,41 @@ public abstract class DBHeadPosTemplateUI<E extends DomainHeadPosDataBase, F ext
 		// Create a dialog box and set the caption text
 	    final DialogBox dialogBox = new DialogBox();
 	    dialogBox.ensureDebugId("yesNoDialogBox");
-	    dialogBox.setText(constants.DeleteDialogHeader());
+	    dialogBox.setText(constants.deleteDialogHeader());
 
 	    // Create a table to layout the content
 	    VerticalPanel dialogContents = new VerticalPanel();
 	    dialogBox.setWidget(dialogContents);
 
 	    // Add some text to the top of the dialog
-	    HTML details = new HTML(constants.DeleteDialogText());
+	    HTML details = new HTML(constants.deleteDialogText());
 	    dialogContents.add(details);
 	    dialogContents.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
 	    HorizontalPanel dialogButtons = new HorizontalPanel();
 	    // Add a yes button at the bottom of the dialog
-	    Button yesButton = new Button(constants.Yes(),
+	    Button yesButton = new Button(constants.yes(),
 	    	new ClickHandler() {
 	          public void onClick(ClickEvent event) {
 	            dialogBox.hide();
-				posTable.removeRow(RowToDelete);
-				/*if( RowToDelete > 1 && RowToDelete == posTable.getRowCount() ) {
-					PushButton downPushButton	=	(PushButton)posTable.getWidget(RowToDelete - 1, posTable.getCellCount(0) - 1);
+				posTable.removeRow(rowToDelete);
+				/*if( rowToDelete > 1 && rowToDelete == posTable.getRowCount() ) {
+					PushButton downPushButton	=	(PushButton)posTable.getWidget(rowToDelete - 1, posTable.getCellCount(0) - 1);
 					downPushButton.setEnabled(false);
 				}*/
 	          }
 	        });
-	    yesButton.setAccessKey(constants.YesKey().trim().charAt(0));
+	    yesButton.setAccessKey(constants.yesKey().trim().charAt(0));
 	    dialogButtons.add(yesButton);
 	    dialogButtons.setCellHorizontalAlignment(yesButton, HasHorizontalAlignment.ALIGN_LEFT);
 	    // Add a no button at the bottom of the dialog
-	    Button noButton = new Button(constants.No(),
+	    Button noButton = new Button(constants.no(),
 	    	new ClickHandler() {
 	          public void onClick(ClickEvent event) {
 	            dialogBox.hide();
 	          }
 	        });
-	    noButton.setAccessKey(constants.NoKey().trim().charAt(0));
+	    noButton.setAccessKey(constants.noKey().trim().charAt(0));
 	    dialogButtons.add(noButton);
 	    dialogButtons.setCellHorizontalAlignment(noButton, HasHorizontalAlignment.ALIGN_RIGHT);
 	    dialogButtons.setWidth("80%");

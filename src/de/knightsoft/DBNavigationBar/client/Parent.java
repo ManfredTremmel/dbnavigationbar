@@ -62,7 +62,7 @@ public abstract class Parent implements EntryPoint {
 	/**
 	 * Remember given parameters in url
 	 */
-	public HashMap<String, String> ParamHash	= null;
+	public HashMap<String, String> paramHash	= null;
 	
 	/**
 	 * Get the data of the logged in user
@@ -173,7 +173,7 @@ public abstract class Parent implements EntryPoint {
 		mainPanel.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
 		mainPanel.getElement().setId("main");
 
-		this.ParamHash		=	new HashMap<String, String>();
+		this.paramHash		=	new HashMap<String, String>();
 		String URLString	=	Window.Location.getHref();
 		if( URLString.indexOf('#') >= 0 ) {
 			URLString		=	URLString.substring(URLString.indexOf('#')+1);
@@ -181,7 +181,7 @@ public abstract class Parent implements EntryPoint {
 			for( int i = 0; i < historyPares.length ; i++ ) {
 				String[] tokenPare = historyPares[i].split("=");
 				if( tokenPare.length == 2 ) {
-					this.ParamHash.put(tokenPare[0], URL.decode(tokenPare[1]));
+					this.paramHash.put(tokenPare[0], URL.decode(tokenPare[1]));
 				}
 			}
 		}
@@ -190,7 +190,7 @@ public abstract class Parent implements EntryPoint {
 			ShowLoginPanel();
 			ReadLoginUser();
 		} else {
-			String page	=	ParamHash.get("page");
+			String page	=	this.paramHash.get("page");
 			if( !this.menuFind(page, currentUser) )
 				ShowLoginPanel();
 		}
@@ -209,9 +209,9 @@ public abstract class Parent implements EntryPoint {
 				String itemtext		=	item.getText();
 				String itemtitle	=	item.getTitle();
 				if( itemtitle != null && itemtitle.length() > 6 ) {
-					if( ParamHash	==	null )
-						ParamHash	=	new HashMap<String, String>();
-					ParamHash.put("period", itemtitle.substring(0, 6));
+					if( paramHash	==	null )
+						paramHash	=	new HashMap<String, String>();
+					paramHash.put("period", itemtitle.substring(0, 6));
 				}
 				DomainUser currentUser = getUser();
 				menuFind(itemtext, currentUser);
@@ -226,14 +226,14 @@ public abstract class Parent implements EntryPoint {
 				DomainUser currentUser = getUser();
 				String historyToken = event.getValue();
 				String[] historyPares = historyToken.split(";");
-				ParamHash		=	new HashMap<String, String>();
+				paramHash		=	new HashMap<String, String>();
 				for( int i = 0; i < historyPares.length; i++ ) {
 					String[] tokenPare = historyPares[i].split("=");
 					if( tokenPare.length == 2 ) {
-						ParamHash.put(tokenPare[0], URL.decode(tokenPare[1]));
+						paramHash.put(tokenPare[0], URL.decode(tokenPare[1]));
 					}
 				}
-				String page	=	ParamHash.get("page");
+				String page	=	paramHash.get("page");
 				if( currentUser != null ) {
 					menuFind(page, currentUser);
 				} else {

@@ -67,7 +67,7 @@ public abstract class DBHeadTemplateUI<E extends DomainHeadDataBase, F extends P
 		ImageResource DeletePosition();
 	}
 	
-	protected E DBEntry;
+	protected E dbEntry;
 
 	protected DBHeadTemplateUIConstants constants;
 	
@@ -133,7 +133,7 @@ public abstract class DBHeadTemplateUI<E extends DomainHeadDataBase, F extends P
 				} else if( DBNavigationBarWidget.ButtonStateDelete.equals(ButtonState)) {
 					service.deleteEntry(myNavigationBar.getOldDBNumber(), DBHeadTemplateUI.this);
 				} else if( DBNavigationBarWidget.ButtonStateStop.equals(ButtonState)) {
-					fillEntry(DBEntry);
+					fillEntry(dbEntry);
 				} else if( DBNavigationBarWidget.ButtonStateFBack.equals(ButtonState)) {
 					service.readFirstEntry(DBHeadTemplateUI.this);
 				} else if( DBNavigationBarWidget.ButtonStateFBackFind.equals(ButtonState)) {
@@ -175,7 +175,7 @@ public abstract class DBHeadTemplateUI<E extends DomainHeadDataBase, F extends P
 				} else if( DBNavigationBarWidget.ButtonStateSave.equals(ButtonState) || ButtonState == null) {
 					E saveentry = checkInput();
 					if( saveentry != null ) {
-						if( !saveentry.equals(DBEntry) ) {
+						if( !saveentry.equals(dbEntry) ) {
 							dosave = true;
 							service.saveEntry(saveentry, DBHeadTemplateUI.this);
 						}
@@ -214,11 +214,11 @@ public abstract class DBHeadTemplateUI<E extends DomainHeadDataBase, F extends P
 	 */
 	protected void newEntry() {
 		myNavigationBar.setNewEntry();
-		this.DBEntry.setUpDefaultEntry();
+		this.dbEntry.setUpDefaultEntry();
 
 		enableKeyField(true);
 
-		this.fillEntry(this.DBEntry);
+		this.fillEntry(this.dbEntry);
 	}
 
 	/**
@@ -267,15 +267,15 @@ public abstract class DBHeadTemplateUI<E extends DomainHeadDataBase, F extends P
 		if( entry == null ) {
 			this.parentwidget.cleanUp();
 		} else if( entry.getKeyCur() == null ) {
-			if( this.DBEntry != null)
-				this.myNavigationBar.setDBMinMaxCurNumber(this.DBEntry.getKeyMin(), this.DBEntry.getKeyMax(), this.DBEntry.getKeyCur());
-			this.myNavigationBar.displayHint(constants.SearchErrorMessage());
+			if( this.dbEntry != null)
+				this.myNavigationBar.setDBMinMaxCurNumber(this.dbEntry.getKeyMin(), this.dbEntry.getKeyMax(), this.dbEntry.getKeyCur());
+			this.myNavigationBar.displayHint(constants.searchErrorMessage());
 		} else {
-			this.DBEntry		=	entry;
+			this.dbEntry		=	entry;
 			this.myNavigationBar.setDBMinMaxCurNumber(entry.getKeyMin(), entry.getKeyMax(), entry.getKeyCur());
 			
 			if( this.dosave )
-				this.myNavigationBar.displayHint(constants.SavedSuccessfully());
+				this.myNavigationBar.displayHint(constants.savedSuccessfully());
 			else
 				this.myNavigationBar.displayHint(null);
 

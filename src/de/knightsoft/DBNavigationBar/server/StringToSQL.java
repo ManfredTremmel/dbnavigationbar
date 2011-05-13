@@ -54,8 +54,8 @@ public class StringToSQL {
      *
      * @param JavaString
      *            Java string to convert
-     * @param JDBCClass
-     *            name of the JDBCClass to detect DataBase
+     * @param JDBC_CLASS
+     *            name of the JDBC_CLASS to detect DataBase
      * @return string as SQL
      */
 	final static public String convertStringPrepared(	String JavaString,
@@ -135,8 +135,8 @@ public class StringToSQL {
      *
      * @param JavaString
      *            Java string to convert
-     * @param JDBCClass
-     *            name of the JDBCClass to detect DataBase
+     * @param JDBC_CLASS
+     *            name of the JDBC_CLASS to detect DataBase
      * @return string as SQL
      */
 	final static public String convert( String JavaString,
@@ -306,8 +306,8 @@ public class StringToSQL {
      *
      * @param JavaString
      *            Java string to convert
-     * @param JDBCClass
-     *            name of the JDBCClass to detect DataBase
+     * @param JDBC_CLASS
+     *            name of the JDBC_CLASS to detect DataBase
      * @return string as SQL
      */
 	final static public String convertString(	String JavaString,
@@ -335,8 +335,8 @@ public class StringToSQL {
      *
      * @param JavaString
      *            Java string to convert
-     * @param JDBCClass
-     *            name of the JDBCClass to detect DataBase
+     * @param JDBC_CLASS
+     *            name of the JDBC_CLASS to detect DataBase
      * @return string as SQL
      */
 	final static public String convertNumber(	String JavaString,
@@ -415,8 +415,8 @@ public class StringToSQL {
      *            database fieldname
      * @param JavaString
      *            Java string to convert
-     * @param JDBCClass
-     *            name of the JDBCClass to detect DataBase
+     * @param JDBC_CLASS
+     *            name of the JDBC_CLASS to detect DataBase
      * @return string as SQL
      */
 	final static public String SearchString(String DBFieldname,
@@ -611,8 +611,8 @@ public class StringToSQL {
      *
      * @param JavaDateTime
      *            Timestamp to convert
-     * @param JDBCClass
-     *            name of the JDBCClass to detect DataBase
+     * @param JDBC_CLASS
+     *            name of the JDBC_CLASS to detect DataBase
      * @return string as SQL
      */
 	final static public String convertDatetime( java.sql.Timestamp JavaDateTime,
