@@ -78,14 +78,28 @@ public abstract class DBHeadPosDateTemplate<E extends DomainHeadPosDataBase>
     		String insertHeadSQL,
     		String posDataBaseTableName,
     		String posKeyfieldName,
-    		String insertPosSQL
+    		String insertPosSQL,
+
+    		String readMinMaxSQL,
+    		String readNextSQL,
+    		String readPrevSQL,
+    		String readHeadSQL,
+    		String invalidateHeadSQL,
+    		
+    		String readPosSQL,
+    	    String invalidatePosSQL
     		) throws UnexpectedException {
 		super(  type,
 				lookUpDataBase,
 	       		sessionUser,
 				dataBaseTableName,
 				keyFieldName,
-				insertHeadSQL
+				insertHeadSQL,
+				readMinMaxSQL,
+				readNextSQL,
+				readPrevSQL,
+				readHeadSQL,
+				invalidateHeadSQL
 			);
 
 		Connection ThisDataBase		=	null;
@@ -98,23 +112,27 @@ public abstract class DBHeadPosDateTemplate<E extends DomainHeadPosDataBase>
 
 			DataBaseDepending myDataBaseDepending = new DataBaseDepending(ThisDataBase.getMetaData().getDatabaseProductName());
 
-			this.readPosSQL		=	
+			this.readPosSQL		=
+				(readPosSQL != null ?
+					readPosSQL :
           		  "SELECT * "
     		  	+ "FROM   " + posDataBaseTableName + " "
   				+ "WHERE  " + Constants.DBFieldGlobalMandator + " = ? "
   				+ "  AND  " + keyFieldName + " = ? "
   				+ "  AND  " + Constants.DBFieldGlobalDate_from + " <= " + myDataBaseDepending.getSQLTimeNow() + " "
-  				+ "  AND  " + Constants.DBFieldGlobalDate_to + " > " + myDataBaseDepending.getSQLTimeNow() + "; ";
+  				+ "  AND  " + Constants.DBFieldGlobalDate_to + " > " + myDataBaseDepending.getSQLTimeNow() + "; ");
 
 
     		this.invalidatePosSQL		=
+    			(invalidatePosSQL != null ?
+    				invalidatePosSQL :
 				  "UPDATE " + posDataBaseTableName + " "
 				+ "SET    " + Constants.DBFieldGlobalDate_to + "=" + myDataBaseDepending.getSQLTimeOutdate() + " "
 				+ "WHERE  " + Constants.DBFieldGlobalMandator + " = ? "
 	    		+ "  AND  " + keyFieldName + " = ? "
 	    		+ "  AND  " + posKeyfieldName + " = ? "
 				+ "  AND  " + Constants.DBFieldGlobalDate_from + " <= " + myDataBaseDepending.getSQLTimeNow() + " "
-				+ "  AND  " + Constants.DBFieldGlobalDate_to + "   > " + myDataBaseDepending.getSQLTimeNow() + ";";
+				+ "  AND  " + Constants.DBFieldGlobalDate_to + "   > " + myDataBaseDepending.getSQLTimeNow() + ";");
 
     		this.insertPosSQL		=	insertPosSQL;
 
@@ -130,6 +148,93 @@ public abstract class DBHeadPosDateTemplate<E extends DomainHeadPosDataBase>
 		}
 	}
 
+    /**
+     * Constructor, set up database connection
+     * 
+     * @param type - class instance of E
+     * @param lookUpDataBase
+     * @param sessionUser
+     * @param dataBaseTableName
+     * @param keyFieldName
+     * @param insertHeadSQL
+     * @param posDataBaseTableName
+     * @param posKeyfieldName
+     * @param insertPosSQL
+     * @throws UnexpectedException
+     */
+    public DBHeadPosDateTemplate(
+    		Class<E> type,
+    		String lookUpDataBase,
+       		String sessionUser,
+    		String dataBaseTableName,
+    		String keyFieldName,
+    		String insertHeadSQL,
+    		String posDataBaseTableName,
+    		String posKeyfieldName,
+    		String insertPosSQL
+			) throws UnexpectedException {
+    	this(	type,
+    			lookUpDataBase,
+    			sessionUser,
+    			dataBaseTableName,
+    			keyFieldName,
+    			insertHeadSQL,
+    			posDataBaseTableName,
+    			posKeyfieldName,
+    			insertPosSQL,
+    			null,
+    			null,
+    			null,
+    			null,
+    			null,
+    			null,
+    			null);
+    }
+
+    /**
+     * Constructor, set up database connection
+     * 
+     * @param type - class instance of E
+     * @param lookUpDataBase
+     * @param sessionUser
+     * @param dataBaseTableName
+     * @param keyFieldName
+     * @param insertHeadSQL
+     * @param posDataBaseTableName
+     * @param posKeyfieldName
+     * @param insertPosSQL
+     * @throws UnexpectedException
+     */
+    public DBHeadPosDateTemplate(
+    		Class<E> type,
+    		String lookUpDataBase,
+       		String sessionUser,
+    		String dataBaseTableName,
+    		String keyFieldName,
+    		String insertHeadSQL,
+    		String posDataBaseTableName,
+    		String posKeyfieldName,
+    		String insertPosSQL,
+    		String readHeadSQL,
+    		String readPosSQL
+    		) throws UnexpectedException {
+    	this(	type,
+    			lookUpDataBase,
+    			sessionUser,
+    			dataBaseTableName,
+    			keyFieldName,
+    			insertHeadSQL,
+    			posDataBaseTableName,
+    			posKeyfieldName,
+    			insertPosSQL,
+    			null,
+    			null,
+    			null,
+    			readHeadSQL,
+    			null,
+    			readPosSQL,
+    			null);
+    }
 
 
 	/**
