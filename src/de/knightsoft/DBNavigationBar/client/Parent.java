@@ -79,19 +79,19 @@ public abstract class Parent implements EntryPoint {
 	/**
 	 * show the login panel
 	 */
-	protected abstract void ShowLoginPanel();
+	protected abstract void showLoginPanel();
 
 	/**
 	 * read the logged in user
 	 */
-	protected abstract void ReadLoginUser();
+	protected abstract void readLoginUser();
 
 	/**
 	 * check if login window matches menu entry
 	 * @param page
 	 * @param currentUser
 	 */
-	protected abstract boolean LoginMatchesMenu(String page, DomainUser currentUser);
+	protected abstract boolean loginMatchesMenu(String page, DomainUser currentUser);
 
 	/**
 	 * get the Image of the Application
@@ -139,14 +139,15 @@ public abstract class Parent implements EntryPoint {
 	/**
 	 * This is the entry point method.
 	 */
+	@Override
 	public void onModuleLoad() {
 		
 		// Create the constants
 		DomainUser currentUser = getUser();
 
 		// Get the title from the internationalized constants
-		navTree	=	new Tree();
-		navTree =	buildNavTree(currentUser);
+		this.navTree	=	new Tree();
+		this.navTree	=	buildNavTree(currentUser);
 
 		// Horizontal Panel, left navigation, right content
 		SplitLayoutPanel hPanel = new SplitLayoutPanel();
@@ -160,24 +161,24 @@ public abstract class Parent implements EntryPoint {
 
 		setupNavPanelLogo(navVPanel);
 		setupNavPanelCopyRight(navVPanel);
-		setupNavPanelTree(navVPanel, navTree);
+		setupNavPanelTree(navVPanel, this.navTree);
 
 		//navScrollPanel.add(navVPanel);
 		//hPanel.addWest(navScrollPanel, 250);
 		hPanel.addWest(navVPanel, 250);
 
 		ScrollPanel mainScrollPanel = new ScrollPanel();
-		mainPanel = new VerticalPanel();
-		mainPanel.setWidth("100%");
-		mainPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
-		mainPanel.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
-		mainPanel.getElement().setId("main");
+		this.mainPanel = new VerticalPanel();
+		this.mainPanel.setWidth("100%");
+		this.mainPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
+		this.mainPanel.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
+		this.mainPanel.getElement().setId("main");
 
 		this.paramHash		=	new HashMap<String, String>();
-		String URLString	=	Window.Location.getHref();
-		if( URLString.indexOf('#') >= 0 ) {
-			URLString		=	URLString.substring(URLString.indexOf('#')+1);
-			String[] historyPares = URLString.split(";");
+		String urlString	=	Window.Location.getHref();
+		if( urlString.indexOf('#') >= 0 ) {
+			urlString		=	urlString.substring(urlString.indexOf('#')+1);
+			String[] historyPares = urlString.split(";");
 			for( int i = 0; i < historyPares.length ; i++ ) {
 				String[] tokenPare = historyPares[i].split("=");
 				if( tokenPare.length == 2 ) {
@@ -187,31 +188,32 @@ public abstract class Parent implements EntryPoint {
 		}
 
 		if( currentUser == null ) {
-			ShowLoginPanel();
-			ReadLoginUser();
+			showLoginPanel();
+			readLoginUser();
 		} else {
 			String page	=	this.paramHash.get("page");
 			if( !this.menuFind(page, currentUser) )
-				ShowLoginPanel();
+				showLoginPanel();
 		}
 			
 
-		mainScrollPanel.add(mainPanel);
+		mainScrollPanel.add(this.mainPanel);
 		hPanel.add(mainScrollPanel);
 
 		// Add image and button to the RootPanel
 		RootPanel.get().add(hPanel);
 
 		// Selection handler to handle clicks on the navigation tree
-		navTree.addSelectionHandler(new SelectionHandler<TreeItem>() {
+		this.navTree.addSelectionHandler(new SelectionHandler<TreeItem>() {
+			@Override
 			public void onSelection(SelectionEvent<TreeItem> event) {
 				TreeItem item = event.getSelectedItem();
 				String itemtext		=	item.getText();
 				String itemtitle	=	item.getTitle();
 				if( itemtitle != null && itemtitle.length() > 6 ) {
-					if( paramHash	==	null )
-						paramHash	=	new HashMap<String, String>();
-					paramHash.put("period", itemtitle.substring(0, 6));
+					if( Parent.this.paramHash	==	null )
+						Parent.this.paramHash	=	new HashMap<String, String>();
+					Parent.this.paramHash.put("period", itemtitle.substring(0, 6));
 				}
 				DomainUser currentUser = getUser();
 				menuFind(itemtext, currentUser);
@@ -222,23 +224,24 @@ public abstract class Parent implements EntryPoint {
 		// Handler to handle page changes, to get back and forward button
 		// work even in AJAX application
 		History.addValueChangeHandler(new ValueChangeHandler<String>() {
+			@Override
 			public void onValueChange(ValueChangeEvent<String> event) {
 				DomainUser currentUser = getUser();
 				String historyToken = event.getValue();
 				String[] historyPares = historyToken.split(";");
-				paramHash		=	new HashMap<String, String>();
+				Parent.this.paramHash		=	new HashMap<String, String>();
 				for( int i = 0; i < historyPares.length; i++ ) {
 					String[] tokenPare = historyPares[i].split("=");
 					if( tokenPare.length == 2 ) {
-						paramHash.put(tokenPare[0], URL.decode(tokenPare[1]));
+						Parent.this.paramHash.put(tokenPare[0], URL.decode(tokenPare[1]));
 					}
 				}
-				String page	=	paramHash.get("page");
+				String page	=	Parent.this.paramHash.get("page");
 				if( currentUser != null ) {
 					menuFind(page, currentUser);
 				} else {
-					mainPanel.clear();
-					LoginMatchesMenu(page, currentUser);
+					Parent.this.mainPanel.clear();
+					loginMatchesMenu(page, currentUser);
 				}
 			}
 		});
@@ -252,7 +255,7 @@ public abstract class Parent implements EntryPoint {
      * @return Navigation tree
      */
 	public Tree getNavTree() {
-		return navTree;
+		return this.navTree;
 	}
 
 	/**
@@ -262,27 +265,27 @@ public abstract class Parent implements EntryPoint {
 	 */
 	protected void setupNavPanelLogo(
 			DockLayoutPanel navVPanel) {
-		String Title		=	getApplicationTitle();
-		VerticalPanel LogoPanel = new VerticalPanel();
+		String title		=	getApplicationTitle();
+		VerticalPanel logoPanel = new VerticalPanel();
 		// Get the title from the internationalized constants
-		String pageTitle	=	"<h1>" + Title + "</h1>";
+		String pageTitle	=	"<h1>" + title + "</h1>";
 		HTML htmlPageTitle	=	new HTML(pageTitle);
 		Image img = getApplicationImage();
 		img.getElement().setId("pc-template-img");
-		img.setAltText(Title);
+		img.setAltText(title);
 		
 		// Add the title and some images to the title bar
-		LogoPanel.add(img);
-		LogoPanel.setCellHorizontalAlignment(img, VerticalPanel.ALIGN_CENTER );
-		LogoPanel.setCellVerticalAlignment(img, VerticalPanel.ALIGN_TOP);
-		LogoPanel.add(htmlPageTitle);
-		LogoPanel.setCellHorizontalAlignment(htmlPageTitle, VerticalPanel.ALIGN_CENTER );
-		LogoPanel.setCellVerticalAlignment(htmlPageTitle, VerticalPanel.ALIGN_TOP);
-		LogoPanel.setWidth("100%");
-		LogoPanel.setBorderWidth(0);
-		LogoPanel.setSpacing(0);
+		logoPanel.add(img);
+		logoPanel.setCellHorizontalAlignment(img, VerticalPanel.ALIGN_CENTER );
+		logoPanel.setCellVerticalAlignment(img, VerticalPanel.ALIGN_TOP);
+		logoPanel.add(htmlPageTitle);
+		logoPanel.setCellHorizontalAlignment(htmlPageTitle, VerticalPanel.ALIGN_CENTER );
+		logoPanel.setCellVerticalAlignment(htmlPageTitle, VerticalPanel.ALIGN_TOP);
+		logoPanel.setWidth("100%");
+		logoPanel.setBorderWidth(0);
+		logoPanel.setSpacing(0);
 		
-		navVPanel.addNorth(LogoPanel, 12);
+		navVPanel.addNorth(logoPanel, 12);
 	}
 
 	/**
@@ -295,11 +298,11 @@ public abstract class Parent implements EntryPoint {
 			DockLayoutPanel navVPanel,
 			Tree navTree) {
 		// Add the title and some images to the title bar
-		ScrollPanel NavScrollerPanel	=	new ScrollPanel();
-		NavScrollerPanel.add(navTree);
-		NavScrollerPanel.setSize("100%", "100%");
+		ScrollPanel navScrollerPanel	=	new ScrollPanel();
+		navScrollerPanel.add(navTree);
+		navScrollerPanel.setSize("100%", "100%");
 
-		navVPanel.add(NavScrollerPanel);
+		navVPanel.add(navScrollerPanel);
 	}
 
 	/**
@@ -310,14 +313,14 @@ public abstract class Parent implements EntryPoint {
 	protected void setupNavPanelCopyRight(
 			DockLayoutPanel navVPanel) {
 		// Get the title from the internationalized constants
-		VerticalPanel CopyrightPanel	=	new VerticalPanel();
+		VerticalPanel copyrightPanel	=	new VerticalPanel();
 		HTML htmlCopyright				=	new HTML(getCopyrightString());
-		CopyrightPanel.add(htmlCopyright);
-		CopyrightPanel.setCellHorizontalAlignment(htmlCopyright, VerticalPanel.ALIGN_CENTER );
-		CopyrightPanel.setCellVerticalAlignment(htmlCopyright, VerticalPanel.ALIGN_TOP);
-		CopyrightPanel.setWidth("100%");
+		copyrightPanel.add(htmlCopyright);
+		copyrightPanel.setCellHorizontalAlignment(htmlCopyright, VerticalPanel.ALIGN_CENTER );
+		copyrightPanel.setCellVerticalAlignment(htmlCopyright, VerticalPanel.ALIGN_TOP);
+		copyrightPanel.setWidth("100%");
 
 		// Add the title and some images to the title bar
-		navVPanel.addSouth(CopyrightPanel, 1.5);
+		navVPanel.addSouth(copyrightPanel, 1.5);
 	}
 }

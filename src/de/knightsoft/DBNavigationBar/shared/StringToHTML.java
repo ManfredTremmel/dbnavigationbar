@@ -35,36 +35,36 @@ public class StringToHTML
      * The <code>convert</code> method converts the string to a
      * table of dos charset bytes
      *  
-     * @param JavaString
+     * @param javaString
      *            Java string to convert
      * @return string as HTML
      */
-	final static public String convert(	String JavaString
+	final static public String convert(	String javaString
 			) {
-		return convert( JavaString, false, true, true );
+		return convert( javaString, false, true, true );
 	}
 
     /**
      * The <code>convert</code> method converts the string to a
      * table of dos charset bytes
      *  
-     * @param JavaString
+     * @param javaString
      *            Java string to convert
      * @param blankwandeln
      *            convert blank to &nbsp; (true/false)
      * @return string as HTML
      */
-	final static public String convert(	String JavaString,
+	final static public String convert(	String javaString,
 											boolean blankwandeln
 			) {
-		return convert( JavaString, blankwandeln, true, true );
+		return convert( javaString, blankwandeln, true, true );
 	}
 
     /**
      * The <code>convert</code> method converts the string to a
      * table of dos charset bytes
      *  
-     * @param JavaString
+     * @param javaString
      *            Java string to convert
      * @param blankwandeln
      *            convert blank to &nbsp; (true/false)
@@ -72,18 +72,18 @@ public class StringToHTML
      *            convert linefeed to <br> (true/false)
      * @return string as HTML
      */
-	final static public String convert(	String JavaString,
+	final static public String convert(	String javaString,
 											boolean blankwandeln,
 											boolean returnwandeln
 			) {
-		return convert( JavaString, blankwandeln, returnwandeln, true );
+		return convert( javaString, blankwandeln, returnwandeln, true );
 	}
 
     /**
      * The <code>convert</code> method converts the string to a
      * table of dos charset bytes
      *  
-     * @param JavaString
+     * @param javaString
      *            Java string to convert
      * @param blankwandeln
      *            convert blank to &nbsp; (true/false)
@@ -93,893 +93,893 @@ public class StringToHTML
      *            < to &lt; and > to &gt; (true/false)
      * @return string as HTML
      */
-	final static public String convert(	String JavaString,
+	final static public String convert(	String javaString,
 											boolean blankwandeln,
 											boolean returnwandeln,
 											boolean tagswandeln
 			) {
-		String HTMLString		=	"";
+		String htmlString		=	"";
 
-		if( JavaString != null && JavaString.length() > 0 ) {
-			char HTMLStringTab[]	=	new char[ ( 8 * JavaString.length() ) ];
-			char JavaStringTab[]	=	JavaString.toCharArray();
+		if( javaString != null && javaString.length() > 0 ) {
+			char htmlStringTab[]	=	new char[ ( 8 * javaString.length() ) ];
+			char javaStringTab[]	=	javaString.toCharArray();
 			int j = 0;
 
-			for(int i = 0; i < JavaString.length(); i++ ) {
-				switch( JavaStringTab[i] ) {
+			for(int i = 0; i < javaString.length(); i++ ) {
+				switch( javaStringTab[i] ) {
 					case '¡':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	'x';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'l';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	'x';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'l';
+						htmlStringTab[j++]	=	';';
 						break;
 					case '¢':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	'n';
-						HTMLStringTab[j++]	=	't';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	'n';
+						htmlStringTab[j++]	=	't';
+						htmlStringTab[j++]	=	';';
 						break;
 					case '£':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'p';
-						HTMLStringTab[j++]	=	'o';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	'n';
-						HTMLStringTab[j++]	=	'd';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'p';
+						htmlStringTab[j++]	=	'o';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	'n';
+						htmlStringTab[j++]	=	'd';
+						htmlStringTab[j++]	=	';';
 						break;
 					case '€':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'o';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'o';
+						htmlStringTab[j++]	=	';';
 						break;
 					case '¥':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'y';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	'n';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'y';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	'n';
+						htmlStringTab[j++]	=	';';
 						break;
 					case '§':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	's';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	't';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	's';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	't';
+						htmlStringTab[j++]	=	';';
 						break;
 					case '©':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'o';
-						HTMLStringTab[j++]	=	'p';
-						HTMLStringTab[j++]	=	'y';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'o';
+						htmlStringTab[j++]	=	'p';
+						htmlStringTab[j++]	=	'y';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'ª':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'o';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'd';
-						HTMLStringTab[j++]	=	'f';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'o';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'd';
+						htmlStringTab[j++]	=	'f';
+						htmlStringTab[j++]	=	';';
 						break;
 					case '«':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'l';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'q';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	'o';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'l';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'q';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	'o';
+						htmlStringTab[j++]	=	';';
 						break;
 					case '¬':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'n';
-						HTMLStringTab[j++]	=	'o';
-						HTMLStringTab[j++]	=	't';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'n';
+						htmlStringTab[j++]	=	'o';
+						htmlStringTab[j++]	=	't';
+						htmlStringTab[j++]	=	';';
 						break;
 					case '­':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	's';
-						HTMLStringTab[j++]	=	'h';
-						HTMLStringTab[j++]	=	'y';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	's';
+						htmlStringTab[j++]	=	'h';
+						htmlStringTab[j++]	=	'y';
+						htmlStringTab[j++]	=	';';
 						break;
 					case '®':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	'g';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	'g';
+						htmlStringTab[j++]	=	';';
 						break;
 					case '¯':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'm';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'm';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	';';
 						break;
 					case '°':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'd';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	'g';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'd';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	'g';
+						htmlStringTab[j++]	=	';';
 						break;
 					case '±':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'p';
-						HTMLStringTab[j++]	=	'l';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	's';
-						HTMLStringTab[j++]	=	'm';
-						HTMLStringTab[j++]	=	'n';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'p';
+						htmlStringTab[j++]	=	'l';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	's';
+						htmlStringTab[j++]	=	'm';
+						htmlStringTab[j++]	=	'n';
+						htmlStringTab[j++]	=	';';
 						break;
 					case '²':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	's';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	'p';
-						HTMLStringTab[j++]	=	'2';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	's';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	'p';
+						htmlStringTab[j++]	=	'2';
+						htmlStringTab[j++]	=	';';
 						break;
 					case '³':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	's';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	'p';
-						HTMLStringTab[j++]	=	'3';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	's';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	'p';
+						htmlStringTab[j++]	=	'3';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'µ':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'm';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'o';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'm';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'o';
+						htmlStringTab[j++]	=	';';
 						break;
 					case '¶':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'p';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'p';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	';';
 						break;
 					case '·':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'm';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'd';
-						HTMLStringTab[j++]	=	'd';
-						HTMLStringTab[j++]	=	'o';
-						HTMLStringTab[j++]	=	't';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'm';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'd';
+						htmlStringTab[j++]	=	'd';
+						htmlStringTab[j++]	=	'o';
+						htmlStringTab[j++]	=	't';
+						htmlStringTab[j++]	=	';';
 						break;
 					case '¹':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	's';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	'p';
-						HTMLStringTab[j++]	=	'1';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	's';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	'p';
+						htmlStringTab[j++]	=	'1';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'º':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'o';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'd';
-						HTMLStringTab[j++]	=	'm';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'o';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'd';
+						htmlStringTab[j++]	=	'm';
+						htmlStringTab[j++]	=	';';
 						break;
 					case '»':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'q';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	'o';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'q';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	'o';
+						htmlStringTab[j++]	=	';';
 						break;
 					case '¿':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'q';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	's';
-						HTMLStringTab[j++]	=	't';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'q';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	's';
+						htmlStringTab[j++]	=	't';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'À':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'A';
-						HTMLStringTab[j++]	=	'g';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'v';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'A';
+						htmlStringTab[j++]	=	'g';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'v';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'Á':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'A';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	't';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'A';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	't';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'Â':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'A';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'A';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'Ã':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'A';
-						HTMLStringTab[j++]	=	't';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'l';
-						HTMLStringTab[j++]	=	'd';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'A';
+						htmlStringTab[j++]	=	't';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'l';
+						htmlStringTab[j++]	=	'd';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'Ä':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'A';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	'm';
-						HTMLStringTab[j++]	=	'l';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'A';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	'm';
+						htmlStringTab[j++]	=	'l';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'Å':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'A';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'n';
-						HTMLStringTab[j++]	=	'g';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'A';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'n';
+						htmlStringTab[j++]	=	'g';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'Æ':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'A';
-						HTMLStringTab[j++]	=	'E';
-						HTMLStringTab[j++]	=	'l';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'g';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'A';
+						htmlStringTab[j++]	=	'E';
+						htmlStringTab[j++]	=	'l';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'g';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'Ç':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'C';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	'd';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'l';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'C';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	'd';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'l';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'È':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'E';
-						HTMLStringTab[j++]	=	'g';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'v';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'E';
+						htmlStringTab[j++]	=	'g';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'v';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'É':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'E';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	't';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'E';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	't';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'Ê':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'E';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'E';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'Ë':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'E';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	'm';
-						HTMLStringTab[j++]	=	'l';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'E';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	'm';
+						htmlStringTab[j++]	=	'l';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'Ì':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'I';
-						HTMLStringTab[j++]	=	'g';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'v';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'I';
+						htmlStringTab[j++]	=	'g';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'v';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'Í':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'I';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	't';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'I';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	't';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'Î':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'I';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'I';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'Ï':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'I';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	'm';
-						HTMLStringTab[j++]	=	'l';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'I';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	'm';
+						htmlStringTab[j++]	=	'l';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'Ð':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'E';
-						HTMLStringTab[j++]	=	'T';
-						HTMLStringTab[j++]	=	'H';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'E';
+						htmlStringTab[j++]	=	'T';
+						htmlStringTab[j++]	=	'H';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'Ñ':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'N';
-						HTMLStringTab[j++]	=	't';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'l';
-						HTMLStringTab[j++]	=	'd';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'N';
+						htmlStringTab[j++]	=	't';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'l';
+						htmlStringTab[j++]	=	'd';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'Ò':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'O';
-						HTMLStringTab[j++]	=	'g';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'v';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'O';
+						htmlStringTab[j++]	=	'g';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'v';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'Ó':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'O';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	't';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'O';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	't';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'Ô':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'O';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'O';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'Õ':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'O';
-						HTMLStringTab[j++]	=	't';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'l';
-						HTMLStringTab[j++]	=	'd';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'O';
+						htmlStringTab[j++]	=	't';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'l';
+						htmlStringTab[j++]	=	'd';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'Ö':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'O';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	'm';
-						HTMLStringTab[j++]	=	'l';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'O';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	'm';
+						htmlStringTab[j++]	=	'l';
+						htmlStringTab[j++]	=	';';
 						break;
 					case '×':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	't';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'm';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	's';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	't';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'm';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	's';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'Ø':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'O';
-						HTMLStringTab[j++]	=	's';
-						HTMLStringTab[j++]	=	'l';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	's';
-						HTMLStringTab[j++]	=	'h';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'O';
+						htmlStringTab[j++]	=	's';
+						htmlStringTab[j++]	=	'l';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	's';
+						htmlStringTab[j++]	=	'h';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'Ù':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'U';
-						HTMLStringTab[j++]	=	'g';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'v';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'U';
+						htmlStringTab[j++]	=	'g';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'v';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'Ú':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'U';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	't';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'U';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	't';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'Û':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'U';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'U';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'Ü':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'U';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	'm';
-						HTMLStringTab[j++]	=	'l';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'U';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	'm';
+						htmlStringTab[j++]	=	'l';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'Ý':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'Y';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	't';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'Y';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	't';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'Þ':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'T';
-						HTMLStringTab[j++]	=	'H';
-						HTMLStringTab[j++]	=	'O';
-						HTMLStringTab[j++]	=	'R';
-						HTMLStringTab[j++]	=	'N';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'T';
+						htmlStringTab[j++]	=	'H';
+						htmlStringTab[j++]	=	'O';
+						htmlStringTab[j++]	=	'R';
+						htmlStringTab[j++]	=	'N';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'ß':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	's';
-						HTMLStringTab[j++]	=	'z';
-						HTMLStringTab[j++]	=	'l';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'g';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	's';
+						htmlStringTab[j++]	=	'z';
+						htmlStringTab[j++]	=	'l';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'g';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'à':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'g';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'v';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'g';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'v';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'á':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	't';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	't';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'â':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'ã':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	't';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'l';
-						HTMLStringTab[j++]	=	'd';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	't';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'l';
+						htmlStringTab[j++]	=	'd';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'ä':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	'm';
-						HTMLStringTab[j++]	=	'l';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	'm';
+						htmlStringTab[j++]	=	'l';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'å':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'n';
-						HTMLStringTab[j++]	=	'g';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'n';
+						htmlStringTab[j++]	=	'g';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'æ':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	'l';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'g';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	'l';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'g';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'ç':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	'd';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'l';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	'd';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'l';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'è':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	'g';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'v';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	'g';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'v';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'é':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	't';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	't';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'ê':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'ë':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	'm';
-						HTMLStringTab[j++]	=	'l';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	'm';
+						htmlStringTab[j++]	=	'l';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'ì':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'g';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'v';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'g';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'v';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'í':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	't';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	't';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'î':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'ï':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	'm';
-						HTMLStringTab[j++]	=	'l';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	'm';
+						htmlStringTab[j++]	=	'l';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'ð':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	't';
-						HTMLStringTab[j++]	=	'h';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	't';
+						htmlStringTab[j++]	=	'h';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'ñ':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'n';
-						HTMLStringTab[j++]	=	't';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'l';
-						HTMLStringTab[j++]	=	'd';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'n';
+						htmlStringTab[j++]	=	't';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'l';
+						htmlStringTab[j++]	=	'd';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'ò':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'o';
-						HTMLStringTab[j++]	=	'g';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'v';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'o';
+						htmlStringTab[j++]	=	'g';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'v';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'ó':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'o';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	't';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'o';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	't';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'ô':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'o';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'o';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'õ':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'o';
-						HTMLStringTab[j++]	=	't';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'l';
-						HTMLStringTab[j++]	=	'd';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'o';
+						htmlStringTab[j++]	=	't';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'l';
+						htmlStringTab[j++]	=	'd';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'ö':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'o';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	'm';
-						HTMLStringTab[j++]	=	'l';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'o';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	'm';
+						htmlStringTab[j++]	=	'l';
+						htmlStringTab[j++]	=	';';
 						break;
 					case '÷':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'd';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'v';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'd';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'd';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'v';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'd';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'ø':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'o';
-						HTMLStringTab[j++]	=	's';
-						HTMLStringTab[j++]	=	'l';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	's';
-						HTMLStringTab[j++]	=	'h';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'o';
+						htmlStringTab[j++]	=	's';
+						htmlStringTab[j++]	=	'l';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	's';
+						htmlStringTab[j++]	=	'h';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'ù':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	'g';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'v';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	'g';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'v';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'ú':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	't';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	't';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'û':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'i';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'i';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'ü':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	'm';
-						HTMLStringTab[j++]	=	'l';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	'm';
+						htmlStringTab[j++]	=	'l';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'ý':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'y';
-						HTMLStringTab[j++]	=	'a';
-						HTMLStringTab[j++]	=	'c';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	't';
-						HTMLStringTab[j++]	=	'e';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'y';
+						htmlStringTab[j++]	=	'a';
+						htmlStringTab[j++]	=	'c';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	't';
+						htmlStringTab[j++]	=	'e';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'þ':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	't';
-						HTMLStringTab[j++]	=	'h';
-						HTMLStringTab[j++]	=	'o';
-						HTMLStringTab[j++]	=	'r';
-						HTMLStringTab[j++]	=	'n';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	't';
+						htmlStringTab[j++]	=	'h';
+						htmlStringTab[j++]	=	'o';
+						htmlStringTab[j++]	=	'r';
+						htmlStringTab[j++]	=	'n';
+						htmlStringTab[j++]	=	';';
 						break;
 					case 'ÿ':
-						HTMLStringTab[j++]	=	'&';
-						HTMLStringTab[j++]	=	'y';
-						HTMLStringTab[j++]	=	'u';
-						HTMLStringTab[j++]	=	'm';
-						HTMLStringTab[j++]	=	'l';
-						HTMLStringTab[j++]	=	';';
+						htmlStringTab[j++]	=	'&';
+						htmlStringTab[j++]	=	'y';
+						htmlStringTab[j++]	=	'u';
+						htmlStringTab[j++]	=	'm';
+						htmlStringTab[j++]	=	'l';
+						htmlStringTab[j++]	=	';';
 						break;
 					case '\"':
 						if( tagswandeln )
 						{
-							HTMLStringTab[j++]	=	'&';
-							HTMLStringTab[j++]	=	'q';
-							HTMLStringTab[j++]	=	'u';
-							HTMLStringTab[j++]	=	'o';
-							HTMLStringTab[j++]	=	't';
-							HTMLStringTab[j++]	=	';';
+							htmlStringTab[j++]	=	'&';
+							htmlStringTab[j++]	=	'q';
+							htmlStringTab[j++]	=	'u';
+							htmlStringTab[j++]	=	'o';
+							htmlStringTab[j++]	=	't';
+							htmlStringTab[j++]	=	';';
 						}
 						else
-							HTMLStringTab[j++]	=	JavaStringTab[i];
+							htmlStringTab[j++]	=	javaStringTab[i];
 						break;
 					case '&':
 						if( tagswandeln ) {
-							HTMLStringTab[j++]	=	'&';
-							HTMLStringTab[j++]	=	'a';
-							HTMLStringTab[j++]	=	'm';
-							HTMLStringTab[j++]	=	'p';
-							HTMLStringTab[j++]	=	';';
+							htmlStringTab[j++]	=	'&';
+							htmlStringTab[j++]	=	'a';
+							htmlStringTab[j++]	=	'm';
+							htmlStringTab[j++]	=	'p';
+							htmlStringTab[j++]	=	';';
 						} else
-							HTMLStringTab[j++]	=	JavaStringTab[i];
+							htmlStringTab[j++]	=	javaStringTab[i];
 						break;
 					case '<':
 						if( tagswandeln ) {
-							HTMLStringTab[j++]	=	'&';
-							HTMLStringTab[j++]	=	'l';
-							HTMLStringTab[j++]	=	't';
-							HTMLStringTab[j++]	=	';';
+							htmlStringTab[j++]	=	'&';
+							htmlStringTab[j++]	=	'l';
+							htmlStringTab[j++]	=	't';
+							htmlStringTab[j++]	=	';';
 						} else
-							HTMLStringTab[j++]	=	JavaStringTab[i];
+							htmlStringTab[j++]	=	javaStringTab[i];
 						break;
 					case '>':
 						if( tagswandeln ) {
-							HTMLStringTab[j++]	=	'&';
-							HTMLStringTab[j++]	=	'g';
-							HTMLStringTab[j++]	=	't';
-							HTMLStringTab[j++]	=	';';
+							htmlStringTab[j++]	=	'&';
+							htmlStringTab[j++]	=	'g';
+							htmlStringTab[j++]	=	't';
+							htmlStringTab[j++]	=	';';
 						} else
-							HTMLStringTab[j++]	=	JavaStringTab[i];
+							htmlStringTab[j++]	=	javaStringTab[i];
 						break;
 					case ' ':
 						if( blankwandeln ) {
-							HTMLStringTab[j++]	=	'&';
-							HTMLStringTab[j++]	=	'n';
-							HTMLStringTab[j++]	=	'b';
-							HTMLStringTab[j++]	=	's';
-							HTMLStringTab[j++]	=	'p';
-							HTMLStringTab[j++]	=	';';
+							htmlStringTab[j++]	=	'&';
+							htmlStringTab[j++]	=	'n';
+							htmlStringTab[j++]	=	'b';
+							htmlStringTab[j++]	=	's';
+							htmlStringTab[j++]	=	'p';
+							htmlStringTab[j++]	=	';';
 						} else
-							HTMLStringTab[j++]	=	JavaStringTab[i];
+							htmlStringTab[j++]	=	javaStringTab[i];
 						break;
 					case '\r':
 						break;
 					case '\n':
 						if( returnwandeln ) {
-							HTMLStringTab[j++]	=	'<';
-							HTMLStringTab[j++]	=	'b';
-							HTMLStringTab[j++]	=	'r';
-							HTMLStringTab[j++]	=	'>';
+							htmlStringTab[j++]	=	'<';
+							htmlStringTab[j++]	=	'b';
+							htmlStringTab[j++]	=	'r';
+							htmlStringTab[j++]	=	'>';
 						} else
-							HTMLStringTab[j++]	=	JavaStringTab[i];
+							htmlStringTab[j++]	=	javaStringTab[i];
 						break;
 					default:
-						if( JavaStringTab[i] > 255 ) {
-							String Dummy		=	Integer.toString( (int)JavaStringTab[i] );
-							HTMLStringTab[j++]	=	'&';
-							HTMLStringTab[j++]	=	'#';
-							for( int k = 0; k < Dummy.length(); k++ ) {
-								HTMLStringTab[j++]	=	Dummy.charAt(k);
+						if( javaStringTab[i] > 255 ) {
+							String dummy		=	Integer.toString( javaStringTab[i] );
+							htmlStringTab[j++]	=	'&';
+							htmlStringTab[j++]	=	'#';
+							for( int k = 0; k < dummy.length(); k++ ) {
+								htmlStringTab[j++]	=	dummy.charAt(k);
 							}
-							HTMLStringTab[j++]	=	';';
+							htmlStringTab[j++]	=	';';
 						} else
-							HTMLStringTab[j++]	=	JavaStringTab[i];
+							htmlStringTab[j++]	=	javaStringTab[i];
 						break;
 				}
 			}
 
-			HTMLString	=	new String( HTMLStringTab, 0, j );
+			htmlString	=	new String( htmlStringTab, 0, j );
 		}
 
-		return HTMLString;
+		return htmlString;
 	}
 };

@@ -115,49 +115,49 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
     				  "SELECT MIN(" + this.keyFieldName + ") AS min, "
     				+ "       MAX(" + this.keyFieldName + ") AS max "
     				+ "FROM   " + this.dataBaseTableName + " "
-    				+ "WHERE  " + Constants.DBFieldGlobalMandator + " = ? "
-    				+ "  AND  " + Constants.DBFieldGlobalDate_from + " <= " + MyDataBaseDepending.getSQLTimeNow() + " "
-    				+ "  AND  " + Constants.DBFieldGlobalDate_to + " > " + MyDataBaseDepending.getSQLTimeNow() + ";");
+    				+ "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? "
+    				+ "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= " + MyDataBaseDepending.getSQLTimeNow() + " "
+    				+ "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > " + MyDataBaseDepending.getSQLTimeNow() + ";");
 
     		this.readNextSQL		=
     			(readNextSQL != null ?
     				readNextSQL :
           		  	  "SELECT MIN(" + this.keyFieldName + ") AS dbnumber "
       				+ "FROM   " + this.dataBaseTableName + " "
-    				+ "WHERE  " + Constants.DBFieldGlobalMandator + " = ? "
+    				+ "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? "
     				+ "  AND  " + this.keyFieldName + " > ? "
-    				+ "  AND  " + Constants.DBFieldGlobalDate_from + " <= " + MyDataBaseDepending.getSQLTimeNow() + " "
-    				+ "  AND  " + Constants.DBFieldGlobalDate_to + " > " + MyDataBaseDepending.getSQLTimeNow() + ";");
+    				+ "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= " + MyDataBaseDepending.getSQLTimeNow() + " "
+    				+ "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > " + MyDataBaseDepending.getSQLTimeNow() + ";");
 
     		this.readPrevSQL		=
     			(readPrevSQL != null ?
     				readPrevSQL :
         		  	  "SELECT MAX(" + this.keyFieldName + ") AS dbnumber "
         			+ "FROM   " + this.dataBaseTableName + " "
-      				+ "WHERE  " + Constants.DBFieldGlobalMandator + " = ? "
+      				+ "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? "
       				+ "  AND  " + this.keyFieldName + " < ? "
-      				+ "  AND  " + Constants.DBFieldGlobalDate_from + " <= " + MyDataBaseDepending.getSQLTimeNow() + " "
-      				+ "  AND  " + Constants.DBFieldGlobalDate_to + " > " + MyDataBaseDepending.getSQLTimeNow() + ";");
+      				+ "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= " + MyDataBaseDepending.getSQLTimeNow() + " "
+      				+ "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > " + MyDataBaseDepending.getSQLTimeNow() + ";");
 
     		this.readHeadSQL		=
     			(readHeadSQL != null ?
     				readHeadSQL :
             		  "SELECT * "
       		  	  	+ "FROM   " + this.dataBaseTableName + " "
-    				+ "WHERE  " + Constants.DBFieldGlobalMandator + " = ? "
+    				+ "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? "
     				+ "  AND  " + this.keyFieldName + " = ? "
-    				+ "  AND  " + Constants.DBFieldGlobalDate_from + " <= " + MyDataBaseDepending.getSQLTimeNow() + " "
-    				+ "  AND  " + Constants.DBFieldGlobalDate_to + " > " + MyDataBaseDepending.getSQLTimeNow() + ";");
+    				+ "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= " + MyDataBaseDepending.getSQLTimeNow() + " "
+    				+ "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > " + MyDataBaseDepending.getSQLTimeNow() + ";");
 
     		this.invalidateHeadSQL	=
     			(invalidateHeadSQL != null ?
     				invalidateHeadSQL :
 					  "UPDATE " + this.dataBaseTableName + " "
-					+ "SET    " + Constants.DBFieldGlobalDate_to + "=" + MyDataBaseDepending.getSQLTimeOutdate() + " "
-					+ "WHERE  " + Constants.DBFieldGlobalMandator + " = ? "
+					+ "SET    " + Constants.DB_FIELD_GLOBAL_DATE_TO + "=" + MyDataBaseDepending.getSQLTimeOutdate() + " "
+					+ "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? "
     				+ "  AND  " + this.keyFieldName + " = ? "
-					+ "  AND  " + Constants.DBFieldGlobalDate_from + " <= " + MyDataBaseDepending.getSQLTimeNow() + " "
-					+ "  AND  " + Constants.DBFieldGlobalDate_to + "   > " + MyDataBaseDepending.getSQLTimeNow() + ";");
+					+ "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= " + MyDataBaseDepending.getSQLTimeNow() + " "
+					+ "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + "   > " + MyDataBaseDepending.getSQLTimeNow() + ";");
 
     		this.insertHeadSQL		=	insertHeadSQL;
 
@@ -287,7 +287,7 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 	 * @return the filled structure
 	 * @throws SQLException
 	 */
-	protected E FillMinMax(
+	protected E fillMinMax(
 			Connection thisDataBase,
 			int mandator,
 			E thisEntry
@@ -326,28 +326,29 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 	 */
 	public E deleteEntry(String currentEntry) {
 		E	ResultValue	=	null;				
-		if( this.getUser() !=	null ) {
-			int Mandator	=	this.getUser().getMandator();
-			String User		=	this.getUser().getUser();
-			Connection ThisDataBase		=	null;
+		DomainUser thisUser	=	this.getUser();	
+		if( thisUser !=	null ) {
+			int mandator	=	thisUser.getMandator();
+			String user		=	thisUser.getUser();
+			Connection thisDataBase		=	null;
 			PreparedStatement invalidateHeadSQLStatement	=	null;
 
 			try {
 				// connect to database
 				InitialContext ic		=	new InitialContext();
-		        DataSource lDataSource	=	(DataSource)ic.lookup(lookUpDataBase);
-		        ThisDataBase			=	lDataSource.getConnection();
+		        DataSource lDataSource	=	(DataSource)ic.lookup(this.lookUpDataBase);
+		        thisDataBase			=	lDataSource.getConnection();
 				ic.close();
 
 				if( allowedToChange() ) {
 					E DBEntry	=	this.readEntry(currentEntry);
 					// invalidate head number
-					invalidateHeadSQLStatement	=	ThisDataBase.prepareStatement(invalidateHeadSQL);
+					invalidateHeadSQLStatement	=	thisDataBase.prepareStatement(this.invalidateHeadSQL);
         			invalidateHeadSQLStatement.clearParameters();
-        			invalidateHeadSQLStatement.setInt(1, Mandator);
+        			invalidateHeadSQLStatement.setInt(1, mandator);
         			invalidateHeadSQLStatement.setString(2, currentEntry);
         			invalidateHeadSQLStatement.executeUpdate();
-	        		this.insertEntry( ThisDataBase, Mandator, User, DBEntry, true);
+	        		this.insertEntry( thisDataBase, mandator, user, DBEntry, true);
 				}
 				ResultValue	= readNextEntry(currentEntry);
 	        } catch( Exception e ) {
@@ -356,8 +357,8 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 				try {
 					if( invalidateHeadSQLStatement != null )
 						invalidateHeadSQLStatement.close();
-					if( ThisDataBase != null )
-						ThisDataBase.close();
+					if( thisDataBase != null )
+						thisDataBase.close();
 				} catch (SQLException e) {
 					// ignore
 				}
@@ -396,24 +397,24 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 			String dbKeyVGL,
 			String dbKey) throws Exception {
 		int mandator	 	=	this.getUser().getMandator();
-		DataBaseDepending MyDataBaseDepending = new DataBaseDepending(thisDataBase.getMetaData().getDatabaseProductName());
+		DataBaseDepending myDataBaseDepending = new DataBaseDepending(thisDataBase.getMetaData().getDatabaseProductName());
 
-		String SQLString =
+		String sqlString =
     			"SELECT " + minMax + "(" + this.keyFieldName + ") AS dbnumber "
 			+	"FROM   " + this.dataBaseTableName + " "
-			+	"WHERE  " + Constants.DBFieldGlobalMandator + " = " + Integer.toString(mandator) + " "
+			+	"WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = " + Integer.toString(mandator) + " "
 			+	" AND   " + this.keyFieldName + " " + dbKeyVGL + " " + StringToSQL.convertString(dbKey, thisDataBase.getMetaData().getDatabaseProductName()) + " "
-			+	" AND	" + Constants.DBFieldGlobalDate_from + " <= " + MyDataBaseDepending.getSQLTimeNow() + " "
-			+	" AND	" + Constants.DBFieldGlobalDate_to + "   > " + MyDataBaseDepending.getSQLTimeNow() + " "
+			+	" AND	" + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= " + myDataBaseDepending.getSQLTimeNow() + " "
+			+	" AND	" + Constants.DB_FIELD_GLOBAL_DATE_TO + "   > " + myDataBaseDepending.getSQLTimeNow() + " "
 			+	" AND   ";
 
 		if( "=".equals(searchMethodeEntry) )
-			SQLString += StringToSQL.SearchString(searchField, searchFieldEntry, thisDataBase.getMetaData().getDatabaseProductName());
+			sqlString += StringToSQL.searchString(searchField, searchFieldEntry, thisDataBase.getMetaData().getDatabaseProductName());
 		else if( "like".equals(searchMethodeEntry) )
-			SQLString += StringToSQL.SearchString(searchField, "*" + searchFieldEntry + "*", thisDataBase.getMetaData().getDatabaseProductName());
+			sqlString += StringToSQL.searchString(searchField, "*" + searchFieldEntry + "*", thisDataBase.getMetaData().getDatabaseProductName());
 		else
-			SQLString += searchField + " " + searchMethodeEntry + " " +  StringToSQL.convertString(searchFieldEntry, thisDataBase.getMetaData().getDatabaseProductName());
-		return SQLString;
+			sqlString += searchField + " " + searchMethodeEntry + " " +  StringToSQL.convertString(searchFieldEntry, thisDataBase.getMetaData().getDatabaseProductName());
+		return sqlString;
 	}
 
 	/**
@@ -428,8 +429,9 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 	public E findFirstEntry(String searchField,
 			String searchMethodeEntry, String searchFieldEntry) {
 		E thisEntry = null;
-		if( this.getUser() !=	null ) {
-			int mandator			=	this.getUser().getMandator();
+		DomainUser thisUser	=	this.getUser();	
+		if( thisUser !=	null ) {
+			int mandator	=	thisUser.getMandator();
 			Connection thisDataBase	=	null;
 			try {
 				if( searchFieldEntry == null || "".equals(searchFieldEntry)) 
@@ -442,7 +444,7 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 			        thisDataBase			=	lDataSource.getConnection();
 					ic.close();
 
-		            thisEntry = FillMinMax( thisDataBase, mandator, thisEntry );
+		            thisEntry = fillMinMax( thisDataBase, mandator, thisEntry );
 		            String newEntry		=	thisEntry.getKeyMin();
 
 		            String sqlString	=	this.searchSQLSelect(thisDataBase, "MIN", searchField, searchMethodeEntry, searchFieldEntry, ">=", newEntry);
@@ -488,8 +490,9 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 	public E findLastEntry(String searchField,
 			String searchMethodeEntry, String searchFieldEntry) {
 		E thisEntry = null;
-		if( this.getUser() !=	null ) {
-			int mandator			=	this.getUser().getMandator();
+		DomainUser thisUser	=	this.getUser();	
+		if( thisUser !=	null ) {
+			int mandator	=	thisUser.getMandator();
 			Connection thisDataBase	=	null;
 			try {
 				if( searchFieldEntry == null || "".equals(searchFieldEntry)) 
@@ -498,11 +501,11 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 					thisEntry = createInstance();
 					// connect to database
 					InitialContext ic		=	new InitialContext();
-			        DataSource lDataSource	=	(DataSource)ic.lookup(lookUpDataBase);
+			        DataSource lDataSource	=	(DataSource)ic.lookup(this.lookUpDataBase);
 			        thisDataBase			=	lDataSource.getConnection();
 					ic.close();
 
-		            thisEntry = FillMinMax( thisDataBase, mandator, thisEntry );
+		            thisEntry = fillMinMax( thisDataBase, mandator, thisEntry );
 		            String newEntry		=	thisEntry.getKeyMax();
 
 		            String sqlString	=	this.searchSQLSelect(thisDataBase, "MAX", searchField, searchMethodeEntry, searchFieldEntry, "<=", newEntry);
@@ -550,8 +553,9 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 			String searchMethodeEntry, String searchFieldEntry,
 			String currentEntry) {
 		E thisEntry = null;
-		if( this.getUser() !=	null ) {
-			int mandator			=	this.getUser().getMandator();
+		DomainUser thisUser	=	this.getUser();	
+		if( thisUser !=	null ) {
+			int mandator	=	thisUser.getMandator();
 			Connection thisDataBase	=	null;	
 			try {
 				if( searchFieldEntry == null || "".equals(searchFieldEntry)) 
@@ -560,11 +564,11 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 					thisEntry = createInstance();
 					// connect to database
 					InitialContext ic		=	new InitialContext();
-			        DataSource lDataSource	=	(DataSource)ic.lookup(lookUpDataBase);
+			        DataSource lDataSource	=	(DataSource)ic.lookup(this.lookUpDataBase);
 			        thisDataBase			=	lDataSource.getConnection();
 					ic.close();
 
-		            thisEntry = FillMinMax( thisDataBase, mandator, thisEntry );
+		            thisEntry = fillMinMax( thisDataBase, mandator, thisEntry );
 		            String newEntry =	currentEntry;
 
 		            String sqlString	=	this.searchSQLSelect(thisDataBase, "MIN", searchField, searchMethodeEntry, searchFieldEntry, ">", newEntry);
@@ -612,8 +616,9 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 			String searchMethodeEntry, String searchFieldEntry,
 			String currentEntry) {
 		E thisEntry = null;
-		if( this.getUser() !=	null ) {
-			int mandator			=	this.getUser().getMandator();
+		DomainUser thisUser	=	this.getUser();	
+		if( thisUser !=	null ) {
+			int mandator	=	thisUser.getMandator();
 			Connection thisDataBase	=	null;	
 			try {
 				if( searchFieldEntry == null || "".equals(searchFieldEntry)) 
@@ -622,11 +627,11 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 					thisEntry = createInstance();
 					// connect to database
 					InitialContext ic		=	new InitialContext();
-			        DataSource lDataSource		=	(DataSource)ic.lookup(lookUpDataBase);
+			        DataSource lDataSource		=	(DataSource)ic.lookup(this.lookUpDataBase);
 			        thisDataBase = lDataSource.getConnection();
 					ic.close();
 
-		            thisEntry = FillMinMax( thisDataBase, mandator, thisEntry );
+		            thisEntry = fillMinMax( thisDataBase, mandator, thisEntry );
 		            String newEntry =	currentEntry;
 
 		            String sqlString	=	this.searchSQLSelect(thisDataBase, "MAX", searchField, searchMethodeEntry, searchFieldEntry, "<", newEntry);
@@ -716,27 +721,28 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 	 */
 	public E readEntry(String entry) {
 		E thisEntry = null;
-		if( this.getUser() !=	null ) {
-			int mandator			=	this.getUser().getMandator();
-			Connection ThisDataBase	=	null;	
+		DomainUser thisUser	=	this.getUser();	
+		if( thisUser !=	null ) {
+			int mandator	=	thisUser.getMandator();
+			Connection thisDataBase	=	null;	
 
 			try {
 				thisEntry = createInstance();
 				// connect to database
 				InitialContext ic		=	new InitialContext();
-		        DataSource lDataSource	=	(DataSource)ic.lookup(lookUpDataBase);
-		        ThisDataBase =	lDataSource.getConnection();
+		        DataSource lDataSource	=	(DataSource)ic.lookup(this.lookUpDataBase);
+		        thisDataBase =	lDataSource.getConnection();
 				ic.close();
 				if( thisEntry	!=	null )
-					thisEntry	=	readOneEntry( ThisDataBase, mandator, entry, thisEntry );
+					thisEntry	=	readOneEntry( thisDataBase, mandator, entry, thisEntry );
 				if( thisEntry	!=	null )
-					thisEntry	=	FillMinMax( ThisDataBase, mandator, thisEntry );
+					thisEntry	=	fillMinMax( thisDataBase, mandator, thisEntry );
 			} catch (Exception e) {
 				thisEntry	=	null;
 			} finally {
 				try {
-					if( ThisDataBase != null )
-						ThisDataBase.close();
+					if( thisDataBase != null )
+						thisDataBase.close();
 				} catch (SQLException e) {
 					// ignore
 				}
@@ -754,29 +760,30 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 	 */
 	public E readFirstEntry() {
 		E thisEntry = null;
-		if( this.getUser() !=	null ) {
-			int Mandator			=	this.getUser().getMandator();
-			Connection ThisDataBase	=	null;
+		DomainUser thisUser	=	this.getUser();	
+		if( thisUser !=	null ) {
+			int mandator	=	thisUser.getMandator();
+			Connection thisDataBase	=	null;
 
 			try {
 				thisEntry = createInstance();
 				// connect to database
 				InitialContext ic		=	new InitialContext();
-		        DataSource lDataSource	=	(DataSource)ic.lookup(lookUpDataBase);
-		        ThisDataBase			=	lDataSource.getConnection();
+		        DataSource lDataSource	=	(DataSource)ic.lookup(this.lookUpDataBase);
+		        thisDataBase			=	lDataSource.getConnection();
 				ic.close();
 
-				thisEntry = FillMinMax( ThisDataBase, Mandator, thisEntry );
+				thisEntry = fillMinMax( thisDataBase, mandator, thisEntry );
 		        if( thisEntry	!=	null )
-		        	thisEntry	=	readOneEntry( ThisDataBase, Mandator, thisEntry.getKeyMin(), thisEntry );
+		        	thisEntry	=	readOneEntry( thisDataBase, mandator, thisEntry.getKeyMin(), thisEntry );
 		        else
 		        	thisEntry	=	null;
 			} catch (Exception e) {
 				thisEntry	=	null;
 			} finally {
 				try {
-					if( ThisDataBase != null )
-						ThisDataBase.close();
+					if( thisDataBase != null )
+						thisDataBase.close();
 				} catch (SQLException e) {
 					// ignore
 				}
@@ -794,28 +801,29 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 	 */
 	public E readLastEntry() {
 		E thisEntry = null;
-		if( this.getUser() !=	null ) {
-			int Mandator			=	this.getUser().getMandator();
+		DomainUser thisUser	=	this.getUser();	
+		if( thisUser !=	null ) {
+			int mandator	=	thisUser.getMandator();
 			thisEntry				=	createInstance();
-			Connection ThisDataBase =	null;
+			Connection thisDataBase =	null;
 			try {
 				// connect to database
 				InitialContext ic		=	new InitialContext();
-		        DataSource lDataSource	=	(DataSource)ic.lookup(lookUpDataBase);
-		        ThisDataBase			=	lDataSource.getConnection();
+		        DataSource lDataSource	=	(DataSource)ic.lookup(this.lookUpDataBase);
+		        thisDataBase			=	lDataSource.getConnection();
 				ic.close();
 
-				thisEntry = FillMinMax( ThisDataBase, Mandator, thisEntry );
+				thisEntry = fillMinMax( thisDataBase, mandator, thisEntry );
 		        if( thisEntry	!=	null )
-		        	thisEntry	=	readOneEntry( ThisDataBase, Mandator, thisEntry.getKeyMax(), thisEntry );
+		        	thisEntry	=	readOneEntry( thisDataBase, mandator, thisEntry.getKeyMax(), thisEntry );
 		        else
 		        	thisEntry	=	null;
 			} catch (Exception e) {
 				thisEntry	=	null;
 			} finally {
 				try {
-					if( ThisDataBase != null )
-						ThisDataBase.close();
+					if( thisDataBase != null )
+						thisDataBase.close();
 				} catch (SQLException e) {
 					// ignore
 				}
@@ -835,8 +843,9 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 	 */
 	public E readNextEntry(String currentEntry) {
 		E thisEntry = null;
-		if( this.getUser() !=	null ) {
-			int mandator			=	this.getUser().getMandator();
+		DomainUser thisUser	=	this.getUser();	
+		if( thisUser !=	null ) {
+			int mandator	=	thisUser.getMandator();
 			thisEntry				=	createInstance();
 			Connection thisDataBase =	null;
 			PreparedStatement readNextSQLStatement			=	null;
@@ -844,15 +853,15 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 			try {
 				// connect to database
 				InitialContext ic		=	new InitialContext();
-		        DataSource lDataSource	=	(DataSource)ic.lookup(lookUpDataBase);
+		        DataSource lDataSource	=	(DataSource)ic.lookup(this.lookUpDataBase);
 		        thisDataBase			=	lDataSource.getConnection();
 				ic.close();
 
-				thisEntry = FillMinMax( thisDataBase, mandator, thisEntry );
+				thisEntry = fillMinMax( thisDataBase, mandator, thisEntry );
 		        String newEntryName = thisEntry.getKeyMax();
 		        if( thisEntry != null ) {
 		        	if( currentEntry != null && !"".equals(currentEntry)) {
-		        		readNextSQLStatement			=	thisDataBase.prepareStatement(readNextSQL);
+		        		readNextSQLStatement			=	thisDataBase.prepareStatement(this.readNextSQL);
 	        			readNextSQLStatement.clearParameters();
 	        			readNextSQLStatement.setInt( 1, mandator);
 	        			readNextSQLStatement.setString( 2, currentEntry);
@@ -885,14 +894,15 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 	 * <code>readPreviousEntry</code> is used to read the previous entry
 	 * from database
 	 * 
-	 * @param CurrentEntry
+	 * @param currentEntry
 	 * 			the currently displayed entry
 	 * @return the filled user structure
 	 */
-	public E readPreviousEntry(String CurrentEntry) {
+	public E readPreviousEntry(String currentEntry) {
 		E thisEntry = null;
-		if( this.getUser() !=	null ) {
-			int mandator			=	this.getUser().getMandator();
+		DomainUser thisUser	=	this.getUser();	
+		if( thisUser !=	null ) {
+			int mandator	=	thisUser.getMandator();
 			thisEntry				=	createInstance();
 			Connection thisDataBase	=	null;
 			PreparedStatement readPrevSQLStatement			=	null;
@@ -900,18 +910,18 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 			try {
 				// connect to database
 				InitialContext ic		=	new InitialContext();
-		        DataSource lDataSource	=	(DataSource)ic.lookup(lookUpDataBase);
+		        DataSource lDataSource	=	(DataSource)ic.lookup(this.lookUpDataBase);
 		        thisDataBase			=	lDataSource.getConnection();
 				ic.close();
 
-				thisEntry = FillMinMax( thisDataBase, mandator, thisEntry );
+				thisEntry = fillMinMax( thisDataBase, mandator, thisEntry );
 		        String newEntryName = thisEntry.getKeyMin();
 		        if( thisEntry != null ) {
-		        	if( CurrentEntry != null && !"".equals(CurrentEntry)) {
-		        		readPrevSQLStatement			=	thisDataBase.prepareStatement(readPrevSQL);
+		        	if( currentEntry != null && !"".equals(currentEntry)) {
+		        		readPrevSQLStatement			=	thisDataBase.prepareStatement(this.readPrevSQL);
 	        			readPrevSQLStatement.clearParameters();
 	        			readPrevSQLStatement.setInt( 1, mandator);
-	        			readPrevSQLStatement.setString( 2, CurrentEntry);
+	        			readPrevSQLStatement.setString( 2, currentEntry);
 	        			ResultSet result = readPrevSQLStatement.executeQuery();
 
 				        if( result.next() )
@@ -970,9 +980,10 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 	 * 			entry that has to be saved
 	 */
 	public E saveEntry(E currentEntry) {
-		if( this.getUser() !=	null ) {
-			int mandator	=	this.getUser().getMandator();
-			String user		=	this.getUser().getUser();
+		DomainUser thisUser	=	this.getUser();	
+		if( thisUser !=	null ) {
+			int mandator	=	thisUser.getMandator();
+			String user		=	thisUser.getUser();
 			String saveKeyString	=	currentEntry.getKeyCur();
 			if( saveKeyString == null || "".equals(saveKeyString) )
 				saveKeyString		=	currentEntry.getKeyNew();
@@ -985,7 +996,7 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 					E dbEntry = createInstance();
 					// connect to database
 					InitialContext ic		=	new InitialContext();
-			        DataSource lDataSource	=	(DataSource)ic.lookup(lookUpDataBase);
+			        DataSource lDataSource	=	(DataSource)ic.lookup(this.lookUpDataBase);
 			        thisDataBase			=	lDataSource.getConnection();
 					ic.close();
 
@@ -997,7 +1008,7 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 					if( !currentEntry.equals( dbEntry ) ) {
 						if( !currentEntry.equalsEntry(dbEntry) ) {
 							// Invalidate old entry
-							invalidateHeadSQLStatement	=	thisDataBase.prepareStatement(invalidateHeadSQL);
+							invalidateHeadSQLStatement	=	thisDataBase.prepareStatement(this.invalidateHeadSQL);
 		        			invalidateHeadSQLStatement.clearParameters();
 		        			invalidateHeadSQLStatement.setInt(1, mandator);
 		        			invalidateHeadSQLStatement.setString(2, saveKeyString);
@@ -1007,7 +1018,7 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 							this.insertEntry( thisDataBase, mandator, user, currentEntry, false);
 
 							currentEntry.setKeyCur(saveKeyString);
-							this.FillMinMax(thisDataBase, mandator, currentEntry);
+							this.fillMinMax(thisDataBase, mandator, currentEntry);
 							currentEntry	=	readOneEntry( thisDataBase, mandator, saveKeyString, currentEntry );
 						}
 					}

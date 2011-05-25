@@ -32,6 +32,7 @@ import javax.sql.DataSource;
 import com.google.gwt.user.server.rpc.UnexpectedException;
 
 import de.knightsoft.DBNavigationBar.client.domain.DomainHeadDataBase;
+import de.knightsoft.DBNavigationBar.client.domain.DomainUser;
 import de.knightsoft.DBNavigationBar.shared.Constants;
 
 /**
@@ -90,29 +91,29 @@ public abstract class DBHeadTemplate<E extends DomainHeadDataBase> extends DBHea
 				"SELECT MIN(" + keyFieldName + ") AS min, " +
 				"       MAX(" + keyFieldName + ") AS max " +
 				"FROM   " + dataBaseTableName + " " +
-				"WHERE  " + Constants.DBFieldGlobalMandator + " = ? ;"),
+				"WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? ;"),
 
 				(readNextSQL != null ? readNextSQL :
 				"SELECT MIN(" + keyFieldName + ") AS dbnumber " +
     			"FROM   " + dataBaseTableName + " " +
-  				"WHERE  " + Constants.DBFieldGlobalMandator + " = ? " +
+  				"WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " +
   				"  AND  " + keyFieldName + " > ? ;"),
 
   				(readPrevSQL != null ? readPrevSQL :
   				"SELECT MAX(" + keyFieldName + ") AS dbnumber " +
   				"FROM   " + dataBaseTableName + " " +
-				"WHERE  " + Constants.DBFieldGlobalMandator + " = ? " +
+				"WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " +
 				"  AND  " + keyFieldName + " < ? ;"),
 
 				(readHeadSQL != null ? readHeadSQL :
 				"SELECT * " +
 		  	  	"FROM   " + dataBaseTableName + " " +
-				"WHERE  " + Constants.DBFieldGlobalMandator + " = ? " +
+				"WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " +
 				"  AND  " + keyFieldName + " = ? ;"),
 
 				(insertHeadSQL != null ? insertHeadSQL :
 				"DELETE FROM " + dataBaseTableName + " " +
-				"WHERE  " + Constants.DBFieldGlobalMandator + " = ? " +
+				"WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " +
 				"  AND  " + keyFieldName + " = ? ;")
 		);
 
@@ -240,14 +241,14 @@ public abstract class DBHeadTemplate<E extends DomainHeadDataBase> extends DBHea
 		String sqlString =
     			"SELECT " + minMax + "(" + this.keyFieldName + ") AS dbnumber "
 			+	"FROM   " + this.dataBaseTableName + " "
-			+	"WHERE  " + Constants.DBFieldGlobalMandator + " = " + Integer.toString(mandator) + " "
+			+	"WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = " + Integer.toString(mandator) + " "
 			+	" AND   " + this.keyFieldName + " " + dbKeyVGL + " " + StringToSQL.convertString(dbKey, thisDataBase.getMetaData().getDatabaseProductName()) + " "
 			+	" AND   ";
 
 		if( "=".equals(searchMethodeEntry) )
-			sqlString += StringToSQL.SearchString(searchField, searchFieldEntry, thisDataBase.getMetaData().getDatabaseProductName());
+			sqlString += StringToSQL.searchString(searchField, searchFieldEntry, thisDataBase.getMetaData().getDatabaseProductName());
 		else if( "like".equals(searchMethodeEntry) )
-			sqlString += StringToSQL.SearchString(searchField, "*" + searchFieldEntry + "*", thisDataBase.getMetaData().getDatabaseProductName());
+			sqlString += StringToSQL.searchString(searchField, "*" + searchFieldEntry + "*", thisDataBase.getMetaData().getDatabaseProductName());
 		else
 			sqlString += searchField + " " + searchMethodeEntry + " " +  StringToSQL.convertString(searchFieldEntry, thisDataBase.getMetaData().getDatabaseProductName());
 		return sqlString;
@@ -259,10 +260,12 @@ public abstract class DBHeadTemplate<E extends DomainHeadDataBase> extends DBHea
 	 * @param currentEntry
 	 * 			entry that has to be saved
 	 */
+    @Override
 	public E saveEntry(E currentEntry) {
-		if( this.getUser() !=	null ) {
-			int mandator	=	this.getUser().getMandator();
-			String user		=	this.getUser().getUser();
+		DomainUser thisUser	=	this.getUser();	
+		if( thisUser !=	null ) {
+			int mandator	=	thisUser.getMandator();
+			String user		=	thisUser.getUser();
 			String saveKeyString	=	currentEntry.getKeyCur();
 			if( saveKeyString == null || "".equals(saveKeyString) )
 				saveKeyString		=	currentEntry.getKeyNew();
@@ -299,7 +302,7 @@ public abstract class DBHeadTemplate<E extends DomainHeadDataBase> extends DBHea
 					}
 					
 					currentEntry.setKeyCur(saveKeyString);
-					this.FillMinMax(thisDataBase, mandator, currentEntry);
+					this.fillMinMax(thisDataBase, mandator, currentEntry);
 					currentEntry	=	readOneEntry( thisDataBase, mandator, saveKeyString, currentEntry );
 				}
 

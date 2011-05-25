@@ -49,6 +49,23 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class DBNavigationBarWidget extends Composite implements HasClickHandlers {
 
+	public static enum ButtonState {
+		NEW,
+		SAVE,
+		DELETE,
+		STOP,
+		FAST_BACK,
+		FAST_BACK_FIND,
+		BACK,
+		BACK_FIND,
+		CHANGE,
+		FORWARD,
+		FORWARD_FIND,
+		FAST_FORWARD,
+		FAST_FORWARD_FIND,
+		USER_DEFINED;
+	}
+
 	private static final DBNavigationBarImages images = (DBNavigationBarImages) GWT.create(DBNavigationBarImages.class);
 	
 	public interface DBNavigationBarImages extends ClientBundle {
@@ -86,32 +103,18 @@ public class DBNavigationBarWidget extends Composite implements HasClickHandlers
 		ImageResource userdefined();
 	}
 	
-	private DialogBox dialogYesNoBox			=	null;
+	private final DialogBox dialogYesNoBox;
 
-	private String userdefinedText				=	null;
-	private String buttonState					=	null;
-	private String searchFieldString			=	null;
-	private String searchFieldEntry				=	null;
-	private String searchFieldMethode			=	null;
-	public final static String ButtonStateNew			=	"new";
-	public final static String ButtonStateSave			=	"save";
-	public final static String ButtonStateDelete		=	"delete";
-	public final static String ButtonStateStop			=	"stop";
-	public final static String ButtonStateFBack			=	"fback";
-	public final static String ButtonStateFBackFind		=	"fbackfind";
-	public final static String ButtonStateBack			=	"back";
-	public final static String ButtonStateBackFind		=	"backfind";
-	public final static String ButtonStateChange		=	"change";
-	public final static String ButtonStateForward		=	"forward";
-	public final static String ButtonStateForwardFind	=	"forwardfind";
-	public final static String ButtonStateFForward		=	"fforward";
-	public final static String ButtonStateFForwardFind	=	"fforwardfind";
-	public final static String ButtonStateUserDef		=	"userdefined";
+	private final String userdefinedText;
+	private ButtonState buttonState;
+	private String searchFieldString;
+	private String searchFieldEntry;
+	private String searchFieldMethode;
 	
-	private String currentDBNumber				=	null;
-	private String oldDBNumber					=	null;
-	private String minDBNumber					=	null;
-	private String maxDBNumber					=	null;
+	private String currentDBNumber;
+	private String oldDBNumber;
+	private String minDBNumber;
+	private String maxDBNumber;
 
 	private final VerticalPanel bigpanel		=	new VerticalPanel();
 	private final HorizontalPanel panel			=	new HorizontalPanel();
@@ -160,7 +163,7 @@ public class DBNavigationBarWidget extends Composite implements HasClickHandlers
 	private final ListBox searchMethodeSelect	=	new ListBox(false);
 	private final Label SearchMethodesLabel		=	new Label();
 	private static final String SearchMethodesSmall[] = {"=", ">", ">=", "<=", "<", "like"};
-	private String SearchMethodes[] = {"=", ">", ">=", "<=", "<", "like"};
+	private static final String SearchMethodes[] = {"=", ">", ">=", "<=", "<", "like"};
 
 
 	private boolean newPushButtonEnabled			=	true;
@@ -180,19 +183,19 @@ public class DBNavigationBarWidget extends Composite implements HasClickHandlers
 	private static final int SPACING			=	10;
 	private static final String PANELSTYLE		=	"PANELSTYLE";
 
-	private String[] searchFieldsRemember;
+	private final String[] searchFieldsRemember;
 
-	private DBNavigationBarWidgetConstants constants;
+	private final DBNavigationBarWidgetConstants constants;
 
 	public DBNavigationBarWidget(
 			String[] searchfields,
 			String[] searchFieldsDisplay,
 			String userdefinedText) {
 
-		constants = (DBNavigationBarWidgetConstants) GWT.create(DBNavigationBarWidgetConstants.class);
+		this.constants = (DBNavigationBarWidgetConstants) GWT.create(DBNavigationBarWidgetConstants.class);
 
-		dialogYesNoBox = createYesNoDialogBox(constants);
-		dialogYesNoBox.hide();
+		this.dialogYesNoBox = createYesNoDialogBox(constants);
+		this.dialogYesNoBox.hide();
 
 		this.searchFieldsRemember	=	searchfields;
 
@@ -209,12 +212,12 @@ public class DBNavigationBarWidget extends Composite implements HasClickHandlers
 		this.userdefinedText	=	userdefinedText;
 		this.hintText.setText("");
 
-		this.SearchMethodes[0]	=	constants.findEquals();
-		this.SearchMethodes[1]	=	constants.findGreater();
-		this.SearchMethodes[2]	=	constants.findGreaterEquals();
-		this.SearchMethodes[3]	=	constants.findLowerEquals();
-		this.SearchMethodes[4]	=	constants.findLower();
-		this.SearchMethodes[5]	=	constants.findContains();
+		DBNavigationBarWidget.SearchMethodes[0]	=	constants.findEquals();
+		DBNavigationBarWidget.SearchMethodes[1]	=	constants.findGreater();
+		DBNavigationBarWidget.SearchMethodes[2]	=	constants.findGreaterEquals();
+		DBNavigationBarWidget.SearchMethodes[3]	=	constants.findLowerEquals();
+		DBNavigationBarWidget.SearchMethodes[4]	=	constants.findLower();
+		DBNavigationBarWidget.SearchMethodes[5]	=	constants.findContains();
 
 		this.newPushButton.setAccessKey(constants.buttonNewAccessKey().trim().charAt(0));
 		this.newPushButton.setTitle(constants.buttonNewMessage());
@@ -281,70 +284,71 @@ public class DBNavigationBarWidget extends Composite implements HasClickHandlers
 	    // Create a handler for the sendButton and nameField
 	    class MyHandler implements ClickHandler {
 
+			@Override
 			public void onClick(ClickEvent event) {
 				PushButton eventPushButton		=	null;
 				eventPushButton		=	(PushButton)event.getSource();
 					
-				hintText.setText("");
+				DBNavigationBarWidget.this.hintText.setText("");
 
-				if( newPushButton.equals(eventPushButton)) {
-					buttonState	=	ButtonStateNew;
+				if( DBNavigationBarWidget.this.newPushButton.equals(eventPushButton)) {
+					DBNavigationBarWidget.this.buttonState	=	ButtonState.NEW;
 					fireEvent(event);
-				} else if ( savePushButton.equals(eventPushButton)) {
-					buttonState	=	ButtonStateSave;
+				} else if ( DBNavigationBarWidget.this.savePushButton.equals(eventPushButton)) {
+					DBNavigationBarWidget.this.buttonState	=	ButtonState.SAVE;
 					fireEvent(event);
-				} else if ( deletePushButton.equals(eventPushButton)) {
-					dialogYesNoBox.center();
-					dialogYesNoBox.show();
-				} else if ( stopPushButton.equals(eventPushButton)) {
-					buttonState	=	ButtonStateStop;
+				} else if ( DBNavigationBarWidget.this.deletePushButton.equals(eventPushButton)) {
+					DBNavigationBarWidget.this.dialogYesNoBox.center();
+					DBNavigationBarWidget.this.dialogYesNoBox.show();
+				} else if ( DBNavigationBarWidget.this.stopPushButton.equals(eventPushButton)) {
+					DBNavigationBarWidget.this.buttonState	=	ButtonState.STOP;
 					fireEvent(event);
-				} else if ( fbackPushButton.equals(eventPushButton)) {
-					buttonState	=	ButtonStateFBack;
-					if( findToggleButton.isDown() ) {
-						searchFieldString	=	searchFieldsRemember[(fieldSelect.getSelectedIndex() < 0 ? 0 : fieldSelect.getSelectedIndex())];
-						searchFieldMethode	=	SearchMethodesSmall[(searchMethodeSelect.getSelectedIndex() < 0 ? 0 : searchMethodeSelect.getSelectedIndex())];
-						searchFieldEntry	=	fieldEntry.getText();
-						if( searchFieldEntry != null && !"".equals(searchFieldEntry) )
-							buttonState	=	ButtonStateFBackFind;
+				} else if ( DBNavigationBarWidget.this.fbackPushButton.equals(eventPushButton)) {
+					DBNavigationBarWidget.this.buttonState	=	ButtonState.FAST_BACK;
+					if( DBNavigationBarWidget.this.findToggleButton.isDown() ) {
+						DBNavigationBarWidget.this.searchFieldString	=	DBNavigationBarWidget.this.searchFieldsRemember[(fieldSelect.getSelectedIndex() < 0 ? 0 : fieldSelect.getSelectedIndex())];
+						DBNavigationBarWidget.this.searchFieldMethode	=	DBNavigationBarWidget.SearchMethodesSmall[(searchMethodeSelect.getSelectedIndex() < 0 ? 0 : searchMethodeSelect.getSelectedIndex())];
+						DBNavigationBarWidget.this.searchFieldEntry		=	DBNavigationBarWidget.this.fieldEntry.getText();
+						if( DBNavigationBarWidget.this.searchFieldEntry != null && !"".equals(DBNavigationBarWidget.this.searchFieldEntry) )
+							DBNavigationBarWidget.this.buttonState	=	ButtonState.FAST_BACK_FIND;
 					}
 					fireEvent(event);
-				} else if ( backPushButton.equals(eventPushButton)) {
-					buttonState	=	ButtonStateBack;
-					if( findToggleButton.isDown() ) {
-						searchFieldString	=	searchFieldsRemember[(fieldSelect.getSelectedIndex() < 0 ? 0 : fieldSelect.getSelectedIndex())];
-						searchFieldMethode	=	SearchMethodesSmall[(searchMethodeSelect.getSelectedIndex() < 0 ? 0 : searchMethodeSelect.getSelectedIndex())];
-						searchFieldEntry	=	fieldEntry.getText();
-						if( searchFieldEntry != null && !"".equals(searchFieldEntry) )
-							buttonState	=	ButtonStateBackFind;
+				} else if ( DBNavigationBarWidget.this.backPushButton.equals(eventPushButton)) {
+					DBNavigationBarWidget.this.buttonState	=	ButtonState.BACK;
+					if( DBNavigationBarWidget.this.findToggleButton.isDown() ) {
+						DBNavigationBarWidget.this.searchFieldString	=	DBNavigationBarWidget.this.searchFieldsRemember[(fieldSelect.getSelectedIndex() < 0 ? 0 : fieldSelect.getSelectedIndex())];
+						DBNavigationBarWidget.this.searchFieldMethode	=	DBNavigationBarWidget.SearchMethodesSmall[(searchMethodeSelect.getSelectedIndex() < 0 ? 0 : searchMethodeSelect.getSelectedIndex())];
+						DBNavigationBarWidget.this.searchFieldEntry	=	DBNavigationBarWidget.this.fieldEntry.getText();
+						if( DBNavigationBarWidget.this.searchFieldEntry != null && !"".equals(searchFieldEntry) )
+							DBNavigationBarWidget.this.buttonState	=	ButtonState.BACK_FIND;
 					}
 					fireEvent(event);
-				} else if ( okPushButton.equals(eventPushButton)) {
-					buttonState	=	ButtonStateChange;
-					currentDBNumber	=	currentEntry.getText();
+				} else if ( DBNavigationBarWidget.this.okPushButton.equals(eventPushButton)) {
+					DBNavigationBarWidget.this.buttonState	=	ButtonState.CHANGE;
+					DBNavigationBarWidget.this.currentDBNumber	=	DBNavigationBarWidget.this.currentEntry.getText();
 					fireEvent(event);
-				} else if ( forwardPushButton.equals(eventPushButton)) {
-					buttonState	=	ButtonStateForward;
-					if( findToggleButton.isDown() ) {
-						searchFieldString	=	searchFieldsRemember[(fieldSelect.getSelectedIndex() < 0 ? 0 : fieldSelect.getSelectedIndex())];
-						searchFieldMethode	=	SearchMethodesSmall[(searchMethodeSelect.getSelectedIndex() < 0 ? 0 : searchMethodeSelect.getSelectedIndex())];
-						searchFieldEntry	=	fieldEntry.getText();
-						if( searchFieldEntry != null && !"".equals(searchFieldEntry) )
-							buttonState	=	ButtonStateForwardFind;
+				} else if ( DBNavigationBarWidget.this.forwardPushButton.equals(eventPushButton)) {
+					DBNavigationBarWidget.this.buttonState	=	ButtonState.FORWARD;
+					if( DBNavigationBarWidget.this.findToggleButton.isDown() ) {
+						DBNavigationBarWidget.this.searchFieldString	=	DBNavigationBarWidget.this.searchFieldsRemember[(fieldSelect.getSelectedIndex() < 0 ? 0 : fieldSelect.getSelectedIndex())];
+						DBNavigationBarWidget.this.searchFieldMethode	=	DBNavigationBarWidget.SearchMethodesSmall[(searchMethodeSelect.getSelectedIndex() < 0 ? 0 : searchMethodeSelect.getSelectedIndex())];
+						DBNavigationBarWidget.this.searchFieldEntry		=	DBNavigationBarWidget.this.fieldEntry.getText();
+						if( DBNavigationBarWidget.this.searchFieldEntry != null && !"".equals(searchFieldEntry) )
+							DBNavigationBarWidget.this.buttonState	=	ButtonState.FORWARD_FIND;
 					}
 					fireEvent(event);
-				} else if ( fforwardPushButton.equals(eventPushButton)) {
-					buttonState	=	ButtonStateFForward;
-					if( findToggleButton.isDown() ) {
-						searchFieldString	=	searchFieldsRemember[(fieldSelect.getSelectedIndex() < 0 ? 0 : fieldSelect.getSelectedIndex())];
-						searchFieldMethode	=	SearchMethodesSmall[(searchMethodeSelect.getSelectedIndex() < 0 ? 0 : searchMethodeSelect.getSelectedIndex())];
-						searchFieldEntry	=	fieldEntry.getText();
-						if( searchFieldEntry != null && !"".equals(searchFieldEntry) )
-							buttonState	=	ButtonStateFForwardFind;
+				} else if ( DBNavigationBarWidget.this.fforwardPushButton.equals(eventPushButton)) {
+					DBNavigationBarWidget.this.buttonState	=	ButtonState.FAST_FORWARD;
+					if( DBNavigationBarWidget.this.findToggleButton.isDown() ) {
+						DBNavigationBarWidget.this.searchFieldString	=	DBNavigationBarWidget.this.searchFieldsRemember[(fieldSelect.getSelectedIndex() < 0 ? 0 : fieldSelect.getSelectedIndex())];
+						DBNavigationBarWidget.this.searchFieldMethode	=	DBNavigationBarWidget.SearchMethodesSmall[(searchMethodeSelect.getSelectedIndex() < 0 ? 0 : searchMethodeSelect.getSelectedIndex())];
+						DBNavigationBarWidget.this.searchFieldEntry		=	DBNavigationBarWidget.this.fieldEntry.getText();
+						if( DBNavigationBarWidget.this.searchFieldEntry != null && !"".equals(searchFieldEntry) )
+							DBNavigationBarWidget.this.buttonState	=	ButtonState.FAST_FORWARD_FIND;
 					}
 					fireEvent(event);
-				} else if ( userdefinedPushButton.equals(eventPushButton)) {
-					buttonState	=	ButtonStateUserDef;
+				} else if ( DBNavigationBarWidget.this.userdefinedPushButton.equals(eventPushButton)) {
+					DBNavigationBarWidget.this.buttonState	=	ButtonState.USER_DEFINED;
 					fireEvent(event);
 				}
 			}
@@ -352,22 +356,24 @@ public class DBNavigationBarWidget extends Composite implements HasClickHandlers
 	    }
 
 	    class MyEntryHandler implements KeyUpHandler {
+			@Override
 			public void onKeyUp(KeyUpEvent event) {
 				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 					class OurClickEvent extends ClickEvent {};
-					okPushButton.fireEvent((ClickEvent)(new OurClickEvent()));
+					DBNavigationBarWidget.this.okPushButton.fireEvent((new OurClickEvent()));
 				}
 			}
 	    }
 
 	    class MySearchHandler implements KeyUpHandler {
+			@Override
 			public void onKeyUp(KeyUpEvent event) {
 				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 					class OurClickEvent extends ClickEvent {};
-					if( fbackPushButton.isEnabled() && fbackPushButton.isVisible() )
-						fbackPushButton.fireEvent((ClickEvent)(new OurClickEvent()));
+					if( DBNavigationBarWidget.this.fbackPushButton.isEnabled() && DBNavigationBarWidget.this.fbackPushButton.isVisible() )
+						DBNavigationBarWidget.this.fbackPushButton.fireEvent((new OurClickEvent()));
 					else
-						forwardPushButton.fireEvent((ClickEvent)(new OurClickEvent()));
+						DBNavigationBarWidget.this.forwardPushButton.fireEvent((new OurClickEvent()));
 				}
 			}
 	    }
@@ -379,19 +385,20 @@ public class DBNavigationBarWidget extends Composite implements HasClickHandlers
 	    this.savePushButton.addClickHandler(handler);
 	    this.deletePushButton.addClickHandler(handler);
 	    ClickHandler myFindToggleClick	=	new ClickHandler(){
+			@Override
 			public void onClick(ClickEvent event) {
 			    if( ((ToggleButton)event.getSource()).isDown() ) {
-			    	searchpanel.setVisible(true);
-			    	fbackPushButton.setTitle(constants.buttonFBackMessageFind());
-			    	backPushButton.setTitle(constants.buttonBackMessageFind());
-			    	forwardPushButton.setTitle(constants.buttonForwardMessageFind());
-			    	fforwardPushButton.setTitle(constants.buttonFForwardMessageFind());
+			    	DBNavigationBarWidget.this.searchpanel.setVisible(true);
+			    	DBNavigationBarWidget.this.fbackPushButton.setTitle(DBNavigationBarWidget.this.constants.buttonFBackMessageFind());
+			    	DBNavigationBarWidget.this.backPushButton.setTitle(DBNavigationBarWidget.this.constants.buttonBackMessageFind());
+			    	DBNavigationBarWidget.this.forwardPushButton.setTitle(DBNavigationBarWidget.this.constants.buttonForwardMessageFind());
+			    	DBNavigationBarWidget.this.fforwardPushButton.setTitle(DBNavigationBarWidget.this.constants.buttonFForwardMessageFind());
 			    } else {
-			    	searchpanel.setVisible(false);
-			    	fbackPushButton.setTitle(constants.buttonFBackMessage());
-			    	backPushButton.setTitle(constants.buttonBackMessage());
-			    	forwardPushButton.setTitle(constants.buttonForwardMessage());
-			    	fforwardPushButton.setTitle(constants.buttonFForwardMessage());
+			    	DBNavigationBarWidget.this.searchpanel.setVisible(false);
+			    	DBNavigationBarWidget.this.fbackPushButton.setTitle(DBNavigationBarWidget.this.constants.buttonFBackMessage());
+			    	DBNavigationBarWidget.this.backPushButton.setTitle(DBNavigationBarWidget.this.constants.buttonBackMessage());
+			    	DBNavigationBarWidget.this.forwardPushButton.setTitle(DBNavigationBarWidget.this.constants.buttonForwardMessage());
+			    	DBNavigationBarWidget.this.fforwardPushButton.setTitle(DBNavigationBarWidget.this.constants.buttonFForwardMessage());
 			    }
 			}
 	    };
@@ -478,10 +485,10 @@ public class DBNavigationBarWidget extends Composite implements HasClickHandlers
 	}
 
 	public DBNavigationBarWidgetConstants getConstants() {
-		return constants;
+		return this.constants;
 	}
 
-	public String getButtonState() {
+	public ButtonState getButtonState() {
 		return this.buttonState;
 	}
 
@@ -788,9 +795,10 @@ public class DBNavigationBarWidget extends Composite implements HasClickHandlers
 	    // Add a yes button at the bottom of the dialog
 	    Button yesButton = new Button(constants.yes(),
 	    	new ClickHandler() {
-	          public void onClick(ClickEvent event) {
+	          @Override
+			public void onClick(ClickEvent event) {
 	        	  dialogBox.hide();
-	        	  buttonState	=	ButtonStateDelete;
+	        	  DBNavigationBarWidget.this.buttonState	=	ButtonState.DELETE;
 	        	  fireEvent(event);
 	          }
 	        });
@@ -800,7 +808,8 @@ public class DBNavigationBarWidget extends Composite implements HasClickHandlers
 	    // Add a no button at the bottom of the dialog
 	    Button noButton = new Button(constants.no(),
 		    new ClickHandler() {
-	          public void onClick(ClickEvent event) {
+	          @Override
+			public void onClick(ClickEvent event) {
 	        	  dialogBox.hide();
 	          }
 	        });
@@ -814,6 +823,7 @@ public class DBNavigationBarWidget extends Composite implements HasClickHandlers
 	    return dialogBox;
 	}
 
+	@Override
 	public HandlerRegistration addClickHandler(ClickHandler handler) {
 		return super.addHandler(handler, ClickEvent.getType());
 	}

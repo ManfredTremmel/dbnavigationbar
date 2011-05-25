@@ -33,6 +33,7 @@ import javax.sql.DataSource;
 import com.google.gwt.user.server.rpc.UnexpectedException;
 
 import de.knightsoft.DBNavigationBar.client.domain.DomainHeadPosDataBase;
+import de.knightsoft.DBNavigationBar.client.domain.DomainUser;
 import de.knightsoft.DBNavigationBar.shared.Constants;
 
 /**
@@ -102,37 +103,37 @@ public abstract class DBHeadPosDateTemplate<E extends DomainHeadPosDataBase>
 				invalidateHeadSQL
 			);
 
-		Connection ThisDataBase		=	null;
+		Connection thisDataBase		=	null;
 		try {
 			// connect to database
 			InitialContext ic		=	new InitialContext();
 	        DataSource lDataSource	=	(DataSource)ic.lookup(lookUpDataBase);
-	        ThisDataBase 			=	lDataSource.getConnection();
+	        thisDataBase 			=	lDataSource.getConnection();
 			ic.close();
 
-			DataBaseDepending myDataBaseDepending = new DataBaseDepending(ThisDataBase.getMetaData().getDatabaseProductName());
+			DataBaseDepending myDataBaseDepending = new DataBaseDepending(thisDataBase.getMetaData().getDatabaseProductName());
 
 			this.readPosSQL		=
 				(readPosSQL != null ?
 					readPosSQL :
           		  "SELECT * "
     		  	+ "FROM   " + posDataBaseTableName + " "
-  				+ "WHERE  " + Constants.DBFieldGlobalMandator + " = ? "
+  				+ "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? "
   				+ "  AND  " + keyFieldName + " = ? "
-  				+ "  AND  " + Constants.DBFieldGlobalDate_from + " <= " + myDataBaseDepending.getSQLTimeNow() + " "
-  				+ "  AND  " + Constants.DBFieldGlobalDate_to + " > " + myDataBaseDepending.getSQLTimeNow() + "; ");
+  				+ "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= " + myDataBaseDepending.getSQLTimeNow() + " "
+  				+ "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > " + myDataBaseDepending.getSQLTimeNow() + "; ");
 
 
     		this.invalidatePosSQL		=
     			(invalidatePosSQL != null ?
     				invalidatePosSQL :
 				  "UPDATE " + posDataBaseTableName + " "
-				+ "SET    " + Constants.DBFieldGlobalDate_to + "=" + myDataBaseDepending.getSQLTimeOutdate() + " "
-				+ "WHERE  " + Constants.DBFieldGlobalMandator + " = ? "
+				+ "SET    " + Constants.DB_FIELD_GLOBAL_DATE_TO + "=" + myDataBaseDepending.getSQLTimeOutdate() + " "
+				+ "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? "
 	    		+ "  AND  " + keyFieldName + " = ? "
 	    		+ "  AND  " + posKeyfieldName + " = ? "
-				+ "  AND  " + Constants.DBFieldGlobalDate_from + " <= " + myDataBaseDepending.getSQLTimeNow() + " "
-				+ "  AND  " + Constants.DBFieldGlobalDate_to + "   > " + myDataBaseDepending.getSQLTimeNow() + ";");
+				+ "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= " + myDataBaseDepending.getSQLTimeNow() + " "
+				+ "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + "   > " + myDataBaseDepending.getSQLTimeNow() + ";");
 
     		this.insertPosSQL		=	insertPosSQL;
 
@@ -140,8 +141,8 @@ public abstract class DBHeadPosDateTemplate<E extends DomainHeadPosDataBase>
 			throw new UnexpectedException( e.toString(), e.getCause() );
 		} finally {
 			try {
-				if( ThisDataBase != null )
-					ThisDataBase.close();
+				if( thisDataBase != null )
+					thisDataBase.close();
 			} catch (SQLException e) {
 				throw new RuntimeException(e);
 			}
@@ -271,11 +272,13 @@ public abstract class DBHeadPosDateTemplate<E extends DomainHeadPosDataBase>
 	 * 
 	 * @param currentEntry
 	 */
+	@Override
 	public E deleteEntry(String currentEntry) {
 		E	resultValue	=	null;				
-		if( this.getUser() !=	null ) {
-			int mandator	=	this.getUser().getMandator();
-			String user		=	this.getUser().getUser();
+		DomainUser thisUser	=	this.getUser();	
+		if( thisUser !=	null ) {
+			int mandator	=	thisUser.getMandator();
+			String user		=	thisUser.getUser();
 			Connection thisDataBase =	null;
 			PreparedStatement invalidateHeadSQLStatement	=	null;
 			PreparedStatement invalidatePosSQLStatement		=	null;
@@ -283,15 +286,15 @@ public abstract class DBHeadPosDateTemplate<E extends DomainHeadPosDataBase>
 			try {
 				// connect to database
 				InitialContext ic		=	new InitialContext();
-		        DataSource lDataSource	=	(DataSource)ic.lookup(lookUpDataBase);
+		        DataSource lDataSource	=	(DataSource)ic.lookup(this.lookUpDataBase);
 		        thisDataBase			=	lDataSource.getConnection();
 				ic.close();
 
 				if( allowedToChange() ) {
 					E dbEntry	=	this.readEntry(currentEntry);
 					// invalidate head number
-					if(invalidateHeadSQL != null) {
-						invalidateHeadSQLStatement	=	thisDataBase.prepareStatement(invalidateHeadSQL);
+					if(this.invalidateHeadSQL != null) {
+						invalidateHeadSQLStatement	=	thisDataBase.prepareStatement(this.invalidateHeadSQL);
 	        			invalidateHeadSQLStatement.clearParameters();
 	        			invalidateHeadSQLStatement.setInt(1, mandator);
 	        			invalidateHeadSQLStatement.setString(2, currentEntry);
@@ -299,7 +302,7 @@ public abstract class DBHeadPosDateTemplate<E extends DomainHeadPosDataBase>
 		        		this.insertEntry( thisDataBase, mandator, user, dbEntry, true);
 					}
 
-					invalidatePosSQLStatement		=	thisDataBase.prepareStatement(invalidatePosSQL);
+					invalidatePosSQLStatement		=	thisDataBase.prepareStatement(this.invalidatePosSQL);
 					for(int i = 0; i < (dbEntry.getKeyPos() == null ? 0 : dbEntry.getKeyPos().length); i++ ) {
 						invalidatePosSQLStatement.clearParameters();
 						invalidatePosSQLStatement.setInt(1, mandator);
@@ -347,7 +350,7 @@ public abstract class DBHeadPosDateTemplate<E extends DomainHeadPosDataBase>
 		int num = -1;
 		PreparedStatement insertPosSQLStatement		=	null;
 		try {
-			insertPosSQLStatement	=	thisDataBase.prepareStatement(insertPosSQL);
+			insertPosSQLStatement	=	thisDataBase.prepareStatement(this.insertPosSQL);
 			insertPosSQLStatement.clearParameters();
 			this.fillInsertPos(insertPosSQLStatement, mandator, user, saveEntry, delete, posNumber);
 			num =  insertPosSQLStatement.executeUpdate();
@@ -374,13 +377,14 @@ public abstract class DBHeadPosDateTemplate<E extends DomainHeadPosDataBase>
 	 * @return the filled structure
 	 * @throws SQLException
 	 */
+	@Override
 	protected E readOneEntry(Connection thisDataBase, int mandator, String entry, E thisEntry) {
 		PreparedStatement readPosSQLStatement	=	null;
 		try {
 			super.readOneEntry(thisDataBase, mandator, entry, thisEntry);
 
 			if( thisEntry != null && thisEntry.getKeyCur() != null ) {
-				readPosSQLStatement	=	thisDataBase.prepareStatement(readPosSQL);
+				readPosSQLStatement	=	thisDataBase.prepareStatement(this.readPosSQL);
 				readPosSQLStatement.clearParameters();
 				readPosSQLStatement.setInt(1, mandator);
 				readPosSQLStatement.setString(2, entry);
@@ -407,10 +411,12 @@ public abstract class DBHeadPosDateTemplate<E extends DomainHeadPosDataBase>
 	 * @param currentEntry
 	 * 			entry that has to be saved
 	 */
+	@Override
 	public E saveEntry(E currentEntry) {
-		if( this.getUser() !=	null ) {
-			int mandator	=	this.getUser().getMandator();
-			String user		=	this.getUser().getUser();
+		DomainUser thisUser	=	this.getUser();	
+		if( thisUser !=	null ) {
+			int mandator	=	thisUser.getMandator();
+			String user		=	thisUser.getUser();
 			String saveKeyString	=	currentEntry.getKeyCur();
 			if( saveKeyString == null || "".equals(saveKeyString) )
 				saveKeyString		=	currentEntry.getKeyNew();
@@ -420,10 +426,10 @@ public abstract class DBHeadPosDateTemplate<E extends DomainHeadPosDataBase>
 
 			try {
 				if( allowedToChange() ) {
-					E dbEntry = (E) createInstance();
+					E dbEntry = createInstance();
 					// connect to database
 					InitialContext ic		=	new InitialContext();
-			        DataSource lDataSource	=	(DataSource)ic.lookup(lookUpDataBase);
+			        DataSource lDataSource	=	(DataSource)ic.lookup(this.lookUpDataBase);
 			        thisDataBase 			=	lDataSource.getConnection();
 					ic.close();
 
@@ -433,11 +439,11 @@ public abstract class DBHeadPosDateTemplate<E extends DomainHeadPosDataBase>
 
 					// Entry already exists in Database?
 					if( !currentEntry.equals( dbEntry ) ) {
-						invalidatePosSQLStatement		=	thisDataBase.prepareStatement(invalidatePosSQL);
+						invalidatePosSQLStatement		=	thisDataBase.prepareStatement(this.invalidatePosSQL);
 
-						if( !currentEntry.equalsEntry(dbEntry) && (invalidateHeadSQL != null) ) {
+						if( !currentEntry.equalsEntry(dbEntry) && (this.invalidateHeadSQL != null) ) {
 							// Invalidate old entry
-							invalidateHeadSQLStatement	=	thisDataBase.prepareStatement(invalidateHeadSQL);
+							invalidateHeadSQLStatement	=	thisDataBase.prepareStatement(this.invalidateHeadSQL);
 		        			invalidateHeadSQLStatement.clearParameters();
 		        			invalidateHeadSQLStatement.setInt(1, mandator);
 		        			invalidateHeadSQLStatement.setString(2, saveKeyString);
@@ -500,7 +506,7 @@ public abstract class DBHeadPosDateTemplate<E extends DomainHeadPosDataBase>
 						}
 
 						currentEntry.setKeyCur(saveKeyString);
-						this.FillMinMax(thisDataBase, mandator, currentEntry);
+						this.fillMinMax(thisDataBase, mandator, currentEntry);
 						currentEntry	=	readOneEntry( thisDataBase, mandator, saveKeyString, currentEntry );
 					}
 				}

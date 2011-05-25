@@ -26,6 +26,7 @@ import com.google.gwt.core.client.EntryPoint;
 
 public class DBNavigationBar implements EntryPoint {
 
+	@Override
 	public void onModuleLoad() {
 		// Nothing to do
 

@@ -74,16 +74,6 @@ public abstract class DomainHeadDataBase implements Serializable {
 	}
 	
 	/**
-	 * Destructor
-	 */
-	protected void finalize() throws Throwable {
-		this.keyMin				=	null;
-		this.keyMax				=	null;
-		setUpDefaultEntry();
-		super.finalize();
-	}
-
-	/**
 	 * get isReadOnly
 	 * 
      * @return isReadOnly

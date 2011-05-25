@@ -22,6 +22,8 @@
  */
 package de.knightsoft.DBNavigationBar.server;
 
+import java.sql.Timestamp;
+
 import de.knightsoft.DBNavigationBar.shared.Constants;
 
 
@@ -39,37 +41,37 @@ public class StringToSQL {
      * The <code>convertStringPrepared</code> method replaces &lt;br&gt; with
      * LineFeed and the char 128 (stupid windows euro sign) to 164 
      *
-     * @param JavaString
+     * @param javaString
      *            Java string to convert
      * @return string as SQL
      */
-	final static public String convertStringPrepared( String JavaString
+	final static public String convertStringPrepared( String javaString
 			) {
-		return convertStringPrepared(JavaString, Constants.JDBCClassMySQL);
+		return convertStringPrepared(javaString, Constants.JDBC_CLASS_MYSQL);
 	}
 
     /**
      * The <code>convertStringPrepared</code> method replaces &lt;br&gt; with
      * LineFeed and the char 128 (stupid windows euro sign) to 164 
      *
-     * @param JavaString
+     * @param javaString
      *            Java string to convert
-     * @param JDBC_CLASS
-     *            name of the JDBC_CLASS to detect DataBase
+     * @param jdbcClass
+     *            name of the JDBC class to detect DataBase
      * @return string as SQL
      */
-	final static public String convertStringPrepared(	String JavaString,
-														String JDBCClass
+	final static public String convertStringPrepared(	String javaString,
+														String jdbcClass
 			) {
-		String SQLString	=	null;
+		String sqlString	=	null;
 
-		if( JavaString != null && JavaString.length() > 0 ) {
-			char SQLStringTab[]		=	new char[ 2 * JavaString.length() ];
-			char JavaStringTab[]	=	JavaString.toCharArray();
+		if( javaString != null && javaString.length() > 0 ) {
+			char sqlStringTab[]		=	new char[ 2 * javaString.length() ];
+			char javaStringTab[]	=	javaString.toCharArray();
 			int j = 0;
 
-			for(int i = 0; i < JavaString.length(); i++ ) {
-				switch( JavaStringTab[i] ) {
+			for(int i = 0; i < javaString.length(); i++ ) {
+				switch( javaStringTab[i] ) {
 //					case '\n':
 //						SQLStringTab[j++]	=	'\\';
 //						SQLStringTab[j++]	=	'n';
@@ -87,16 +89,16 @@ public class StringToSQL {
 //						SQLStringTab[j++]	=	'b';
 //						break;
 					case '<':
-						if((i+3)			<	JavaString.length() &&
-							JavaStringTab[i+1]	==	'b' &&
-							JavaStringTab[i+2]	==	'r' &&
-							JavaStringTab[i+3]	==	'>') {
+						if((i+3)			<	javaString.length() &&
+							javaStringTab[i+1]	==	'b' &&
+							javaStringTab[i+2]	==	'r' &&
+							javaStringTab[i+3]	==	'>') {
 							i	+=	3;
 //							SQLStringTab[j++]	=	'\\';
 //							SQLStringTab[j++]	=	'n';
-							SQLStringTab[j++]	=	'\n';
+							sqlStringTab[j++]	=	'\n';
 						} else
-							SQLStringTab[j++] = JavaStringTab[i];
+							sqlStringTab[j++] = javaStringTab[i];
 						break;
 //					case '\\':
 //					case '\'':
@@ -105,252 +107,252 @@ public class StringToSQL {
 //						SQLStringTab[j++]	=	JavaStringTab[i];
 //						break;
 					case 128:
-						SQLStringTab[j++]	=	'€';
+						sqlStringTab[j++]	=	'€';
 						break;
 					default:
-						SQLStringTab[j++] = JavaStringTab[i];
+						sqlStringTab[j++] = javaStringTab[i];
 						break;
 				}
 			}
-			SQLString	= new String( SQLStringTab, 0, j );
+			sqlString	= new String( sqlStringTab, 0, j );
 		}
 
-		return SQLString;
+		return sqlString;
 	}
 
     /**
      * The <code>convert</code> method converts a Java string to SQL
      *
-     * @param JavaString
+     * @param javaString
      *            Java string to convert
      * @return string as SQL
      */
-	final static public String convert( String JavaString
+	final static public String convert( String javaString
 			) {
-		return convert(JavaString, Constants.JDBCClassMySQL);
+		return convert(javaString, Constants.JDBC_CLASS_MYSQL);
 	}
 
     /**
      * The <code>convert</code> method converts a Java string to SQL
      *
-     * @param JavaString
+     * @param javaString
      *            Java string to convert
-     * @param JDBC_CLASS
-     *            name of the JDBC_CLASS to detect DataBase
+     * @param jdbcClass
+     *            name of the JDBC class to detect DataBase
      * @return string as SQL
      */
-	final static public String convert( String JavaString,
-										String JDBCClass
+	final static public String convert( String javaString,
+										String jdbcClass
 			) {
 		String convertedString	=	null;
 		
-		if( JDBCClass == null || JDBCClass.equals(Constants.JDBCClassMySQL))
-			convertedString	=	convertMySQL(JavaString);
-		else if( JDBCClass.equals(Constants.JDBCClassMSSQL) )
-			convertedString	=	convertMSSQL(JavaString);
+		if( jdbcClass == null || jdbcClass.equals(Constants.JDBC_CLASS_MYSQL))
+			convertedString	=	convertMySQL(javaString);
+		else if( jdbcClass.equals(Constants.JDBC_CLASS_MSSQL) )
+			convertedString	=	convertMSSQL(javaString);
 		else
-			convertedString	=	convertMySQL(JavaString);
+			convertedString	=	convertMySQL(javaString);
 		return convertedString;
 	}
 
     /**
      * The <code>convertMySQL</code> method converts a Java string to SQL
      *
-     * @param JavaString
+     * @param javaString
      *            Java string to convert MySQL Style
      * @return string as SQL
      */
-	final static private String convertMySQL( String JavaString
+	final static private String convertMySQL( String javaString
 			) {
-		String SQLString	=	null;
+		String sqlString	=	null;
 
-		if( JavaString != null && JavaString.length() > 0 ) {
-			char SQLStringTab[]		=	new char[ 2 + ( 2 * JavaString.length() ) ];
-			char JavaStringTab[]	=	JavaString.toCharArray();
+		if( javaString != null && javaString.length() > 0 ) {
+			char sqlStringTab[]		=	new char[ 2 + ( 2 * javaString.length() ) ];
+			char javaStringTab[]	=	javaString.toCharArray();
 			int j = 0;
 
-			SQLStringTab[j++]	=	'\'';
+			sqlStringTab[j++]	=	'\'';
 
-			for(int i = 0; i < JavaString.length(); i++ ) {
-				switch( JavaStringTab[i] ) {
+			for(int i = 0; i < javaString.length(); i++ ) {
+				switch( javaStringTab[i] ) {
 					case '\n':
-						SQLStringTab[j++]	=	'\\';
-						SQLStringTab[j++]	=	'n';
+						sqlStringTab[j++]	=	'\\';
+						sqlStringTab[j++]	=	'n';
 						break;
 					case '\t':
-						SQLStringTab[j++]	=	'\\';
-						SQLStringTab[j++]	=	't';
+						sqlStringTab[j++]	=	'\\';
+						sqlStringTab[j++]	=	't';
 						break;
 					case '\r':
-						SQLStringTab[j++]	=	'\\';
-						SQLStringTab[j++]	=	'r';
+						sqlStringTab[j++]	=	'\\';
+						sqlStringTab[j++]	=	'r';
 						break;
 					case '\b':
-						SQLStringTab[j++]	=	'\\';
-						SQLStringTab[j++]	=	'b';
+						sqlStringTab[j++]	=	'\\';
+						sqlStringTab[j++]	=	'b';
 						break;
 					case '<':
-						if((i+3)						<	JavaString.length() &&
-							JavaStringTab[i+1]	==	'b' &&
-							JavaStringTab[i+2]	==	'r' &&
-							JavaStringTab[i+3]	==	'>') {
+						if((i+3)						<	javaString.length() &&
+							javaStringTab[i+1]	==	'b' &&
+							javaStringTab[i+2]	==	'r' &&
+							javaStringTab[i+3]	==	'>') {
 							i	+=	3;
-							SQLStringTab[j++]	=	'\\';
-							SQLStringTab[j++]	=	'n';
+							sqlStringTab[j++]	=	'\\';
+							sqlStringTab[j++]	=	'n';
 						} else
-							SQLStringTab[j++] = JavaStringTab[i];
+							sqlStringTab[j++] = javaStringTab[i];
 						break;
 					case '"':
 					case '\\':
 					case '\'':
-						SQLStringTab[j++]	=	'\\';
-						SQLStringTab[j++]	=	JavaStringTab[i];
+						sqlStringTab[j++]	=	'\\';
+						sqlStringTab[j++]	=	javaStringTab[i];
 						break;
 					case 128:
-						SQLStringTab[j++]	=	'€';
+						sqlStringTab[j++]	=	'€';
 						break;
 					default:
-						SQLStringTab[j++] += JavaStringTab[i];
+						sqlStringTab[j++] += javaStringTab[i];
 						break;
 				}
 			}
-			SQLStringTab[j++]	=	'\'';
+			sqlStringTab[j++]	=	'\'';
 
-			SQLString	= new String( SQLStringTab, 0, j );
+			sqlString	= new String( sqlStringTab, 0, j );
 		}
 
-		return SQLString;
+		return sqlString;
 	}
 
     /**
      * The <code>convertMSSQL</code> method converts a Java string to SQL
      *
-     * @param JavaString
+     * @param javaString
      *            Java string to convert MSSQL Style
      * @return string as SQL
      */
-	final static private String convertMSSQL( String JavaString
+	final static private String convertMSSQL( String javaString
 			) {
-		String SQLString	=	null;
+		String sqlString	=	null;
 
-		if( JavaString != null && JavaString.length() > 0 ) {
-			char SQLStringTab[]		=	new char[ 2 + ( 2 * JavaString.length() ) ];
-			char JavaStringTab[]	=	JavaString.toCharArray();
+		if( javaString != null && javaString.length() > 0 ) {
+			char sqlStringTab[]		=	new char[ 2 + ( 2 * javaString.length() ) ];
+			char javaStringTab[]	=	javaString.toCharArray();
 			int j = 0;
 
-			SQLStringTab[j++]	=	'\'';
+			sqlStringTab[j++]	=	'\'';
 
-			for(int i = 0; i < JavaString.length(); i++ ) {
-				switch( JavaStringTab[i] ) {
+			for(int i = 0; i < javaString.length(); i++ ) {
+				switch( javaStringTab[i] ) {
 					case '\n':
-						SQLStringTab[j++]	=	'\\';
-						SQLStringTab[j++]	=	'n';
+						sqlStringTab[j++]	=	'\\';
+						sqlStringTab[j++]	=	'n';
 						break;
 					case '\t':
-						SQLStringTab[j++]	=	'\\';
-						SQLStringTab[j++]	=	't';
+						sqlStringTab[j++]	=	'\\';
+						sqlStringTab[j++]	=	't';
 						break;
 					case '\r':
-						SQLStringTab[j++]	=	'\\';
-						SQLStringTab[j++]	=	'r';
+						sqlStringTab[j++]	=	'\\';
+						sqlStringTab[j++]	=	'r';
 						break;
 					case '\b':
-						SQLStringTab[j++]	=	'\\';
-						SQLStringTab[j++]	=	'b';
+						sqlStringTab[j++]	=	'\\';
+						sqlStringTab[j++]	=	'b';
 						break;
 					case '<':
-						if((i+3)						<	JavaString.length() &&
-							JavaStringTab[i+1]	==	'b' &&
-							JavaStringTab[i+2]	==	'r' &&
-							JavaStringTab[i+3]	==	'>') {
+						if((i+3)						<	javaString.length() &&
+							javaStringTab[i+1]	==	'b' &&
+							javaStringTab[i+2]	==	'r' &&
+							javaStringTab[i+3]	==	'>') {
 							i	+=	3;
-							SQLStringTab[j++]	=	'\\';
-							SQLStringTab[j++]	=	'n';
+							sqlStringTab[j++]	=	'\\';
+							sqlStringTab[j++]	=	'n';
 						} else
-							SQLStringTab[j++] = JavaStringTab[i];
+							sqlStringTab[j++] = javaStringTab[i];
 						break;
 					case '\'':
-						SQLStringTab[j++]	=	JavaStringTab[i];
-						SQLStringTab[j++]	=	JavaStringTab[i];
+						sqlStringTab[j++]	=	javaStringTab[i];
+						sqlStringTab[j++]	=	javaStringTab[i];
 						break;
 					case 128:
-						SQLStringTab[j++]	=	'€';
+						sqlStringTab[j++]	=	'€';
 						break;
 					default:
-						SQLStringTab[j++] += JavaStringTab[i];
+						sqlStringTab[j++] += javaStringTab[i];
 						break;
 				}
 			}
-			SQLStringTab[j++]	=	'\'';
+			sqlStringTab[j++]	=	'\'';
 
-			SQLString	= new String( SQLStringTab, 0, j );
+			sqlString	= new String( sqlStringTab, 0, j );
 		}
 
-		return SQLString;
+		return sqlString;
 	}
 
     /**
      * The <code>convertString</code> is the same as convert
      *
-     * @param JavaString
+     * @param javaString
      *            Java string to convert
      * @return string as SQL
      */
-	final static public String convertString( String JavaString
+	final static public String convertString( String javaString
 			) {
-		return convert(JavaString);
+		return convert(javaString);
 	}
 
     /**
      * The <code>convertString</code> is the same as convert
      *
-     * @param JavaString
+     * @param javaString
      *            Java string to convert
-     * @param JDBC_CLASS
-     *            name of the JDBC_CLASS to detect DataBase
+     * @param jdbcClass
+     *            name of the JDBC class to detect DataBase
      * @return string as SQL
      */
-	final static public String convertString(	String JavaString,
-												String JDBCClass
+	final static public String convertString(	String javaString,
+												String jdbcClass
 			) {
-		return convert(JavaString, JDBCClass);
+		return convert(javaString, jdbcClass);
 	}
 
     /**
      * The <code>convertNumber</code> method converts a Java string,
      * contains a number to SQL
      *
-     * @param JavaString
+     * @param javaString
      *            Java string to convert
      * @return string as SQL
      */
-	final static public String convertNumber( String JavaString
+	final static public String convertNumber( String javaString
 			) {
-		return convertNumber(JavaString, Constants.JDBCClassMySQL);
+		return convertNumber(javaString, Constants.JDBC_CLASS_MYSQL);
 	}
 
     /**
      * The <code>convertNumber</code> method converts a Java string,
      * contains a number to SQL
      *
-     * @param JavaString
+     * @param javaString
      *            Java string to convert
-     * @param JDBC_CLASS
-     *            name of the JDBC_CLASS to detect DataBase
+     * @param jdbcClass
+     *            name of the JDBC class to detect DataBase
      * @return string as SQL
      */
-	final static public String convertNumber(	String JavaString,
-												String JDBCClass
+	final static public String convertNumber(	String javaString,
+												String jdbcClass
 			) {
-		String SQLString	=	null;
+		String sqlString	=	null;
 
-		if( JavaString != null && JavaString.length() > 0 ) {
-			char SQLStringTab[]	=	new char[ JavaString.length() ];
-			char JavaStringTab[]	=	JavaString.toCharArray();
+		if( javaString != null && javaString.length() > 0 ) {
+			char sqlStringTab[]		=	new char[ javaString.length() ];
+			char javaStringTab[]	=	javaString.toCharArray();
 			int j = 0;
 
-			for(int i = 0; i < JavaString.length(); i++ ) {
-				switch( JavaStringTab[i] ) {
+			for(int i = 0; i < javaString.length(); i++ ) {
+				switch( javaStringTab[i] ) {
 					case '0':
 					case '1':
 					case '2':
@@ -362,7 +364,7 @@ public class StringToSQL {
 					case '8':
 					case '9':
 					case '.':
-						SQLStringTab[j++] += JavaStringTab[i];
+						sqlStringTab[j++] += javaStringTab[i];
 						break;
 					default:
 						break;
@@ -370,303 +372,288 @@ public class StringToSQL {
 			}
 
 			if( j > 0 )
-				SQLString	= new String( SQLStringTab, 0, j );
+				sqlString	= new String( sqlStringTab, 0, j );
 		}
 
-		return SQLString;
+		return sqlString;
 	}
 
     /**
-     * The <code>SuchString</code> method is the same as <code>SearchString</code>
+     * The <code>searchString</code> method prepares a string for
+     * searching in a SQL database using = or like
      *
-     * @param DBFieldname
+     * @param dbFieldname
      *            database fieldname
-     * @param JavaString
+     * @param javaString
      *            Java string to convert
      * @return string as SQL
      */
-	final static public String SuchString(	String DBFieldname,
-											String JavaString
+	final static public String searchString(String dbFieldname,
+											String javaString
 			) {
-		return SearchString(DBFieldname, JavaString);
+		return searchString(dbFieldname, javaString, Constants.JDBC_CLASS_MYSQL);
 	}
 
     /**
      * The <code>SearchString</code> method prepares a string for
      * searching in a SQL database using = or like
      *
-     * @param DBFieldname
+     * @param dbFieldname
      *            database fieldname
-     * @param JavaString
+     * @param javaString
      *            Java string to convert
+     * @param jdbcClass
+     *            name of the JDBC class to detect DataBase
      * @return string as SQL
      */
-	final static public String SearchString(String DBFieldname,
-											String JavaString
-			) {
-		return SearchString(DBFieldname, JavaString, Constants.JDBCClassMySQL);
-	}
-
-    /**
-     * The <code>SearchString</code> method prepares a string for
-     * searching in a SQL database using = or like
-     *
-     * @param DBFieldname
-     *            database fieldname
-     * @param JavaString
-     *            Java string to convert
-     * @param JDBC_CLASS
-     *            name of the JDBC_CLASS to detect DataBase
-     * @return string as SQL
-     */
-	final static public String SearchString(String DBFieldname,
-											String JavaString,
-											String JDBCClass
+	final static public String searchString(String dbFieldname,
+											String javaString,
+											String jdbcClass
 			) {
 		String convertedString	=	null;
 		
-		if( JDBCClass == null || JDBCClass.equals(Constants.JDBCClassMySQL))
-			convertedString	=	SearchStringMySQL(DBFieldname, JavaString);
-		else if( JDBCClass.equals(Constants.JDBCClassMSSQL) )
-			convertedString	=	SearchStringMSSQL(DBFieldname, JavaString);
+		if( jdbcClass == null || jdbcClass.equals(Constants.JDBC_CLASS_MYSQL))
+			convertedString	=	searchStringMySQL(dbFieldname, javaString);
+		else if( jdbcClass.equals(Constants.JDBC_CLASS_MSSQL) )
+			convertedString	=	searchStringMSSQL(dbFieldname, javaString);
 		else
-			convertedString	=	SearchStringMySQL(DBFieldname, JavaString);
+			convertedString	=	searchStringMySQL(dbFieldname, javaString);
 		return convertedString;
 	}
 
     /**
-     * The <code>SearchStringMySQL</code> method prepares a string for
+     * The <code>searchStringMySQL</code> method prepares a string for
      * searching in a SQL database using = or like
      *
-     * @param DBFieldname
+     * @param dbFieldname
      *            database fieldname
-     * @param JavaString
+     * @param javaString
      *            Java string to convert
      * @return string as SQL MySQL style
      */
-	final static private String SearchStringMySQL(String DBFieldname,
-												String JavaString
+	final static private String searchStringMySQL(String dbFieldname,
+												String javaString
 			) {
-		String SQLString	=	"";
+		String sqlString	=	"";
 
-		if( JavaString != null && JavaString.length() > 0 ) {
-			char SQLStringTab[]	=	new char[ 2 + ( 2 * JavaString.length() ) ];
-			char JavaStringTab[]	=	JavaString.toCharArray();
+		if( javaString != null && javaString.length() > 0 ) {
+			char sqlStringTab[]		=	new char[ 2 + ( 2 * javaString.length() ) ];
+			char javaStringTab[]	=	javaString.toCharArray();
 			int j = 0;
-			boolean	platzhalter	=	false;
+			boolean	wildcard	=	false;
 
-			SQLStringTab[j++]	=	'\'';
+			sqlStringTab[j++]	=	'\'';
 
-			for(int i = 0; i < JavaString.length(); i++ ) {
-				switch( JavaStringTab[i] ) {
+			for(int i = 0; i < javaString.length(); i++ ) {
+				switch( javaStringTab[i] ) {
 					case '\n':
-						SQLStringTab[j++]	=	'\\';
-						SQLStringTab[j++]	=	'n';
+						sqlStringTab[j++]	=	'\\';
+						sqlStringTab[j++]	=	'n';
 						break;
 					case '\t':
-						SQLStringTab[j++]	=	'\\';
-						SQLStringTab[j++]	=	't';
+						sqlStringTab[j++]	=	'\\';
+						sqlStringTab[j++]	=	't';
 						break;
 					case '\r':
-						SQLStringTab[j++]	=	'\\';
-						SQLStringTab[j++]	=	'r';
+						sqlStringTab[j++]	=	'\\';
+						sqlStringTab[j++]	=	'r';
 						break;
 					case '\b':
-						SQLStringTab[j++]	=	'\\';
-						SQLStringTab[j++]	=	'b';
+						sqlStringTab[j++]	=	'\\';
+						sqlStringTab[j++]	=	'b';
 						break;
 					case '<':
-						if((i+3)						<	JavaString.length() &&
-							JavaStringTab[i+1]	==	'b' &&
-							JavaStringTab[i+2]	==	'r' &&
-							JavaStringTab[i+3]	==	'>') {
+						if((i+3)						<	javaString.length() &&
+							javaStringTab[i+1]	==	'b' &&
+							javaStringTab[i+2]	==	'r' &&
+							javaStringTab[i+3]	==	'>') {
 							i	+=	3;
-							SQLStringTab[j++]	=	'\\';
-							SQLStringTab[j++]	=	'n';
+							sqlStringTab[j++]	=	'\\';
+							sqlStringTab[j++]	=	'n';
 						}
 						else
-							SQLStringTab[j++] = JavaStringTab[i];
+							sqlStringTab[j++] = javaStringTab[i];
 						break;
 					case '"':
 					case '\\':
 					case '\'':
-						SQLStringTab[j++]	=	'\\';
-						SQLStringTab[j++]	=	JavaStringTab[i];
+						sqlStringTab[j++]	=	'\\';
+						sqlStringTab[j++]	=	javaStringTab[i];
 						break;
 					case '*':
-						SQLStringTab[j++]	=	'%';
-						platzhalter			=	true;
+						sqlStringTab[j++]	=	'%';
+						wildcard			=	true;
 						break;
 					case '?':
-						SQLStringTab[j++]	=	'_';
-						platzhalter			=	true;
+						sqlStringTab[j++]	=	'_';
+						wildcard			=	true;
 						break;
 					case 128:
-						SQLStringTab[j++]	=	'€';
+						sqlStringTab[j++]	=	'€';
 						break;
 					default:
-						SQLStringTab[j++] += JavaStringTab[i];
+						sqlStringTab[j++] += javaStringTab[i];
 						break;
 				}
 			}
-			SQLStringTab[j++]	=	'\'';
+			sqlStringTab[j++]	=	'\'';
 
-			SQLString	= new String( SQLStringTab, 0, j );
-			if( platzhalter )
-				SQLString	=	DBFieldname + " like " + SQLString;
+			sqlString	= new String( sqlStringTab, 0, j );
+			if( wildcard )
+				sqlString	=	dbFieldname + " like " + sqlString;
 			else
-				SQLString	=	DBFieldname + "=" + SQLString;
+				sqlString	=	dbFieldname + "=" + sqlString;
 		}
 
-		return SQLString;
+		return sqlString;
 	}
 
     /**
-     * The <code>SearchStringMSSQL</code> method prepares a string for
+     * The <code>searchStringMSSQL</code> method prepares a string for
      * searching in a SQL database using = or like
      *
-     * @param DBFieldname
+     * @param dbFieldname
      *            database fieldname
-     * @param JavaString
+     * @param javaString
      *            Java string to convert
      * @return string as SQL MSSQL style
      */
-	final static private String SearchStringMSSQL(String DBFieldname,
-												String JavaString
+	final static private String searchStringMSSQL(String dbFieldname,
+												String javaString
 			) {
-		String SQLString	=	"";
+		String sqlString	=	"";
 
-		if( JavaString != null && JavaString.length() > 0 ) {
-			char SQLStringTab[]	=	new char[ 2 + ( 2 * JavaString.length() ) ];
-			char JavaStringTab[]	=	JavaString.toCharArray();
+		if( javaString != null && javaString.length() > 0 ) {
+			char sqlStringTab[]	=	new char[ 2 + ( 2 * javaString.length() ) ];
+			char javaStringTab[]	=	javaString.toCharArray();
 			int j = 0;
-			boolean	platzhalter	=	false;
+			boolean	wildcard	=	false;
 
-			SQLStringTab[j++]	=	'\'';
+			sqlStringTab[j++]	=	'\'';
 
-			for(int i = 0; i < JavaString.length(); i++ ) {
-				switch( JavaStringTab[i] ) {
+			for(int i = 0; i < javaString.length(); i++ ) {
+				switch( javaStringTab[i] ) {
 					case '\n':
-						SQLStringTab[j++]	=	'\\';
-						SQLStringTab[j++]	=	'n';
+						sqlStringTab[j++]	=	'\\';
+						sqlStringTab[j++]	=	'n';
 						break;
 					case '\t':
-						SQLStringTab[j++]	=	'\\';
-						SQLStringTab[j++]	=	't';
+						sqlStringTab[j++]	=	'\\';
+						sqlStringTab[j++]	=	't';
 						break;
 					case '\r':
-						SQLStringTab[j++]	=	'\\';
-						SQLStringTab[j++]	=	'r';
+						sqlStringTab[j++]	=	'\\';
+						sqlStringTab[j++]	=	'r';
 						break;
 					case '\b':
-						SQLStringTab[j++]	=	'\\';
-						SQLStringTab[j++]	=	'b';
+						sqlStringTab[j++]	=	'\\';
+						sqlStringTab[j++]	=	'b';
 						break;
 					case '<':
-						if((i+3)						<	JavaString.length() &&
-							JavaStringTab[i+1]	==	'b' &&
-							JavaStringTab[i+2]	==	'r' &&
-							JavaStringTab[i+3]	==	'>') {
+						if((i+3)			<	javaString.length() &&
+							javaStringTab[i+1]	==	'b' &&
+							javaStringTab[i+2]	==	'r' &&
+							javaStringTab[i+3]	==	'>') {
 							i	+=	3;
-							SQLStringTab[j++]	=	'\\';
-							SQLStringTab[j++]	=	'n';
+							sqlStringTab[j++]	=	'\\';
+							sqlStringTab[j++]	=	'n';
 						}
 						else
-							SQLStringTab[j++] = JavaStringTab[i];
+							sqlStringTab[j++] = javaStringTab[i];
 						break;
 					case '\'':
-						SQLStringTab[j++]	=	JavaStringTab[i];
-						SQLStringTab[j++]	=	JavaStringTab[i];
+						sqlStringTab[j++]	=	javaStringTab[i];
+						sqlStringTab[j++]	=	javaStringTab[i];
 						break;
 					case '*':
-						SQLStringTab[j++]	=	'%';
-						platzhalter			=	true;
+						sqlStringTab[j++]	=	'%';
+						wildcard			=	true;
 						break;
 					case '?':
-						SQLStringTab[j++]	=	'_';
-						platzhalter			=	true;
+						sqlStringTab[j++]	=	'_';
+						wildcard			=	true;
 						break;
 					case 128:
-						SQLStringTab[j++]	=	'€';
+						sqlStringTab[j++]	=	'€';
 						break;
 					default:
-						SQLStringTab[j++] += JavaStringTab[i];
+						sqlStringTab[j++] += javaStringTab[i];
 						break;
 				}
 			}
-			SQLStringTab[j++]	=	'\'';
+			sqlStringTab[j++]	=	'\'';
 
-			SQLString	= new String( SQLStringTab, 0, j );
-			if( platzhalter )
-				SQLString	=	DBFieldname + " like " + SQLString;
+			sqlString	= new String( sqlStringTab, 0, j );
+			if( wildcard )
+				sqlString	=	dbFieldname + " like " + sqlString;
 			else
-				SQLString	=	DBFieldname + "=" + SQLString;
+				sqlString	=	dbFieldname + "=" + sqlString;
 		}
 
-		return SQLString;
+		return sqlString;
 	}
 
     /**
      * The <code>convertDatetime</code> method converts a datetime to SQL
      *
-     * @param JavaDateTime
+     * @param javaDateTime
      *            Timestamp to convert
-     * @param JDBC_CLASS
-     *            name of the JDBC_CLASS to detect DataBase
+     * @param jdbcClass
+     *            name of the JDBC class to detect DataBase
      * @return string as SQL
      */
-	final static public String convertDatetime( java.sql.Timestamp JavaDateTime,
-										String JDBCClass
+	final static public String convertDatetime( Timestamp javaDateTime,
+										String jdbcClass
 			) {
 		String convertedString	=	null;
 		
-		if( JDBCClass == null || JDBCClass.equals(Constants.JDBCClassMySQL))
-			convertedString	=	convertDatetimeMySQL(JavaDateTime);
-		else if( JDBCClass.equals(Constants.JDBCClassMSSQL) )
-			convertedString	=	convertDatetimeMSSQL(JavaDateTime);
+		if( jdbcClass == null || jdbcClass.equals(Constants.JDBC_CLASS_MYSQL))
+			convertedString	=	convertDatetimeMySQL(javaDateTime);
+		else if( jdbcClass.equals(Constants.JDBC_CLASS_MSSQL) )
+			convertedString	=	convertDatetimeMSSQL(javaDateTime);
 		else
-			convertedString	=	convertDatetimeMySQL(JavaDateTime);
+			convertedString	=	convertDatetimeMySQL(javaDateTime);
 		return convertedString;
 	}
 
     /**
      * The <code>convertDatetimeMySQL</code> method converts a datetime to SQL
      *
-     * @param JavaDateTime
+     * @param javaDateTime
      *            Timestamp to convert MySQL Style
      * @return string as SQL
      */
-	final static private String convertDatetimeMySQL( java.sql.Timestamp JavaDateTime
+	final static private String convertDatetimeMySQL( Timestamp javaDateTime
 			) {
-		String SQLString	=	null;
+		String sqlString	=	null;
 
-		if( JavaDateTime != null ) {
-			SQLString		=	"\'" + (new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")).format(JavaDateTime) + "\'";
+		if( javaDateTime != null ) {
+			sqlString		=	"\'" + (new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")).format(javaDateTime) + "\'";
 		} else {
-			SQLString		=	"null";
+			sqlString		=	"null";
 		}
 
-		return SQLString;
+		return sqlString;
 	}
 
     /**
      * The <code>convertDatetimeMSSQL</code> method converts a datetime to SQL
      *
-     * @param JavaDateTime
+     * @param javaDateTime
      *            Timestamp to convert MSSQL Style
      * @return string as SQL
      */
-	final static private String convertDatetimeMSSQL( java.sql.Timestamp JavaDateTime
+	final static private String convertDatetimeMSSQL( Timestamp javaDateTime
 			) {
-		String SQLString	=	null;
+		String sqlString	=	null;
 
-		if( JavaDateTime != null ) {
-			SQLString		=	"CONVERT(DATETIME, '" + (new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")).format(JavaDateTime) + "', 121)";
+		if( javaDateTime != null ) {
+			sqlString		=	"CONVERT(DATETIME, '" + (new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")).format(javaDateTime) + "', 121)";
 		} else {
-			SQLString		=	"null";
+			sqlString		=	"null";
 		}
 
-		return SQLString;
+		return sqlString;
 	}
 
 };

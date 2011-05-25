@@ -30,17 +30,17 @@ package de.knightsoft.DBNavigationBar.shared;
  * @version 1.0.0, 2011-02-05
  */
 public class Constants {
-    public static final boolean UseConnectionPool		=	true;
+    public static final boolean USE_CONNECTION_POOL			=	true;
     
 
-	final static public String JDBCClassMySQL				=	"com.mysql.jdbc.Driver";
-	final static public String JDBCClassMySQL_OLD			=	"org.gjt.mm.mysql.Driver";
-	final static public String JDBCClassMSSQL				=	"com.microsoft.jdbc.sqlserver.SQLServerDriver";
+	final static public String JDBC_CLASS_MYSQL				=	"com.mysql.jdbc.Driver";
+	final static public String JDBC_CLASS_MYSQL_OLD			=	"org.gjt.mm.mysql.Driver";
+	final static public String JDBC_CLASS_MSSQL				=	"com.microsoft.jdbc.sqlserver.SQLServerDriver";
 
-    public static final String DBFieldGlobalMandator		=	"Mandator";
-    public static final String DBFieldGlobalUser			=	"Username";
-    public static final String DBFieldGlobalDate_from		=	"Date_from";
-    public static final String DBFieldGlobalDate_to		=	"Date_to";
+    public static final String DB_FIELD_GLOBAL_MANDATOR		=	"Mandator";
+    public static final String DB_FIELD_GLOBAL_USER			=	"Username";
+    public static final String DB_FIELD_GLOBAL_DATE_FROM	=	"Date_from";
+    public static final String DB_FIELD_GLOBAL_DATE_TO		=	"Date_to";
 
-    public static final String DBFieldMandator			=	DBFieldGlobalMandator;
+    public static final String DB_FIELD_MANDATOR			=	DB_FIELD_GLOBAL_MANDATOR;
 };

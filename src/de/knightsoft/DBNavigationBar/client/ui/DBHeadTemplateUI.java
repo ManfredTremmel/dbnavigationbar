@@ -50,7 +50,7 @@ import de.knightsoft.DBNavigationBar.client.ui.widget.DBNavigationBarWidget;
  */
 public abstract class DBHeadTemplateUI<E extends DomainHeadDataBase, F extends Parent> extends BasicTemplateUI<F> implements AsyncCallback<E> {
 
-	protected DBNavigationBarWidget myNavigationBar;
+	protected final DBNavigationBarWidget myNavigationBar;
 	
 	protected static final Images images = GWT.create(Images.class);
 
@@ -69,9 +69,9 @@ public abstract class DBHeadTemplateUI<E extends DomainHeadDataBase, F extends P
 	
 	protected E dbEntry;
 
-	protected DBHeadTemplateUIConstants constants;
+	protected final DBHeadTemplateUIConstants constants;
 	
-	protected Widget[] widgetlist;
+	protected final Widget[] widgetlist;
 
 	/**
 	 * Constructor
@@ -91,13 +91,14 @@ public abstract class DBHeadTemplateUI<E extends DomainHeadDataBase, F extends P
 		super(parentwidget);
 		this.widgetlist		=	widgetlist;
 
-		constants = (DBHeadTemplateUIConstants) GWT.create(DBHeadTemplateUIConstants.class);
+		this.constants = (DBHeadTemplateUIConstants) GWT.create(DBHeadTemplateUIConstants.class);
 
-		myNavigationBar = new DBNavigationBarWidget(
+		this.myNavigationBar = new DBNavigationBarWidget(
 				getSearchFields(),
 				getSearchFieldsDisplay(),
 				userdefinedfunction
 			);
+
 
 		VerticalPanel myPanel = new VerticalPanel();
 	    myPanel.setWidth("100%");
@@ -113,7 +114,7 @@ public abstract class DBHeadTemplateUI<E extends DomainHeadDataBase, F extends P
 
 	    myPanel.add(titlePanel);
 
-	    myPanel.add(myNavigationBar);
+	    myPanel.add(this.myNavigationBar);
 
 	    final FormPanel form = new FormPanel();
 
@@ -123,63 +124,78 @@ public abstract class DBHeadTemplateUI<E extends DomainHeadDataBase, F extends P
 
 		this.initWidget(form);
 
-		myNavigationBar.addClickHandler(new ClickHandler() {
+		this.myNavigationBar.addClickHandler(new ClickHandler() {
+			@Override
 			public void onClick(ClickEvent event) {
-				dosave = false;
+				DBHeadTemplateUI.this.dosave = false;
 				final DBTemplateRemoteServiceAsync<E> service = getServiceFactory();
-				String ButtonState	=	myNavigationBar.getButtonState();
-				if( DBNavigationBarWidget.ButtonStateNew.equals(ButtonState)) {
-					newEntry();
-				} else if( DBNavigationBarWidget.ButtonStateDelete.equals(ButtonState)) {
-					service.deleteEntry(myNavigationBar.getOldDBNumber(), DBHeadTemplateUI.this);
-				} else if( DBNavigationBarWidget.ButtonStateStop.equals(ButtonState)) {
-					fillEntry(dbEntry);
-				} else if( DBNavigationBarWidget.ButtonStateFBack.equals(ButtonState)) {
-					service.readFirstEntry(DBHeadTemplateUI.this);
-				} else if( DBNavigationBarWidget.ButtonStateFBackFind.equals(ButtonState)) {
-					service.findFirstEntry(
-							myNavigationBar.getSearchFieldField(),
-							myNavigationBar.getSearchFieldMethode(),
-							myNavigationBar.getSearchFieldEntry(),
-							DBHeadTemplateUI.this);
-				} else if( DBNavigationBarWidget.ButtonStateBack.equals(ButtonState)) {
-					service.readPreviousEntry(myNavigationBar.getOldDBNumber(), DBHeadTemplateUI.this);
-				} else if( DBNavigationBarWidget.ButtonStateBackFind.equals(ButtonState)) {
-					service.findPreviousEntry(
-							myNavigationBar.getSearchFieldField(),
-							myNavigationBar.getSearchFieldMethode(),
-							myNavigationBar.getSearchFieldEntry(),
-							myNavigationBar.getCurrentDBNumber(),
-							DBHeadTemplateUI.this);
-				} else if( DBNavigationBarWidget.ButtonStateForward.equals(ButtonState)) {
-					service.readNextEntry(myNavigationBar.getOldDBNumber(), DBHeadTemplateUI.this);
-				} else if( DBNavigationBarWidget.ButtonStateForwardFind.equals(ButtonState)) {
-					service.findNextEntry(
-							myNavigationBar.getSearchFieldField(),
-							myNavigationBar.getSearchFieldMethode(),
-							myNavigationBar.getSearchFieldEntry(),
-							myNavigationBar.getCurrentDBNumber(),
-							DBHeadTemplateUI.this);
-				} else if( DBNavigationBarWidget.ButtonStateFForward.equals(ButtonState)) {
-					service.readLastEntry(DBHeadTemplateUI.this);
-				} else if( DBNavigationBarWidget.ButtonStateFForwardFind.equals(ButtonState)) {
-					service.findLastEntry(
-							myNavigationBar.getSearchFieldField(),
-							myNavigationBar.getSearchFieldMethode(),
-							myNavigationBar.getSearchFieldEntry(),
-							DBHeadTemplateUI.this);
-				} else if( DBNavigationBarWidget.ButtonStateChange.equals(ButtonState)) {
-					service.readEntry(myNavigationBar.getCurrentDBNumber(), DBHeadTemplateUI.this);
-				} else if( DBNavigationBarWidget.ButtonStateUserDef.equals(ButtonState)) {
-					UserDefinedFunction();
-				} else if( DBNavigationBarWidget.ButtonStateSave.equals(ButtonState) || ButtonState == null) {
-					E saveentry = checkInput();
-					if( saveentry != null ) {
-						if( !saveentry.equals(dbEntry) ) {
-							dosave = true;
-							service.saveEntry(saveentry, DBHeadTemplateUI.this);
+				switch(DBHeadTemplateUI.this.myNavigationBar.getButtonState()) {
+					case NEW:
+						newEntry();
+						break;
+					case DELETE:
+						service.deleteEntry(DBHeadTemplateUI.this.myNavigationBar.getOldDBNumber(), DBHeadTemplateUI.this);
+						break;
+					case STOP:
+						fillEntry(dbEntry);
+						break;
+					case FAST_BACK:
+						service.readFirstEntry(DBHeadTemplateUI.this);
+						break;
+					case FAST_BACK_FIND:
+						service.findFirstEntry(
+								DBHeadTemplateUI.this.myNavigationBar.getSearchFieldField(),
+								DBHeadTemplateUI.this.myNavigationBar.getSearchFieldMethode(),
+								DBHeadTemplateUI.this.myNavigationBar.getSearchFieldEntry(),
+								DBHeadTemplateUI.this);
+						break;
+					case BACK:
+						service.readPreviousEntry(DBHeadTemplateUI.this.myNavigationBar.getOldDBNumber(), DBHeadTemplateUI.this);
+						break;
+					case BACK_FIND:
+						service.findPreviousEntry(
+								DBHeadTemplateUI.this.myNavigationBar.getSearchFieldField(),
+								DBHeadTemplateUI.this.myNavigationBar.getSearchFieldMethode(),
+								DBHeadTemplateUI.this.myNavigationBar.getSearchFieldEntry(),
+								DBHeadTemplateUI.this.myNavigationBar.getCurrentDBNumber(),
+								DBHeadTemplateUI.this);
+						break;
+					case FORWARD:
+						service.readNextEntry(DBHeadTemplateUI.this.myNavigationBar.getOldDBNumber(), DBHeadTemplateUI.this);
+						break;
+					case FORWARD_FIND:
+						service.findNextEntry(
+								DBHeadTemplateUI.this.myNavigationBar.getSearchFieldField(),
+								DBHeadTemplateUI.this.myNavigationBar.getSearchFieldMethode(),
+								DBHeadTemplateUI.this.myNavigationBar.getSearchFieldEntry(),
+								DBHeadTemplateUI.this.myNavigationBar.getCurrentDBNumber(),
+								DBHeadTemplateUI.this);
+						break;
+					case FAST_FORWARD:
+						service.readLastEntry(DBHeadTemplateUI.this);
+						break;
+					case FAST_FORWARD_FIND:
+						service.findLastEntry(
+								DBHeadTemplateUI.this.myNavigationBar.getSearchFieldField(),
+								DBHeadTemplateUI.this.myNavigationBar.getSearchFieldMethode(),
+								DBHeadTemplateUI.this.myNavigationBar.getSearchFieldEntry(),
+								DBHeadTemplateUI.this);
+						break;
+					case CHANGE:
+						service.readEntry(DBHeadTemplateUI.this.myNavigationBar.getCurrentDBNumber(), DBHeadTemplateUI.this);
+						break;
+					case USER_DEFINED:
+						userDefinedFunction();
+						break;
+					default:
+						E saveentry = checkInput();
+						if( saveentry != null ) {
+							if( !saveentry.equals(dbEntry) ) {
+								dosave = true;
+								service.saveEntry(saveentry, DBHeadTemplateUI.this);
+							}
 						}
-					}
+						break;
 				}
 			}
 		});
@@ -213,7 +229,7 @@ public abstract class DBHeadTemplateUI<E extends DomainHeadDataBase, F extends P
 	 * <code>newEntry</code> creates a new entry
 	 */
 	protected void newEntry() {
-		myNavigationBar.setNewEntry();
+		this.myNavigationBar.setNewEntry();
 		this.dbEntry.setUpDefaultEntry();
 
 		enableKeyField(true);
@@ -241,7 +257,7 @@ public abstract class DBHeadTemplateUI<E extends DomainHeadDataBase, F extends P
 	 * <code>UserDefinedFunction</code> can be used for additional
 	 * functionality that can be used by a button in the navigation widget
 	 */
-	protected void UserDefinedFunction() {
+	protected void userDefinedFunction() {
 		// redefine if you want to include a user defined function
 	}
 
@@ -252,6 +268,7 @@ public abstract class DBHeadTemplateUI<E extends DomainHeadDataBase, F extends P
 	 *  @param caught
 	 *  		the thrown exception 
 	 */
+	@Override
 	public void onFailure(Throwable caught) {
 		this.myNavigationBar.displayHint(caught.toString());
 	}
@@ -263,6 +280,7 @@ public abstract class DBHeadTemplateUI<E extends DomainHeadDataBase, F extends P
 	 *  @param entry
 	 *  		the returnvalue of the serverside function
 	 */
+	@Override
 	public void onSuccess(E entry) {
 		if( entry == null ) {
 			this.parentwidget.cleanUp();
@@ -307,6 +325,7 @@ public abstract class DBHeadTemplateUI<E extends DomainHeadDataBase, F extends P
      *            user information about the currently logged in user
      * @return true if it is allowed for this user
      */
+	@Override
 	public boolean matchesMenu(
 			String itemtext,
 			DomainUser user) {

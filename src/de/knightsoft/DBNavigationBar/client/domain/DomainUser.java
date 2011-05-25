@@ -296,20 +296,8 @@ public abstract class DomainUser extends DomainHeadPosDataBase implements Serial
 	 * set up a default entries
 	 * 
 	 */
+	@Override
 	public void setUpDefaultEntry() {
 		setUpDefaultUser(0, false, null,null);
-	}
-
-	/**
-	 * calculate a hashCode
-	 *
-	 * @return hash code
-	 */
-	public int hashCode() {
-		final int PRIME = 31;
-		int result = 1;
-		result = PRIME * result
-				+ ((user == null) ? 0 : (Integer.toString(mandator) + user).hashCode());
-		return result;
 	}
 }

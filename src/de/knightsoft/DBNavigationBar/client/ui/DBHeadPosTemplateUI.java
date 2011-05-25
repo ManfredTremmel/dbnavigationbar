@@ -58,9 +58,9 @@ public abstract class DBHeadPosTemplateUI<E extends DomainHeadPosDataBase, F ext
 	protected VerticalPanel posPanel;
 	protected FlexTable posTable;
 
-	protected int rowToDelete						=	-1;
+	protected int rowToDelete;
 
-	protected DialogBox dialogYesNoBox;
+	protected final DialogBox dialogYesNoBox;
 	
 	/**
 	 * Constructor
@@ -81,7 +81,8 @@ public abstract class DBHeadPosTemplateUI<E extends DomainHeadPosDataBase, F ext
 
 		this.setNewPositionButton();
 
-		this.dialogYesNoBox = createYesNoDialogBox(myNavigationBar.getConstants());
+		this.rowToDelete	=	-1;
+		this.dialogYesNoBox	=	createYesNoDialogBox(myNavigationBar.getConstants());
 		this.dialogYesNoBox.hide();
 	}
 
@@ -92,25 +93,26 @@ public abstract class DBHeadPosTemplateUI<E extends DomainHeadPosDataBase, F ext
 		if( this.newPositionButton == null )
 			this.newPositionButton = new Button(constantsPos.addPositionButton(),
 				new ClickHandler() {
+					@Override
 					public void onClick(ClickEvent event) {
 						fillPosition(
-			        			  	posTable.getRowCount(),
+								DBHeadPosTemplateUI.this.posTable.getRowCount(),
 			        				null);
 			          }
 				});
 	}
 
 	protected void setupPosPanel( String[] HeaderValues ) {
-		posPanel	=	new VerticalPanel();
-		posTable	=	new FlexTable();
+		this.posPanel	=	new VerticalPanel();
+		this.posTable	=	new FlexTable();
 		
 		for( int i = 0; i < HeaderValues.length; i++ ) {
-			posTable.setText(0, i, HeaderValues[i] );
-			posTable.getCellFormatter().setStyleName(0, i, "thlistcentergrey");
+			this.posTable.setText(0, i, HeaderValues[i] );
+			this.posTable.getCellFormatter().setStyleName(0, i, "thlistcentergrey");
 		}
 
-		posTable.setWidth("100%");
-		this.posPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+		this.posTable.setWidth("100%");
+		this.posPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		this.posPanel.setWidth("100%");
 		this.posPanel.add(posTable);
 	}
@@ -121,6 +123,7 @@ public abstract class DBHeadPosTemplateUI<E extends DomainHeadPosDataBase, F ext
 	 *  @param entry
 	 *  		entry to display
 	 */
+	@Override
 	protected abstract void fillEntry(E entry);
 	
 
@@ -131,11 +134,11 @@ public abstract class DBHeadPosTemplateUI<E extends DomainHeadPosDataBase, F ext
 	 */
 	protected void fillPositions( E entry) {
 
-		posTable.setVisible(false);
+		this.posTable.setVisible(false);
 		if( entry.getKeyPos() != null ) {
 		
-			for( int i = (posTable.getRowCount() - 1); i > entry.getKeyPos().length && i > 0; i--) {
-				posTable.removeRow(i);
+			for( int i = (this.posTable.getRowCount() - 1); i > entry.getKeyPos().length && i > 0; i--) {
+				this.posTable.removeRow(i);
 			}
 
 			for( int numRows = 0; numRows < entry.getKeyPos().length; numRows++ ) {
@@ -144,11 +147,11 @@ public abstract class DBHeadPosTemplateUI<E extends DomainHeadPosDataBase, F ext
 							);
 			}
 		} else {
-			for( int i = (posTable.getRowCount() - 1); i > 0; i--) {
-				posTable.removeRow(i);
+			for( int i = (this.posTable.getRowCount() - 1); i > 0; i--) {
+				this.posTable.removeRow(i);
 			}
 		}
-		posTable.setVisible(true);
+		this.posTable.setVisible(true);
 	}
 
 	/**
@@ -169,15 +172,16 @@ public abstract class DBHeadPosTemplateUI<E extends DomainHeadPosDataBase, F ext
 	 */
 	protected PushButton getDeleteButton() {
 		PushButton DeleteButton =	new PushButton(
-				new Image(images.DeletePosition()), new ClickHandler() {
+				new Image(DBHeadTemplateUI.images.DeletePosition()), new ClickHandler() {
+					@Override
 					public void onClick(ClickEvent event) {
 						PushButton sender = (PushButton)event.getSource();
-						for( int i = 1; i < posTable.getRowCount(); i++) {
-							if( ((PushButton)sender).equals( (PushButton)posTable.getWidget(i, (posTable.getCellCount(i) - 1))) ) {
-								rowToDelete = i;
-								dialogYesNoBox.center();
-								dialogYesNoBox.show();
-								i = posTable.getRowCount();
+						for( int i = 1; i < DBHeadPosTemplateUI.this.posTable.getRowCount(); i++) {
+							if( (sender).equals( posTable.getWidget(i, (posTable.getCellCount(i) - 1))) ) {
+								DBHeadPosTemplateUI.this.rowToDelete = i;
+								DBHeadPosTemplateUI.this.dialogYesNoBox.center();
+								DBHeadPosTemplateUI.this.dialogYesNoBox.show();
+								i = DBHeadPosTemplateUI.this.posTable.getRowCount();
 							}
 						}
 		            }
@@ -210,9 +214,10 @@ public abstract class DBHeadPosTemplateUI<E extends DomainHeadPosDataBase, F ext
 	    // Add a yes button at the bottom of the dialog
 	    Button yesButton = new Button(constants.yes(),
 	    	new ClickHandler() {
-	          public void onClick(ClickEvent event) {
+	          @Override
+			public void onClick(ClickEvent event) {
 	            dialogBox.hide();
-				posTable.removeRow(rowToDelete);
+	            DBHeadPosTemplateUI.this.posTable.removeRow(DBHeadPosTemplateUI.this.rowToDelete);
 				/*if( rowToDelete > 1 && rowToDelete == posTable.getRowCount() ) {
 					PushButton downPushButton	=	(PushButton)posTable.getWidget(rowToDelete - 1, posTable.getCellCount(0) - 1);
 					downPushButton.setEnabled(false);
@@ -225,7 +230,8 @@ public abstract class DBHeadPosTemplateUI<E extends DomainHeadPosDataBase, F ext
 	    // Add a no button at the bottom of the dialog
 	    Button noButton = new Button(constants.no(),
 	    	new ClickHandler() {
-	          public void onClick(ClickEvent event) {
+	          @Override
+			public void onClick(ClickEvent event) {
 	            dialogBox.hide();
 	          }
 	        });

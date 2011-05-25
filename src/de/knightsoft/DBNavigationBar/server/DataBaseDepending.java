@@ -46,11 +46,11 @@ public class DataBaseDepending {
 			"#\n\n"
     	};
 
-	protected int dbnumber;
+	protected final int dbnumber;
 	protected static final String[][] JDBC_CLASS =
 		{	
-			{"MySQL", Constants.JDBCClassMySQL, Constants.JDBCClassMySQL_OLD},
-			{"MSSQL", Constants.JDBCClassMSSQL}
+			{"MySQL", Constants.JDBC_CLASS_MYSQL, Constants.JDBC_CLASS_MYSQL_OLD},
+			{"MSSQL", Constants.JDBC_CLASS_MSSQL}
 		};
 
 	protected static final String[] SQL_TIME_NOW =
@@ -74,17 +74,18 @@ public class DataBaseDepending {
      */
     public DataBaseDepending(String jdbcClassToUse
     		) throws Exception {
-    	dbnumber	=	-1;
-    	if( Constants.JDBCClassMySQL_OLD.equalsIgnoreCase(jdbcClassToUse) )
-    		jdbcClassToUse	=	Constants.JDBCClassMySQL;	
-    	for( int i = 0; i < JDBC_CLASS.length && dbnumber == -1; i++ ) {
-    		for( int j = 0; j < JDBC_CLASS[i].length && dbnumber == -1; j++) {
+    	int tmpDBnumber	=	-1;
+    	if( Constants.JDBC_CLASS_MYSQL_OLD.equalsIgnoreCase(jdbcClassToUse) )
+    		jdbcClassToUse	=	Constants.JDBC_CLASS_MYSQL;	
+    	for( int i = 0; i < JDBC_CLASS.length && tmpDBnumber == -1; i++ ) {
+    		for( int j = 0; j < JDBC_CLASS[i].length && tmpDBnumber == -1; j++) {
     			if( jdbcClassToUse.equals( JDBC_CLASS[i][j] ) )
-    				dbnumber	=	i;
+    				tmpDBnumber	=	i;
     		}
     	}
-    	if( dbnumber == -1 )
-    		throw new Exception("This JDBC_CLASS is not Supported");
+    	if( tmpDBnumber == -1 )
+    		throw new Exception("This JDBC class is not Supported");
+    	this.dbnumber	=	tmpDBnumber;
     }
 
     /**
@@ -94,7 +95,7 @@ public class DataBaseDepending {
      */
     public String getJDBCClass(
     		) {
-        return JDBC_CLASS[dbnumber][1];
+        return JDBC_CLASS[this.dbnumber][1];
     }
 
     /**
@@ -105,7 +106,7 @@ public class DataBaseDepending {
      */
     public String getSQLTimeNow(
     		) {
-        return SQL_TIME_NOW[dbnumber];
+        return SQL_TIME_NOW[this.dbnumber];
     }
 
     /**
@@ -116,7 +117,7 @@ public class DataBaseDepending {
      */
     public String getSQLTimeOutdate(
     		) {
-        return SQL_TIME_OUTDATE[dbnumber];
+        return SQL_TIME_OUTDATE[this.dbnumber];
     }
 
     /**
@@ -130,7 +131,7 @@ public class DataBaseDepending {
     public String getSQLDiffFromNow( String compareField
 			) {
 		String returnString	=	null;
-		switch( dbnumber ) {
+		switch( this.dbnumber ) {
 			case 0:
 				returnString	=	"TO_DAYS(NOW()) - TO_DAYS(" + compareField + ")";
 				break;
@@ -152,7 +153,7 @@ public class DataBaseDepending {
     public String getSQLPassword( String encryptField
 			) {
 		String returnString	=	null;
-		switch( dbnumber ) {
+		switch( this.dbnumber ) {
 			case 0:
 				returnString	=	"OLD_PASSWORD(" + encryptField + ")";
 				break;
@@ -173,9 +174,9 @@ public class DataBaseDepending {
      */
 	public String concatStrings( String[] StringTab
 			) {
-		StringBuffer returnString	=	new StringBuffer();
+		StringBuilder returnString	=	new StringBuilder();
 		int i;
-		switch( dbnumber ) {
+		switch( this.dbnumber ) {
 			case 0:
 	    		returnString.append("CONCAT(");
 	    		for( i = 0; i < StringTab.length; i++) {
@@ -218,7 +219,7 @@ public class DataBaseDepending {
     public String getSQLBoolean( boolean booleanField
 			) {
 		String returnString	=	null;
-		switch( dbnumber ) {
+		switch( this.dbnumber ) {
 			case 0:
 				returnString	=	( booleanField ? "'1'" : "'0'");
 				break;

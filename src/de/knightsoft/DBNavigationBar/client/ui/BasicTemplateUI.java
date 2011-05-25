@@ -22,8 +22,13 @@
  */
 package de.knightsoft.DBNavigationBar.client.ui;
 
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.TextBox;
 
 import de.knightsoft.DBNavigationBar.client.Parent;
 import de.knightsoft.DBNavigationBar.client.domain.DomainUser;
@@ -38,7 +43,12 @@ import de.knightsoft.DBNavigationBar.client.domain.DomainUser;
  */
 public abstract class BasicTemplateUI<F extends Parent> extends Composite {
 
-	protected F parentwidget;
+	protected final F parentwidget;
+
+	protected final char point;
+	protected final KeyPressHandler numericKeyPressHandler;
+	protected final KeyPressHandler numericPointKeyPressHandler;
+
 	
 	/**
 	 * Constructor
@@ -50,6 +60,82 @@ public abstract class BasicTemplateUI<F extends Parent> extends Composite {
 			F parentwidget) {
 
 		this.parentwidget	=	parentwidget;
+		char tmpPoint	=	',';
+		try {
+			tmpPoint = NumberFormat.getFormat("0.00").format(1.1).replaceAll("1", "").replaceAll("0", "").trim().charAt(0);
+		} catch( Exception e ) {
+			tmpPoint = ',';
+		}
+		this.point	=	tmpPoint;
+
+	    this.numericKeyPressHandler = new KeyPressHandler() {
+	    	@Override
+			public void onKeyPress(KeyPressEvent event) {
+				int keyCode = (event.getNativeEvent() == null ? 0 : event.getNativeEvent().getKeyCode());
+				char charCode	=	event.getCharCode();
+				
+				switch(keyCode) {
+					case KeyCodes.KEY_BACKSPACE:
+					case KeyCodes.KEY_DELETE:
+					case KeyCodes.KEY_LEFT:
+					case KeyCodes.KEY_RIGHT:
+					case KeyCodes.KEY_SHIFT:
+					case KeyCodes.KEY_TAB:
+					case KeyCodes.KEY_ENTER:
+					case KeyCodes.KEY_HOME:
+					case KeyCodes.KEY_END:
+					case KeyCodes.KEY_UP:
+					case KeyCodes.KEY_DOWN:
+						break;
+					default:
+						if( event.isControlKeyDown() &&
+							(charCode == 'c' || charCode == 'x') ) {
+							// Copy or Cut
+						} else if( event.isControlKeyDown() &&
+							charCode == 'v' ) {
+							// Paste, how to verify copied text?
+						} else if( !Character.isDigit(charCode) ) {
+							((TextBox) event.getSource()).cancelKey();
+						}
+						break;
+				}
+			}
+		};
+
+	    this.numericPointKeyPressHandler = new KeyPressHandler() {
+	    	@Override
+			public void onKeyPress(KeyPressEvent event) {
+				int keyCode = (event.getNativeEvent() == null ? 0 : event.getNativeEvent().getKeyCode());
+				char charCode	=	event.getCharCode();
+				
+				switch(keyCode) {
+					case KeyCodes.KEY_BACKSPACE:
+					case KeyCodes.KEY_DELETE:
+					case KeyCodes.KEY_LEFT:
+					case KeyCodes.KEY_RIGHT:
+					case KeyCodes.KEY_SHIFT:
+					case KeyCodes.KEY_TAB:
+					case KeyCodes.KEY_ENTER:
+					case KeyCodes.KEY_HOME:
+					case KeyCodes.KEY_END:
+					case KeyCodes.KEY_UP:
+					case KeyCodes.KEY_DOWN:
+						break;
+					default:
+						if( event.isControlKeyDown() &&
+							(charCode == 'c' || charCode == 'x') ) {
+							// Copy or Cut
+						} else if( event.isControlKeyDown() &&
+							charCode == 'v' ) {
+							// Paste, how to verify copied text?
+						} else if( !Character.isDigit(event.getCharCode()) &&
+								BasicTemplateUI.this.point != event.getCharCode()) {
+							((TextBox) event.getSource()).cancelKey();
+						}
+						break;
+				}
+			}
+		};
 	}
 
 	/**
