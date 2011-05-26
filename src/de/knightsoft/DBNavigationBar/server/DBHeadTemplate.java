@@ -315,7 +315,7 @@ public abstract class DBHeadTemplate<E extends DomainHeadDataBase> extends DBHea
 					if( thisDataBase != null )
 						thisDataBase.close();
 				} catch (SQLException e) {
-					// ignore
+					e.printStackTrace();
 				}
 			}
 		} else

@@ -325,7 +325,7 @@ public abstract class DBHeadPosDateTemplate<E extends DomainHeadPosDataBase>
 					if( thisDataBase != null )
 						thisDataBase.close();
 				} catch (SQLException e) {
-					// ignore
+					e.printStackTrace();
 				}
 			}
 		}
@@ -399,7 +399,7 @@ public abstract class DBHeadPosDateTemplate<E extends DomainHeadPosDataBase>
 				if( readPosSQLStatement != null )
 					readPosSQLStatement.close();
 			} catch (SQLException e) {
-				// ignore
+				e.printStackTrace();
 			}
 		}
 		return thisEntry;
@@ -521,7 +521,7 @@ public abstract class DBHeadPosDateTemplate<E extends DomainHeadPosDataBase>
 					if( thisDataBase != null )
 						thisDataBase.close();
 				} catch (SQLException e) {
-					// ignore
+					e.printStackTrace();
 				}
 			}
 		} else

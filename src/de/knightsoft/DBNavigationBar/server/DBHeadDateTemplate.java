@@ -312,7 +312,7 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 	        	if( readMinMaxSQLStatement != null )
 	        		readMinMaxSQLStatement.close();
 			} catch (SQLException e) {
-				// ignore;
+				e.printStackTrace();;
 			}
         }
 		return thisEntry;
@@ -360,7 +360,7 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 					if( thisDataBase != null )
 						thisDataBase.close();
 				} catch (SQLException e) {
-					// ignore
+					e.printStackTrace();
 				}
 			}
 		}
@@ -470,7 +470,7 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 					if( thisDataBase != null )
 						thisDataBase.close();
 				} catch (SQLException e) {
-					// ignore
+					e.printStackTrace();
 				}
 			}
 		} else
@@ -531,7 +531,7 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 					if( thisDataBase != null )
 						thisDataBase.close();
 				} catch (SQLException e) {
-					// ignore
+					e.printStackTrace();
 				}
 			}
 		} else
@@ -594,7 +594,7 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 					if( thisDataBase != null )
 						thisDataBase.close();
 				} catch (SQLException e) {
-					// ignore
+					e.printStackTrace();
 				}
 			}
 		} else
@@ -657,7 +657,7 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 					if( thisDataBase != null )
 						thisDataBase.close();
 				} catch (SQLException e) {
-					// ignore
+					e.printStackTrace();
 				}
 			}
 		} else
@@ -705,7 +705,7 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 				if( readHeadSQLStatement != null )
 					readHeadSQLStatement.close();
 			} catch (SQLException e) {
-				// ignore;
+				e.printStackTrace();;
 			}
 		}
 		return thisEntry;
@@ -744,7 +744,7 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 					if( thisDataBase != null )
 						thisDataBase.close();
 				} catch (SQLException e) {
-					// ignore
+					e.printStackTrace();
 				}
 			}
 		} else
@@ -785,7 +785,7 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 					if( thisDataBase != null )
 						thisDataBase.close();
 				} catch (SQLException e) {
-					// ignore
+					e.printStackTrace();
 				}
 			}
 		} else
@@ -825,7 +825,7 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 					if( thisDataBase != null )
 						thisDataBase.close();
 				} catch (SQLException e) {
-					// ignore
+					e.printStackTrace();
 				}
 			}
 		} else
@@ -882,7 +882,7 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 					if( thisDataBase != null )
 						thisDataBase.close();
 				} catch (SQLException e) {
-					// ignore
+					e.printStackTrace();
 				}
 			}
 		} else
@@ -939,7 +939,7 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 					if( thisDataBase != null )
 						thisDataBase.close();
 				} catch (SQLException e) {
-					// ignore
+					e.printStackTrace();
 				}
 			}
 		} else
@@ -1032,7 +1032,7 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBase> extends R
 					if( thisDataBase != null )
 						thisDataBase.close();
 				} catch (SQLException e) {
-					// ignore
+					e.printStackTrace();
 				}
 			}
 		} else
