@@ -5,7 +5,7 @@
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
- * 
+ *
  * RiPhone is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -13,23 +13,26 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with RiPhone.  If not, see <http://www.gnu.org/licenses/>
- * 
- * 
+ *
+ *
  * Copyright (c) 2011 Manfred Tremmel
  *
  * --
- *	Name		Date		Change
+ *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.client;
 
 import com.google.gwt.core.client.EntryPoint;
 
+/**
+ * entry point is called when webpage is loaded.
+ * @author Manfred Tremmel
+ */
 public class DBNavigationBar implements EntryPoint {
 
-	@Override
-	public void onModuleLoad() {
-		// Nothing to do
+    @Override
+    public void onModuleLoad() {
+        // Nothing to do
 
-	}
-
+    }
 }

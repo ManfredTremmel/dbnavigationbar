@@ -26,26 +26,48 @@ import com.google.gwt.i18n.client.Constants;
 
 /**
  *
- * The <code>DBHeadPosTemplateUIConstants</code> class contains the
- * messages for position template.
+ * The <code>DBHeadTemplateUIConstants</code> class contains the
+ * messages for head template.
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2011-02-19
+ * @version 1.0.0, 2011-02-13
  */
-public interface DBHeadPosTemplateUIConstants extends Constants {
+public interface BasicDBTemplateUIConstants extends Constants {
+
     /**
-     * the text "function".
-     * @return function
+     * title of the page.
+     * @return title
      */
-    String function();
+    String title();
     /**
-     * text of the new entry button.
-     * @return addPositionButton
+     * menuEntry of the page.
+     * @return menuEntry
      */
-    String addPositionButton();
+    String menuEntry();
+
     /**
-     * message to display if two entries with the same key are inserted.
-     * @return doubleEntryError
+     * message to display if database entry is not found.
+     * @return searchErrorMessage
      */
-    String doubleEntryError();
+    String searchErrorMessage();
+    /**
+     * message to display if input format is wrong.
+     * @return formatError
+     */
+    String formatError();
+    /**
+     * message to display when field is empty.
+     * @return empty
+     */
+    String empty();
+    /**
+     * message to display if entry can't be found in database.
+     * @return notFoundInDB
+     */
+    String notFoundInDB();
+    /**
+     * message to display if saving was successfully.
+     * @return savedSuccessfully
+     */
+    String savedSuccessfully();
 }

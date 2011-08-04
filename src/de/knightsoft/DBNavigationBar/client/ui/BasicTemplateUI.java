@@ -5,7 +5,7 @@
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
- * 
+ *
  * RiPhone is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -13,12 +13,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with RiPhone.  If not, see <http://www.gnu.org/licenses/>
- * 
- * 
+ *
+ *
  * Copyright (c) 2011 Manfred Tremmel
  *
  * --
- *	Name		Date		Change
+ *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.client.ui;
 
@@ -34,184 +34,202 @@ import de.knightsoft.DBNavigationBar.client.Parent;
 import de.knightsoft.DBNavigationBar.client.domain.DomainUser;
 
 /**
- * 
  * The <code>BasicTemplateUI</code> class is a template for all
- * input mask
- * 
+ * input mask.
+ *
+ * @param <F> parent widget
+ *
  * @author Manfred Tremmel
  * @version 1.0.0, 2011-02-19
  */
-public abstract class BasicTemplateUI<F extends Parent> extends Composite {
-
-	protected final F parentwidget;
-
-	protected final char point;
-	protected final KeyPressHandler numericKeyPressHandler;
-	protected final KeyPressHandler numericPointKeyPressHandler;
-
-	
-	/**
-	 * Constructor
-	 * 
-	 * @param parentwidget
-	 * 		the parent widget, where this frame is displayed
-	 */
-	public BasicTemplateUI(
-			F parentwidget) {
-
-		this.parentwidget	=	parentwidget;
-		char tmpPoint	=	',';
-		try {
-			tmpPoint = NumberFormat.getFormat("0.00").format(1.1).replaceAll("1", "").replaceAll("0", "").trim().charAt(0);
-		} catch( Exception e ) {
-			tmpPoint = ',';
-		}
-		this.point	=	tmpPoint;
-
-	    this.numericKeyPressHandler = new KeyPressHandler() {
-	    	@Override
-			public void onKeyPress(KeyPressEvent event) {
-				int keyCode = (event.getNativeEvent() == null ? 0 : event.getNativeEvent().getKeyCode());
-				char charCode	=	event.getCharCode();
-				
-				switch(keyCode) {
-					case KeyCodes.KEY_BACKSPACE:
-					case KeyCodes.KEY_DELETE:
-					case KeyCodes.KEY_LEFT:
-					case KeyCodes.KEY_RIGHT:
-					case KeyCodes.KEY_SHIFT:
-					case KeyCodes.KEY_TAB:
-					case KeyCodes.KEY_ENTER:
-					case KeyCodes.KEY_HOME:
-					case KeyCodes.KEY_END:
-					case KeyCodes.KEY_UP:
-					case KeyCodes.KEY_DOWN:
-						break;
-					default:
-						if( event.isControlKeyDown() &&
-							(charCode == 'c' || charCode == 'x') ) {
-							// Copy or Cut
-						} else if( event.isControlKeyDown() &&
-							charCode == 'v' ) {
-							// Paste, how to verify copied text?
-						} else if( !Character.isDigit(charCode) ) {
-							((TextBox) event.getSource()).cancelKey();
-						}
-						break;
-				}
-			}
-		};
-
-	    this.numericPointKeyPressHandler = new KeyPressHandler() {
-	    	@Override
-			public void onKeyPress(KeyPressEvent event) {
-				int keyCode = (event.getNativeEvent() == null ? 0 : event.getNativeEvent().getKeyCode());
-				char charCode	=	event.getCharCode();
-				
-				switch(keyCode) {
-					case KeyCodes.KEY_BACKSPACE:
-					case KeyCodes.KEY_DELETE:
-					case KeyCodes.KEY_LEFT:
-					case KeyCodes.KEY_RIGHT:
-					case KeyCodes.KEY_SHIFT:
-					case KeyCodes.KEY_TAB:
-					case KeyCodes.KEY_ENTER:
-					case KeyCodes.KEY_HOME:
-					case KeyCodes.KEY_END:
-					case KeyCodes.KEY_UP:
-					case KeyCodes.KEY_DOWN:
-						break;
-					default:
-						if( event.isControlKeyDown() &&
-							(charCode == 'c' || charCode == 'x') ) {
-							// Copy or Cut
-						} else if( event.isControlKeyDown() &&
-							charCode == 'v' ) {
-							// Paste, how to verify copied text?
-						} else if( !Character.isDigit(event.getCharCode()) &&
-								BasicTemplateUI.this.point != event.getCharCode()) {
-							((TextBox) event.getSource()).cancelKey();
-						}
-						break;
-				}
-			}
-		};
-	}
-
-	/**
-	 * <code>setFocusOnFirstWidget</code> set focus to first enabled
-	 * input field
-	 * 
-	 */
-	protected abstract void setFocusOnFirstWidget();
-
+public abstract class BasicTemplateUI<F extends Parent> extends Composite
+    implements BasicTemplateUIInterface<F> {
 
     /**
-     * The Method <code>getHeaderTitle</code> gets title text
-     * 
-     * @return menu text
+     * parent widget.
      */
-	public abstract String getHeaderTitle();
+    private final F parentwidget;
 
     /**
-     * The Method <code>getMenuText</code> gets menu text
-     * 
-     * @return menu text
+     * a decimal point, localized.
      */
-	public abstract String getMenuText();
+    private final char point;
 
     /**
-     * The Method <code>getMenuEntry</code> gets completely menu entry
-     * 
-     * @return menu entry
+     * key press handler for numeric input fields
+     * (only numeric signs).
      */
-	public abstract String getMenuEntry();
+    private final KeyPressHandler numericKeyPressHandler;
 
     /**
-     * The Method <code>matchesMenu</code> looks if this UI is selected and
-     * makes the necessary changes.
-     * 
+     * key press handler for numeric input fields
+     * (numeric signs and decimal point).
+     */
+    private final KeyPressHandler numericPointKeyPressHandler;
+
+
+    /**
+     * Constructor.
+     *
+     * @param setParentwidget
+     *         the parent widget, where this frame is displayed
+     */
+    public BasicTemplateUI(
+            final F setParentwidget) {
+
+        final double decPointTest = 1.1;
+
+        this.parentwidget  =    setParentwidget;
+        char tmpPoint      =    ',';
+        try {
+            tmpPoint = NumberFormat.getFormat("0.00")
+                    .format(decPointTest).replaceAll("1", "")
+                    .replaceAll("0", "").trim().charAt(0);
+        } catch (Exception e) {
+            tmpPoint = ',';
+        }
+        this.point    =    tmpPoint;
+
+        this.numericKeyPressHandler = new KeyPressHandler() {
+            @Override
+            public void onKeyPress(final KeyPressEvent event) {
+                int keyCode = 0;
+                if (event.getNativeEvent() != null) {
+                   keyCode = event.getNativeEvent().getKeyCode();
+                }
+                char charCode    =    event.getCharCode();
+
+                switch(keyCode) {
+                    case KeyCodes.KEY_BACKSPACE:
+                    case KeyCodes.KEY_DELETE:
+                    case KeyCodes.KEY_LEFT:
+                    case KeyCodes.KEY_RIGHT:
+                    case KeyCodes.KEY_SHIFT:
+                    case KeyCodes.KEY_TAB:
+                    case KeyCodes.KEY_ENTER:
+                    case KeyCodes.KEY_HOME:
+                    case KeyCodes.KEY_END:
+                    case KeyCodes.KEY_UP:
+                    case KeyCodes.KEY_DOWN:
+                        break;
+                    default:
+                        // Copy, Cut or Paste or numeric input
+                        if (!(event.isControlKeyDown()
+                              && (charCode == 'c'
+                               || charCode == 'x'
+                               || charCode == 'v'))
+                          && !Character.isDigit(charCode)) {
+                            ((TextBox) event.getSource()).cancelKey();
+                        }
+                        break;
+                }
+            }
+        };
+
+        this.numericPointKeyPressHandler = new KeyPressHandler() {
+            @Override
+            public void onKeyPress(final KeyPressEvent event) {
+                int keyCode = 0;
+                if (event.getNativeEvent() != null) {
+                   keyCode = event.getNativeEvent().getKeyCode();
+                }
+                char charCode    =    event.getCharCode();
+
+                switch(keyCode) {
+                    case KeyCodes.KEY_BACKSPACE:
+                    case KeyCodes.KEY_DELETE:
+                    case KeyCodes.KEY_LEFT:
+                    case KeyCodes.KEY_RIGHT:
+                    case KeyCodes.KEY_SHIFT:
+                    case KeyCodes.KEY_TAB:
+                    case KeyCodes.KEY_ENTER:
+                    case KeyCodes.KEY_HOME:
+                    case KeyCodes.KEY_END:
+                    case KeyCodes.KEY_UP:
+                    case KeyCodes.KEY_DOWN:
+                        break;
+                    default:
+                        // Copy, Cut or Paste or numeric input or point
+                        if (!(event.isControlKeyDown()
+                              && (charCode == 'c'
+                               || charCode == 'x'
+                               || charCode == 'v'))
+                          && !Character.isDigit(charCode)
+                          && (BasicTemplateUI.this.point
+                              != charCode)) {
+                            ((TextBox) event.getSource()).cancelKey();
+                        }
+                        break;
+                }
+            }
+        };
+    }
+
+    /**
+     * <code>setFocusOnFirstWidget</code> set focus to first enabled
+     * input field.
+     *
+     */
+    protected abstract void setFocusOnFirstWidget();
+
+
+    /**
+     * The Method <code>matchesMenuSimple</code> looks if this UI is selected
+     * and makes the necessary changes.
+     *
      * @param itemtext
      *            selected menu item
      * @param user
      *            user information about the currently logged in user
      * @return true if it is allowed for this user
      */
-	public boolean matchesMenu(
-			String itemtext,
-			DomainUser user) {
-		boolean matches = false;
-		if(	itemtext != null &&
-			itemtext.indexOf(this.getMenuText()) >= 0 ) {
-			//this.myNavigationBar.enableAllButtons();
-			this.parentwidget.mainPanel.clear();
-			this.parentwidget.mainPanel.add(this);
-			this.setFocusOnFirstWidget();
-			matches	=	true;
-			History.newItem("page=" + this.getMenuText());
-		}
-		return matches;
-	}
+    public final boolean matchesMenuSimple(
+            final String itemtext,
+            final DomainUser user) {
+        boolean matches = false;
+        if (itemtext != null
+         && itemtext.indexOf(this.getMenuText()) >= 0) {
+            //this.myNavigationBar.enableAllButtons();
+            this.parentwidget.getMainPanel().clear();
+            this.parentwidget.getMainPanel().add(this);
+            this.setFocusOnFirstWidget();
+            matches    =    true;
+            History.newItem("page=" + this.getMenuText());
+        }
+        return matches;
+    }
 
     /**
-     * The Method <code>allowedToSee</code> tells you if the currently logged
-     * in user is allowed to access this application.
-     * 
-     * @param user
-     *            information about logged in user
-     * @return true if it is allowed for this user
+     * return parent widget.
+     * @return the parent widget
      */
-	public abstract boolean allowedToSee(
-			DomainUser user);
+    @Override
+    public final F getParentwidget() {
+        return parentwidget;
+    }
 
     /**
-     * The Method <code>allowedToChange</code> tells you if the currently
-     * logged in user is allowed to change data in this application.
-     * 
-     * @param user
-     *            information about logged in user
-     * @return true if it is allowed for this user
+     * return decimal point.
+     * @return the point
      */
-    public abstract boolean allowedToChange(
-    		DomainUser user);
+    public final char getPoint() {
+        return point;
+    }
+
+    /**
+     * return numeric key press handler.
+     * @return the numericKeyPressHandler
+     */
+    public final KeyPressHandler getNumericKeyPressHandler() {
+        return numericKeyPressHandler;
+    }
+
+    /**
+     * return numeric point key press handler.
+     * @return the numericPointKeyPressHandler
+     */
+    public final KeyPressHandler getNumericPointKeyPressHandler() {
+        return numericPointKeyPressHandler;
+    }
+
 }

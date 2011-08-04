@@ -5,7 +5,7 @@
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
- * 
+ *
  * RiPhone is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -13,34 +13,73 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with RiPhone.  If not, see <http://www.gnu.org/licenses/>
- * 
- * 
+ *
+ *
  * Copyright (c) 2011 Manfred Tremmel
  *
  * --
- *	Name		Date		Change
+ *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.shared;
 
 /**
- * 
- * The <code>Konstanten</code> contains the fixed fields
- * 
+ *
+ * The <code>Constants</code> contains the fixed fields.
+ *
  * @author Manfred Tremmel
  * @version 1.0.0, 2011-02-05
  */
 public class Constants {
-    public static final boolean USE_CONNECTION_POOL			=	true;
-    
 
-	final static public String JDBC_CLASS_MYSQL				=	"com.mysql.jdbc.Driver";
-	final static public String JDBC_CLASS_MYSQL_OLD			=	"org.gjt.mm.mysql.Driver";
-	final static public String JDBC_CLASS_MSSQL				=	"com.microsoft.jdbc.sqlserver.SQLServerDriver";
+    /**
+     * private constructor.
+     */
+    protected Constants() {
+    };
 
-    public static final String DB_FIELD_GLOBAL_MANDATOR		=	"Mandator";
-    public static final String DB_FIELD_GLOBAL_USER			=	"Username";
-    public static final String DB_FIELD_GLOBAL_DATE_FROM	=	"Date_from";
-    public static final String DB_FIELD_GLOBAL_DATE_TO		=	"Date_to";
+    /**
+     * use a connection pool or directly connect.
+     */
+    public static final boolean USE_CONNECTION_POOL       =    true;
 
-    public static final String DB_FIELD_MANDATOR			=	DB_FIELD_GLOBAL_MANDATOR;
+    /**
+     * jdbc class for mysql.
+     */
+    public static final String JDBC_CLASS_MYSQL           =
+            "com.mysql.jdbc.Driver";
+    /**
+     * jdbc class for mysql (older version).
+     */
+    public static final String JDBC_CLASS_MYSQL_OLD       =
+            "org.gjt.mm.mysql.Driver";
+    /**
+     * jdbc class for mssql.
+     */
+    public static final String JDBC_CLASS_MSSQL           =
+            "com.microsoft.jdbc.sqlserver.SQLServerDriver";
+
+    /**
+     * database field name for mandator field.
+     */
+    public static final String DB_FIELD_GLOBAL_MANDATOR   = "Mandator";
+
+    /**
+     * database field name for username field.
+     */
+    public static final String DB_FIELD_GLOBAL_USER       = "Username";
+
+    /**
+     * database field name for date from field.
+     */
+    public static final String DB_FIELD_GLOBAL_DATE_FROM  = "Date_from";
+
+    /**
+     * database field name for date to field.
+     */
+    public static final String DB_FIELD_GLOBAL_DATE_TO    = "Date_to";
+
+    /**
+     * database field name for mandator field.
+     */
+    public static final String DB_FIELD_MANDATOR =    DB_FIELD_GLOBAL_MANDATOR;
 };

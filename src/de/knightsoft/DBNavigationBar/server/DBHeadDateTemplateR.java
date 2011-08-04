@@ -18,7 +18,7 @@
  * Copyright (c) 2011 Manfred Tremmel
  *
  * --
- *    Name        Date        Change
+ *  Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.server;
 
@@ -35,62 +35,54 @@ import de.knightsoft.DBNavigationBar.client.domain.DomainUser;
 import de.knightsoft.DBNavigationBar.shared.Constants;
 
 /**
+ *
  * The <code>RiPhoneDBHeadDateTemplate</code> class is the server side
  * implementation template for a simple database.
  *
- * @param <E> DataBase structure type
+ * @param <E> structure
  * @author Manfred Tremmel
  * @version 1.0.0, 2011-02-08
  */
-public abstract class DBHeadTemplate<E extends DomainHeadDataBaseInterface>
-                      extends DBTemplate<E> {
+public abstract class DBHeadDateTemplateR<E extends DomainHeadDataBaseInterface>
+    extends DBTemplate<E> {
 
     /**
      * Serial version id.
      */
-    private static final long serialVersionUID = 6419810537457908964L;
-
-    /**
-     * SQL string to update database.
-     */
-    private final String updateHeadSQL;
-
+    private static final long serialVersionUID = 3633734786925668260L;
 
     /**
      * Constructor, set up database connection.
      *
      * @param setType - class instance of E
      * @param setLookUpDataBase
-     *          Data source for lookup
+     *          look up of the data base
      * @param setSessionUser
-     *          name of the session where user data are saved
+     *          user session key
      * @param setDataBaseTableName
-     *          data base table name
+     *          database table name
      * @param setKeyFieldName
-     *          name of the key field in the database
+     *          key field of the database
      * @param setInsertHeadSQL
-     *          insert sql statement
-     * @param setUpdateHeadSQL
-     *          update sql statement
+     *          sql statement to insert a new head entry
      * @param setReadMinMaxSQL
-     *          sql statement to read min and max entry key
+     *          sql statement for min/max read
      * @param setReadNextSQL
-     *          sql statement to read next entry
+     *          sql statement to read next key
      * @param setReadPrevSQL
-     *          sql statement to read previous entry
+     *          sql statement to read previous key
      * @param setReadHeadSQL
-     *          sql statement to read the head data
+     *          sql statement to read head entry
      * @param setInvalidateHeadSQL
-     *          sql statement to invalidate/delete a entry
+     *          sql statement to invalidate head entry
      */
-    public DBHeadTemplate(
+    public DBHeadDateTemplateR(
             final Class<E> setType,
             final String setLookUpDataBase,
             final String setSessionUser,
             final String setDataBaseTableName,
             final String setKeyFieldName,
             final String setInsertHeadSQL,
-            final String setUpdateHeadSQL,
             final String setReadMinMaxSQL,
             final String setReadNextSQL,
             final String setReadPrevSQL,
@@ -107,10 +99,7 @@ public abstract class DBHeadTemplate<E extends DomainHeadDataBaseInterface>
               setReadNextSQL,
               setReadPrevSQL,
               setReadHeadSQL,
-              setInvalidateHeadSQL
-       );
-
-        this.updateHeadSQL        =    setUpdateHeadSQL;
+              setInvalidateHeadSQL);
     }
 
     /**
@@ -118,26 +107,23 @@ public abstract class DBHeadTemplate<E extends DomainHeadDataBaseInterface>
      *
      * @param setType - class instance of E
      * @param setLookUpDataBase
-     *          Data source for lookup
+     *          look up of the data base
      * @param setSessionUser
-     *          name of the session where user data are saved
+     *          user session key
      * @param setDataBaseTableName
-     *          data base table name
+     *          database table name
      * @param setKeyFieldName
-     *          name of the key field in the database
+     *          key field of the database
      * @param setInsertHeadSQL
-     *          insert sql statement
-     * @param setUpdateHeadSQL
-     *          update sql statement
+     *          sql statement to insert a new head entry
      */
-    public DBHeadTemplate(
+    public DBHeadDateTemplateR(
             final Class<E> setType,
             final String setLookUpDataBase,
             final String setSessionUser,
             final String setDataBaseTableName,
             final String setKeyFieldName,
-            final String setInsertHeadSQL,
-            final String setUpdateHeadSQL
+            final String setInsertHeadSQL
           ) {
         this(setType,
              setLookUpDataBase,
@@ -145,91 +131,44 @@ public abstract class DBHeadTemplate<E extends DomainHeadDataBaseInterface>
              setDataBaseTableName,
              setKeyFieldName,
              setInsertHeadSQL,
-             setUpdateHeadSQL,
 
                "SELECT MIN(" + setKeyFieldName + ") AS min, "
              + "       MAX(" + setKeyFieldName + ") AS max "
              + "FROM   " + setDataBaseTableName + " "
-             + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? ;",
+             + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? "
+             + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() "
+             + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > NOW();",
 
                "SELECT MIN(" + setKeyFieldName + ") AS dbnumber "
              + "FROM   " + setDataBaseTableName + " "
              + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? "
-             + "  AND  " + setKeyFieldName + " > ? ;",
+             + "  AND  " + setKeyFieldName + " > ? "
+             + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() "
+             + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > NOW();",
 
                "SELECT MAX(" + setKeyFieldName + ") AS dbnumber "
              + "FROM   " + setDataBaseTableName + " "
              + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? "
-             + "  AND  " + setKeyFieldName + " < ? ;",
+             + "  AND  " + setKeyFieldName + " < ? "
+             + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() "
+             + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > NOW();",
 
                "SELECT * "
              + "FROM   " + setDataBaseTableName + " "
              + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? "
-             + "  AND  " + setKeyFieldName + " = ? ;",
+             + "  AND  " + setKeyFieldName + " = ? "
+             + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() "
+             + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > NOW();",
 
-               "DELETE FROM " + setDataBaseTableName + " "
+               "UPDATE " + setDataBaseTableName + " "
+             + "SET    " + Constants.DB_FIELD_GLOBAL_DATE_TO + " = OUTDATE() "
              + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? "
-             + "  AND  " + setKeyFieldName + " = ? ;"
-           );
+             + "  AND  " + setKeyFieldName + " = ? "
+             + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() "
+             + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + "   > NOW();"
+
+            );
     }
-
-    /**
-     * Constructor, set up database connection.
-     *
-     * @param setType - class instance of E
-     * @param setLookUpDataBase
-     *          Data source for lookup
-     * @param setSessionUser
-     *          name of the session where user data are saved
-     * @param setDataBaseTableName
-     *          data base table name
-     * @param setKeyFieldName
-     *          name of the key field in the database
-     * @param setInsertHeadSQL
-     *          insert sql statement
-     * @param setUpdateHeadSQL
-     *          update sql statement
-     * @param setReadHeadSQL
-     *          sql statement to read the head data
-     */
-    public DBHeadTemplate(
-            final Class<E> setType,
-            final String setLookUpDataBase,
-            final String setSessionUser,
-            final String setDataBaseTableName,
-            final String setKeyFieldName,
-            final String setInsertHeadSQL,
-            final String setUpdateHeadSQL,
-            final String setReadHeadSQL
-          ) {
-        this(setType,
-             setLookUpDataBase,
-             setSessionUser,
-             setDataBaseTableName,
-             setKeyFieldName,
-             setInsertHeadSQL,
-             setUpdateHeadSQL,
-             "SELECT MIN(" + setKeyFieldName + ") AS min, "
-           + "       MAX(" + setKeyFieldName + ") AS max "
-           + "FROM   " + setDataBaseTableName + " "
-           + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? ;",
-
-             "SELECT MIN(" + setKeyFieldName + ") AS dbnumber "
-           + "FROM   " + setDataBaseTableName + " "
-           + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? "
-           + "  AND  " + setKeyFieldName + " > ? ;",
-
-             "SELECT MAX(" + setKeyFieldName + ") AS dbnumber "
-           + "FROM   " + setDataBaseTableName + " "
-           + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? "
-           + "  AND  " + setKeyFieldName + " < ? ;",
-             setReadHeadSQL,
-             "DELETE FROM " + setDataBaseTableName + " "
-           + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? "
-           + "  AND  " + setKeyFieldName + " = ? ;"
-           );
-    }
-
 
     /**
      * <code>searchSQLSelect</code> setup a part of the
@@ -264,6 +203,9 @@ public abstract class DBHeadTemplate<E extends DomainHeadDataBaseInterface>
             final String dbKeyVGL,
             final String dbKey) throws Exception {
         int mandator         =    this.getUser().getMandator();
+        DataBaseDepending myDataBaseDepending =
+                new DataBaseDepending(thisDataBase.getMetaData()
+                        .getDatabaseProductName());
 
         String sqlString =
               "SELECT " + minMax + "(" + this.getKeyFieldName()
@@ -274,6 +216,10 @@ public abstract class DBHeadTemplate<E extends DomainHeadDataBaseInterface>
             + " AND   " + this.getKeyFieldName() + " " + dbKeyVGL
             + " " + StringToSQL.convertString(dbKey,
                     thisDataBase.getMetaData().getDatabaseProductName()) + " "
+            + " AND    " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= "
+                    + myDataBaseDepending.getSQLTimeNow() + " "
+            + " AND    " + Constants.DB_FIELD_GLOBAL_DATE_TO + "   > "
+                    + myDataBaseDepending.getSQLTimeNow() + " "
             + " AND   ";
 
         if ("=".equals(searchMethodeEntry)) {
@@ -290,55 +236,6 @@ public abstract class DBHeadTemplate<E extends DomainHeadDataBaseInterface>
                        thisDataBase.getMetaData().getDatabaseProductName());
         }
         return sqlString;
-    }
-
-    /**
-     * getUpdateHeadSQL.
-     * @return updateHeadSQL sql statement
-     */
-    public final String getUpdateHeadSQL() {
-        return this.updateHeadSQL;
-    }
-
-    /**
-     * <code>fillUpdateHead</code> fills the parameters of the
-     * update prepared statement.
-     * @param updateHeadSQLStatement
-     *          update sql statement
-     * @param mandator
-     *          mandator number
-     * @param user
-     *          user name
-     * @param saveEntry
-     *          entry to save
-     * @throws SQLException if fill up fails
-     */
-    protected abstract void fillUpdateHead(
-            PreparedStatement updateHeadSQLStatement,
-            int mandator,
-            String user,
-            E saveEntry) throws SQLException;
-
-    /**
-     * <code>readOneEntry</code> is used to read a
-     * given entry from database.
-     *
-     * @param thisDataBase
-     *             Database Connection
-     * @param mandator
-     *             mandator is a keyfield
-     * @param entry
-     *             the Entry to read
-     * @param thisEntry
-     *             structure to be filled
-     * @return the filled structure
-     * @throws SQLException
-     */
-    @Override
-    protected final E readOneEntry(final Connection thisDataBase,
-            final int mandator, final String entry,
-            final E thisEntry) {
-        return super.readHeadEntry(thisDataBase, mandator, entry, thisEntry);
     }
 
     /**
@@ -430,31 +327,24 @@ public abstract class DBHeadTemplate<E extends DomainHeadDataBaseInterface>
            ) throws SQLException {
         // Entry already exists in Database?
         if (!currentEntry.equals(dbEntry)) {
-            PreparedStatement updateHeadSQLStatement    =    null;
+            PreparedStatement invalidateHeadSQLStatement = null;
 
             try {
-                if (dbEntry    ==    null) {
-                    // new Entry, insert a new one
-                    this.insertEntry(thisDataBase, mandator, user,
-                            currentEntry, false);
-                } else {
-                    // Entry already exists, update it, if necessary
-                    if (!currentEntry.equals(dbEntry)) {
-                        if (!currentEntry.equalsEntry(dbEntry)) {
-                            // Invalidate old entry
-                            updateHeadSQLStatement =
-                                    thisDataBase.prepareStatement(
-                                            this.updateHeadSQL);
-                            updateHeadSQLStatement.clearParameters();
-                            this.fillUpdateHead(updateHeadSQLStatement,
-                                    mandator, user, currentEntry);
-                            updateHeadSQLStatement.executeUpdate();
-                        }
-                    }
-                }
+                // Invalidate old entry
+                invalidateHeadSQLStatement =
+                        thisDataBase.prepareStatement(
+                                this.getInvalidateHeadSQL());
+                invalidateHeadSQLStatement
+                        .clearParameters();
+                invalidateHeadSQLStatement
+                        .setInt(1, mandator);
+                invalidateHeadSQLStatement
+                        .setString(2, saveKeyString);
+                invalidateHeadSQLStatement
+                        .executeUpdate();
             } finally {
-                if (updateHeadSQLStatement != null) {
-                    updateHeadSQLStatement.close();
+                if (invalidateHeadSQLStatement != null) {
+                    invalidateHeadSQLStatement.close();
                 }
             }
 
@@ -464,4 +354,5 @@ public abstract class DBHeadTemplate<E extends DomainHeadDataBaseInterface>
                     false);
         }
     }
+
 }
