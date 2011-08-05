@@ -352,6 +352,11 @@ public abstract class BasicDBTemplateUI<E extends DomainDataBaseBasics,
             this.dbEntry        =    entry;
             this.myNavigationBar.setDBMinMaxCurNumber(entry.getKeyMin(),
                     entry.getKeyMax(), entry.getKeyCur());
+            if (entry.getIsReadOnly()) {
+                this.myNavigationBar.setReadOnly();
+            } else {
+                this.myNavigationBar.setReadWrite();
+            }
 
             if (this.dosave) {
                 this.myNavigationBar.displayHint(

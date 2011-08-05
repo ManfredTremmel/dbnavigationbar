@@ -176,7 +176,8 @@ public abstract class Parent implements EntryPoint {
         DomainUser currentUser = getUser();
 
         // Get the title from the internationalized constants
-        this.navTree    =    buildNavTree(currentUser);
+        this.navTree    =    new Tree();
+        this.setNavTree(buildNavTree(currentUser));
 
         // Horizontal Panel, left navigation, right content
         SplitLayoutPanel hPanel = new SplitLayoutPanel();
@@ -296,6 +297,14 @@ public abstract class Parent implements EntryPoint {
      */
     public final Tree getNavTree() {
         return this.navTree;
+    }
+
+    /**
+     * setter for navTree.
+     * @param setNavTree the navTree to set
+     */
+    public final void setNavTree(final Tree setNavTree) {
+        this.navTree = setNavTree;
     }
 
     /**
