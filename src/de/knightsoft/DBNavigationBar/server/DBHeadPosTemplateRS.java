@@ -395,7 +395,7 @@ public abstract class DBHeadPosTemplateRS<E extends DomainHeadPosDataBaseInt>
                 if (dbEntry != null && dbEntry.getKeyPos() != null) {
                     numDbPos = dbEntry.getKeyPos().length;
                 }
-                if ((dbEntry != null) && (dbEntry.getKeyCur() == null)) {
+                if ((dbEntry == null) || (dbEntry.getKeyCur() == null)) {
                     // new Entry, insert a new one
                     this.insertEntry(thisDataBase, mandator, user,
                             currentEntry, false);

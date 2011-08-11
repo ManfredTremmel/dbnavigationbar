@@ -433,7 +433,7 @@ public abstract class DBHeadTemplate<E extends DomainHeadDataBaseInterface>
             PreparedStatement updateHeadSQLStatement    =    null;
 
             try {
-                if (dbEntry    ==    null) {
+                if ((dbEntry == null) || (dbEntry.getKeyCur() == null)) {
                     // new Entry, insert a new one
                     this.insertEntry(thisDataBase, mandator, user,
                             currentEntry, false);
