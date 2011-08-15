@@ -233,7 +233,7 @@ public class SendEMail {
 
                                     responseline = br.readLine();
                                     if (responseline == null
-                                     || responseline.startsWith("221")) {
+                                     || !responseline.startsWith("221")) {
                                         throw new IOException(
                                           "Got no OK after QUIT: "
                                         + responseline);

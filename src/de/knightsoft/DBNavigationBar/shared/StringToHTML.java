@@ -221,85 +221,86 @@ public final class StringToHTML {
 
             for (int i = 0; i < javaString.length(); i++) {
                 switch (javaStringTab[i]) {
-                    case '\"':
-                        if (tagswandeln) {
-                            htmlStringTab[j++]    =    '&';
-                            htmlStringTab[j++]    =    'q';
-                            htmlStringTab[j++]    =    'u';
-                            htmlStringTab[j++]    =    'o';
-                            htmlStringTab[j++]    =    't';
-                            htmlStringTab[j++]    =    ';';
-                        } else {
-                            htmlStringTab[j++]    =    javaStringTab[i];
-                        }
-                        break;
-                    case '&':
-                        if (tagswandeln) {
-                            htmlStringTab[j++]    =    '&';
-                            htmlStringTab[j++]    =    'a';
-                            htmlStringTab[j++]    =    'm';
-                            htmlStringTab[j++]    =    'p';
-                            htmlStringTab[j++]    =    ';';
-                        } else {
-                            htmlStringTab[j++]    =    javaStringTab[i];
-                        }
-                        break;
-                    case '<':
-                        if (tagswandeln) {
-                            htmlStringTab[j++]    =    '&';
-                            htmlStringTab[j++]    =    'l';
-                            htmlStringTab[j++]    =    't';
-                            htmlStringTab[j++]    =    ';';
-                        } else {
-                            htmlStringTab[j++]    =    javaStringTab[i];
-                        }
-                        break;
-                    case '>':
-                        if (tagswandeln) {
-                            htmlStringTab[j++]    =    '&';
-                            htmlStringTab[j++]    =    'g';
-                            htmlStringTab[j++]    =    't';
-                            htmlStringTab[j++]    =    ';';
-                        } else {
-                            htmlStringTab[j++]    =    javaStringTab[i];
-                        }
-                        break;
-                    case ' ':
-                        if (blankwandeln) {
-                            htmlStringTab[j++]    =    '&';
-                            htmlStringTab[j++]    =    'n';
-                            htmlStringTab[j++]    =    'b';
-                            htmlStringTab[j++]    =    's';
-                            htmlStringTab[j++]    =    'p';
-                            htmlStringTab[j++]    =    ';';
-                        } else {
-                            htmlStringTab[j++]    =    javaStringTab[i];
-                        }
-                        break;
-                    case '\r':
-                        break;
-                    case '\n':
-                        if (returnwandeln) {
-                            htmlStringTab[j++]    =    '<';
-                            htmlStringTab[j++]    =    'b';
-                            htmlStringTab[j++]    =    'r';
-                            htmlStringTab[j++]    =    '>';
-                        } else {
-                            htmlStringTab[j++]    =    javaStringTab[i];
-                        }
-                        break;
-                    default:
-                        boolean found = false;
-                        for (int c = 0; c < CONVERSION_TABLE.length && !found;
-                                c++) {
-                            if (CONVERSION_TABLE[c][0] == javaStringTab[i]) {
-                                found = true;
-                                for (int p = 1; p < CONVERSION_TABLE[c].length;
-                                     p++) {
-                                   htmlStringTab[j++] = CONVERSION_TABLE[c][p];
-                                }
+                case '\"':
+                    if (tagswandeln) {
+                        htmlStringTab[j++]    =    '&';
+                        htmlStringTab[j++]    =    'q';
+                        htmlStringTab[j++]    =    'u';
+                        htmlStringTab[j++]    =    'o';
+                        htmlStringTab[j++]    =    't';
+                        htmlStringTab[j++]    =    ';';
+                    } else {
+                        htmlStringTab[j++]    =    javaStringTab[i];
+                    }
+                    break;
+                case '&':
+                    if (tagswandeln) {
+                        htmlStringTab[j++]    =    '&';
+                        htmlStringTab[j++]    =    'a';
+                        htmlStringTab[j++]    =    'm';
+                        htmlStringTab[j++]    =    'p';
+                        htmlStringTab[j++]    =    ';';
+                    } else {
+                        htmlStringTab[j++]    =    javaStringTab[i];
+                    }
+                    break;
+                case '<':
+                    if (tagswandeln) {
+                        htmlStringTab[j++]    =    '&';
+                        htmlStringTab[j++]    =    'l';
+                        htmlStringTab[j++]    =    't';
+                        htmlStringTab[j++]    =    ';';
+                    } else {
+                        htmlStringTab[j++]    =    javaStringTab[i];
+                    }
+                    break;
+                case '>':
+                    if (tagswandeln) {
+                        htmlStringTab[j++]    =    '&';
+                        htmlStringTab[j++]    =    'g';
+                        htmlStringTab[j++]    =    't';
+                        htmlStringTab[j++]    =    ';';
+                    } else {
+                        htmlStringTab[j++]    =    javaStringTab[i];
+                    }
+                    break;
+                case ' ':
+                    if (blankwandeln) {
+                        htmlStringTab[j++]    =    '&';
+                        htmlStringTab[j++]    =    'n';
+                        htmlStringTab[j++]    =    'b';
+                        htmlStringTab[j++]    =    's';
+                        htmlStringTab[j++]    =    'p';
+                        htmlStringTab[j++]    =    ';';
+                    } else {
+                        htmlStringTab[j++]    =    javaStringTab[i];
+                    }
+                    break;
+                case '\r':
+                    break;
+                case '\n':
+                    if (returnwandeln) {
+                        htmlStringTab[j++]    =    '<';
+                        htmlStringTab[j++]    =    'b';
+                        htmlStringTab[j++]    =    'r';
+                        htmlStringTab[j++]    =    '>';
+                    } else {
+                        htmlStringTab[j++]    =    javaStringTab[i];
+                    }
+                    break;
+                default:
+                    boolean found = false;
+                    for (int c = 0; c < CONVERSION_TABLE.length && !found;
+                            c++) {
+                        if (CONVERSION_TABLE[c][0] == javaStringTab[i]) {
+                            found = true;
+                            for (int p = 1; p < CONVERSION_TABLE[c].length;
+                                 p++) {
+                               htmlStringTab[j++] = CONVERSION_TABLE[c][p];
                             }
                         }
+                    }
+                    if (!found) {
                         if (javaStringTab[i] > MAX_LENGTH) {
                             String dummy = Integer.toString(javaStringTab[i]);
                             htmlStringTab[j++]    =    '&';
@@ -311,7 +312,8 @@ public final class StringToHTML {
                         } else {
                             htmlStringTab[j++]    =    javaStringTab[i];
                         }
-                        break;
+                    }
+                    break;
                 }
             }
 
