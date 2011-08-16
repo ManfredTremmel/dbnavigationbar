@@ -724,11 +724,6 @@ public abstract class DBHeadPosDateTemplateR<E extends DomainHeadPosDataBaseInt>
                     invalidateHeadSQLStatement.close();
                 }
             }
-
-            // Insert new entry
-            this.insertEntry(thisDataBase,
-                    mandator, user, currentEntry,
-                    false);
         }
     }
 
