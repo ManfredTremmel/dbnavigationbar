@@ -162,7 +162,7 @@ public class DataBaseDepending {
         String returnString    =    null;
         switch (this.dbnumber) {
             case 0:
-                returnString = "OLD_PASSWORD(" + encryptField + ")";
+                returnString = "PASSWORD(" + encryptField + ")";
                 break;
             default:
                 returnString = encryptField;
