@@ -163,24 +163,48 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                     new DataBaseDepending(thisDataBase.getMetaData()
                             .getDatabaseProductName());
 
-            this.readMinMaxSQL      = setReadMinMaxSQL
+            if (setReadMinMaxSQL == null) {
+                this.readMinMaxSQL = null;
+            } else {
+                this.readMinMaxSQL = setReadMinMaxSQL
                 .replace("OUTDATE()", myDataBaseDepending.getSQLTimeOutdate())
                 .replace("NOW()", myDataBaseDepending.getSQLTimeNow());
-            this.readNextSQL        = setReadNextSQL
+            }
+            if (setReadNextSQL == null) {
+                this.readNextSQL = null;
+            } else {
+                this.readNextSQL = setReadNextSQL
                 .replace("OUTDATE()", myDataBaseDepending.getSQLTimeOutdate())
                 .replace("NOW()", myDataBaseDepending.getSQLTimeNow());
-            this.readPrevSQL        = setReadPrevSQL
+            }
+            if (setReadPrevSQL == null) {
+                this.readPrevSQL = null;
+            } else {
+                this.readPrevSQL        = setReadPrevSQL
                 .replace("OUTDATE()", myDataBaseDepending.getSQLTimeOutdate())
                 .replace("NOW()", myDataBaseDepending.getSQLTimeNow());
-            this.readHeadSQL        = setReadHeadSQL
+            }
+            if (setReadHeadSQL == null) {
+                this.readHeadSQL = null;
+            } else {
+                this.readHeadSQL = setReadHeadSQL
                 .replace("OUTDATE()", myDataBaseDepending.getSQLTimeOutdate())
                 .replace("NOW()", myDataBaseDepending.getSQLTimeNow());
-            this.invalidateHeadSQL  = setInvalidateHeadSQL
+            }
+            if (setInvalidateHeadSQL == null) {
+                this.invalidateHeadSQL = null;
+            } else {
+                this.invalidateHeadSQL = setInvalidateHeadSQL
                 .replace("OUTDATE()", myDataBaseDepending.getSQLTimeOutdate())
                 .replace("NOW()", myDataBaseDepending.getSQLTimeNow());
-            this.insertHeadSQL      = setInsertHeadSQL
+            }
+            if (setInsertHeadSQL == null) {
+                this.insertHeadSQL = null;
+            } else {
+                this.insertHeadSQL = setInsertHeadSQL
                 .replace("OUTDATE()", myDataBaseDepending.getSQLTimeOutdate())
                 .replace("NOW()", myDataBaseDepending.getSQLTimeNow());
+            }
         } catch (Exception e) {
             throw new UnexpectedException(e.toString(), e.getCause());
         } finally {

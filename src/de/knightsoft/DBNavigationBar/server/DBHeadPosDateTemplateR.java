@@ -148,17 +148,29 @@ public abstract class DBHeadPosDateTemplateR<E extends DomainHeadPosDataBaseInt>
                     new DataBaseDepending(thisDataBase.getMetaData()
                             .getDatabaseProductName());
 
-            this.readPosSQL = setReadPosSQL
+            if (setReadPosSQL == null) {
+                this.readPosSQL = null;
+            } else {
+                this.readPosSQL = setReadPosSQL
                 .replace("OUTDATE()", myDataBaseDepending.getSQLTimeOutdate())
                 .replace("NOW()", myDataBaseDepending.getSQLTimeNow());
+            }
 
-            this.invalidatePosSQL = setInvalidatePosSQL
+            if (setInvalidatePosSQL == null) {
+                this.invalidatePosSQL = null;
+            } else {
+                this.invalidatePosSQL = setInvalidatePosSQL
                 .replace("OUTDATE()", myDataBaseDepending.getSQLTimeOutdate())
                 .replace("NOW()", myDataBaseDepending.getSQLTimeNow());
+            }
 
-            this.insertPosSQL = setInsertPosSQL
+            if (setInsertPosSQL == null) {
+                this.insertPosSQL = null;
+            } else {
+                this.insertPosSQL = setInsertPosSQL
                 .replace("OUTDATE()", myDataBaseDepending.getSQLTimeOutdate())
                 .replace("NOW()", myDataBaseDepending.getSQLTimeNow());
+            }
 
         } catch (Exception e) {
             throw new UnexpectedException(e.toString(), e.getCause());
