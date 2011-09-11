@@ -1286,4 +1286,13 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
     protected final String getLookUpDataBase() {
         return lookUpDataBase;
     }
+
+    /**
+     * workaround for wrong detected "java.lang.SecurityException: Blocked
+     * request without GWT permutation header (XSRF attack?)" problem.
+     */
+    @Override
+    protected final void checkPermutationStrongName() {
+        return;
+    }
 }
