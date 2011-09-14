@@ -1155,11 +1155,11 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                     this.saveEntry(currentEntry, dbEntry, thisDataBase,
                             mandator, user, saveKeyString);
 
-                    returnEntry.setKeyCur(saveKeyString);
+                    returnEntry.setKeyCur(returnEntry.getKeyNew());
                     this.fillMinMax(thisDataBase, mandator,
                             returnEntry);
                     returnEntry = readOneEntry(thisDataBase,
-                            mandator, saveKeyString, returnEntry);
+                            mandator, returnEntry.getKeyNew(), returnEntry);
                 }
             } catch (SQLException e) {
                 returnEntry    =    null;
