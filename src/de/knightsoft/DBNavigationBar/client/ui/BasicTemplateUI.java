@@ -187,8 +187,9 @@ public abstract class BasicTemplateUI<F extends Parent> extends Composite
             final String itemtext,
             final DomainUser user) {
         boolean matches = false;
-        if (itemtext != null
-         && itemtext.indexOf(this.getMenuText()) >= 0) {
+        if (this.allowedToSee(user)
+         && itemtext != null
+         && itemtext.equals(this.getMenuText())) {
             //this.myNavigationBar.enableAllButtons();
             this.parentwidget.getMainPanel().clear();
             this.parentwidget.getMainPanel().add(this);

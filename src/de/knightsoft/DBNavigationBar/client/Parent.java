@@ -44,6 +44,7 @@ import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.knightsoft.DBNavigationBar.client.domain.DomainUser;
+import de.knightsoft.DBNavigationBar.client.ui.BasicTemplateUIInterface;
 
 /**
  *
@@ -219,14 +220,12 @@ public abstract class Parent implements EntryPoint {
             }
         }
 
-        if (currentUser == null) {
-            showLoginPanel();
-            readLoginUser();
-        } else {
-            String page    =    this.paramHash.get("page");
-            if (!this.menuFind(page, currentUser)) {
-                showLoginPanel();
+        String page = this.paramHash.get("page");
+        if (!this.menuFind(page, currentUser)) {
+            if (currentUser == null) {
+                readLoginUser();
             }
+            showLoginPanel();
         }
 
 
@@ -243,8 +242,11 @@ public abstract class Parent implements EntryPoint {
             public void onSelection(
                     final SelectionEvent<TreeItem> event) {
                 TreeItem item = event.getSelectedItem();
-                String itemtext        =    item.getText();
-                String itemtitle    =    item.getTitle();
+                String itemtext = item.getText();
+                if (itemtext != null) {
+                    itemtext = itemtext.trim();
+                }
+                String itemtitle = item.getTitle();
                 if (itemtitle != null
                  && itemtitle.length() > TITLE_CHECK_LENGTH) {
                     if (Parent.this.paramHash == null) {
@@ -254,8 +256,8 @@ public abstract class Parent implements EntryPoint {
                     Parent.this.paramHash.put("period",
                             itemtitle.substring(0, TITLE_CHECK_LENGTH));
                 }
-                DomainUser currentUser = getUser();
-                menuFind(itemtext, currentUser);
+                DomainUser currentUser = Parent.this.getUser();
+                Parent.this.menuFind(itemtext, currentUser);
             }
 
         });
@@ -263,6 +265,7 @@ public abstract class Parent implements EntryPoint {
         // Handler to handle page changes, to get back and
         // forward button work even in AJAX application.
         History.addValueChangeHandler(new ValueChangeHandler<String>() {
+            @SuppressWarnings("unchecked")
             @Override
             public void onValueChange(
                     final ValueChangeEvent<String> event) {
@@ -278,11 +281,18 @@ public abstract class Parent implements EntryPoint {
                     }
                 }
                 String page = Parent.this.paramHash.get("page");
-                if (currentUser != null) {
-                    menuFind(page, currentUser);
-                } else {
-                    Parent.this.mainPanel.clear();
-                    loginMatchesMenu(page, null);
+                String oldPage = null;
+                if (Parent.this.mainPanel.getWidgetCount() > 0
+                 && (Parent.this.mainPanel.getWidget(0)
+                             instanceof BasicTemplateUIInterface)) {
+                    oldPage = ((BasicTemplateUIInterface<Parent>)
+                            Parent.this.mainPanel.getWidget(0)).getMenuText();
+                }
+                if (oldPage == null || !oldPage.equals(page)) {
+                    if (!Parent.this.menuFind(page, currentUser)) {
+                        Parent.this.mainPanel.clear();
+                        Parent.this.loginMatchesMenu(page, null);
+                    }
                 }
             }
         });
