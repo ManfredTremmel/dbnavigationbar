@@ -200,9 +200,9 @@ public abstract class Parent implements EntryPoint {
 
         ScrollPanel mainScrollPanel = new ScrollPanel();
         this.mainPanel = new VerticalPanel();
-        this.mainPanel.setWidth("100%");
+        this.mainPanel.setSize("100%", "100%");
         this.mainPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
-        this.mainPanel.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
+        this.mainPanel.setVerticalAlignment(VerticalPanel.ALIGN_TOP);
         this.mainPanel.getElement().setId("main");
 
         this.paramHash        =    new HashMap<String, String>();
