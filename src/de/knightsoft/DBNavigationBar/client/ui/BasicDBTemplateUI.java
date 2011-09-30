@@ -42,7 +42,7 @@ import de.knightsoft.DBNavigationBar.client.ui.widget.DBNaviBarWidget;
 
 /**
  *
- * The <code>DBHeadTemplateUI</code> class is a template for database
+ * The <code>BasicDBTemplateUI</code> class is a template for database
  * input mask.
  *
  * @param <E> data structure
@@ -57,6 +57,11 @@ public abstract class BasicDBTemplateUI<E extends DomainDataBaseBasics,
      * navigation bar.
      */
     private final DBNaviBarWidget myNavigationBar;
+
+    /**
+     * form panel.
+     */
+    private final FormPanel form;
 
     /**
      * images.
@@ -103,6 +108,11 @@ public abstract class BasicDBTemplateUI<E extends DomainDataBaseBasics,
     private final Widget[] widgetlist;
 
     /**
+     * mask is set up.
+     */
+    private boolean maskSetUp;
+
+    /**
      * Constructor.
      *
      * @param parentwidget
@@ -118,6 +128,7 @@ public abstract class BasicDBTemplateUI<E extends DomainDataBaseBasics,
             final String userdefinedfunction) {
 
         super(parentwidget);
+        this.maskSetUp = false;
         this.widgetlist        =    thisWidgetlist;
 
         this.constants = (BasicDBTemplateUIConstants)
@@ -128,132 +139,141 @@ public abstract class BasicDBTemplateUI<E extends DomainDataBaseBasics,
                 getSearchFieldsDisplay(),
                 userdefinedfunction
            );
+        this.form = new FormPanel();
 
+        this.initWidget(this.form);
 
-        VerticalPanel myPanel = new VerticalPanel();
-        myPanel.setWidth("100%");
-        myPanel.setHeight("100%");
-        myPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
+    }
 
-        HorizontalPanel titlePanel = new HorizontalPanel();
-        titlePanel.setWidth("100%");
-        titlePanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
-        String pageTitle    =    "<h1>" + getHeaderTitle() + "</h1>";
-        HTML htmlPageTitle    =    new HTML(pageTitle);
-        titlePanel.add(htmlPageTitle);
+    /**
+     * set up the mask.
+     * @param user user information about the currently logged in user
+     */
+    @Override
+    protected final void setUpMask(final DomainUser user) {
+        if (!this.maskSetUp) {
+            VerticalPanel myPanel = new VerticalPanel();
+            myPanel.setWidth("100%");
+            myPanel.setHeight("100%");
+            myPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
 
-        myPanel.add(titlePanel);
+            HorizontalPanel titlePanel = new HorizontalPanel();
+            titlePanel.setWidth("100%");
+            titlePanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+            String pageTitle    =    "<h1>" + getHeaderTitle() + "</h1>";
+            HTML htmlPageTitle    =    new HTML(pageTitle);
+            titlePanel.add(htmlPageTitle);
 
-        myPanel.add(this.myNavigationBar);
+            myPanel.add(titlePanel);
 
-        final FormPanel form = new FormPanel();
+            myPanel.add(this.myNavigationBar);
 
-        myPanel.add(this.createAndFormatContentPanel());
+            myPanel.add(this.createAndFormatContentPanel());
 
-        form.add(myPanel);
+            this.form.add(myPanel);
 
-        this.initWidget(form);
-
-        this.myNavigationBar.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(final ClickEvent event) {
-                BasicDBTemplateUI.this.dosave = false;
-                final DBTemplateRemoteServiceAsync<E> service =
-                        getServiceFactory();
-                switch (BasicDBTemplateUI.this.myNavigationBar
-                        .getButtonState()) {
-                    case NEW:
-                        newEntry();
-                        break;
-                    case DELETE:
-                        service.deleteEntry(BasicDBTemplateUI.this
-                                .myNavigationBar.getOldDBNumber(),
-                                BasicDBTemplateUI.this);
-                        break;
-                    case STOP:
-                        fillEntry(dbEntry);
-                        break;
-                    case FAST_BACK:
-                        service.readFirstEntry(BasicDBTemplateUI.this);
-                        break;
-                    case FAST_BACK_FIND:
-                        service.findFirstEntry(
-                                BasicDBTemplateUI.this.myNavigationBar
-                                    .getSearchFieldField(),
-                                BasicDBTemplateUI.this.myNavigationBar
-                                    .getSearchFieldMethode(),
-                                BasicDBTemplateUI.this.myNavigationBar
-                                    .getSearchFieldEntry(),
-                                BasicDBTemplateUI.this);
-                        break;
-                    case BACK:
-                        service.readPreviousEntry(BasicDBTemplateUI.this
-                                .myNavigationBar.getOldDBNumber(),
-                                BasicDBTemplateUI.this);
-                        break;
-                    case BACK_FIND:
-                        service.findPreviousEntry(
-                                BasicDBTemplateUI.this.myNavigationBar
-                                    .getSearchFieldField(),
-                                BasicDBTemplateUI.this.myNavigationBar
-                                    .getSearchFieldMethode(),
-                                BasicDBTemplateUI.this.myNavigationBar
-                                    .getSearchFieldEntry(),
-                                BasicDBTemplateUI.this.myNavigationBar
-                                    .getCurrentDBNumber(),
-                                BasicDBTemplateUI.this);
-                        break;
-                    case FORWARD:
-                        service.readNextEntry(BasicDBTemplateUI.this
-                                .myNavigationBar.getOldDBNumber(),
-                                BasicDBTemplateUI.this);
-                        break;
-                    case FORWARD_FIND:
-                        service.findNextEntry(
-                                BasicDBTemplateUI.this.myNavigationBar
-                                    .getSearchFieldField(),
-                                BasicDBTemplateUI.this.myNavigationBar
-                                    .getSearchFieldMethode(),
-                                BasicDBTemplateUI.this.myNavigationBar
-                                    .getSearchFieldEntry(),
-                                BasicDBTemplateUI.this.myNavigationBar
-                                    .getCurrentDBNumber(),
-                                BasicDBTemplateUI.this);
-                        break;
-                    case FAST_FORWARD:
-                        service.readLastEntry(BasicDBTemplateUI.this);
-                        break;
-                    case FAST_FORWARD_FIND:
-                        service.findLastEntry(
-                                BasicDBTemplateUI.this.myNavigationBar
-                                    .getSearchFieldField(),
-                                BasicDBTemplateUI.this.myNavigationBar
-                                    .getSearchFieldMethode(),
-                                BasicDBTemplateUI.this.myNavigationBar
-                                    .getSearchFieldEntry(),
-                                BasicDBTemplateUI.this);
-                        break;
-                    case CHANGE:
-                        service.readEntry(BasicDBTemplateUI.this
-                                .myNavigationBar.getCurrentDBNumber(),
-                                BasicDBTemplateUI.this);
-                        break;
-                    case USER_DEFINED:
-                        userDefinedFunction();
-                        break;
-                    default:
-                        E saveentry = checkInput();
-                        if (saveentry != null) {
-                            if (!saveentry.equals(dbEntry)) {
-                                dosave = true;
-                                service.saveEntry(saveentry,
-                                        BasicDBTemplateUI.this);
+            this.myNavigationBar.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(final ClickEvent event) {
+                    BasicDBTemplateUI.this.dosave = false;
+                    final DBTemplateRemoteServiceAsync<E> service =
+                            getServiceFactory();
+                    switch (BasicDBTemplateUI.this.myNavigationBar
+                            .getButtonState()) {
+                        case NEW:
+                            newEntry();
+                            break;
+                        case DELETE:
+                            service.deleteEntry(BasicDBTemplateUI.this
+                                    .myNavigationBar.getOldDBNumber(),
+                                    BasicDBTemplateUI.this);
+                            break;
+                        case STOP:
+                            fillEntry(dbEntry);
+                            break;
+                        case FAST_BACK:
+                            service.readFirstEntry(BasicDBTemplateUI.this);
+                            break;
+                        case FAST_BACK_FIND:
+                            service.findFirstEntry(
+                                    BasicDBTemplateUI.this.myNavigationBar
+                                        .getSearchFieldField(),
+                                    BasicDBTemplateUI.this.myNavigationBar
+                                        .getSearchFieldMethode(),
+                                    BasicDBTemplateUI.this.myNavigationBar
+                                        .getSearchFieldEntry(),
+                                    BasicDBTemplateUI.this);
+                            break;
+                        case BACK:
+                            service.readPreviousEntry(BasicDBTemplateUI.this
+                                    .myNavigationBar.getOldDBNumber(),
+                                    BasicDBTemplateUI.this);
+                            break;
+                        case BACK_FIND:
+                            service.findPreviousEntry(
+                                    BasicDBTemplateUI.this.myNavigationBar
+                                        .getSearchFieldField(),
+                                    BasicDBTemplateUI.this.myNavigationBar
+                                        .getSearchFieldMethode(),
+                                    BasicDBTemplateUI.this.myNavigationBar
+                                        .getSearchFieldEntry(),
+                                    BasicDBTemplateUI.this.myNavigationBar
+                                        .getCurrentDBNumber(),
+                                    BasicDBTemplateUI.this);
+                            break;
+                        case FORWARD:
+                            service.readNextEntry(BasicDBTemplateUI.this
+                                    .myNavigationBar.getOldDBNumber(),
+                                    BasicDBTemplateUI.this);
+                            break;
+                        case FORWARD_FIND:
+                            service.findNextEntry(
+                                    BasicDBTemplateUI.this.myNavigationBar
+                                        .getSearchFieldField(),
+                                    BasicDBTemplateUI.this.myNavigationBar
+                                        .getSearchFieldMethode(),
+                                    BasicDBTemplateUI.this.myNavigationBar
+                                        .getSearchFieldEntry(),
+                                    BasicDBTemplateUI.this.myNavigationBar
+                                        .getCurrentDBNumber(),
+                                    BasicDBTemplateUI.this);
+                            break;
+                        case FAST_FORWARD:
+                            service.readLastEntry(BasicDBTemplateUI.this);
+                            break;
+                        case FAST_FORWARD_FIND:
+                            service.findLastEntry(
+                                    BasicDBTemplateUI.this.myNavigationBar
+                                        .getSearchFieldField(),
+                                    BasicDBTemplateUI.this.myNavigationBar
+                                        .getSearchFieldMethode(),
+                                    BasicDBTemplateUI.this.myNavigationBar
+                                        .getSearchFieldEntry(),
+                                    BasicDBTemplateUI.this);
+                            break;
+                        case CHANGE:
+                            service.readEntry(BasicDBTemplateUI.this
+                                    .myNavigationBar.getCurrentDBNumber(),
+                                    BasicDBTemplateUI.this);
+                            break;
+                        case USER_DEFINED:
+                            userDefinedFunction();
+                            break;
+                        default:
+                            E saveentry = checkInput();
+                            if (saveentry != null) {
+                                if (!saveentry.equals(dbEntry)) {
+                                    dosave = true;
+                                    service.saveEntry(saveentry,
+                                            BasicDBTemplateUI.this);
+                                }
                             }
-                        }
-                        break;
+                            break;
+                    }
                 }
-            }
-        });
+            });
+        }
+        this.maskSetUp = true;
     }
 
     /**
