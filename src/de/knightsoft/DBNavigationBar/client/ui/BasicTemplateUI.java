@@ -93,13 +93,17 @@ public abstract class BasicTemplateUI<F extends Parent> extends Composite
             this.parentwidget.getMainPanel().clear();
             this.setUpMask(user);
             this.parentwidget.getMainPanel().add(this);
-            this.setFocusOnFirstWidget();
             matches    =    true;
             History.newItem("page=" + this.getMenuText());
         }
         return matches;
     }
 
+    @Override
+    public final void onLoad() {
+        super.onLoad();
+        this.setFocusOnFirstWidget();
+    }
     /**
      * return parent widget.
      * @return the parent widget
