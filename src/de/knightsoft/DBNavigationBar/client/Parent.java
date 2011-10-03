@@ -34,14 +34,17 @@ import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.knightsoft.DBNavigationBar.client.domain.DomainUser;
 import de.knightsoft.DBNavigationBar.client.ui.BasicTemplateUIInterface;
@@ -80,7 +83,7 @@ public abstract class Parent implements EntryPoint {
     /**
      * mainPanel on the web site.
      */
-    private VerticalPanel mainPanel;
+    private ScrollPanel mainPanel;
 
     /**
      * navigation tree.
@@ -180,29 +183,25 @@ public abstract class Parent implements EntryPoint {
         this.navTree    =    new Tree();
         this.setNavTree(buildNavTree(currentUser));
 
+        Window.enableScrolling(false);
+        Window.setMargin("0px");
+
         // Horizontal Panel, left navigation, right content
         SplitLayoutPanel hPanel = new SplitLayoutPanel();
         hPanel.setSize("100%", "100%");
 
         //ScrollPanel navScrollPanel = new ScrollPanel();
-        //VerticalPanel navVPanel = new VerticalPanel();
         DockLayoutPanel navVPanel = new DockLayoutPanel(Unit.EM);
         navVPanel.setSize("100%", "100%");
-        //navVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_LEFT);
 
         setupNavPanelLogo(navVPanel);
         setupNavPanelCopyRight(navVPanel);
         setupNavPanelTree(navVPanel, this.navTree);
 
-        //navScrollPanel.add(navVPanel);
-        //hPanel.addWest(navScrollPanel, NAV_WIDTH);
         hPanel.addWest(navVPanel, NAV_WIDTH);
 
-        ScrollPanel mainScrollPanel = new ScrollPanel();
-        this.mainPanel = new VerticalPanel();
+        this.mainPanel = new ScrollPanel();
         this.mainPanel.setSize("100%", "100%");
-        this.mainPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
-        this.mainPanel.setVerticalAlignment(VerticalPanel.ALIGN_TOP);
         this.mainPanel.getElement().setId("main");
 
         this.paramHash        =    new HashMap<String, String>();
@@ -229,11 +228,10 @@ public abstract class Parent implements EntryPoint {
         }
 
 
-        mainScrollPanel.add(this.mainPanel);
-        hPanel.add(mainScrollPanel);
+        hPanel.add(this.mainPanel);
 
         // Add image and button to the RootPanel
-        RootPanel.get().add(hPanel);
+        RootLayoutPanel.get().add(hPanel);
 
         // Selection handler to handle clicks on the navigation tree
         this.navTree.addSelectionHandler(
@@ -282,11 +280,11 @@ public abstract class Parent implements EntryPoint {
                 }
                 String page = Parent.this.paramHash.get("page");
                 String oldPage = null;
-                if (Parent.this.mainPanel.getWidgetCount() > 0
-                 && (Parent.this.mainPanel.getWidget(0)
+                if (Parent.this.mainPanel.getWidget() != null
+                 && (Parent.this.mainPanel.getWidget()
                              instanceof BasicTemplateUIInterface)) {
                     oldPage = ((BasicTemplateUIInterface<Parent>)
-                            Parent.this.mainPanel.getWidget(0)).getMenuText();
+                            Parent.this.mainPanel.getWidget()).getMenuText();
                 }
                 if (oldPage == null || !oldPage.equals(page)) {
                     if (!Parent.this.menuFind(page, currentUser)) {
@@ -321,7 +319,7 @@ public abstract class Parent implements EntryPoint {
      * return the mainPanel.
      * @return main panel
      */
-    public final VerticalPanel getMainPanel() {
+    public final ScrollPanel getMainPanel() {
         return this.mainPanel;
     }
 
@@ -341,30 +339,27 @@ public abstract class Parent implements EntryPoint {
     protected final void setupNavPanelLogo(
             final DockLayoutPanel navVPanel) {
         String title        =    getApplicationTitle();
-        VerticalPanel logoPanel = new VerticalPanel();
+        FlexTable logoPanel = new FlexTable();
+        FlexCellFormatter fcf = logoPanel.getFlexCellFormatter();
         // Get the title from the internationalized constants
-        String pageTitle    =    "<h1>" + title + "</h1>";
-        HTML htmlPageTitle    =    new HTML(pageTitle);
+        String pageTitle = "<h1>" + title + "</h1>";
         Image img = getApplicationImage();
         img.getElement().setId("pc-template-img");
         img.setAltText(title);
+        HTML htmlPageTitle = new HTML(pageTitle);
 
         // Add the title and some images to the title bar
-        logoPanel.add(img);
-        logoPanel.setCellHorizontalAlignment(img,
-                VerticalPanel.ALIGN_CENTER);
-        logoPanel.setCellVerticalAlignment(img,
-                VerticalPanel.ALIGN_TOP);
-        logoPanel.add(htmlPageTitle);
-        logoPanel.setCellHorizontalAlignment(htmlPageTitle,
-                VerticalPanel.ALIGN_CENTER);
-        logoPanel.setCellVerticalAlignment(htmlPageTitle,
-                VerticalPanel.ALIGN_TOP);
-        logoPanel.setWidth("100%");
+        logoPanel.setWidget(0, 0, img);
+        fcf.setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_MIDDLE);
+        fcf.setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        logoPanel.setWidget(1, 0, htmlPageTitle);
+        fcf.setVerticalAlignment(1, 0, HasVerticalAlignment.ALIGN_MIDDLE);
+        fcf.setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        logoPanel.setSize("100%", "100%");
         logoPanel.setBorderWidth(0);
-        logoPanel.setSpacing(0);
 
         navVPanel.addNorth(logoPanel, LOGO_PANEL_HIGTH);
+
     }
 
     /**
@@ -377,7 +372,7 @@ public abstract class Parent implements EntryPoint {
             final DockLayoutPanel navVPanel,
             final Tree newNavTree) {
         // Add the title and some images to the title bar
-        ScrollPanel navScrollerPanel    =    new ScrollPanel();
+        ScrollPanel navScrollerPanel = new ScrollPanel();
         navScrollerPanel.add(newNavTree);
         navScrollerPanel.setSize("100%", "100%");
 
