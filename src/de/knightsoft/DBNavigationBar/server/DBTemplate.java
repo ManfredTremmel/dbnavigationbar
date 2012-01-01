@@ -33,8 +33,8 @@ import javax.naming.NamingException;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.google.gwt.user.server.rpc.UnexpectedException;
+import com.google.gwt.user.server.rpc.XsrfProtectedServiceServlet;
 
 import de.knightsoft.DBNavigationBar.client.domain.DomainDataBaseInterface;
 import de.knightsoft.DBNavigationBar.client.domain.DomainUser;
@@ -49,7 +49,7 @@ import de.knightsoft.DBNavigationBar.client.domain.DomainUser;
  * @version 1.0.0, 2011-07-23
  */
 public abstract class DBTemplate<E extends DomainDataBaseInterface>
-    extends RemoteServiceServlet
+    extends XsrfProtectedServiceServlet
     implements DBTemplateInterface<E> {
 
     /**

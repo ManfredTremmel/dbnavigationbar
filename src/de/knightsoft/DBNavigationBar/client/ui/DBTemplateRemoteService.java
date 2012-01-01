@@ -22,7 +22,7 @@
  */
 package de.knightsoft.DBNavigationBar.client.ui;
 
-import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.XsrfProtectedService;
 
 import de.knightsoft.DBNavigationBar.client.domain.DomainDataBaseBasics;
 
@@ -36,7 +36,7 @@ import de.knightsoft.DBNavigationBar.client.domain.DomainDataBaseBasics;
  * @version 1.0.0, 2011-02-13
  */
 public abstract interface DBTemplateRemoteService
-    <E extends DomainDataBaseBasics> extends RemoteService {
+    <E extends DomainDataBaseBasics> extends XsrfProtectedService {
     /**
      * save entry to database.
      * @param currentEntry
