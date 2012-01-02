@@ -28,6 +28,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.RpcTokenException;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -346,7 +347,13 @@ public abstract class BasicDBTemplateUI<E extends DomainDataBaseBasics,
      */
     @Override
     public final void onFailure(final Throwable caught) {
-        this.myNavigationBar.displayHint(caught.toString());
+        try {
+            throw caught;
+        } catch (RpcTokenException e) {
+            this.getParentwidget().cleanUp();
+        } catch (Throwable e) {
+            this.myNavigationBar.displayHint(e.toString());
+        }
     }
 
     /**
