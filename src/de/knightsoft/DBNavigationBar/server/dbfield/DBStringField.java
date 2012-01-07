@@ -15,7 +15,7 @@
  * along with RiPhone.  If not, see <http://www.gnu.org/licenses/>
  *
  *
- * Copyright (c) 2011 RI Solutions GmbH
+ * Copyright (c) 2011-2012 RI Solutions GmbH
  *
  * --
  *    Name        Date        Change

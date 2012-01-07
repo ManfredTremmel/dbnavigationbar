@@ -15,7 +15,7 @@
  * along with RiPhone.  If not, see <http://www.gnu.org/licenses/>
  *
  *
- * Copyright (c) 2011 Manfred Tremmel
+ * Copyright (c) 2011-2012 Manfred Tremmel
  *
  * --
  *    Name        Date        Change
@@ -350,7 +350,7 @@ public abstract class BasicDBTemplateUI<E extends DomainDataBaseBasics,
         try {
             throw caught;
         } catch (RpcTokenException e) {
-            this.getParentwidget().cleanUp();
+            this.getParentwidget().cleanUp(e.getLocalizedMessage());
         } catch (Throwable e) {
             this.myNavigationBar.displayHint(e.toString());
         }
@@ -366,7 +366,7 @@ public abstract class BasicDBTemplateUI<E extends DomainDataBaseBasics,
     @Override
     public final void onSuccess(final E entry) {
         if (entry == null) {
-            this.getParentwidget().cleanUp();
+            this.getParentwidget().cleanUp(null);
         } else if (entry.getKeyCur() == null) {
             if (this.dbEntry != null) {
                 this.myNavigationBar.setDBMinMaxCurNumber(

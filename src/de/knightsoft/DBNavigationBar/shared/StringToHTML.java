@@ -1,5 +1,5 @@
 /**
- * This file is part of RiPhone.
+ * This file is part of knightsoft db navigation.
  *
  * RiPhone is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -15,7 +15,7 @@
  * along with RiPhone.  If not, see <http://www.gnu.org/licenses/>
  *
  *
- * Copyright (c) 2010 RI Solutions GmbH
+ * Copyright (c) 2011-2012 RI Solutions GmbH
  *
  * --
  *    Name        Date        Change

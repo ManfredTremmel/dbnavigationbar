@@ -15,7 +15,7 @@
  * along with RiPhone.  If not, see <http://www.gnu.org/licenses/>
  *
  *
- * Copyright (c) 2011 Manfred Tremmel
+ * Copyright (c) 2011-2012 Manfred Tremmel
  *
  * --
  *  Name        Date        Change
@@ -158,8 +158,9 @@ public abstract class Parent implements EntryPoint {
      * The <code>cleanUp</code> method can be called if user
      * logs off or session is timed out.
      *
+     * @param text to display
      */
-    public abstract void cleanUp();
+    public abstract void cleanUp(String text);
 
     /**
      * The <code>buildNavTree</code> method builds the navigation

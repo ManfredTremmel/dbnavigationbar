@@ -15,7 +15,7 @@
  * along with RiPhone.  If not, see <http://www.gnu.org/licenses/>
  *
  *
- * Copyright (c) 2011 Manfred Tremmel
+ * Copyright (c) 2011-2012 Manfred Tremmel
  *
  * --
  *  Name        Date        Change
