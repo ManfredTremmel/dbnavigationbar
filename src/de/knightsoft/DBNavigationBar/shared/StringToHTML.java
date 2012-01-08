@@ -36,9 +36,9 @@ public final class StringToHTML {
      */
     private static final int MULTI         =   8;
     /**
-     * maximum length of ths string.
+     * maximum length of the value not to encode.
      */
-    private static final int MAX_LENGTH    =   255;
+    private static final int MAX_LENGTH    =   127;
 
     /**
      * conversion table with html translations.
