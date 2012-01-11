@@ -271,6 +271,7 @@ public abstract class Parent implements EntryPoint {
                 DomainUser currentUser = getUser();
                 String historyToken = event.getValue();
                 String[] historyPares = historyToken.split(";");
+                HashMap<String, String> oldParamHash = Parent.this.paramHash;
                 Parent.this.paramHash = new HashMap<String, String>();
                 for (int i = 0; i < historyPares.length; i++) {
                     String[] tokenPare = historyPares[i].split("=");
@@ -287,7 +288,8 @@ public abstract class Parent implements EntryPoint {
                     oldPage = ((BasicTemplateUIInterface<Parent>)
                             Parent.this.mainPanel.getWidget()).getMenuText();
                 }
-                if (oldPage == null || !oldPage.equals(page)) {
+                if (oldPage == null
+                 || !Parent.this.paramHash.equals(oldParamHash)) {
                     if (!Parent.this.menuFind(page, currentUser)) {
                         Parent.this.mainPanel.clear();
                         Parent.this.loginMatchesMenu(page, null);
