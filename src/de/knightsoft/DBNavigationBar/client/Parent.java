@@ -220,11 +220,11 @@ public abstract class Parent implements EntryPoint {
             }
         }
 
+        if (currentUser == null) {
+            readLoginUser();
+        }
         String page = this.paramHash.get("page");
         if (!this.menuFind(page, currentUser)) {
-            if (currentUser == null) {
-                readLoginUser();
-            }
             showLoginPanel();
         }
 
