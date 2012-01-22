@@ -88,7 +88,7 @@ public abstract class Parent implements EntryPoint {
     /**
      * navigation tree.
      */
-    private Tree navTree;
+    private final Tree navTree = new Tree();
 
     /**
      * Remember given parameters in url.
@@ -177,12 +177,8 @@ public abstract class Parent implements EntryPoint {
      */
     public final void onModuleLoadBase() {
 
-        // Create the constants
-        DomainUser currentUser = getUser();
-
         // Get the title from the internationalized constants
-        this.navTree    =    new Tree();
-        this.setNavTree(buildNavTree(currentUser));
+        buildNavTree(null);
 
         Window.enableScrolling(false);
         Window.setMargin("0px");
@@ -220,11 +216,10 @@ public abstract class Parent implements EntryPoint {
             }
         }
 
-        if (currentUser == null) {
-            readLoginUser();
-        }
+        readLoginUser();
+
         String page = this.paramHash.get("page");
-        if (!this.menuFind(page, currentUser)) {
+        if (!this.menuFind(page, null)) {
             showLoginPanel();
         }
 
@@ -308,14 +303,6 @@ public abstract class Parent implements EntryPoint {
      */
     public final Tree getNavTree() {
         return this.navTree;
-    }
-
-    /**
-     * setter for navTree.
-     * @param setNavTree the navTree to set
-     */
-    public final void setNavTree(final Tree setNavTree) {
-        this.navTree = setNavTree;
     }
 
     /**

@@ -43,7 +43,14 @@ public abstract class BasicTemplateUI<F extends Parent> extends Composite
     /**
      * parent widget.
      */
-    private final F parentwidget;
+    private F parentwidget;
+
+    /**
+     * Constructor.
+     */
+    public BasicTemplateUI() {
+        super();
+    }
 
     /**
      * Constructor.
@@ -111,5 +118,13 @@ public abstract class BasicTemplateUI<F extends Parent> extends Composite
     @Override
     public final F getParentwidget() {
         return parentwidget;
+    }
+
+
+    /**
+     * @param parentwidgetSet the parentwidget to set
+     */
+    public final void setParentwidget(final F parentwidgetSet) {
+        this.parentwidget = parentwidgetSet;
     }
 }
