@@ -71,19 +71,24 @@ public abstract class Parent implements EntryPoint {
     public static final int TITLE_CHECK_LENGTH = 6;
 
     /**
-     * logo panel higth.
+     * logo panel height.
      */
-    public static final int LOGO_PANEL_HIGTH = 12;
+    public static final int LOGO_PANEL_HEIGHT = 12;
 
     /**
-     * copyright panel higth.
+     * copyright panel height.
      */
-    public static final double COPYRIGHT_PANEL_HIGTH = 1.5;
+    public static final double COPYRIGHT_PANEL_HEIGHT = 1.5;
 
     /**
      * mainPanel on the web site.
      */
     private ScrollPanel mainPanel;
+
+    /**
+     * split layout panel left navigation right content.
+     */
+    private final SplitLayoutPanel hPanel = new SplitLayoutPanel();
 
     /**
      * navigation tree.
@@ -184,8 +189,7 @@ public abstract class Parent implements EntryPoint {
         Window.setMargin("0px");
 
         // Horizontal Panel, left navigation, right content
-        SplitLayoutPanel hPanel = new SplitLayoutPanel();
-        hPanel.setSize("100%", "100%");
+        this.hPanel.setSize("100%", "100%");
 
         //ScrollPanel navScrollPanel = new ScrollPanel();
         DockLayoutPanel navVPanel = new DockLayoutPanel(Unit.EM);
@@ -195,14 +199,14 @@ public abstract class Parent implements EntryPoint {
         setupNavPanelCopyRight(navVPanel);
         setupNavPanelTree(navVPanel, this.navTree);
 
-        hPanel.addWest(navVPanel, NAV_WIDTH);
+        this.hPanel.addWest(navVPanel, NAV_WIDTH);
 
         this.mainPanel = new ScrollPanel();
         this.mainPanel.setSize("100%", "100%");
         this.mainPanel.getElement().setId("main");
 
-        this.paramHash        =    new HashMap<String, String>();
-        String urlString    =    Window.Location.getHref();
+        this.paramHash = new HashMap<String, String>();
+        String urlString = Window.Location.getHref();
         if (urlString.indexOf('#') >= 0) {
             urlString        =    urlString.substring(
                     urlString.indexOf('#') + 1);
@@ -224,10 +228,10 @@ public abstract class Parent implements EntryPoint {
         }
 
 
-        hPanel.add(this.mainPanel);
+        this.hPanel.add(this.mainPanel);
 
         // Add image and button to the RootPanel
-        RootLayoutPanel.get().add(hPanel);
+        RootLayoutPanel.get().add(this.hPanel);
 
         // Selection handler to handle clicks on the navigation tree
         this.navTree.addSelectionHandler(
@@ -314,6 +318,14 @@ public abstract class Parent implements EntryPoint {
     }
 
     /**
+     * return the split layout panel.
+     * @return the hPanel
+     */
+    public final SplitLayoutPanel gethPanel() {
+        return this.hPanel;
+    }
+
+    /**
      * return the paramHash.
      * @return hash parameter table
      */
@@ -348,7 +360,7 @@ public abstract class Parent implements EntryPoint {
         logoPanel.setSize("100%", "100%");
         logoPanel.setBorderWidth(0);
 
-        navVPanel.addNorth(logoPanel, LOGO_PANEL_HIGTH);
+        navVPanel.addNorth(logoPanel, LOGO_PANEL_HEIGHT);
 
     }
 
