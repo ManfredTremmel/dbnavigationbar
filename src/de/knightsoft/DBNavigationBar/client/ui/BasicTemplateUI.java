@@ -22,6 +22,8 @@
  */
 package de.knightsoft.DBNavigationBar.client.ui;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Composite;
 
@@ -102,6 +104,12 @@ public abstract class BasicTemplateUI<F extends Parent> extends Composite
             this.parentwidget.getMainPanel().add(this);
             matches    =    true;
             History.newItem("page=" + this.getMenuText());
+            Scheduler.get().scheduleDeferred(new Command() {
+                @Override
+                public void execute() {
+                    BasicTemplateUI.this.setFocusOnFirstWidget();
+                }
+            });
         }
         return matches;
     }
@@ -109,7 +117,12 @@ public abstract class BasicTemplateUI<F extends Parent> extends Composite
     @Override
     public final void onLoad() {
         super.onLoad();
-        this.setFocusOnFirstWidget();
+        Scheduler.get().scheduleDeferred(new Command() {
+            @Override
+            public void execute() {
+                BasicTemplateUI.this.setFocusOnFirstWidget();
+            }
+        });
     }
     /**
      * return parent widget.
