@@ -23,6 +23,7 @@
 package de.knightsoft.DBNavigationBar.client.ui;
 
 import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Composite;
@@ -41,6 +42,11 @@ import de.knightsoft.DBNavigationBar.client.domain.DomainUser;
  */
 public abstract class BasicTemplateUI<F extends Parent> extends Composite
     implements BasicTemplateUIInterface<F> {
+
+    /**
+     * hundred milliseconds.
+     */
+    public static final int FOCUS_DELAY = 100;
 
     /**
      * parent widget.
@@ -104,12 +110,13 @@ public abstract class BasicTemplateUI<F extends Parent> extends Composite
             this.parentwidget.getMainPanel().add(this);
             matches    =    true;
             History.newItem("page=" + this.getMenuText());
-            Scheduler.get().scheduleDeferred(new Command() {
+            Scheduler.get().scheduleFixedDelay(new RepeatingCommand() {
                 @Override
-                public void execute() {
+                public boolean execute() {
                     BasicTemplateUI.this.setFocusOnFirstWidget();
+                    return false;
                 }
-            });
+            }, FOCUS_DELAY);
         }
         return matches;
     }
