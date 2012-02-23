@@ -43,9 +43,9 @@ public abstract class BasicTemplateUI<F extends Parent> extends Composite
     implements BasicTemplateUIInterface<F> {
 
     /**
-     * hundred milliseconds.
+     * three hundred milliseconds.
      */
-    public static final int FOCUS_DELAY = 100;
+    public static final int FOCUS_DELAY = 300;
 
     /**
      * parent widget.

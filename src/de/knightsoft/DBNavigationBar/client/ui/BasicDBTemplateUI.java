@@ -497,4 +497,11 @@ public abstract class BasicDBTemplateUI<E extends DomainDataBaseBasics,
     protected final Widget[] getWidgetlist() {
         return this.widgetlist;
     }
+
+    /**
+     * @return the maskSetUp
+     */
+    public final boolean isMaskSetUp() {
+        return maskSetUp;
+    }
 }
