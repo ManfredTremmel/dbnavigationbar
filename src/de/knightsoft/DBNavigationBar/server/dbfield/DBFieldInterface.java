@@ -1,7 +1,7 @@
 /**
  * This file is part of knightsoft db navigation.
  *
- * RiPhone is free software: you can redistribute it and/or modify
+ * DBNavigationBar is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
@@ -15,10 +15,7 @@
  * along with RiPhone.  If not, see <http://www.gnu.org/licenses/>
  *
  *
- * Copyright (c) 2011-2012 RI Solutions GmbH
- *
- * --
- *    Name        Date        Change
+ * Copyright (c) 2012 Manfred Tremmel
  */
 package de.knightsoft.DBNavigationBar.server.dbfield;
 
@@ -33,7 +30,7 @@ import java.sql.SQLException;
  * @param <E> field type (KnightSoft DBNavigation field type)
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2011-11-01
+ * @version 1.0.0, 2012-05-07
  */
 public interface DBFieldInterface<E> {
 
