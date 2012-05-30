@@ -820,7 +820,6 @@ public abstract class DBHead2PosDateTemplate
                     invalidateHeadSQLStatement.close();
                 }
             }
-            this.insertEntry(thisDataBase, mandator, user, currentEntry, false);
         }
     }
 }
