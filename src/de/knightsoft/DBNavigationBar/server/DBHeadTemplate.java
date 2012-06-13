@@ -457,11 +457,6 @@ public abstract class DBHeadTemplate<E extends DomainHeadDataBaseInterface>
                     updateHeadSQLStatement.close();
                 }
             }
-
-            // Insert new entry
-            this.insertEntry(thisDataBase,
-                    mandator, user, currentEntry,
-                    false);
         }
     }
 }
