@@ -17,6 +17,9 @@
   <!-- German language, independent of country -->
   <extend-property name="locale" values="de"/>
 
+  <!-- Austrian German language, independent of country -->
+  <extend-property name="locale" values="de_AT"/>
+
   <!-- English language, independent of country -->
   <extend-property name="locale" values="en"/>
 

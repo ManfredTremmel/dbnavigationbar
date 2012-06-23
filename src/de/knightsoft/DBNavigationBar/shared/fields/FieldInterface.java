@@ -51,6 +51,11 @@ public interface FieldInterface<E> {
     void setValue(final E sValue);
 
     /**
+     * @param sValue the value to set
+     */
+    void setValueObject(Object sValue);
+
+    /**
      * get value as String.
      * @return value as String
      */

@@ -98,6 +98,12 @@ public abstract class AbstractField<E>
         this.value = sValue;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public final void setValueObject(final Object sValue) {
+        this.setValue((E) sValue);
+    }
+
     @Override
     public abstract String getString();
 

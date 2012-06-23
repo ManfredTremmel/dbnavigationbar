@@ -79,6 +79,24 @@ public interface DBFieldInterface<E> {
     boolean fieldHasChanged(final ResultSetMetaData rsmd) throws SQLException;
 
     /**
+     * create part of prepared update statement for this field.
+     * @return String with prepared part
+     */
+    String preparedUpdatePart();
+
+    /**
+     * create part of prepared insert or read statement for this field.
+     * @return String with sql part
+     */
+    String preparedInsertReadPart();
+
+    /**
+     * create part of insert statement for this field.
+     * @return String with sql part
+     */
+    String preparedInsertValuesPart();
+
+    /**
      * read from ResultSet.
      * @param result the ResultSet to read from
      * @throws SQLException if read fails

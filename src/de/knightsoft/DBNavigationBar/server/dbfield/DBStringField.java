@@ -138,4 +138,19 @@ public abstract class DBStringField
             final int pos) throws SQLException {
         statement.setString(pos, this.field.getValue());
     }
+
+    @Override
+    public final String preparedUpdatePart() {
+        return this.dbFieldName + " = ?";
+    }
+
+    @Override
+    public final String preparedInsertReadPart() {
+        return this.dbFieldName;
+    }
+
+    @Override
+    public final String preparedInsertValuesPart() {
+        return "?";
+    }
 }
