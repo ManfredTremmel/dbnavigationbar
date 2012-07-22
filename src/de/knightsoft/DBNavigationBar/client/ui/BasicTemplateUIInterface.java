@@ -22,6 +22,8 @@
  */
 package de.knightsoft.DBNavigationBar.client.ui;
 
+import com.google.gwt.safehtml.shared.SafeHtml;
+
 import de.knightsoft.DBNavigationBar.client.Parent;
 import de.knightsoft.DBNavigationBar.client.domain.DomainUser;
 
@@ -55,7 +57,7 @@ public interface BasicTemplateUIInterface<F extends Parent> {
      *
      * @return menu entry
      */
-    String getMenuEntry();
+    SafeHtml getMenuEntry();
 
     /**
      * returns the parent widget.
