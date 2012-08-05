@@ -24,6 +24,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
+import de.knightsoft.DBNavigationBar.shared.fields.FieldInterface;
+
 /**
  *
  * <code>DBFieldInterface</code> is a class to define a field.
@@ -99,16 +101,33 @@ public interface DBFieldInterface<E> {
     /**
      * read from ResultSet.
      * @param result the ResultSet to read from
+     * @param fieldToFill the field to fill data into
      * @throws SQLException if read fails
      */
-    void readFromResultSet(final ResultSet result) throws SQLException;
+    void readFromResultSet(final ResultSet result,
+            final FieldInterface<?> fieldToFill)
+            throws SQLException;
+
+    /**
+     * read from ResultSet.
+     * @param result the ResultSet to read from
+     * @param fieldName name of the field to read
+     * @param fieldToFill the field to fill data into
+     * @throws SQLException if read fails
+     */
+    void readFromResultSet(final ResultSet result,
+            final String fieldName, final FieldInterface<?> fieldToFill
+            ) throws SQLException;
 
     /**
      * add value to a prepared statement.
      * @param statement statement to add.
      * @param pos position number
+     * @param fieldToSet field to take entry from
+     * @return new position number after adding to statement
      * @throws SQLException if set fails
      */
-    void addToPreparedStatement(final PreparedStatement statement,
-            final int pos) throws SQLException;
+    int addToPreparedStatement(final PreparedStatement statement,
+            final int pos, final FieldInterface<?> fieldToSet)
+                    throws SQLException;
 }

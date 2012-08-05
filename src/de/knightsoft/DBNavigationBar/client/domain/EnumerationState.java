@@ -44,6 +44,10 @@ public enum EnumerationState {
      */
     WRITE_OK,
     /**
+     * Deleting a entry was OK.
+     */
+    DELETE_OK,
+    /**
      * Searching has found an entry.
      */
     SEARCH_OK,
@@ -63,4 +67,20 @@ public enum EnumerationState {
      * Server error, something went wrong on server.
      */
     SERVER_ERROR,
+    /**
+     * Not allowed to read the entry.
+     */
+    NOT_ALLOWED_TO_READ,
+    /**
+     * Not allowed to write the entry.
+     */
+    NOT_ALLOWED_TO_WRITE,
+    /**
+     * the given data are wrong.
+     */
+    DATA_WRONG,
+    /**
+     * user is not logged in, maybe session timed out.
+     */
+    NOT_LOGGED_IN,
 }

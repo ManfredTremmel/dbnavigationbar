@@ -27,14 +27,14 @@ import java.util.HashMap;
 import de.knightsoft.DBNavigationBar.shared.fields.FieldInterface;
 
 /**
-*
-* The <code>AbstractDataBaseDomain</code> is a abstract implementation
-* of data base domain.
-*
-* @author Manfred Tremmel
-* @version 1.0.0, 2012-06-02
-* @param <E> Type of the keyField
-*/
+ *
+ * The <code>AbstractDataBaseDomain</code> is a abstract implementation
+ * of data base domain.
+ *
+ * @author Manfred Tremmel
+ * @version 1.0.0, 2012-06-02
+ * @param <E> Type of the keyField
+ */
 public abstract class AbstractDataBaseDomain<E>
     implements InterfaceDataBase<E> {
 
@@ -56,17 +56,17 @@ public abstract class AbstractDataBaseDomain<E>
     /**
      * lowest key in database.
      */
-    private FieldInterface<E> keyMin;
+    private final FieldInterface<E> keyMin;
 
     /**
      * highest key in database.
      */
-    private FieldInterface<E> keyMax;
+    private final FieldInterface<E> keyMax;
 
     /**
      * current key of the entry.
      */
-    private FieldInterface<E> keyCur;
+    private final FieldInterface<E> keyCur;
 
     /**
      * map of fields.
@@ -75,15 +75,20 @@ public abstract class AbstractDataBaseDomain<E>
 
     /**
      * default constructor.
+     * @param keyType the type of the key field
+     * @throws IllegalAccessException if instantiation fails
+     * @throws InstantiationException if instantiation fails
      */
-    public AbstractDataBaseDomain() {
+    public AbstractDataBaseDomain(
+            final Class<FieldInterface<E>> keyType)
+                    throws InstantiationException, IllegalAccessException {
         super();
         this.readOnly = false;
         this.enumerationState = EnumerationState.UNDEFINED;
         this.stateText = null;
-        this.keyMin = null;
-        this.keyMax = null;
-        this.keyCur = null;
+        this.keyMin = keyType.newInstance();
+        this.keyMax = keyType.newInstance();
+        this.keyCur = keyType.newInstance();
         this.fieldMap = new HashMap<String, FieldInterface<?>>();
     }
 
@@ -171,7 +176,7 @@ public abstract class AbstractDataBaseDomain<E>
      */
     @Override
     public final void setKeyMin(final FieldInterface<E> newKeyMin) {
-        this.keyMin = newKeyMin;
+        this.keyMin.setValue(newKeyMin.getValue());
     }
 
     /* (non-Javadoc)
@@ -190,7 +195,7 @@ public abstract class AbstractDataBaseDomain<E>
      */
     @Override
     public final void setKeyMax(final FieldInterface<E> newKeyMax) {
-        this.keyMax = newKeyMax;
+        this.keyMax.setValue(newKeyMax.getValue());
     }
 
     /* (non-Javadoc)
@@ -209,7 +214,7 @@ public abstract class AbstractDataBaseDomain<E>
      */
     @Override
     public final void setKeyCur(final FieldInterface<E> newKeyCur) {
-        this.keyCur = newKeyCur;
+        this.keyCur.setValue(newKeyCur.getValue());
     }
 
     /*
@@ -323,19 +328,17 @@ public abstract class AbstractDataBaseDomain<E>
      * objectEquals compares if two objects are equal.
      *
      * @param thisObject a string to compare with vglString
-     * @param vglObject entry to compare with thisString
+     * @param compareObject entry to compare with thisString
      * @return true if both contain the same entries, otherwise false
      */
     protected final boolean objectEquals(final Object thisObject,
-          final Object vglObject) {
-        Object compareThisObject = thisObject;
-        Object compareVglObject = vglObject;
-        if (compareThisObject == null) {
-            compareThisObject = "";
+          final Object compareObject) {
+        if (thisObject == compareObject) {
+            return true;
         }
-        if (compareVglObject == null) {
-            compareVglObject = "";
+        if (thisObject == null || compareObject == null) {
+            return false;
         }
-        return compareThisObject.equals(compareVglObject);
+        return thisObject.equals(compareObject);
     }
 }

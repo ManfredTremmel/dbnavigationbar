@@ -89,4 +89,12 @@ public interface FieldInterface<E> {
      * @return true if all is ok.
      */
     boolean isOK();
+
+    /**
+     * Creates and returns a copy of this object.
+     *
+     * @return a cloned version of this field
+     * @throws CloneNotSupportedException if cloning fails
+     */
+    FieldInterface<E> clone() throws CloneNotSupportedException;
 }

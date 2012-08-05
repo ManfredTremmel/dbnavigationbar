@@ -128,4 +128,10 @@ public class IntegerField
     public final int getMaxEntry() {
         return this.maxEntry;
     }
+
+    @Override
+    public final IntegerField clone() throws CloneNotSupportedException {
+        return new IntegerField(isCanBeNull(), isPrimaryKey(), this.minEntry,
+                this.maxEntry, getDefaultValue());
+    }
 }

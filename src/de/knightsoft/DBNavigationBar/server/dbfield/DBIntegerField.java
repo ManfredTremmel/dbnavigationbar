@@ -29,6 +29,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
 
+import de.knightsoft.DBNavigationBar.shared.fields.FieldInterface;
 import de.knightsoft.DBNavigationBar.shared.fields.IntegerField;
 
 /**
@@ -137,24 +138,39 @@ public abstract class DBIntegerField
     }
 
     @Override
-    public final void readFromResultSet(final ResultSet result
+    public final void readFromResultSet(final ResultSet result,
+            final FieldInterface<?> fieldToFill) throws SQLException {
+        readFromResultSet(result, this.dbFieldName, fieldToFill);
+    }
+
+    @Override
+    public final void readFromResultSet(final ResultSet result,
+            final String fieldName, final FieldInterface<?> fieldToFill
             ) throws SQLException {
-        final int intResult = result.getInt(this.dbFieldName);
-        if (result.wasNull()) {
-            this.field.setValue(null);
-        } else {
-            this.field.setValue(Integer.valueOf(intResult));
+        if (fieldToFill != null && fieldToFill instanceof IntegerField) {
+            final int intResult = result.getInt(this.dbFieldName);
+            if (result.wasNull()) {
+                fieldToFill.setValue(null);
+            } else {
+                ((IntegerField) fieldToFill).setValue(
+                        Integer.valueOf(intResult));
+            }
         }
     }
 
     @Override
-    public final void addToPreparedStatement(final PreparedStatement statement,
-            final int pos) throws SQLException {
-        if (this.field.getValue() == null) {
+    public final int addToPreparedStatement(final PreparedStatement statement,
+            final int pos, final FieldInterface<?> fieldToSet)
+                    throws SQLException {
+        if (fieldToSet.getValue() == null) {
             statement.setNull(pos, this.getFieldType());
-        } else {
-            statement.setInt(pos, this.field.getValue());
+        } else if (fieldToSet instanceof IntegerField) {
+            statement.setInt(pos, ((IntegerField) fieldToSet).getValue()
+                    .intValue());
+        } else  {
+            statement.setNull(pos, this.getFieldType());
         }
+        return pos + 1;
     }
 
     @Override

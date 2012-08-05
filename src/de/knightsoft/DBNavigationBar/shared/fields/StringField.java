@@ -104,4 +104,13 @@ public class StringField
         }
         return checkOk;
     }
+
+    /* (non-Javadoc)
+     * @see de.knightsoft.DBNavigationBar.shared.fields.AbstractField#clone()
+     */
+    @Override
+    public final StringField clone() throws CloneNotSupportedException {
+        return new StringField(isCanBeNull(), isPrimaryKey(), getMaxLength(),
+                getDefaultValue(), this.regExCheck);
+    }
 }

@@ -22,6 +22,8 @@
  */
 package de.knightsoft.DBNavigationBar.server;
 
+import java.sql.SQLException;
+
 import de.knightsoft.DBNavigationBar.shared.Constants;
 
 
@@ -74,10 +76,10 @@ public class DataBaseDepending {
      *
      * @param jdbcClassToUse
      *            JDBC driver class to use
-     * @exception Exception if the JDBCClassToUse is not supported
+     * @exception SQLException if the JDBCClassToUse is not supported
      */
     public DataBaseDepending(final String jdbcClassToUse
-           ) throws Exception {
+           ) throws SQLException {
         int tmpDBnumber    =    -1;
         String myJDBCClassToUse = jdbcClassToUse;
         if (Constants.JDBC_CLASS_MYSQL_OLD.equalsIgnoreCase(
@@ -93,7 +95,7 @@ public class DataBaseDepending {
             }
         }
         if (tmpDBnumber == -1) {
-            throw new Exception("This JDBC class is not Supported");
+            throw new SQLException("This JDBC class is not Supported");
         }
         this.dbnumber    =    tmpDBnumber;
     }

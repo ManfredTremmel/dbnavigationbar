@@ -34,7 +34,7 @@ import java.text.ParseException;
  * @version 1.0.0, 2012-05-17
  */
 public abstract class AbstractField<E>
-    implements Serializable, FieldInterface<E> {
+    implements Serializable, Cloneable, FieldInterface<E> {
 
     /**
      * Serial version id.
@@ -139,4 +139,7 @@ public abstract class AbstractField<E>
      */
     @Override
     public abstract boolean isOK();
+
+    @Override
+    public abstract AbstractField<E> clone() throws CloneNotSupportedException;
 }

@@ -28,7 +28,9 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.text.ParseException;
 
+import de.knightsoft.DBNavigationBar.shared.fields.FieldInterface;
 import de.knightsoft.DBNavigationBar.shared.fields.StringField;
 
 /**
@@ -128,15 +130,29 @@ public abstract class DBStringField
     }
 
     @Override
-    public final void readFromResultSet(final ResultSet result
+    public final void readFromResultSet(final ResultSet result,
+            final FieldInterface<?> fieldToFill
             ) throws SQLException {
-        this.field.setValue(result.getString(this.dbFieldName));
+        this.readFromResultSet(result, this.dbFieldName, fieldToFill);
     }
 
     @Override
-    public final void addToPreparedStatement(final PreparedStatement statement,
-            final int pos) throws SQLException {
-        statement.setString(pos, this.field.getValue());
+    public final void readFromResultSet(final ResultSet result,
+            final String fieldName, final FieldInterface<?> fieldToFill)
+                    throws SQLException {
+        try {
+            fieldToFill.setString(result.getString(fieldName));
+        } catch (ParseException e) {
+            throw new SQLException(e);
+        }
+    }
+
+    @Override
+    public final int addToPreparedStatement(final PreparedStatement statement,
+            final int pos, final FieldInterface<?> fieldToSet)
+                    throws SQLException {
+        statement.setString(pos, fieldToSet.getString());
+        return pos + 1;
     }
 
     @Override
