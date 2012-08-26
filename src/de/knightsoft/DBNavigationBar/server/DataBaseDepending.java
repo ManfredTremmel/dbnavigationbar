@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2011-2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.server;
 
@@ -34,7 +32,7 @@ import de.knightsoft.DBNavigationBar.shared.Constants;
  * SQL strings. It supports MySQL and MSSQL at the moment
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2011-01-02
+ * @version $Rev$, $Date$
  */
 public class DataBaseDepending {
 
@@ -138,11 +136,14 @@ public class DataBaseDepending {
      * @return SQL function
      */
     public final String getSQLDiffFromNow(final String compareField) {
-        String returnString    =    null;
+        final String returnString;
         switch(this.dbnumber) {
             case 0:
+                returnString = "TO_DAYS(NOW()) - TO_DAYS(" + compareField + ")";
+                break;
+            case 1:
                 returnString =
-                    "TO_DAYS(NOW()) - TO_DAYS(" + compareField + ")";
+                    "DATEDIFF (day, " + compareField + ", GETDATE())";
                 break;
             default:
                 returnString =
@@ -161,10 +162,13 @@ public class DataBaseDepending {
      * @return SQL function
      */
     public final String getSQLPassword(final String encryptField) {
-        String returnString    =    null;
+        final String returnString;
         switch (this.dbnumber) {
             case 0:
                 returnString = "PASSWORD(" + encryptField + ")";
+                break;
+            case 1:
+                returnString = encryptField;
                 break;
             default:
                 returnString = encryptField;
@@ -182,12 +186,11 @@ public class DataBaseDepending {
      * @return SQL function
      */
     public final String concatStrings(final String[] stringTab) {
-        StringBuilder returnString    =    new StringBuilder();
-        int i;
+        final StringBuilder returnString = new StringBuilder();
         switch (this.dbnumber) {
             case 0:
                 returnString.append("CONCAT(");
-                for (i = 0; i < stringTab.length; i++) {
+                for (int i = 0; i < stringTab.length; i++) {
                     if (i > 0) {
                         returnString.append(", ");
                     }
@@ -197,7 +200,7 @@ public class DataBaseDepending {
                 break;
             case 1:
                 returnString.append('(');
-                for (i = 0; i < stringTab.length; i++) {
+                for (int i = 0; i < stringTab.length; i++) {
                     if (i > 0) {
                         returnString.append(" + ");
                     }
@@ -207,7 +210,7 @@ public class DataBaseDepending {
                 break;
             default:
                 returnString.append('(');
-                for (i = 0; i < stringTab.length; i++) {
+                for (int i = 0; i < stringTab.length; i++) {
                     if (i > 0) {
                         returnString.append(" || ");
                     }
@@ -228,13 +231,20 @@ public class DataBaseDepending {
      * @return SQL field
      */
     public final String getSQLBoolean(final boolean booleanField) {
-        String returnString    =    null;
+        final String returnString;
         switch(this.dbnumber) {
             case 0:
                 if (booleanField) {
                     returnString =  "'1'";
                 } else {
                     returnString =  "'0'";
+                }
+                break;
+            case 1:
+                if (booleanField) {
+                    returnString =  "1";
+                } else {
+                    returnString =  "0";
                 }
                 break;
             default:

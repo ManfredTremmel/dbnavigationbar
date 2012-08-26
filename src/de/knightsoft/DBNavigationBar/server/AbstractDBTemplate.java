@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2011-2012 Manfred Tremmel
  *
- * --
- *  Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.server;
 
@@ -37,7 +35,7 @@ import com.google.gwt.user.server.rpc.UnexpectedException;
 import com.google.gwt.user.server.rpc.XsrfProtectedServiceServlet;
 
 import de.knightsoft.DBNavigationBar.client.domain.DomainDataBaseInterface;
-import de.knightsoft.DBNavigationBar.client.domain.DomainUser;
+import de.knightsoft.DBNavigationBar.client.domain.AbstractDomainUser;
 
 /**
  *
@@ -46,9 +44,9 @@ import de.knightsoft.DBNavigationBar.client.domain.DomainUser;
  *
  * @param <E> structure
  * @author Manfred Tremmel
- * @version 1.0.0, 2011-07-23
+ * @version $Rev$, $Date$
  */
-public abstract class DBTemplate<E extends DomainDataBaseInterface>
+public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface>
     extends XsrfProtectedServiceServlet
     implements DBTemplateInterface<E> {
 
@@ -131,7 +129,7 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
      * @param setInvalidateHeadSQL
      *          sql statement to invalidate head entry
      */
-    public DBTemplate(
+    public AbstractDBTemplate(
             final Class<E> setType,
             final String setLookUpDataBase,
             final String setSessionUser,
@@ -144,6 +142,7 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
             final String setReadHeadSQL,
             final String setInvalidateHeadSQL
           ) {
+        super();
         this.type               = setType;
         this.lookUpDataBase     = setLookUpDataBase;
         this.dataBaseTableName  = setDataBaseTableName;
@@ -153,13 +152,13 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
 
         try {
             // connect to database
-            InitialContext ic       =    new InitialContext();
-            DataSource lDataSource  =    (DataSource) ic.lookup(
+            final InitialContext ic       =    new InitialContext();
+            final DataSource lDataSource  =    (DataSource) ic.lookup(
                     this.lookUpDataBase);
             thisDataBase            =    lDataSource.getConnection();
             ic.close();
 
-            DataBaseDepending myDataBaseDepending =
+            final DataBaseDepending myDataBaseDepending =
                     new DataBaseDepending(thisDataBase.getMetaData()
                             .getDatabaseProductName());
 
@@ -205,15 +204,17 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                 .replace("OUTDATE()", myDataBaseDepending.getSQLTimeOutdate())
                 .replace("NOW()", myDataBaseDepending.getSQLTimeNow());
             }
-        } catch (Exception e) {
-            throw new UnexpectedException(e.toString(), e.getCause());
+        } catch (SQLException e) {
+            throw new UnexpectedException(e.toString(), e);
+        } catch (NamingException e) {
+            throw new UnexpectedException(e.toString(), e);
         } finally {
             try {
                 if (thisDataBase != null) {
                     thisDataBase.close();
                 }
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
     }
@@ -241,10 +242,10 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
      * @param thisEntry
      *             Entry to fill
      * @return filled Entry
-     * @throws Exception when error occurs
+     * @throws SQLException when error occurs
      */
     protected abstract E fillHeadFromResultSet(ResultSet resultHead,
-            E thisEntry) throws Exception;
+            E thisEntry) throws SQLException;
 
 
     /**
@@ -252,14 +253,14 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
      *
      * @return logged in user
      */
-    protected final DomainUser getUser() {
-        HttpSession session =
+    protected final AbstractDomainUser getUser() {
+        final HttpSession session =
                 this.getThreadLocalRequest().getSession(true);
 
-        DomainUser thisUser = null;
+        AbstractDomainUser thisUser = null;
         if (session != null) {
             thisUser =
-                (DomainUser) session.getAttribute(this.sessionUser);
+                (AbstractDomainUser) session.getAttribute(this.sessionUser);
         }
 
         return thisUser;
@@ -290,13 +291,19 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                     this.readMinMaxSQL);
             readMinMaxSQLStatement.clearParameters();
             readMinMaxSQLStatement.setInt(1, mandator);
-            ResultSet result = readMinMaxSQLStatement.executeQuery();
+            ResultSet result = null;
+            try {
+                result = readMinMaxSQLStatement.executeQuery();
 
-            if (result.next()) {
-                returnEntry.setKeyMin(result.getString("min"));
-                returnEntry.setKeyMax(result.getString("max"));
+                if (result.next()) {
+                    returnEntry.setKeyMin(result.getString("min"));
+                    returnEntry.setKeyMax(result.getString("max"));
+                }
+            } finally {
+                if (result != null) {
+                    result.close();
+                }
             }
-            result.close();
 
         } catch (SQLException e) {
             returnEntry    =    null;
@@ -335,7 +342,7 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
      * @param dbKey
      *             comparison number
      * @return SQL-String
-     * @throws Exception when error occurs
+     * @throws SQLException when error occurs
      */
     protected abstract String searchSQLSelect(
             final Connection thisDataBase,
@@ -344,7 +351,7 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
             final String searchMethodEntry,
             final String searchFieldEntry,
             final String dbKeyVGL,
-            final String dbKey) throws Exception;
+            final String dbKey) throws SQLException;
 
     /**
      * <code>findFirstEntry</code> is called to search for the
@@ -364,9 +371,11 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
             final String searchMethodEntry,
             final String searchFieldEntry) {
         E thisEntry = null;
-        DomainUser thisUser    =    this.getUser();
-        if (thisUser !=    null) {
-            int mandator    =    thisUser.getMandator();
+        final AbstractDomainUser thisUser    =    this.getUser();
+        if (thisUser ==    null) {
+            thisEntry    =    null;
+        } else {
+            final int mandator    =    thisUser.getMandator();
             Connection thisDataBase    =    null;
             try {
                 if (searchFieldEntry == null || "".equals(searchFieldEntry)) {
@@ -374,8 +383,8 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                 } else {
                     thisEntry = createInstance();
                     // connect to database
-                    InitialContext ic =    new InitialContext();
-                    DataSource lDataSource =
+                    final InitialContext ic =    new InitialContext();
+                    final DataSource lDataSource =
                             (DataSource) ic.lookup(lookUpDataBase);
                     thisDataBase = lDataSource.getConnection();
                     ic.close();
@@ -383,10 +392,12 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                     thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
                     String newEntry        =    thisEntry.getKeyMin();
 
-                    String sqlString = this.searchSQLSelect(thisDataBase,
+                    final String sqlString = this.searchSQLSelect(thisDataBase,
                             "MIN", searchField, searchMethodEntry,
                             searchFieldEntry, ">=", newEntry);
-                    if (sqlString != null) {
+                    if (sqlString == null) {
+                        newEntry    =    null;
+                    } else {
                         Statement statement = null;
                         ResultSet result    = null;
                         try {
@@ -405,18 +416,20 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                                 statement.close();
                             }
                         }
-                    } else {
-                        newEntry    =    null;
                     }
 
-                    if (newEntry != null) {
+                    if (newEntry == null) {
+                        thisEntry.setKeyCur(null);
+                    } else {
                         thisEntry = readOneEntry(thisDataBase,
                                 mandator, newEntry, thisEntry);
-                    } else {
-                        thisEntry.setKeyCur(null);
                     }
                 }
-            } catch (Exception e) {
+            } catch (SQLException e) {
+                e.printStackTrace();
+                thisEntry    =    null;
+            } catch (NamingException e) {
+                e.printStackTrace();
                 thisEntry    =    null;
             } finally {
                 try {
@@ -427,8 +440,6 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                     e.printStackTrace();
                 }
             }
-        } else {
-            thisEntry    =    null;
         }
         return thisEntry;
     }
@@ -450,9 +461,11 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
             final String searchMethodEntry,
             final String searchFieldEntry) {
         E thisEntry = null;
-        DomainUser thisUser = this.getUser();
-        if (thisUser != null) {
-            int mandator = thisUser.getMandator();
+        final AbstractDomainUser thisUser = this.getUser();
+        if (thisUser == null) {
+            thisEntry    =    null;
+        } else {
+            final int mandator = thisUser.getMandator();
             Connection thisDataBase    =    null;
             try {
                 if (searchFieldEntry == null
@@ -461,8 +474,8 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                 } else {
                     thisEntry = createInstance();
                     // connect to database
-                    InitialContext ic = new InitialContext();
-                    DataSource lDataSource =
+                    final InitialContext ic = new InitialContext();
+                    final DataSource lDataSource =
                             (DataSource) ic.lookup(this.lookUpDataBase);
                     thisDataBase = lDataSource.getConnection();
                     ic.close();
@@ -470,10 +483,12 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                     thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
                     String newEntry         = thisEntry.getKeyMax();
 
-                    String sqlString = this.searchSQLSelect(thisDataBase,
+                    final String sqlString = this.searchSQLSelect(thisDataBase,
                             "MAX", searchField, searchMethodEntry,
                             searchFieldEntry, "<=", newEntry);
-                    if (sqlString != null) {
+                    if (sqlString == null) {
+                        newEntry    =    null;
+                    } else {
                         Statement statement = null;
                         ResultSet result    = null;
                         try {
@@ -492,18 +507,20 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                                 statement.close();
                             }
                         }
-                    } else {
-                        newEntry    =    null;
                     }
 
-                    if (newEntry != null) {
+                    if (newEntry == null) {
+                        thisEntry.setKeyCur(null);
+                    } else {
                         thisEntry = readOneEntry(thisDataBase, mandator,
                                 newEntry, thisEntry);
-                    } else {
-                        thisEntry.setKeyCur(null);
                     }
                 }
-            } catch (Exception e) {
+            } catch (SQLException e) {
+                e.printStackTrace();
+                thisEntry    =    null;
+            } catch (NamingException e) {
+                e.printStackTrace();
                 thisEntry    =    null;
             } finally {
                 try {
@@ -514,8 +531,6 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                     e.printStackTrace();
                 }
             }
-        } else {
-            thisEntry    =    null;
         }
         return thisEntry;
     }
@@ -540,9 +555,11 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
             final String searchFieldEntry,
             final String currentEntry) {
         E thisEntry = null;
-        DomainUser thisUser = this.getUser();
-        if (thisUser != null) {
-            int mandator    =    thisUser.getMandator();
+        final AbstractDomainUser thisUser = this.getUser();
+        if (thisUser == null) {
+            thisEntry    =    null;
+        } else {
+            final int mandator    =    thisUser.getMandator();
             Connection thisDataBase    =    null;
             try {
                 if (searchFieldEntry == null
@@ -551,8 +568,8 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                 } else {
                     thisEntry = createInstance();
                     // connect to database
-                    InitialContext ic  =    new InitialContext();
-                    DataSource lDataSource  =
+                    final InitialContext ic  =    new InitialContext();
+                    final DataSource lDataSource  =
                             (DataSource) ic.lookup(this.lookUpDataBase);
                     thisDataBase = lDataSource.getConnection();
                     ic.close();
@@ -560,10 +577,12 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                     thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
                     String newEntry =    currentEntry;
 
-                    String sqlString = this.searchSQLSelect(thisDataBase,
+                    final String sqlString = this.searchSQLSelect(thisDataBase,
                             "MIN", searchField, searchMethodEntry,
                             searchFieldEntry, ">", newEntry);
-                    if (sqlString != null) {
+                    if (sqlString == null) {
+                        newEntry    =    null;
+                    } else {
                         Statement statement = null;
                         ResultSet result    = null;
                         try {
@@ -582,18 +601,20 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                                 statement.close();
                             }
                         }
-                    } else {
-                        newEntry    =    null;
                     }
 
-                    if (newEntry != null) {
+                    if (newEntry == null) {
+                        thisEntry.setKeyCur(null);
+                    } else {
                         thisEntry = readOneEntry(thisDataBase, mandator,
                                 newEntry, thisEntry);
-                    } else {
-                        thisEntry.setKeyCur(null);
                     }
                 }
-            } catch (Exception e) {
+            } catch (SQLException e) {
+                e.printStackTrace();
+                thisEntry    =    null;
+            } catch (NamingException e) {
+                e.printStackTrace();
                 thisEntry    =    null;
             } finally {
                 try {
@@ -604,8 +625,6 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                     e.printStackTrace();
                 }
             }
-        } else {
-            thisEntry    =    null;
         }
         return thisEntry;
     }
@@ -630,9 +649,11 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
             final String searchFieldEntry,
             final String currentEntry) {
         E thisEntry = null;
-        DomainUser thisUser    =    this.getUser();
-        if (thisUser != null) {
-            int mandator    =    thisUser.getMandator();
+        final AbstractDomainUser thisUser    =    this.getUser();
+        if (thisUser == null) {
+            thisEntry    =    null;
+        } else {
+            final int mandator    =    thisUser.getMandator();
             Connection thisDataBase = null;
             try {
                 if (searchFieldEntry == null || "".equals(searchFieldEntry)) {
@@ -640,8 +661,8 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                 } else {
                     thisEntry = createInstance();
                     // connect to database
-                    InitialContext ic = new InitialContext();
-                    DataSource lDataSource =
+                    final InitialContext ic = new InitialContext();
+                    final DataSource lDataSource =
                             (DataSource) ic.lookup(this.lookUpDataBase);
                     thisDataBase = lDataSource.getConnection();
                     ic.close();
@@ -649,10 +670,12 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                     thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
                     String newEntry =    currentEntry;
 
-                    String sqlString = this.searchSQLSelect(thisDataBase,
+                    final String sqlString = this.searchSQLSelect(thisDataBase,
                             "MAX", searchField, searchMethodEntry,
                             searchFieldEntry, "<", newEntry);
-                    if (sqlString != null) {
+                    if (sqlString == null) {
+                        newEntry    =    null;
+                    } else {
                         Statement statement = null;
                         ResultSet result    = null;
                         try {
@@ -671,18 +694,20 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                                 statement.close();
                             }
                         }
-                    } else {
-                        newEntry    =    null;
                     }
 
-                    if (newEntry != null) {
+                    if (newEntry == null) {
+                        thisEntry.setKeyCur(null);
+                    } else {
                         thisEntry = readOneEntry(thisDataBase, mandator,
                                 newEntry, thisEntry);
-                    } else {
-                        thisEntry.setKeyCur(null);
                     }
                 }
-            } catch (Exception e) {
+            } catch (SQLException e) {
+                e.printStackTrace();
+                thisEntry    =    null;
+            } catch (NamingException e) {
+                e.printStackTrace();
                 thisEntry    =    null;
             } finally {
                 try {
@@ -693,8 +718,6 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                     e.printStackTrace();
                 }
             }
-        } else {
-            thisEntry    =    null;
         }
         return thisEntry;
     }
@@ -728,19 +751,25 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                 readHeadSQLStatement.clearParameters();
                 readHeadSQLStatement.setInt(1, mandator);
                 readHeadSQLStatement.setString(2, entry);
-                ResultSet resultHead =
-                        readHeadSQLStatement.executeQuery();
-                if (resultHead.next()) {
-                    returnEntry = fillHeadFromResultSet(resultHead,
-                            returnEntry);
-                } else {
-                    returnEntry.setKeyCur(null);
+                ResultSet resultHead = null;
+                try {
+                    resultHead =  readHeadSQLStatement.executeQuery();
+                    if (resultHead.next()) {
+                        returnEntry = fillHeadFromResultSet(resultHead,
+                                returnEntry);
+                    } else {
+                        returnEntry.setKeyCur(null);
+                    }
+                } finally {
+                    if (resultHead != null) {
+                        resultHead.close();
+                    }
                 }
-                resultHead.close();
             } else {
                 returnEntry    =    null;
             }
-        } catch (Exception nef) {
+        } catch (SQLException e) {
+            e.printStackTrace();
             returnEntry    =    null;
         } finally {
             try {
@@ -784,16 +813,18 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
     @Override
     public final E readEntry(final String entry) {
         E thisEntry = null;
-        DomainUser thisUser    =    this.getUser();
-        if (thisUser != null) {
-            int mandator    =    thisUser.getMandator();
+        final AbstractDomainUser thisUser    =    this.getUser();
+        if (thisUser == null) {
+            thisEntry    =    null;
+        } else {
+            final int mandator    =    thisUser.getMandator();
             Connection thisDataBase    =    null;
 
             try {
                 thisEntry = createInstance();
                 // connect to database
-                InitialContext ic = new InitialContext();
-                DataSource lDataSource =
+                final InitialContext ic = new InitialContext();
+                final DataSource lDataSource =
                         (DataSource) ic.lookup(this.lookUpDataBase);
                 thisDataBase =    lDataSource.getConnection();
                 ic.close();
@@ -806,8 +837,10 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                             mandator, thisEntry);
                 }
             } catch (SQLException e) {
+                e.printStackTrace();
                 thisEntry    =    null;
             } catch (NamingException e) {
+                e.printStackTrace();
                 thisEntry    =    null;
             } finally {
                 try {
@@ -818,8 +851,6 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                     e.printStackTrace();
                 }
             }
-        } else {
-            thisEntry    =    null;
         }
         return thisEntry;
     }
@@ -833,30 +864,34 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
     @Override
     public final E readFirstEntry() {
         E thisEntry = null;
-        DomainUser thisUser    =    this.getUser();
-        if (thisUser !=    null) {
-            int mandator    =    thisUser.getMandator();
+        final AbstractDomainUser thisUser    =    this.getUser();
+        if (thisUser ==    null) {
+            thisEntry    =    null;
+        } else {
+            final int mandator    =    thisUser.getMandator();
             Connection thisDataBase    =    null;
 
             try {
                 thisEntry = createInstance();
                 // connect to database
-                InitialContext ic = new InitialContext();
-                DataSource lDataSource =
+                final InitialContext ic = new InitialContext();
+                final DataSource lDataSource =
                         (DataSource) ic.lookup(this.lookUpDataBase);
                 thisDataBase = lDataSource.getConnection();
                 ic.close();
 
                 thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
-                if (thisEntry    !=    null) {
-                    thisEntry    =    readOneEntry(thisDataBase,
-                            mandator, thisEntry.getKeyMin(), thisEntry);
+                if (thisEntry == null) {
+                    thisEntry = null;
                 } else {
-                    thisEntry    =    null;
+                    thisEntry = readOneEntry(thisDataBase,
+                            mandator, thisEntry.getKeyMin(), thisEntry);
                 }
             } catch (SQLException e) {
+                e.printStackTrace();
                 thisEntry    =    null;
             } catch (NamingException e) {
+                e.printStackTrace();
                 thisEntry    =    null;
             } finally {
                 try {
@@ -867,8 +902,6 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                     e.printStackTrace();
                 }
             }
-        } else {
-            thisEntry    =    null;
         }
         return thisEntry;
     }
@@ -882,28 +915,32 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
     @Override
     public final E readLastEntry() {
         E thisEntry = null;
-        DomainUser thisUser    =    this.getUser();
-        if (thisUser !=    null) {
-            int mandator = thisUser.getMandator();
+        final AbstractDomainUser thisUser    =    this.getUser();
+        if (thisUser ==    null) {
+            thisEntry    =    null;
+        } else {
+            final int mandator = thisUser.getMandator();
             thisEntry = createInstance();
             Connection thisDataBase = null;
             try {
                 // connect to database
-                InitialContext ic = new InitialContext();
-                DataSource lDataSource =
+                final InitialContext ic = new InitialContext();
+                final DataSource lDataSource =
                         (DataSource) ic.lookup(this.lookUpDataBase);
                 thisDataBase = lDataSource.getConnection();
                 ic.close();
 
                 thisEntry = fillMinMax(thisDataBase,
                         mandator, thisEntry);
-                if (thisEntry    !=    null) {
-                    thisEntry    =    readOneEntry(thisDataBase,
+                if (thisEntry != null) {
+                    thisEntry = readOneEntry(thisDataBase,
                             mandator, thisEntry.getKeyMax(), thisEntry);
-                } else {
-                    thisEntry    =    null;
                 }
-            } catch (Exception e) {
+            } catch (SQLException e) {
+                e.printStackTrace();
+                thisEntry    =    null;
+            } catch (NamingException e) {
+                e.printStackTrace();
                 thisEntry    =    null;
             } finally {
                 try {
@@ -914,8 +951,6 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                     e.printStackTrace();
                 }
             }
-        } else {
-            thisEntry    =    null;
         }
         return thisEntry;
     }
@@ -931,17 +966,19 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
     @Override
     public final E readNextEntry(final String currentEntry) {
         E thisEntry = null;
-        DomainUser thisUser = this.getUser();
-        if (thisUser !=    null) {
-            int mandator = thisUser.getMandator();
+        final AbstractDomainUser thisUser = this.getUser();
+        if (thisUser ==    null) {
+            thisEntry    =    null;
+        } else {
+            final int mandator = thisUser.getMandator();
             thisEntry = createInstance();
             Connection thisDataBase =    null;
             PreparedStatement readNextSQLStatement = null;
 
             try {
                 // connect to database
-                InitialContext ic = new InitialContext();
-                DataSource lDataSource =
+                final InitialContext ic = new InitialContext();
+                final DataSource lDataSource =
                         (DataSource) ic.lookup(this.lookUpDataBase);
                 thisDataBase = lDataSource.getConnection();
                 ic.close();
@@ -957,21 +994,28 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                         readNextSQLStatement.clearParameters();
                         readNextSQLStatement.setInt(1, mandator);
                         readNextSQLStatement.setString(2, currentEntry);
-                        ResultSet result =
-                                readNextSQLStatement.executeQuery();
+                        ResultSet result = null;
+                        try {
+                            result = readNextSQLStatement.executeQuery();
 
-                        if (result.next()) {
-                            newEntryName =
-                                    result.getString("dbnumber");
+                            if (result.next()) {
+                                newEntryName =
+                                        result.getString("dbnumber");
+                            }
+                        } finally {
+                            if (result != null) {
+                                result.close();
+                            }
                         }
-                        result.close();
                     }
                     thisEntry = readOneEntry(thisDataBase, mandator,
                             newEntryName, thisEntry);
                 }
             } catch (SQLException e) {
+                e.printStackTrace();
                 thisEntry    =    null;
             } catch (NamingException e) {
+                e.printStackTrace();
                 thisEntry    =    null;
             } finally {
                 try {
@@ -985,8 +1029,6 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                     e.printStackTrace();
                 }
             }
-        } else {
-            thisEntry    =    null;
         }
         return thisEntry;
     }
@@ -1002,17 +1044,19 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
     @Override
     public final E readPreviousEntry(final String currentEntry) {
         E thisEntry = null;
-        DomainUser thisUser = this.getUser();
-        if (thisUser !=    null) {
-            int mandator = thisUser.getMandator();
+        final AbstractDomainUser thisUser = this.getUser();
+        if (thisUser ==    null) {
+            thisEntry    =    null;
+        } else {
+            final int mandator = thisUser.getMandator();
             thisEntry = createInstance();
             Connection thisDataBase = null;
             PreparedStatement readPrevSQLStatement = null;
 
             try {
                 // connect to database
-                InitialContext ic = new InitialContext();
-                DataSource lDataSource =
+                final InitialContext ic = new InitialContext();
+                final DataSource lDataSource =
                         (DataSource) ic.lookup(this.lookUpDataBase);
                 thisDataBase = lDataSource.getConnection();
                 ic.close();
@@ -1029,20 +1073,28 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                         readPrevSQLStatement.clearParameters();
                         readPrevSQLStatement.setInt(1, mandator);
                         readPrevSQLStatement.setString(2, currentEntry);
-                        ResultSet result = readPrevSQLStatement.executeQuery();
+                        ResultSet result = null;
+                        try {
+                            result = readPrevSQLStatement.executeQuery();
 
-                        if (result.next()) {
-                            newEntryName =
-                                    result.getString("dbnumber");
+                            if (result.next()) {
+                                newEntryName =
+                                        result.getString("dbnumber");
+                            }
+                        } finally {
+                            if (result != null) {
+                                result.close();
+                            }
                         }
-                        result.close();
                     }
                     thisEntry = readOneEntry(thisDataBase,
                             mandator, newEntryName, thisEntry);
                 }
             } catch (SQLException e) {
+                e.printStackTrace();
                 thisEntry    =    null;
             } catch (NamingException e) {
+                e.printStackTrace();
                 thisEntry    =    null;
             } finally {
                 try {
@@ -1056,8 +1108,6 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                     e.printStackTrace();
                 }
             }
-        } else {
-            thisEntry    =    null;
         }
         return thisEntry;
     }
@@ -1091,7 +1141,7 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
             insertHeadSQLStatement.clearParameters();
             fillInsertHead(insertHeadSQLStatement, mandator,
                     user, saveEntry, delete);
-             num = insertHeadSQLStatement.executeUpdate();
+            num = insertHeadSQLStatement.executeUpdate();
         } finally {
             if (insertHeadSQLStatement != null) {
                 insertHeadSQLStatement.close();
@@ -1124,11 +1174,13 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
      */
     @Override
     public final E saveEntry(final E currentEntry) {
-        DomainUser thisUser    =    this.getUser();
+        final AbstractDomainUser thisUser    =    this.getUser();
         E returnEntry = currentEntry;
-        if (thisUser !=    null) {
-            int mandator = thisUser.getMandator();
-            String user = thisUser.getUser();
+        if (thisUser ==    null) {
+            returnEntry    =    null;
+        } else {
+            final int mandator = thisUser.getMandator();
+            final String user = thisUser.getUser();
             String saveKeyString = returnEntry.getKeyCur();
             if (saveKeyString == null || "".equals(saveKeyString)) {
                 saveKeyString = returnEntry.getKeyNew();
@@ -1140,8 +1192,8 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                 if (allowedToChange()) {
                     E dbEntry = createInstance();
                     // connect to database
-                    InitialContext ic = new InitialContext();
-                    DataSource lDataSource =
+                    final InitialContext ic = new InitialContext();
+                    final DataSource lDataSource =
                             (DataSource) ic.lookup(this.lookUpDataBase);
                     thisDataBase = lDataSource.getConnection();
                     ic.close();
@@ -1162,8 +1214,10 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                             mandator, returnEntry.getKeyNew(), returnEntry);
                 }
             } catch (SQLException e) {
+                e.printStackTrace();
                 returnEntry    =    null;
             } catch (NamingException e) {
+                e.printStackTrace();
                 returnEntry    =    null;
             } finally {
                 try {
@@ -1174,8 +1228,6 @@ public abstract class DBTemplate<E extends DomainDataBaseInterface>
                     e.printStackTrace();
                 }
             }
-        } else {
-            returnEntry    =    null;
         }
         return returnEntry;
     }

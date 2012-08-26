@@ -17,28 +17,27 @@
  *
  * Copyright (c) 2011-2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.client.ui;
 
 import com.google.gwt.user.client.ui.Widget;
 
-import de.knightsoft.DBNavigationBar.client.Parent;
-import de.knightsoft.DBNavigationBar.client.domain.DomainHeadDataBase;
+import de.knightsoft.DBNavigationBar.client.AbstractParent;
+import de.knightsoft.DBNavigationBar.client.domain.AbstractDomainHeadDB;
 
 /**
  *
- * The <code>DBHeadTemplateUI</code> class is a template for database
+ * The <code>AbstractDBHeadTemplateUI</code> class is a template for database
  * input mask.
  *
  * @param <E> data structure
  * @param <F> parent widget
  * @author Manfred Tremmel
- * @version 1.0.0, 2011-02-14
+ * @version $Rev$, $Date$
  */
-public abstract class DBHeadTemplateUI<E extends DomainHeadDataBase,
-     F extends Parent> extends BasicDBTemplateUI<E, F> {
+public abstract class AbstractDBHeadTemplateUI<E extends
+    AbstractDomainHeadDB, F extends AbstractParent>
+    extends AbstractBasicDBTemplateUI<E, F> {
 
     /**
      * Constructor.
@@ -50,7 +49,7 @@ public abstract class DBHeadTemplateUI<E extends DomainHeadDataBase,
      * @param userdefinedfunction
      *         special function to include into the navigation bar
      */
-    public DBHeadTemplateUI(
+    public AbstractDBHeadTemplateUI(
             final F parentwidget,
             final Widget[] thisWidgetlist,
             final String userdefinedfunction) {

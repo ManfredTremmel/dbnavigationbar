@@ -16,6 +16,7 @@
  *
  *
  * Copyright (c) 2012 Manfred Tremmel
+ *
  */
 package de.knightsoft.DBNavigationBar.server.dbfield;
 
@@ -32,7 +33,7 @@ import de.knightsoft.DBNavigationBar.shared.fields.FieldInterface;
  * @param <E> field type (KnightSoft DBNavigation field type)
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2012-05-07
+ * @version $Rev$, $Date$
  */
 public interface DBFieldInterface<E> {
 

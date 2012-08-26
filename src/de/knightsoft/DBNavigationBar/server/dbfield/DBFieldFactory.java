@@ -16,6 +16,7 @@
  *
  *
  * Copyright (c) 2012 Manfred Tremmel
+ *
  */
 package de.knightsoft.DBNavigationBar.server.dbfield;
 
@@ -33,6 +34,7 @@ import de.knightsoft.DBNavigationBar.shared.fields.StringField;
  * a DBField out of a field.
  *
  * @author Manfred Tremmel
+ * @version $Rev$, $Date$
  */
 public final class DBFieldFactory {
 

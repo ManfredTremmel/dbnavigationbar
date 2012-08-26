@@ -17,9 +17,6 @@
  *
  * Copyright (c) 2011-2012 Manfred Tremmel
  *
- * --
- *  Name        Date        Change
- *  TremmelM    2011-01-02  Added a constructor with reply-to
  */
 package de.knightsoft.DBNavigationBar.server;
 
@@ -33,14 +30,19 @@ import java.net.Socket;
  * <code>SendEMail</code> is a class to send emails.
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2011-02-01
+ * @version $Rev$, $Date$
  */
 public class SendEMail {
 
     /**
      * SMTP port.
      */
-    static final int SMTP_PORT = 25;
+    public static final int SMTP_PORT = 25;
+
+    /**
+     * ip address of LOCALHOST.
+     */
+    public static final String LOCALHOST = "127.0.0.1"; // NOPMD
 
     /**
      * Constructor.
@@ -76,7 +78,7 @@ public class SendEMail {
             replyToText = "\nReply-To: " + replyTo;
         }
         // setup String with complete mail including headers
-        String eMailString =
+        final String eMailString =
                 "MAIL FROM: " + from
               + "\nRCPT TO: " + to
               + "\nDATA"
@@ -142,7 +144,7 @@ public class SendEMail {
                      final String subject,
                      final String mailtext
                    ) throws IOException {
-        this(from, organization, to, null, subject, mailtext,  "127.0.0.1");
+        this(from, organization, to, null, subject, mailtext, LOCALHOST);
     }
 
     /**
@@ -154,7 +156,7 @@ public class SendEMail {
      */
     public SendEMail(final String eMailString
            ) throws IOException {
-        this(eMailString, "127.0.0.1");
+        this(eMailString, LOCALHOST);
     }
 
     /**
@@ -184,18 +186,18 @@ public class SendEMail {
     public final void sendEMailSendmail(final String eMailString,
                                         final String smtpServer
            ) throws IOException {
-        Socket smtpSocket = new Socket(smtpServer, SMTP_PORT);
+        final Socket smtpSocket = new Socket(smtpServer, SMTP_PORT);
         String responseline    = null;
         final int mailTabStart = 3;
 
         if (smtpSocket != null) {
-            DataOutputStream os =
+            final DataOutputStream os =
                     new DataOutputStream(smtpSocket.getOutputStream());
-            BufferedReader   br =
+            final BufferedReader   br =
                     new BufferedReader(new InputStreamReader(
                             smtpSocket.getInputStream()));
 
-            String[] mailTab = eMailString.split("\n");
+            final String[] mailTab = eMailString.split("\n");
 
             responseline = br.readLine();
             if (responseline != null

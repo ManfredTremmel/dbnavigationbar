@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2012 RI Solutions GmbH
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.shared.fields;
 
@@ -30,9 +28,9 @@ import java.text.ParseException;
  * @param <E> field type
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2012-05-17
+ * @version $Rev$, $Date$
  */
-public interface FieldInterface<E> {
+public interface FieldInterface<E> extends Cloneable {
 
     /**
      * @return the value
@@ -89,12 +87,4 @@ public interface FieldInterface<E> {
      * @return true if all is ok.
      */
     boolean isOK();
-
-    /**
-     * Creates and returns a copy of this object.
-     *
-     * @return a cloned version of this field
-     * @throws CloneNotSupportedException if cloning fails
-     */
-    FieldInterface<E> clone() throws CloneNotSupportedException;
 }

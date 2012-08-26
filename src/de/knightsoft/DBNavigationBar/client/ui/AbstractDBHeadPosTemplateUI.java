@@ -36,21 +36,23 @@ import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import de.knightsoft.DBNavigationBar.client.Parent;
-import de.knightsoft.DBNavigationBar.client.domain.DomainHeadPosDataBase;
+import de.knightsoft.DBNavigationBar.client.AbstractParent;
+import de.knightsoft.DBNavigationBar.client.domain
+    .AbstractDomainHeadPosDB;
 import de.knightsoft.DBNavigationBar.client.ui.widget.DBNaviBarWidgetConstants;
 
 /**
- * The <code>DBHeadTemplateUI</code> class is a template
+ * The <code>AbstractDBHeadTemplateUI</code> class is a template
  * for database input mask.
  *
  * @param <E> Structure Type
- * @param <F> Parent panel
+ * @param <F> AbstractParent panel
  * @author Manfred Tremmel
  * @version 1.0.0, 2011-02-19
  */
-public abstract class DBHeadPosTemplateUI<E extends DomainHeadPosDataBase,
-    F extends Parent> extends BasicDBTemplateUI<E, F> {
+public abstract class AbstractDBHeadPosTemplateUI<E extends
+    AbstractDomainHeadPosDB, F extends AbstractParent>
+    extends AbstractBasicDBTemplateUI<E, F> {
 
     /**
      * constantsPos.
@@ -92,7 +94,7 @@ public abstract class DBHeadPosTemplateUI<E extends DomainHeadPosDataBase,
      * @param userdefinedfunction
      *         special function to include into the navigation bar
      */
-    public DBHeadPosTemplateUI(
+    public AbstractDBHeadPosTemplateUI(
             final F parentwidget,
             final Widget[] widgetlist,
             final String userdefinedfunction) {
@@ -123,7 +125,7 @@ public abstract class DBHeadPosTemplateUI<E extends DomainHeadPosDataBase,
                     @Override
                     public void onClick(final ClickEvent event) {
                         fillPosition(
-                                DBHeadPosTemplateUI.this.getPosTable()
+                                AbstractDBHeadPosTemplateUI.this.getPosTable()
                                 .getRowCount(),
                                     null);
                       }
@@ -170,8 +172,11 @@ public abstract class DBHeadPosTemplateUI<E extends DomainHeadPosDataBase,
     protected final void fillPositions(final E entry) {
 
         this.getPosTable().setVisible(false);
-        if (entry.getKeyPos() != null) {
-
+        if (entry.getKeyPos() == null) {
+            for (int i = (this.getPosTable().getRowCount() - 1); i > 0; i--) {
+                this.getPosTable().removeRow(i);
+            }
+        } else {
             for (int i = (this.getPosTable().getRowCount() - 1);
                  i > entry.getKeyPos().length && i > 0; i--) {
                 this.getPosTable().removeRow(i);
@@ -182,10 +187,6 @@ public abstract class DBHeadPosTemplateUI<E extends DomainHeadPosDataBase,
                 fillPosition(numRows + 1,
                              entry
                            );
-            }
-        } else {
-            for (int i = (this.getPosTable().getRowCount() - 1); i > 0; i--) {
-                this.getPosTable().removeRow(i);
             }
         }
         this.getPosTable().setVisible(true);
@@ -208,28 +209,29 @@ public abstract class DBHeadPosTemplateUI<E extends DomainHeadPosDataBase,
      * @return PushButton
      */
     protected final PushButton getDeleteButton() {
-        PushButton deleteButton =    new PushButton(
-                new Image(DBHeadTemplateUI.IMAGES.deletePosition()),
-                          new ClickHandler() {
-                    @Override
-                    public void onClick(final ClickEvent event) {
-                        PushButton sender = (PushButton) event.getSource();
-                        for (int i = 1;
-                             i < DBHeadPosTemplateUI.this.getPosTable()
-                             .getRowCount(); i++) {
-                            if (sender.equals(DBHeadPosTemplateUI.this
-                               .getPosTable().getWidget(i,
-                                 (getPosTable().getCellCount(i) - 1)))) {
-                                DBHeadPosTemplateUI.this.rowToDelete = i;
-                                DBHeadPosTemplateUI.this.dialogYesNoBox
-                                      .center();
-                                DBHeadPosTemplateUI.this.dialogYesNoBox.show();
-                                i = DBHeadPosTemplateUI.this.getPosTable()
-                                      .getRowCount();
-                            }
+        final PushButton deleteButton = new PushButton(
+            new Image(AbstractDBHeadTemplateUI.IMAGES.deletePosition()),
+                      new ClickHandler() {
+                @Override
+                public void onClick(final ClickEvent event) {
+                    PushButton sender = (PushButton) event.getSource();
+                    for (int i = 1;
+                         i < AbstractDBHeadPosTemplateUI.this.getPosTable()
+                         .getRowCount(); i++) {
+                        if (sender.equals(AbstractDBHeadPosTemplateUI.this
+                           .getPosTable().getWidget(i,
+                             (getPosTable().getCellCount(i) - 1)))) {
+                            AbstractDBHeadPosTemplateUI.this.rowToDelete = i;
+                            AbstractDBHeadPosTemplateUI.this.dialogYesNoBox
+                                    .center();
+                            AbstractDBHeadPosTemplateUI.this.dialogYesNoBox
+                                    .show();
+                            i = AbstractDBHeadPosTemplateUI.this.getPosTable()
+                                    .getRowCount();
                         }
                     }
-                });
+                }
+            });
         return deleteButton;
     }
 
@@ -249,24 +251,24 @@ public abstract class DBHeadPosTemplateUI<E extends DomainHeadPosDataBase,
         dialogBox.setText(constants.deleteDialogHeader());
 
         // Create a table to layout the content
-        VerticalPanel dialogContents = new VerticalPanel();
+        final VerticalPanel dialogContents = new VerticalPanel();
         dialogBox.setWidget(dialogContents);
 
         // Add some text to the top of the dialog
-        HTML details = new HTML(constants.deleteDialogText());
+        final HTML details = new HTML(constants.deleteDialogText());
         dialogContents.add(details);
         dialogContents.setHorizontalAlignment(
                 HasHorizontalAlignment.ALIGN_CENTER);
 
-        HorizontalPanel dialogButtons = new HorizontalPanel();
+        final HorizontalPanel dialogButtons = new HorizontalPanel();
         // Add a yes button at the bottom of the dialog
-        Button yesButton = new Button(constants.yes(),
+        final Button yesButton = new Button(constants.yes(),
             new ClickHandler() {
               @Override
             public void onClick(final ClickEvent event) {
                 dialogBox.hide();
-                DBHeadPosTemplateUI.this.getPosTable().removeRow(
-                        DBHeadPosTemplateUI.this.rowToDelete);
+                AbstractDBHeadPosTemplateUI.this.getPosTable().removeRow(
+                        AbstractDBHeadPosTemplateUI.this.rowToDelete);
               }
             });
         yesButton.setAccessKey(constants.yesKey().trim().charAt(0));
@@ -274,7 +276,7 @@ public abstract class DBHeadPosTemplateUI<E extends DomainHeadPosDataBase,
         dialogButtons.setCellHorizontalAlignment(yesButton,
                 HasHorizontalAlignment.ALIGN_LEFT);
         // Add a no button at the bottom of the dialog
-        Button noButton = new Button(constants.no(),
+        final Button noButton = new Button(constants.no(),
             new ClickHandler() {
               @Override
             public void onClick(final ClickEvent event) {

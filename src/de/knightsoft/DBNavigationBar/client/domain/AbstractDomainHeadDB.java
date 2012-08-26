@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2011-2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.client.domain;
 
@@ -31,9 +29,10 @@ import java.io.Serializable;
  * between the client and the servlet on the server.
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2011-02-05
+ * @version $Rev$, $Date$
  */
-public abstract class DomainHeadDataBase extends DomainDataBaseBasics
+public abstract class AbstractDomainHeadDB
+       extends AbstractDomainDBBasics
        implements DomainHeadDataBaseInterface, Serializable {
 
     /**
@@ -44,7 +43,7 @@ public abstract class DomainHeadDataBase extends DomainDataBaseBasics
     /**
      * Constructor, setup a empty entry.
      */
-    public DomainHeadDataBase() {
+    public AbstractDomainHeadDB() {
         super();
     }
 
@@ -54,7 +53,8 @@ public abstract class DomainHeadDataBase extends DomainDataBaseBasics
      *
      * @param copyEntry entry to copy
      */
-    public DomainHeadDataBase(final DomainHeadDataBase copyEntry) {
+    public AbstractDomainHeadDB(
+            final AbstractDomainHeadDB copyEntry) {
         super(copyEntry);
     }
 
@@ -72,10 +72,10 @@ public abstract class DomainHeadDataBase extends DomainDataBaseBasics
         if (obj == null) {
             return false;
         }
-        if (!(obj instanceof DomainHeadDataBase)) {
+        if (!(obj instanceof AbstractDomainHeadDB)) {
             return false;
         }
-        return this.equalsEntry((DomainDataBaseBasics) obj);
+        return this.equalsEntry((AbstractDomainDBBasics) obj);
     }
 
     /**

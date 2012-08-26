@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.client.domain;
 
@@ -32,7 +30,7 @@ import de.knightsoft.DBNavigationBar.shared.fields.FieldInterface;
  * of data base domain.
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2012-06-02
+ * @version $Rev$, $Date$
  * @param <E> Type of the keyField
  */
 public abstract class AbstractDataBaseDomain<E>
@@ -97,7 +95,7 @@ public abstract class AbstractDataBaseDomain<E>
      *  .InterfaceDataBase#getIsReadOnly()
      */
     @Override
-    public final boolean getIsReadOnly() {
+    public final boolean isReadOnly() {
         return this.readOnly;
     }
 
@@ -306,7 +304,7 @@ public abstract class AbstractDataBaseDomain<E>
     @Override
     public final boolean equalsEntry(final InterfaceDataBase<E> vglEntry) {
         boolean entriesAreEqual = true;
-        entriesAreEqual &= (this.readOnly == vglEntry.getIsReadOnly());
+        entriesAreEqual &= (this.readOnly == vglEntry.isReadOnly());
         entriesAreEqual &= (this.enumerationState == vglEntry.getState());
         entriesAreEqual &= objectEquals(this.stateText,
                 vglEntry.getStateText());
@@ -333,7 +331,7 @@ public abstract class AbstractDataBaseDomain<E>
      */
     protected final boolean objectEquals(final Object thisObject,
           final Object compareObject) {
-        if (thisObject == compareObject) {
+        if (thisObject == compareObject) { // NOPMD we really want same
             return true;
         }
         if (thisObject == null || compareObject == null) {

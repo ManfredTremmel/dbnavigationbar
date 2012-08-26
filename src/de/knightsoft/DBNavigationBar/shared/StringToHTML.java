@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2011-2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.shared;
 
@@ -27,7 +25,7 @@ package de.knightsoft.DBNavigationBar.shared;
  * <code>StringToHTML</code> is a class to convert a string to HTML.
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2011-01-02
+ * @version $Rev$, $Date$
  */
 public final class StringToHTML {
 
@@ -216,7 +214,7 @@ public final class StringToHTML {
 
         if (javaString != null && javaString.length() > 0) {
             char[] htmlStringTab = new char[(MULTI * javaString.length())];
-            char[] javaStringTab = javaString.toCharArray();
+            final char[] javaStringTab = javaString.toCharArray();
             int j = 0;
 
             for (int i = 0; i < javaString.length(); i++) {
@@ -302,7 +300,8 @@ public final class StringToHTML {
                     }
                     if (!found) {
                         if (javaStringTab[i] > MAX_LENGTH) {
-                            String dummy = Integer.toString(javaStringTab[i]);
+                            final String dummy =
+                                    Integer.toString(javaStringTab[i]);
                             htmlStringTab[j++]    =    '&';
                             htmlStringTab[j++]    =    '#';
                             for (int k = 0; k < dummy.length(); k++) {

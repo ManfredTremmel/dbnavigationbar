@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2011-2012 Manfred Tremmel
  *
- * --
- *  Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.server;
 
@@ -31,7 +29,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import de.knightsoft.DBNavigationBar.client.domain.DomainHeadDataBaseInterface;
-import de.knightsoft.DBNavigationBar.client.domain.DomainUser;
+import de.knightsoft.DBNavigationBar.client.domain.AbstractDomainUser;
 import de.knightsoft.DBNavigationBar.shared.Constants;
 
 /**
@@ -41,10 +39,11 @@ import de.knightsoft.DBNavigationBar.shared.Constants;
  *
  * @param <E> structure
  * @author Manfred Tremmel
- * @version 1.0.0, 2011-02-08
+ * @version $Rev$, $Date$
  */
-public abstract class DBHeadDateTemplateR<E extends DomainHeadDataBaseInterface>
-    extends DBTemplate<E> {
+public abstract class AbstractDBHeadDateTemplateR<E extends
+    DomainHeadDataBaseInterface>
+    extends AbstractDBTemplate<E> {
 
     /**
      * Serial version id.
@@ -76,7 +75,7 @@ public abstract class DBHeadDateTemplateR<E extends DomainHeadDataBaseInterface>
      * @param setInvalidateHeadSQL
      *          sql statement to invalidate head entry
      */
-    public DBHeadDateTemplateR(
+    public AbstractDBHeadDateTemplateR(
             final Class<E> setType,
             final String setLookUpDataBase,
             final String setSessionUser,
@@ -117,7 +116,7 @@ public abstract class DBHeadDateTemplateR<E extends DomainHeadDataBaseInterface>
      * @param setInsertHeadSQL
      *          sql statement to insert a new head entry
      */
-    public DBHeadDateTemplateR(
+    public AbstractDBHeadDateTemplateR(
             final Class<E> setType,
             final String setLookUpDataBase,
             final String setSessionUser,
@@ -191,7 +190,7 @@ public abstract class DBHeadDateTemplateR<E extends DomainHeadDataBaseInterface>
      * @param dbKey
      *             comparison number
      * @return SQL-String
-     * @throws Exception when error occurs
+     * @throws SQLException when error occurs
      */
     @Override
     protected final String searchSQLSelect(
@@ -201,13 +200,14 @@ public abstract class DBHeadDateTemplateR<E extends DomainHeadDataBaseInterface>
             final String searchMethodeEntry,
             final String searchFieldEntry,
             final String dbKeyVGL,
-            final String dbKey) throws Exception {
-        int mandator         =    this.getUser().getMandator();
-        DataBaseDepending myDataBaseDepending =
+            final String dbKey) throws SQLException {
+        final int mandator = this.getUser().getMandator();
+        final DataBaseDepending myDataBaseDepending =
                 new DataBaseDepending(thisDataBase.getMetaData()
                         .getDatabaseProductName());
 
-        String sqlString =
+        final StringBuilder sqlString = new StringBuilder();
+        sqlString.append(
               "SELECT " + minMax + "(" + this.getKeyFieldName()
                         + ") AS dbnumber "
             + "FROM   " + this.getDataBaseTableName() + " "
@@ -220,22 +220,22 @@ public abstract class DBHeadDateTemplateR<E extends DomainHeadDataBaseInterface>
                     + myDataBaseDepending.getSQLTimeNow() + " "
             + " AND    " + Constants.DB_FIELD_GLOBAL_DATE_TO + "   > "
                     + myDataBaseDepending.getSQLTimeNow() + " "
-            + " AND   ";
+            + " AND   ");
 
         if ("=".equals(searchMethodeEntry)) {
-            sqlString += StringToSQL.searchString(searchField,
+            sqlString.append(StringToSQL.searchString(searchField,
                     searchFieldEntry, thisDataBase.getMetaData()
-                    .getDatabaseProductName());
+                    .getDatabaseProductName()));
         } else if ("like".equals(searchMethodeEntry)) {
-            sqlString += StringToSQL.searchString(searchField,
+            sqlString.append(StringToSQL.searchString(searchField,
                     "*" + searchFieldEntry + "*", thisDataBase
-                    .getMetaData().getDatabaseProductName());
+                    .getMetaData().getDatabaseProductName()));
         } else {
-            sqlString += searchField + " " + searchMethodeEntry
+            sqlString.append(searchField + " " + searchMethodeEntry
                     + " " +  StringToSQL.convertString(searchFieldEntry,
-                       thisDataBase.getMetaData().getDatabaseProductName());
+                       thisDataBase.getMetaData().getDatabaseProductName()));
         }
-        return sqlString;
+        return sqlString.toString();
     }
 
     /**
@@ -248,23 +248,23 @@ public abstract class DBHeadDateTemplateR<E extends DomainHeadDataBaseInterface>
     @Override
     public final E deleteEntry(final String currentEntry) {
         E resultValue = null;
-        DomainUser thisUser  =    this.getUser();
+        final AbstractDomainUser thisUser  =    this.getUser();
         if (thisUser != null) {
-            int mandator     =    thisUser.getMandator();
-            String user      =    thisUser.getUser();
+            final int mandator     =    thisUser.getMandator();
+            final String user      =    thisUser.getUser();
             Connection thisDataBase        =    null;
             PreparedStatement invalidateHeadSQLStatement = null;
 
             try {
                 // connect to database
-                InitialContext ic = new InitialContext();
-                DataSource lDataSource =
+                final InitialContext ic = new InitialContext();
+                final DataSource lDataSource =
                         (DataSource) ic.lookup(this.getLookUpDataBase());
                 thisDataBase = lDataSource.getConnection();
                 ic.close();
 
                 if (allowedToChange()) {
-                    E dbEntry = this.readEntry(currentEntry);
+                    final E dbEntry = this.readEntry(currentEntry);
                     // invalidate head number
                     invalidateHeadSQLStatement =
                             thisDataBase.prepareStatement(

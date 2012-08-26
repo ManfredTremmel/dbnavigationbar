@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2011-2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.client.ui;
 
@@ -27,19 +25,20 @@ import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Composite;
 
-import de.knightsoft.DBNavigationBar.client.Parent;
-import de.knightsoft.DBNavigationBar.client.domain.DomainUser;
+import de.knightsoft.DBNavigationBar.client.AbstractParent;
+import de.knightsoft.DBNavigationBar.client.domain.AbstractDomainUser;
 
 /**
- * The <code>BasicTemplateUI</code> class is a template for all
+ * The <code>AbstractBasicTemplateUI</code> class is a template for all
  * input mask.
  *
  * @param <F> parent widget
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2011-02-19
+ * @version $Rev$, $Date$
  */
-public abstract class BasicTemplateUI<F extends Parent> extends Composite
+public abstract class AbstractBasicTemplateUI<F extends AbstractParent>
+    extends Composite
     implements BasicTemplateUIInterface<F> {
 
     /**
@@ -55,7 +54,7 @@ public abstract class BasicTemplateUI<F extends Parent> extends Composite
     /**
      * Constructor.
      */
-    public BasicTemplateUI() {
+    public AbstractBasicTemplateUI() {
         super();
     }
 
@@ -65,9 +64,9 @@ public abstract class BasicTemplateUI<F extends Parent> extends Composite
      * @param setParentwidget
      *         the parent widget, where this frame is displayed
      */
-    public BasicTemplateUI(
+    public AbstractBasicTemplateUI(
             final F setParentwidget) {
-
+        super();
         this.parentwidget  =    setParentwidget;
     }
 
@@ -83,7 +82,7 @@ public abstract class BasicTemplateUI<F extends Parent> extends Composite
      * @param user
      *            user information about the currently logged in user
      */
-    protected abstract void setUpMask(DomainUser user);
+    protected abstract void setUpMask(AbstractDomainUser user);
 
 
     /**
@@ -98,7 +97,7 @@ public abstract class BasicTemplateUI<F extends Parent> extends Composite
      */
     public final boolean matchesMenuSimple(
             final String itemtext,
-            final DomainUser user) {
+            final AbstractDomainUser user) {
         boolean matches = false;
         if (this.allowedToSee(user)
          && itemtext != null
@@ -112,7 +111,7 @@ public abstract class BasicTemplateUI<F extends Parent> extends Composite
             Scheduler.get().scheduleFixedDelay(new RepeatingCommand() {
                 @Override
                 public boolean execute() {
-                    BasicTemplateUI.this.setFocusOnFirstWidget();
+                    AbstractBasicTemplateUI.this.setFocusOnFirstWidget();
                     return false;
                 }
             }, FOCUS_DELAY);
@@ -126,7 +125,7 @@ public abstract class BasicTemplateUI<F extends Parent> extends Composite
         Scheduler.get().scheduleFixedDelay(new RepeatingCommand() {
             @Override
             public boolean execute() {
-                BasicTemplateUI.this.setFocusOnFirstWidget();
+                AbstractBasicTemplateUI.this.setFocusOnFirstWidget();
                 return false;
             }
         }, FOCUS_DELAY);

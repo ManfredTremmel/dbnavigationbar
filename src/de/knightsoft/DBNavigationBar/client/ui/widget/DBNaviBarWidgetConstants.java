@@ -17,21 +17,19 @@
  *
  * Copyright (c) 2011-2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.client.ui.widget;
 
 import com.google.gwt.i18n.client.Constants;
 
 /**
-*
-* The <code>DBNavigationBarWidgetConstants</code> class contains the
-* messages for navigation bar widget.
-*
-* @author Manfred Tremmel
-* @version 1.0.0, 2011-02-13
-*/
+ *
+ * The <code>DBNavigationBarWidgetConstants</code> class contains the
+ * messages for navigation bar widget.
+ *
+ * @author Manfred Tremmel
+ * @version $Rev$, $Date$
+ */
 public interface DBNaviBarWidgetConstants extends Constants {
 
     /**

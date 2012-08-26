@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2011-2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.client;
 
@@ -27,6 +25,7 @@ import com.google.gwt.core.client.EntryPoint;
 /**
  * entry point is called when webpage is loaded.
  * @author Manfred Tremmel
+ * @version $Rev$, $Date$
  */
 public class DBNavigationBar implements EntryPoint {
 

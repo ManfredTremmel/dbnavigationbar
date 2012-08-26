@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2011-2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.client.domain;
 
@@ -27,15 +25,15 @@ import java.util.Date;
 
 /**
  *
- * The <code>DomainDataBaseBasics</code> class is a exchange structure
+ * The <code>AbstractDomainDBBasics</code> class is a exchange structure
  * between the client and the servlet on the server with database
  * functions. This is a abstract basic class to setup on.
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2011-07-23
+ * @version $Rev$, $Date$
  */
-public abstract class DomainDataBaseBasics implements DomainDataBaseInterface,
-    Serializable {
+public abstract class AbstractDomainDBBasics
+    implements DomainDataBaseInterface, Serializable {
 
     /**
      * Serial version id.
@@ -43,9 +41,9 @@ public abstract class DomainDataBaseBasics implements DomainDataBaseInterface,
     private static final long serialVersionUID = 6396714435198200480L;
 
     /**
-     * isReadOnly, true if only read is allowed, false, if it's writable.
+     * readOnly, true if only read is allowed, false, if it's writable.
      */
-    private Boolean isReadOnly;
+    private Boolean readOnly;
 
     /**
      * keyMin, the lowest key in the database.
@@ -65,10 +63,10 @@ public abstract class DomainDataBaseBasics implements DomainDataBaseInterface,
     /**
      * Constructor, setup a empty entry.
      */
-    public DomainDataBaseBasics() {
+    public AbstractDomainDBBasics() {
         this.setUpDefaultEntry();
-        this.keyMin                =    null;
-        this.keyMax                =    null;
+        this.keyMin = null;
+        this.keyMax = null;
     }
 
     /**
@@ -77,47 +75,48 @@ public abstract class DomainDataBaseBasics implements DomainDataBaseInterface,
      *
      * @param copyEntry entry to copy
      */
-    public DomainDataBaseBasics(final DomainDataBaseBasics copyEntry) {
+    public AbstractDomainDBBasics(
+            final AbstractDomainDBBasics copyEntry) {
         if (copyEntry == null) {
             this.setUpDefaultEntry();
-            this.keyMin                    =    null;
-            this.keyMax                    =    null;
+            this.keyMin = null;
+            this.keyMax = null;
         } else {
-            this.isReadOnly                =    copyEntry.isReadOnly;
-            this.keyMin                    =    copyEntry.keyMin;
-            this.keyMax                    =    copyEntry.keyMax;
-            this.keyCur                    =    copyEntry.keyCur;
+            this.readOnly = copyEntry.readOnly;
+            this.keyMin = copyEntry.keyMin;
+            this.keyMax = copyEntry.keyMax;
+            this.keyCur = copyEntry.keyCur;
         }
     }
 
     /**
-     * get isReadOnly.
+     * get readOnly.
      *
-     * @return isReadOnly
+     * @return readOnly
      */
     @Override
-    public final boolean getIsReadOnly() {
-        return this.isReadOnly;
+    public final boolean isReadOnly() {
+        return this.readOnly;
     }
 
     /**
-     * set isReadOnly.
+     * set readOnly.
      *
-     * @param newIsReadOnly new isReadOnly
+     * @param newIsReadOnly new readOnly
      */
     @Override
     public final void setIsReadOnly(final boolean newIsReadOnly) {
-        this.isReadOnly = newIsReadOnly;
+        this.readOnly = newIsReadOnly;
     }
 
     /**
-     * set isReadOnly.
+     * set readOnly.
      *
-     * @param newIsReadOnly new isReadOnly
+     * @param newIsReadOnly new readOnly
      */
     @Override
     public final void setIsReadOnly(final Boolean newIsReadOnly) {
-        this.isReadOnly = newIsReadOnly;
+        this.readOnly = newIsReadOnly;
     }
 
     /**
@@ -226,7 +225,7 @@ public abstract class DomainDataBaseBasics implements DomainDataBaseInterface,
      *
      */
     public final void setUpDefaultEntryKey() {
-        this.isReadOnly                    =    false;
+        this.readOnly                    =    false;
         this.keyCur                        =    null;
     }
 

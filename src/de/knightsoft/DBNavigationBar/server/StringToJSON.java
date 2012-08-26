@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2011-2012 RI Solutions GmbH
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.server;
 
@@ -27,7 +25,7 @@ package de.knightsoft.DBNavigationBar.server;
  * <code>StringToJSON</code> is a class to convert a string to JSON.
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2011-01-02
+ * @version $Rev$, $Date$
  */
 public final class StringToJSON {
 
@@ -65,7 +63,7 @@ public final class StringToJSON {
 
         if (javaString != null && javaString.length() > 0) {
             char[] jsonStringTab = new char[(MULTI * javaString.length())];
-            char[] javaStringTab = javaString.toCharArray();
+            final char[] javaStringTab = javaString.toCharArray();
             int j = 0;
 
             for (int i = 0; i < javaString.length(); i++) {
@@ -97,7 +95,7 @@ public final class StringToJSON {
                     jsonStringTab[j++]    =    't';
                     break;
                 default:
-                    int test = (int) javaStringTab[i];
+                    final int test = (int) javaStringTab[i];
                     if (test > MAX_LENGTH) {
                         jsonStringTab[j++]    =    '\\';
                         jsonStringTab[j++]    =    'u';

@@ -17,13 +17,11 @@
  *
  * Copyright (c) 2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.server.dbfield.mysql;
 
 import de.knightsoft.DBNavigationBar.server.StringToSQL;
-import de.knightsoft.DBNavigationBar.server.dbfield.DBStringField;
+import de.knightsoft.DBNavigationBar.server.dbfield.AbstractDBStringField;
 import de.knightsoft.DBNavigationBar.shared.Constants;
 import de.knightsoft.DBNavigationBar.shared.fields.StringField;
 
@@ -33,9 +31,9 @@ import de.knightsoft.DBNavigationBar.shared.fields.StringField;
  * including mysql specific parts.
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2012-05-17
+ * @version $Rev$, $Date$
  */
-public class MySQLDBStringField extends DBStringField {
+public class MySQLDBStringField extends AbstractDBStringField {
 
     /**
      * Serial version id.
@@ -63,7 +61,7 @@ public class MySQLDBStringField extends DBStringField {
 
     @Override
     public final String buildSQLFieldString() {
-        StringBuilder sqlString = new StringBuilder();
+        final StringBuilder sqlString = new StringBuilder();
         sqlString.append("`" + StringToSQL.convert(this.getDBFieldName(),
                 Constants.JDBC_CLASS_MYSQL) + "` ");
         if (this.getField().getMaxLength() > VARCHAR_MAX_LENGTH) {

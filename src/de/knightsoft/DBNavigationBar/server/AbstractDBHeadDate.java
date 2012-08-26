@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.server;
 
@@ -41,7 +39,7 @@ import com.google.gwt.user.server.rpc.UnexpectedException;
 import com.google.gwt.user.server.rpc.XsrfProtectedServiceServlet;
 
 import de.knightsoft.DBNavigationBar.client.domain.AbstractDataBaseDomain;
-import de.knightsoft.DBNavigationBar.client.domain.DomainUser;
+import de.knightsoft.DBNavigationBar.client.domain.AbstractDomainUser;
 import de.knightsoft.DBNavigationBar.client.domain.EnumerationState;
 import de.knightsoft.DBNavigationBar.client.ui.AbstractDBRemoteService;
 import de.knightsoft.DBNavigationBar.server.dbfield.DBFieldFactory;
@@ -54,6 +52,7 @@ import de.knightsoft.DBNavigationBar.shared.fields.FieldInterface;
  * Abstract class to implement database calls for the mask.
  *
  * @author Manfred Tremmel
+ * @version $Rev$, $Date$
  *
  * @param <E> Type of the database domain
  * @param <F> Type of the keyField
@@ -170,13 +169,13 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
 
         try {
             // connect to database
-            InitialContext ic       =    new InitialContext();
-            DataSource lDataSource  =    (DataSource) ic.lookup(
+            final InitialContext ic = new InitialContext();
+            final DataSource lDataSource  = (DataSource) ic.lookup(
                     this.lookUpDataBase);
             thisDataBase            =    lDataSource.getConnection();
             ic.close();
 
-            DataBaseDepending myDataBaseDepending =
+            final DataBaseDepending myDataBaseDepending =
                     new DataBaseDepending(thisDataBase.getMetaData()
                             .getDatabaseProductName());
 
@@ -187,6 +186,7 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
             for (DBFieldInterface<?> dbField : this.dbFieldList) {
                 if (!firstEntry) {
                     readHeadSB.append(", ");
+                    firstEntry = false;
                 }
                 readHeadSB.append(dbField.preparedInsertReadPart());
             }
@@ -294,16 +294,16 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
             this.invalidateHeadSQL = invalidateHeadSQLSB.toString();
 
         } catch (SQLException e) {
-            throw new UnexpectedException(e.toString(), e.getCause());
+            throw new UnexpectedException(e.toString(), e);
         } catch (NamingException e) {
-            throw new UnexpectedException(e.toString(), e.getCause());
+            throw new UnexpectedException(e.toString(), e);
         } finally {
             try {
                 if (thisDataBase != null) {
                     thisDataBase.close();
                 }
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
     }
@@ -315,14 +315,14 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
      *
      * @return logged in user
      */
-    protected final DomainUser getUser() {
-        HttpSession session =
+    protected final AbstractDomainUser getUser() {
+        final HttpSession session =
                 this.getThreadLocalRequest().getSession(true);
 
-        DomainUser thisUser = null;
+        AbstractDomainUser thisUser = null;
         if (session != null) {
             thisUser =
-                (DomainUser) session.getAttribute(this.sessionUser);
+                (AbstractDomainUser) session.getAttribute(this.sessionUser);
         }
 
         return thisUser;
@@ -404,13 +404,19 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
                     this.readMinMaxSQL);
             readMinMaxSQLStatement.clearParameters();
             readMinMaxSQLStatement.setInt(1, mandator);
-            ResultSet result = readMinMaxSQLStatement.executeQuery();
+            ResultSet result = null;
+            try {
+                result = readMinMaxSQLStatement.executeQuery();
 
-            if (result.next()) {
-                returnEntry.getKeyMin().setString(result.getString("min"));
-                returnEntry.getKeyMax().setString(result.getString("max"));
+                if (result.next()) {
+                    returnEntry.getKeyMin().setString(result.getString("min"));
+                    returnEntry.getKeyMax().setString(result.getString("max"));
+                }
+            } finally {
+                if (result != null) {
+                    result.close();
+                }
             }
-            result.close();
         } catch (SQLException e) {
             e.printStackTrace();
             returnEntry.setState(EnumerationState.SERVER_ERROR);
@@ -462,12 +468,13 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
             final String searchFieldEntry,
             final String dbKeyVGL,
             final String dbKey) throws SQLException {
-        int mandator         =    this.getUser().getMandator();
-        DataBaseDepending myDataBaseDepending =
+        final int mandator         =    this.getUser().getMandator();
+        final DataBaseDepending myDataBaseDepending =
                 new DataBaseDepending(thisDataBase.getMetaData()
                         .getDatabaseProductName());
 
-        String sqlString =
+        final StringBuilder sqlString = new StringBuilder();
+        sqlString.append(
               "SELECT " + minMax + "(" + this.dbKeyField.getDBFieldName()
                         + ") AS dbnumber "
             + "FROM   " + this.dataBaseTableName + " "
@@ -480,22 +487,22 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
                     + myDataBaseDepending.getSQLTimeNow() + " "
             + " AND    " + Constants.DB_FIELD_GLOBAL_DATE_TO + "   > "
                     + myDataBaseDepending.getSQLTimeNow() + " "
-            + " AND   ";
+            + " AND   ");
 
         if ("=".equals(searchMethodeEntry)) {
-            sqlString += StringToSQL.searchString(searchField,
+            sqlString.append(StringToSQL.searchString(searchField,
                     searchFieldEntry, thisDataBase.getMetaData()
-                    .getDatabaseProductName());
+                    .getDatabaseProductName()));
         } else if ("like".equals(searchMethodeEntry)) {
-            sqlString += StringToSQL.searchString(searchField,
+            sqlString.append(StringToSQL.searchString(searchField,
                     "*" + searchFieldEntry + "*", thisDataBase
-                    .getMetaData().getDatabaseProductName());
+                    .getMetaData().getDatabaseProductName()));
         } else {
-            sqlString += searchField + " " + searchMethodeEntry
+            sqlString.append(searchField + " " + searchMethodeEntry
                     + " " +  StringToSQL.convertString(searchFieldEntry,
-                       thisDataBase.getMetaData().getDatabaseProductName());
+                       thisDataBase.getMetaData().getDatabaseProductName()));
         }
-        return sqlString;
+        return sqlString.toString();
     }
 
     /**
@@ -525,16 +532,25 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
                     readHeadSQLStatement.clearParameters();
                     readHeadSQLStatement.setInt(1, mandator);
                     readHeadSQLStatement.setString(2, entry);
-                    ResultSet resultHead = readHeadSQLStatement.executeQuery();
+                    ResultSet resultHead = null;
+                    try {
+                        resultHead = readHeadSQLStatement.executeQuery();
 
-                    if (resultHead.next()) {
-                        for (DBFieldInterface<?> dbField : this.dbFieldList) {
-                            dbField.readFromResultSet(resultHead, thisEntry
-                                .getFieldMap().get(dbField.getDBFieldName()));
+                        if (resultHead.next()) {
+                            for (DBFieldInterface<?> dbField
+                                    : this.dbFieldList) {
+                                dbField.readFromResultSet(resultHead,
+                                        thisEntry.getFieldMap().get(
+                                        dbField.getDBFieldName()));
+                            }
+                            thisEntry.getKeyCur().setString(entry);
+                        } else {
+                            thisEntry.setState(EnumerationState.READ_NOT_FOUND);
                         }
-                        thisEntry.getKeyCur().setString(entry);
-                    } else {
-                        thisEntry.setState(EnumerationState.READ_NOT_FOUND);
+                    } finally {
+                        if (resultHead != null) {
+                            resultHead.close();
+                        }
                     }
                     thisEntry.setIsReadOnly(!this.allowedToChange());
                 } catch (SQLException e) {
@@ -568,18 +584,18 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
     @Override
     public final E readEntry(final String entry) {
         E thisEntry = null;
-        DomainUser thisUser = this.getUser();
+        final AbstractDomainUser thisUser = this.getUser();
         if (thisUser ==    null) {
             thisEntry = this.createDomainInstance();
             thisEntry.setState(EnumerationState.NOT_LOGGED_IN);
         } else {
-            int mandator = thisUser.getMandator();
+            final int mandator = thisUser.getMandator();
             Connection thisDataBase = null;
 
             try {
                 // connect to database
-                InitialContext ic = new InitialContext();
-                DataSource lDataSource =
+                final InitialContext ic = new InitialContext();
+                final DataSource lDataSource =
                         (DataSource) ic.lookup(this.lookUpDataBase);
                 thisDataBase =    lDataSource.getConnection();
                 ic.close();
@@ -624,20 +640,20 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
             final String searchMethodEntry,
             final String searchFieldEntry) {
         E thisEntry = null;
-        DomainUser thisUser    =    this.getUser();
+        final AbstractDomainUser thisUser    =    this.getUser();
         if (thisUser ==    null) {
             thisEntry = this.createDomainInstance();
             thisEntry.setState(EnumerationState.NOT_LOGGED_IN);
         } else {
-            int mandator    =    thisUser.getMandator();
+            final int mandator    =    thisUser.getMandator();
             Connection thisDataBase    =    null;
             try {
                 if (searchFieldEntry == null || "".equals(searchFieldEntry)) {
                     thisEntry = this.readFirstEntry();
                 } else {
                     // connect to database
-                    InitialContext ic =    new InitialContext();
-                    DataSource lDataSource =
+                    final InitialContext ic =    new InitialContext();
+                    final DataSource lDataSource =
                             (DataSource) ic.lookup(lookUpDataBase);
                     thisDataBase = lDataSource.getConnection();
                     ic.close();
@@ -645,7 +661,7 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
                     thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
                     String newEntry = thisEntry.getKeyMin().getString();
 
-                    String sqlString = this.searchSQLSelect(thisDataBase,
+                    final String sqlString = this.searchSQLSelect(thisDataBase,
                             "MIN", searchField, searchMethodEntry,
                             searchFieldEntry, ">=", newEntry);
                     if (sqlString == null) {
@@ -714,20 +730,20 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
             final String searchMethodEntry,
             final String searchFieldEntry) {
         E thisEntry = null;
-        DomainUser thisUser    =    this.getUser();
+        final AbstractDomainUser thisUser    =    this.getUser();
         if (thisUser ==    null) {
             thisEntry = this.createDomainInstance();
             thisEntry.setState(EnumerationState.NOT_LOGGED_IN);
         } else {
-            int mandator    =    thisUser.getMandator();
+            final int mandator    =    thisUser.getMandator();
             Connection thisDataBase    =    null;
             try {
                 if (searchFieldEntry == null || "".equals(searchFieldEntry)) {
                     thisEntry = this.readFirstEntry();
                 } else {
                     // connect to database
-                    InitialContext ic =    new InitialContext();
-                    DataSource lDataSource =
+                    final InitialContext ic =    new InitialContext();
+                    final DataSource lDataSource =
                             (DataSource) ic.lookup(lookUpDataBase);
                     thisDataBase = lDataSource.getConnection();
                     ic.close();
@@ -735,7 +751,7 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
                     thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
                     String newEntry = thisEntry.getKeyMin().getString();
 
-                    String sqlString = this.searchSQLSelect(thisDataBase,
+                    final String sqlString = this.searchSQLSelect(thisDataBase,
                             "MAX", searchField, searchMethodEntry,
                             searchFieldEntry, "<=", newEntry);
                     if (sqlString == null) {
@@ -806,20 +822,20 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
             final String searchFieldEntry,
             final String currentEntry) {
         E thisEntry = null;
-        DomainUser thisUser    =    this.getUser();
+        final AbstractDomainUser thisUser    =    this.getUser();
         if (thisUser ==    null) {
             thisEntry = this.createDomainInstance();
             thisEntry.setState(EnumerationState.NOT_LOGGED_IN);
         } else {
-            int mandator    =    thisUser.getMandator();
+            final int mandator    =    thisUser.getMandator();
             Connection thisDataBase    =    null;
             try {
                 if (searchFieldEntry == null || "".equals(searchFieldEntry)) {
                     thisEntry = this.readNextEntry(currentEntry);
                 } else {
                     // connect to database
-                    InitialContext ic =    new InitialContext();
-                    DataSource lDataSource =
+                    final InitialContext ic =    new InitialContext();
+                    final DataSource lDataSource =
                             (DataSource) ic.lookup(lookUpDataBase);
                     thisDataBase = lDataSource.getConnection();
                     ic.close();
@@ -827,7 +843,7 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
                     thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
                     String newEntry = currentEntry;
 
-                    String sqlString = this.searchSQLSelect(thisDataBase,
+                    final String sqlString = this.searchSQLSelect(thisDataBase,
                             "MIN", searchField, searchMethodEntry,
                             searchFieldEntry, ">", newEntry);
                     if (sqlString == null) {
@@ -898,20 +914,20 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
             final String searchFieldEntry,
             final String currentEntry) {
         E thisEntry = null;
-        DomainUser thisUser    =    this.getUser();
+        final AbstractDomainUser thisUser    =    this.getUser();
         if (thisUser ==    null) {
             thisEntry = this.createDomainInstance();
             thisEntry.setState(EnumerationState.NOT_LOGGED_IN);
         } else {
-            int mandator    =    thisUser.getMandator();
+            final int mandator    =    thisUser.getMandator();
             Connection thisDataBase    =    null;
             try {
                 if (searchFieldEntry == null || "".equals(searchFieldEntry)) {
                     thisEntry = this.readPreviousEntry(currentEntry);
                 } else {
                     // connect to database
-                    InitialContext ic =    new InitialContext();
-                    DataSource lDataSource =
+                    final InitialContext ic =    new InitialContext();
+                    final DataSource lDataSource =
                             (DataSource) ic.lookup(lookUpDataBase);
                     thisDataBase = lDataSource.getConnection();
                     ic.close();
@@ -919,7 +935,7 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
                     thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
                     String newEntry = currentEntry;
 
-                    String sqlString = this.searchSQLSelect(thisDataBase,
+                    final String sqlString = this.searchSQLSelect(thisDataBase,
                             "MAX", searchField, searchMethodEntry,
                             searchFieldEntry, "<", newEntry);
                     if (sqlString == null) {
@@ -985,18 +1001,18 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
     @Override
     public final E readFirstEntry() {
         E thisEntry = null;
-        DomainUser thisUser    =    this.getUser();
+        final AbstractDomainUser thisUser    =    this.getUser();
         if (thisUser ==    null) {
             thisEntry = this.createDomainInstance();
             thisEntry.setState(EnumerationState.NOT_LOGGED_IN);
         } else {
-            int mandator    =    thisUser.getMandator();
+            final int mandator    =    thisUser.getMandator();
             Connection thisDataBase    =    null;
 
             try {
                 // connect to database
-                InitialContext ic = new InitialContext();
-                DataSource lDataSource =
+                final InitialContext ic = new InitialContext();
+                final DataSource lDataSource =
                         (DataSource) ic.lookup(this.lookUpDataBase);
                 thisDataBase = lDataSource.getConnection();
                 ic.close();
@@ -1035,17 +1051,17 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
     @Override
     public final E readLastEntry() {
         E thisEntry = null;
-        DomainUser thisUser    =    this.getUser();
+        final AbstractDomainUser thisUser    =    this.getUser();
         if (thisUser ==    null) {
             thisEntry = this.createDomainInstance();
             thisEntry.setState(EnumerationState.NOT_LOGGED_IN);
         } else {
-            int mandator = thisUser.getMandator();
+            final int mandator = thisUser.getMandator();
             Connection thisDataBase = null;
             try {
                 // connect to database
-                InitialContext ic = new InitialContext();
-                DataSource lDataSource =
+                final InitialContext ic = new InitialContext();
+                final DataSource lDataSource =
                         (DataSource) ic.lookup(this.lookUpDataBase);
                 thisDataBase = lDataSource.getConnection();
                 ic.close();
@@ -1084,19 +1100,19 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
     @Override
     public final E readNextEntry(final String currentEntry) {
         E thisEntry = null;
-        DomainUser thisUser = this.getUser();
+        final AbstractDomainUser thisUser = this.getUser();
         if (thisUser ==    null) {
             thisEntry = this.createDomainInstance();
             thisEntry.setState(EnumerationState.NOT_LOGGED_IN);
         } else {
-            int mandator = thisUser.getMandator();
+            final int mandator = thisUser.getMandator();
             Connection thisDataBase =    null;
             PreparedStatement readNextSQLStatement = null;
 
             try {
                 // connect to database
-                InitialContext ic = new InitialContext();
-                DataSource lDataSource =
+                final InitialContext ic = new InitialContext();
+                final DataSource lDataSource =
                         (DataSource) ic.lookup(this.lookUpDataBase);
                 thisDataBase = lDataSource.getConnection();
                 ic.close();
@@ -1110,13 +1126,19 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
                     readNextSQLStatement.clearParameters();
                     readNextSQLStatement.setInt(1, mandator);
                     readNextSQLStatement.setString(2, currentEntry);
-                    ResultSet result = readNextSQLStatement.executeQuery();
+                    ResultSet result = null;
+                    try {
+                        result = readNextSQLStatement.executeQuery();
 
-                    if (result.next()) {
-                        newEntryName = result.getString("dbnumber");
-                        thisEntry.setState(EnumerationState.READ_OK);
+                        if (result.next()) {
+                            newEntryName = result.getString("dbnumber");
+                            thisEntry.setState(EnumerationState.READ_OK);
+                        }
+                    } finally {
+                        if (result != null) {
+                            result.close();
+                        }
                     }
-                    result.close();
                 }
                 thisEntry = readOneEntry(thisDataBase, mandator,
                         newEntryName, thisEntry);
@@ -1153,19 +1175,19 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
     @Override
     public final E readPreviousEntry(final String currentEntry) {
         E thisEntry = null;
-        DomainUser thisUser = this.getUser();
+        final AbstractDomainUser thisUser = this.getUser();
         if (thisUser ==    null) {
             thisEntry = this.createDomainInstance();
             thisEntry.setState(EnumerationState.NOT_LOGGED_IN);
         } else {
-            int mandator = thisUser.getMandator();
+            final int mandator = thisUser.getMandator();
             Connection thisDataBase =    null;
             PreparedStatement readPrevSQLStatement = null;
 
             try {
                 // connect to database
-                InitialContext ic = new InitialContext();
-                DataSource lDataSource =
+                final InitialContext ic = new InitialContext();
+                final DataSource lDataSource =
                         (DataSource) ic.lookup(this.lookUpDataBase);
                 thisDataBase = lDataSource.getConnection();
                 ic.close();
@@ -1180,13 +1202,19 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
                     readPrevSQLStatement.clearParameters();
                     readPrevSQLStatement.setInt(1, mandator);
                     readPrevSQLStatement.setString(2, currentEntry);
-                    ResultSet result = readPrevSQLStatement.executeQuery();
+                    ResultSet result = null;
+                    try {
+                        result = readPrevSQLStatement.executeQuery();
 
-                    if (result.next()) {
-                        newEntryName = result.getString("dbnumber");
-                        thisEntry.setState(EnumerationState.READ_OK);
+                        if (result.next()) {
+                            newEntryName = result.getString("dbnumber");
+                            thisEntry.setState(EnumerationState.READ_OK);
+                        }
+                    } finally {
+                        if (result != null) {
+                            result.close();
+                        }
                     }
-                    result.close();
                 }
                 thisEntry = readOneEntry(thisDataBase, mandator,
                         newEntryName, thisEntry);
@@ -1324,15 +1352,13 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
      */
     @Override
     public final E saveEntry(final E currentEntry) {
-        DomainUser thisUser    =    this.getUser();
+        final AbstractDomainUser thisUser    =    this.getUser();
         E returnEntry = currentEntry;
-        if (!returnEntry.isFieldSetOk()) {
-            returnEntry.setState(EnumerationState.DATA_WRONG);
-        } else if (thisUser ==    null) {
+        if (thisUser == null) {
             returnEntry.setState(EnumerationState.NOT_LOGGED_IN);
-        } else {
-            int mandator = thisUser.getMandator();
-            String user = thisUser.getUser();
+        } else if (returnEntry.isFieldSetOk()) {
+            final int mandator = thisUser.getMandator();
+            final String user = thisUser.getUser();
             String saveKeyString = returnEntry.getKeyCur().getString();
             if (saveKeyString == null || "".equals(saveKeyString)) {
                 saveKeyString = returnEntry.getKeyNew().getString();
@@ -1343,8 +1369,8 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
             try {
                 if (allowedToChange()) {
                     // connect to database
-                    InitialContext ic = new InitialContext();
-                    DataSource lDataSource =
+                    final InitialContext ic = new InitialContext();
+                    final DataSource lDataSource =
                             (DataSource) ic.lookup(this.lookUpDataBase);
                     thisDataBase = lDataSource.getConnection();
                     ic.close();
@@ -1388,6 +1414,8 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
                     e.printStackTrace();
                 }
             }
+        } else {
+            returnEntry.setState(EnumerationState.DATA_WRONG);
         }
         return returnEntry;
     }
@@ -1399,26 +1427,26 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
     @Override
     public final E deleteEntry(final String currentEntry) {
         E resultValue = null;
-        DomainUser thisUser  =    this.getUser();
+        final AbstractDomainUser thisUser  =    this.getUser();
         if (thisUser ==    null) {
             resultValue = this.createDomainInstance();
             resultValue.setState(EnumerationState.NOT_LOGGED_IN);
         } else {
-            int mandator     =    thisUser.getMandator();
-            String user      =    thisUser.getUser();
+            final int mandator     =    thisUser.getMandator();
+            final String user      =    thisUser.getUser();
             Connection thisDataBase        =    null;
             PreparedStatement invalidateHeadSQLStatement = null;
 
             try {
                 // connect to database
-                InitialContext ic = new InitialContext();
-                DataSource lDataSource =
+                final InitialContext ic = new InitialContext();
+                final DataSource lDataSource =
                         (DataSource) ic.lookup(this.lookUpDataBase);
                 thisDataBase = lDataSource.getConnection();
                 ic.close();
 
                 if (allowedToChange()) {
-                    E dbEntry = this.readEntry(currentEntry);
+                    final E dbEntry = this.readEntry(currentEntry);
                     // invalidate head number
                     invalidateHeadSQLStatement =
                             thisDataBase.prepareStatement(

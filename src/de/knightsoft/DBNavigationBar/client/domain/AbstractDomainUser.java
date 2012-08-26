@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2011-2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.client.domain;
 
@@ -27,15 +25,15 @@ import java.util.Date;
 
 /**
  *
- * The <code>DomainUser</code> class is a exchange structure
+ * The <code>AbstractDomainUser</code> class is a exchange structure
  * between the login and user mask on the client and the servlet
  * on the server, it's abstract and has to be fully implemented
  * in depending classes.
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2011-02-05
+ * @version $Rev$, $Date$
  */
-public abstract class DomainUser extends DomainHeadPosDataBase
+public abstract class AbstractDomainUser extends AbstractDomainHeadPosDB
        implements Serializable {
 
     /**
@@ -82,7 +80,7 @@ public abstract class DomainUser extends DomainHeadPosDataBase
     /**
      * Constructor, setup a empty entry.
      */
-    public DomainUser() {
+    public AbstractDomainUser() {
         super();
     }
 
@@ -92,7 +90,7 @@ public abstract class DomainUser extends DomainHeadPosDataBase
      *
      * @param copyUser entry to copy
      */
-    public DomainUser(final DomainUser copyUser) {
+    public AbstractDomainUser(final AbstractDomainUser copyUser) {
         super(copyUser);
         if (copyUser == null) {
             this.setUpDefaultUser(1, true, "batch", null);
@@ -256,7 +254,7 @@ public abstract class DomainUser extends DomainHeadPosDataBase
      * @param vglUser user to compare with user of this class
      * @return true if both contain the same entries, otherwise false
      */
-    public final boolean equalsHeadUser(final DomainUser vglUser) {
+    public final boolean equalsHeadUser(final AbstractDomainUser vglUser) {
         boolean isequal        =    true;
         if (vglUser == null) {
             isequal            =    false;
@@ -275,12 +273,12 @@ public abstract class DomainUser extends DomainHeadPosDataBase
      * @param vglUser user to compare with user of this class
      * @return true if both contain the same entries, otherwise false
      */
-    public abstract boolean equalsUser(final DomainUser vglUser);
+    public abstract boolean equalsUser(final AbstractDomainUser vglUser);
 
 
     @Override
     public final boolean equalsEntry(final DomainDataBaseInterface vglEntry) {
-        return this.equalsUser((DomainUser) vglEntry);
+        return this.equalsUser((AbstractDomainUser) vglEntry);
     }
 
 

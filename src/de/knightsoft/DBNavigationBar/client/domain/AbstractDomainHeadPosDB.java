@@ -17,33 +17,35 @@
  *
  * Copyright (c) 2011-2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.client.domain;
 
 import java.io.Serializable;
 
+
+
 /**
+ *
  * The <code>RiPhoneDomaneHeadPosDataBase</code> class is a exchange structure
  * between the client and the servlet on the server.
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2011-02-05
+ * @version $Rev$, $Date$
  */
-public abstract class DomainHead2PosDataBase extends DomainDataBaseBasics
-       implements DomainHeadDataBaseInterface, DomainHeadPosDataBaseInt,
-       DomainHead2PosDataBaseInt, Serializable {
+public abstract class AbstractDomainHeadPosDB
+    extends AbstractDomainDBBasics
+    implements DomainHeadDataBaseInterface, DomainHeadPosDataBaseInt,
+    Serializable {
 
     /**
      * Serial version id.
      */
-    private static final long serialVersionUID = -7326572024556553144L;
+    private static final long serialVersionUID = -6242668640945495634L;
 
     /**
      * Constructor, setup a empty entry.
      */
-    public DomainHead2PosDataBase() {
+    public AbstractDomainHeadPosDB() {
         super();
     }
 
@@ -53,7 +55,8 @@ public abstract class DomainHead2PosDataBase extends DomainDataBaseBasics
      *
      * @param copyEntry entry to copy
      */
-    public DomainHead2PosDataBase(final DomainHead2PosDataBase copyEntry) {
+    public AbstractDomainHeadPosDB(
+            final AbstractDomainHeadPosDB copyEntry) {
         super(copyEntry);
     }
 
@@ -71,14 +74,15 @@ public abstract class DomainHead2PosDataBase extends DomainDataBaseBasics
         if (obj == null) {
             return false;
         }
-        if (!(obj instanceof DomainHead2PosDataBase)) {
+        if (!(obj instanceof AbstractDomainHeadPosDB)) {
             return false;
         }
 
-        boolean isequal         =  this.equalsEntry((DomainDataBaseBasics) obj);
+        boolean isequal = this.equalsEntry((AbstractDomainDBBasics) obj);
         if (isequal) {
             String[] posKeys    = this.getKeyPos();
-            String[] vglPosKeys = ((DomainHead2PosDataBase) obj).getKeyPos();
+            String[] vglPosKeys =
+                    ((AbstractDomainHeadPosDB) obj).getKeyPos();
             if (posKeys == null) {
                 posKeys = new String[0];
             }
@@ -90,27 +94,7 @@ public abstract class DomainHead2PosDataBase extends DomainDataBaseBasics
                      (pos < posKeys.length)
                      && isequal; pos++) {
                     isequal &= this.equalsPosition(
-                            ((DomainHead2PosDataBase) obj), pos, pos);
-                }
-            } else {
-                isequal    =    false;
-            }
-        }
-        if (isequal) {
-            String[] pos2Keys    = this.getKeyPos2();
-            String[] vglPos2Keys = ((DomainHead2PosDataBase) obj).getKeyPos2();
-            if (pos2Keys == null) {
-                pos2Keys = new String[0];
-            }
-            if (vglPos2Keys == null) {
-                vglPos2Keys = new String[0];
-            }
-            if (pos2Keys.length == vglPos2Keys.length) {
-                for (int pos2 = 0;
-                     (pos2 < pos2Keys.length)
-                     && isequal; pos2++) {
-                    isequal &= this.equalsPosition2(
-                            ((DomainHead2PosDataBase) obj), pos2, pos2);
+                            ((AbstractDomainHeadPosDB) obj), pos, pos);
                 }
             } else {
                 isequal    =    false;
@@ -118,32 +102,6 @@ public abstract class DomainHead2PosDataBase extends DomainDataBaseBasics
         }
         return isequal;
     }
-
-    /**
-     * compare to positions.
-     * @param vgl
-     *      comparison position
-     * @param posthis
-     *      position of this structure
-     * @param posvgl
-     *      position of the comparison structure
-     * @return true if equal otherwise false
-     */
-    public abstract boolean equalsPosition(DomainHeadPosDataBaseInt vgl,
-            int posthis, int posvgl);
-
-    /**
-     * compare two positions.
-     * @param vgl
-     *      comparison position
-     * @param posthis
-     *      position of this structure
-     * @param posvgl
-     *      position of the comparison structure
-     * @return true if equal otherwise false
-     */
-    public abstract boolean equalsPosition2(DomainHead2PosDataBaseInt vgl,
-            int posthis, int posvgl);
 
     /**
      * hashCode implementation.

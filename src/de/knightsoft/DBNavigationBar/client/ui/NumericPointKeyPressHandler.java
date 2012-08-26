@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2011-2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.client.ui;
 
@@ -33,7 +31,7 @@ import com.google.gwt.user.client.ui.TextBox;
  * Class to limit input to numeric fields with fraction digits.
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2011-09-30
+ * @version $Rev$, $Date$
  */
 public class NumericPointKeyPressHandler implements KeyPressHandler {
     /**
@@ -66,7 +64,7 @@ public class NumericPointKeyPressHandler implements KeyPressHandler {
         if (event.getNativeEvent() != null) {
            keyCode = event.getNativeEvent().getKeyCode();
         }
-        char charCode    =    event.getCharCode();
+        final char charCode    =    event.getCharCode();
 
         switch(keyCode) {
             case KeyCodes.KEY_BACKSPACE:

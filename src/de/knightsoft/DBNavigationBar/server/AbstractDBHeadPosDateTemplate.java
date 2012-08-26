@@ -39,8 +39,9 @@ import de.knightsoft.DBNavigationBar.client.domain.DomainHeadPosDataBaseInt;
  * @author Manfred Tremmel
  * @version 1.0.0, 2011-02-08
  */
-public abstract class DBHeadPosDateTemplate<E extends DomainHeadPosDataBaseInt>
-    extends DBHeadPosDateTemplateR<E> {
+public abstract class AbstractDBHeadPosDateTemplate<E extends
+    DomainHeadPosDataBaseInt>
+    extends AbstractDBHeadPosDateTemplateR<E> {
 
     /**
      * Serial version id.
@@ -61,10 +62,6 @@ public abstract class DBHeadPosDateTemplate<E extends DomainHeadPosDataBaseInt>
      *          key field of the database
      * @param setInsertHeadSQL
      *          sql statement to insert a new head entry
-     * @param setPosDataBaseTableName
-     *          database table name (position)
-     * @param setPosKeyFieldName
-     *          key field of the database (position)
      * @param setInsertPosSQL
      *          sql statement to insert a new head entry (position)
      * @param setReadMinMaxSQL
@@ -82,15 +79,13 @@ public abstract class DBHeadPosDateTemplate<E extends DomainHeadPosDataBaseInt>
      * @param setInvalidatePosSQL
      *          sql statement to invalidate position entry
      */
-    public DBHeadPosDateTemplate(
+    public AbstractDBHeadPosDateTemplate(
             final Class<E> setType,
             final String setLookUpDataBase,
             final String setSessionUser,
             final String setDataBaseTableName,
             final String setKeyFieldName,
             final String setInsertHeadSQL,
-            final String setPosDataBaseTableName,
-            final String setPosKeyFieldName,
             final String setInsertPosSQL,
 
             final String setReadMinMaxSQL,
@@ -108,8 +103,6 @@ public abstract class DBHeadPosDateTemplate<E extends DomainHeadPosDataBaseInt>
               setDataBaseTableName,
               setKeyFieldName,
               setInsertHeadSQL,
-              setPosDataBaseTableName,
-              setPosKeyFieldName,
               setInsertPosSQL,
 
               setReadMinMaxSQL,
@@ -144,7 +137,7 @@ public abstract class DBHeadPosDateTemplate<E extends DomainHeadPosDataBaseInt>
      * @param setInsertPosSQL
      *          sql statement to insert a new head entry (position)
      */
-    public DBHeadPosDateTemplate(
+    public AbstractDBHeadPosDateTemplate(
             final Class<E> setType,
             final String setLookUpDataBase,
             final String setSessionUser,
@@ -192,7 +185,7 @@ public abstract class DBHeadPosDateTemplate<E extends DomainHeadPosDataBaseInt>
      * @param setReadPosSQL
      *          sql statement to read position entry
      */
-    public DBHeadPosDateTemplate(
+    public AbstractDBHeadPosDateTemplate(
             final Class<E> setType,
             final String setLookUpDataBase,
             final String setSessionUser,
@@ -250,9 +243,15 @@ public abstract class DBHeadPosDateTemplate<E extends DomainHeadPosDataBaseInt>
                 readPosSQLStatement.clearParameters();
                 readPosSQLStatement.setInt(1, mandator);
                 readPosSQLStatement.setString(2, entry);
-                ResultSet resultPos    =    readPosSQLStatement.executeQuery();
-                returnEntry = fillPosFromResultSet(resultPos, returnEntry);
-                resultPos.close();
+                ResultSet resultPos = null;
+                try {
+                    resultPos = readPosSQLStatement.executeQuery();
+                    returnEntry = fillPosFromResultSet(resultPos, returnEntry);
+                } finally {
+                    if (resultPos != null) {
+                        resultPos.close();
+                    }
+                }
             }
         } catch (Exception nef) {
             returnEntry    =    null;

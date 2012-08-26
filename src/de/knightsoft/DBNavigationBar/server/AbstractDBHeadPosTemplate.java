@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2011-2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.server;
 
@@ -32,7 +30,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import de.knightsoft.DBNavigationBar.client.domain.DomainHeadPosDataBaseInt;
-import de.knightsoft.DBNavigationBar.client.domain.DomainUser;
+import de.knightsoft.DBNavigationBar.client.domain.AbstractDomainUser;
 
 /**
  * The <code>RiPhoneDBHeadPosTemplate</code> class is the server
@@ -40,10 +38,11 @@ import de.knightsoft.DBNavigationBar.client.domain.DomainUser;
  *
  * @param <E> DataBase structure type
  * @author Manfred Tremmel
- * @version 1.0.0, 2011-02-08
+ * @version $Rev$, $Date$
  */
-public abstract class DBHeadPosTemplate<E extends DomainHeadPosDataBaseInt>
-    extends DBHeadPosTemplateRS<E> {
+public abstract class AbstractDBHeadPosTemplate<E extends
+    DomainHeadPosDataBaseInt>
+    extends AbstractDBHeadPosTemplateRS<E> {
 
     /**
      * Serial version id.
@@ -75,7 +74,7 @@ public abstract class DBHeadPosTemplate<E extends DomainHeadPosDataBaseInt>
      * @param setUpdatePosSQL
      *          update sql statement position
      */
-    public DBHeadPosTemplate(
+    public AbstractDBHeadPosTemplate(
             final Class<E> setType,
             final String setLookUpDataBase,
             final String setSessionUser,
@@ -111,24 +110,24 @@ public abstract class DBHeadPosTemplate<E extends DomainHeadPosDataBaseInt>
     @Override
     public final E deleteEntry(final String currentEntry) {
         E resultValue = null;
-        DomainUser thisUser = this.getUser();
+        final AbstractDomainUser thisUser = this.getUser();
         if (thisUser != null) {
-            int mandator    =    thisUser.getMandator();
-            String user     =    thisUser.getUser();
+            final int mandator    =    thisUser.getMandator();
+            final String user     =    thisUser.getUser();
             Connection thisDataBase =    null;
             PreparedStatement invalidateHeadSQLStatement = null;
             PreparedStatement invalidatePosSQLStatement  = null;
 
             try {
                 // connect to database
-                InitialContext ic = new InitialContext();
-                DataSource lDataSource =
+                final InitialContext ic = new InitialContext();
+                final DataSource lDataSource =
                         (DataSource) ic.lookup(this.getLookUpDataBase());
                 thisDataBase = lDataSource.getConnection();
                 ic.close();
 
                 if (allowedToChange()) {
-                    E dbEntry    =    this.readEntry(currentEntry);
+                    final E dbEntry    =    this.readEntry(currentEntry);
                     // invalidate head number
                     if (this.getInvalidateHeadSQL() != null) {
                         invalidateHeadSQLStatement =
@@ -217,9 +216,15 @@ public abstract class DBHeadPosTemplate<E extends DomainHeadPosDataBaseInt>
                 readPosSQLStatement.clearParameters();
                 readPosSQLStatement.setInt(1, mandator);
                 readPosSQLStatement.setString(2, entry);
-                ResultSet resultPos = readPosSQLStatement.executeQuery();
-                returnEntry = fillPosFromResultSet(resultPos, returnEntry);
-                resultPos.close();
+                ResultSet resultPos = null;
+                try {
+                    resultPos = readPosSQLStatement.executeQuery();
+                    returnEntry = fillPosFromResultSet(resultPos, returnEntry);
+                } finally {
+                    if (resultPos != null) {
+                        resultPos.close();
+                    }
+                }
             }
         } catch (Exception nef) {
             returnEntry    =    null;

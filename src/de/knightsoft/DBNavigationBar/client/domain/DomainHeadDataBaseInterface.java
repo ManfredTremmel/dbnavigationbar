@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2011-2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.client.domain;
 
@@ -28,7 +26,7 @@ package de.knightsoft.DBNavigationBar.client.domain;
  * functions for a data base domain.
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2011-07-23
+ * @version $Rev$, $Date$
  */
 public interface DomainHeadDataBaseInterface
        extends DomainDataBaseInterface {

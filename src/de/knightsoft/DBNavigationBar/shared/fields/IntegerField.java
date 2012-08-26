@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2012 RI Solutions GmbH
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.shared.fields;
 
@@ -30,11 +28,11 @@ import java.text.ParseException;
  * <code>IntegerField</code> is a class to define a Integer field.
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2012-05-17
+ * @version $Rev$, $Date$
  */
 public class IntegerField
     extends AbstractField<Integer>
-    implements Serializable, FieldInterface<Integer> {
+    implements Serializable, Cloneable, FieldInterface<Integer> {
 
     /**
      * Serial version id.
@@ -65,7 +63,7 @@ public class IntegerField
             final int setMaxEntry,
             final Integer setDefaultValue) {
         super(setCanBeNull, setPrimaryKey,
-                Integer.valueOf(setMaxEntry).toString().length(),
+                Integer.toString(setMaxEntry).length(),
                 setDefaultValue);
         this.minEntry = setMinEntry;
         this.maxEntry = setMaxEntry;
@@ -95,7 +93,7 @@ public class IntegerField
             try {
                 super.setValue(Integer.valueOf(Integer.parseInt(sString)));
             } catch (NumberFormatException e) {
-                throw new ParseException(e.getMessage(), -1);
+                throw new ParseException(e.getMessage(), -1); // NOPMD
             }
         }
     }
@@ -127,11 +125,5 @@ public class IntegerField
      */
     public final int getMaxEntry() {
         return this.maxEntry;
-    }
-
-    @Override
-    public final IntegerField clone() throws CloneNotSupportedException {
-        return new IntegerField(isCanBeNull(), isPrimaryKey(), this.minEntry,
-                this.maxEntry, getDefaultValue());
     }
 }

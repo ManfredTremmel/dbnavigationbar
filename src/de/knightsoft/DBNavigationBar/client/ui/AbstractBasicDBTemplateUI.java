@@ -36,14 +36,14 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import de.knightsoft.DBNavigationBar.client.Parent;
-import de.knightsoft.DBNavigationBar.client.domain.DomainDataBaseBasics;
-import de.knightsoft.DBNavigationBar.client.domain.DomainUser;
+import de.knightsoft.DBNavigationBar.client.AbstractParent;
+import de.knightsoft.DBNavigationBar.client.domain.AbstractDomainDBBasics;
+import de.knightsoft.DBNavigationBar.client.domain.AbstractDomainUser;
 import de.knightsoft.DBNavigationBar.client.ui.widget.DBNaviBarWidget;
 
 /**
  *
- * The <code>BasicDBTemplateUI</code> class is a template for database
+ * The <code>AbstractBasicDBTemplateUI</code> class is a template for database
  * input mask.
  *
  * @param <E> data structure
@@ -51,8 +51,9 @@ import de.knightsoft.DBNavigationBar.client.ui.widget.DBNaviBarWidget;
  * @author Manfred Tremmel
  * @version 1.0.0, 2011-02-14
  */
-public abstract class BasicDBTemplateUI<E extends DomainDataBaseBasics,
-     F extends Parent> extends BasicTemplateUI<F> implements AsyncCallback<E> {
+public abstract class AbstractBasicDBTemplateUI<E extends
+    AbstractDomainDBBasics, F extends AbstractParent>
+    extends AbstractBasicTemplateUI<F> implements AsyncCallback<E> {
 
     /**
      * navigation bar.
@@ -123,7 +124,7 @@ public abstract class BasicDBTemplateUI<E extends DomainDataBaseBasics,
      * @param userdefinedfunction
      *         special function to include into the navigation bar
      */
-    public BasicDBTemplateUI(
+    public AbstractBasicDBTemplateUI(
             final F parentwidget,
             final Widget[] thisWidgetlist,
             final String userdefinedfunction) {
@@ -151,18 +152,18 @@ public abstract class BasicDBTemplateUI<E extends DomainDataBaseBasics,
      * @param user user information about the currently logged in user
      */
     @Override
-    protected final void setUpMask(final DomainUser user) {
+    protected final void setUpMask(final AbstractDomainUser user) {
         if (!this.maskSetUp) {
-            VerticalPanel myPanel = new VerticalPanel();
+            final VerticalPanel myPanel = new VerticalPanel();
             myPanel.setWidth("100%");
             myPanel.setHeight("100%");
             myPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
 
-            HorizontalPanel titlePanel = new HorizontalPanel();
+            final HorizontalPanel titlePanel = new HorizontalPanel();
             titlePanel.setWidth("100%");
             titlePanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
-            String pageTitle    =    "<h1>" + getHeaderTitle() + "</h1>";
-            HTML htmlPageTitle    =    new HTML(pageTitle);
+            final String pageTitle = "<h1>" + getHeaderTitle() + "</h1>";
+            final HTML htmlPageTitle = new HTML(pageTitle);
             titlePanel.add(htmlPageTitle);
 
             myPanel.add(titlePanel);
@@ -176,98 +177,103 @@ public abstract class BasicDBTemplateUI<E extends DomainDataBaseBasics,
             this.myNavigationBar.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(final ClickEvent event) {
-                    BasicDBTemplateUI.this.dosave = false;
+                    AbstractBasicDBTemplateUI.this.dosave = false;
                     final DBTemplateRemoteServiceAsync<E> service =
                             getServiceFactory();
-                    switch (BasicDBTemplateUI.this.myNavigationBar
+                    switch (AbstractBasicDBTemplateUI.this.myNavigationBar
                             .getButtonState()) {
                         case NEW:
                             newEntry();
                             break;
                         case DELETE:
-                            service.deleteEntry(BasicDBTemplateUI.this
-                                    .myNavigationBar.getOldDBNumber(),
-                                    BasicDBTemplateUI.this);
+                            service.deleteEntry(
+                                AbstractBasicDBTemplateUI.this.myNavigationBar
+                                    .getOldDBNumber(),
+                                AbstractBasicDBTemplateUI.this);
                             break;
                         case STOP:
                             fillEntry(dbEntry);
                             break;
                         case FAST_BACK:
-                            service.readFirstEntry(BasicDBTemplateUI.this);
+                            service.readFirstEntry(
+                                    AbstractBasicDBTemplateUI.this);
                             break;
                         case FAST_BACK_FIND:
                             service.findFirstEntry(
-                                    BasicDBTemplateUI.this.myNavigationBar
-                                        .getSearchFieldField(),
-                                    BasicDBTemplateUI.this.myNavigationBar
-                                        .getSearchFieldMethode(),
-                                    BasicDBTemplateUI.this.myNavigationBar
-                                        .getSearchFieldEntry(),
-                                    BasicDBTemplateUI.this);
+                                AbstractBasicDBTemplateUI.this.myNavigationBar
+                                    .getSearchFieldField(),
+                                AbstractBasicDBTemplateUI.this.myNavigationBar
+                                    .getSearchFieldMethode(),
+                                AbstractBasicDBTemplateUI.this.myNavigationBar
+                                    .getSearchFieldEntry(),
+                                AbstractBasicDBTemplateUI.this);
                             break;
                         case BACK:
-                            service.readPreviousEntry(BasicDBTemplateUI.this
-                                    .myNavigationBar.getOldDBNumber(),
-                                    BasicDBTemplateUI.this);
+                            service.readPreviousEntry(
+                                AbstractBasicDBTemplateUI.this.myNavigationBar
+                                    .getOldDBNumber(),
+                                AbstractBasicDBTemplateUI.this);
                             break;
                         case BACK_FIND:
                             service.findPreviousEntry(
-                                    BasicDBTemplateUI.this.myNavigationBar
-                                        .getSearchFieldField(),
-                                    BasicDBTemplateUI.this.myNavigationBar
-                                        .getSearchFieldMethode(),
-                                    BasicDBTemplateUI.this.myNavigationBar
-                                        .getSearchFieldEntry(),
-                                    BasicDBTemplateUI.this.myNavigationBar
-                                        .getCurrentDBNumber(),
-                                    BasicDBTemplateUI.this);
+                                AbstractBasicDBTemplateUI.this.myNavigationBar
+                                    .getSearchFieldField(),
+                                AbstractBasicDBTemplateUI.this.myNavigationBar
+                                    .getSearchFieldMethode(),
+                                AbstractBasicDBTemplateUI.this.myNavigationBar
+                                    .getSearchFieldEntry(),
+                                AbstractBasicDBTemplateUI.this.myNavigationBar
+                                    .getCurrentDBNumber(),
+                                AbstractBasicDBTemplateUI.this);
                             break;
                         case FORWARD:
-                            service.readNextEntry(BasicDBTemplateUI.this
-                                    .myNavigationBar.getOldDBNumber(),
-                                    BasicDBTemplateUI.this);
+                            service.readNextEntry(
+                                AbstractBasicDBTemplateUI.this.myNavigationBar
+                                    .getOldDBNumber(),
+                                AbstractBasicDBTemplateUI.this);
                             break;
                         case FORWARD_FIND:
                             service.findNextEntry(
-                                    BasicDBTemplateUI.this.myNavigationBar
-                                        .getSearchFieldField(),
-                                    BasicDBTemplateUI.this.myNavigationBar
-                                        .getSearchFieldMethode(),
-                                    BasicDBTemplateUI.this.myNavigationBar
-                                        .getSearchFieldEntry(),
-                                    BasicDBTemplateUI.this.myNavigationBar
-                                        .getCurrentDBNumber(),
-                                    BasicDBTemplateUI.this);
+                                AbstractBasicDBTemplateUI.this.myNavigationBar
+                                    .getSearchFieldField(),
+                                AbstractBasicDBTemplateUI.this.myNavigationBar
+                                    .getSearchFieldMethode(),
+                                AbstractBasicDBTemplateUI.this.myNavigationBar
+                                    .getSearchFieldEntry(),
+                                AbstractBasicDBTemplateUI.this.myNavigationBar
+                                    .getCurrentDBNumber(),
+                                AbstractBasicDBTemplateUI.this);
                             break;
                         case FAST_FORWARD:
-                            service.readLastEntry(BasicDBTemplateUI.this);
+                            service.readLastEntry(
+                                AbstractBasicDBTemplateUI.this);
                             break;
                         case FAST_FORWARD_FIND:
                             service.findLastEntry(
-                                    BasicDBTemplateUI.this.myNavigationBar
-                                        .getSearchFieldField(),
-                                    BasicDBTemplateUI.this.myNavigationBar
-                                        .getSearchFieldMethode(),
-                                    BasicDBTemplateUI.this.myNavigationBar
-                                        .getSearchFieldEntry(),
-                                    BasicDBTemplateUI.this);
+                                AbstractBasicDBTemplateUI.this.myNavigationBar
+                                    .getSearchFieldField(),
+                                AbstractBasicDBTemplateUI.this.myNavigationBar
+                                    .getSearchFieldMethode(),
+                                AbstractBasicDBTemplateUI.this.myNavigationBar
+                                    .getSearchFieldEntry(),
+                                AbstractBasicDBTemplateUI.this);
                             break;
                         case CHANGE:
-                            service.readEntry(BasicDBTemplateUI.this
-                                    .myNavigationBar.getCurrentDBNumber(),
-                                    BasicDBTemplateUI.this);
+                            service.readEntry(
+                                AbstractBasicDBTemplateUI.this.myNavigationBar
+                                    .getCurrentDBNumber(),
+                                AbstractBasicDBTemplateUI.this);
                             break;
                         case USER_DEFINED:
                             userDefinedFunction();
                             break;
                         default:
-                            E saveentry = checkInput();
-                            if (saveentry != null) {
-                                if (!saveentry.equals(dbEntry)) {
-                                    dosave = true;
-                                    service.saveEntry(saveentry,
-                                            BasicDBTemplateUI.this);
-                                }
+                            final E saveentry = checkInput();
+                            if (saveentry != null
+                             && !saveentry.equals(dbEntry)) {
+                                dosave = true;
+                                service.saveEntry(saveentry,
+                                        AbstractBasicDBTemplateUI.this);
                             }
                             break;
                     }
@@ -379,7 +385,7 @@ public abstract class BasicDBTemplateUI<E extends DomainDataBaseBasics,
             this.dbEntry        =    entry;
             this.myNavigationBar.setDBMinMaxCurNumber(entry.getKeyMin(),
                     entry.getKeyMax(), entry.getKeyCur());
-            if (entry.getIsReadOnly()) {
+            if (entry.isReadOnly()) {
                 this.myNavigationBar.setReadOnly();
             } else {
                 this.myNavigationBar.setReadWrite();
@@ -423,8 +429,8 @@ public abstract class BasicDBTemplateUI<E extends DomainDataBaseBasics,
     @Override
     public final boolean matchesMenu(
             final String itemtext,
-            final DomainUser user) {
-        boolean matches = super.matchesMenuSimple(itemtext, user);
+            final AbstractDomainUser user) {
+        final boolean matches = super.matchesMenuSimple(itemtext, user);
         if (matches) {
             if (allowedToChange(user)) {
                 this.myNavigationBar.setReadWrite();
@@ -434,7 +440,7 @@ public abstract class BasicDBTemplateUI<E extends DomainDataBaseBasics,
             if (this.myNavigationBar.getOldDBNumber() == null) {
                 final DBTemplateRemoteServiceAsync<E> service =
                         getServiceFactory();
-                service.readLastEntry(BasicDBTemplateUI.this);
+                service.readLastEntry(AbstractBasicDBTemplateUI.this);
             }
         }
         return matches;
@@ -452,7 +458,7 @@ public abstract class BasicDBTemplateUI<E extends DomainDataBaseBasics,
      * get dosave.
      * @return dosave
      */
-    protected final boolean getDosave() {
+    protected final boolean isDosave() {
         return this.dosave;
     }
 

@@ -24,7 +24,7 @@ package de.knightsoft.DBNavigationBar.client.ui;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import de.knightsoft.DBNavigationBar.client.domain.DomainDataBaseBasics;
+import de.knightsoft.DBNavigationBar.client.domain.AbstractDomainDBBasics;
 
 /**
  *
@@ -36,7 +36,7 @@ import de.knightsoft.DBNavigationBar.client.domain.DomainDataBaseBasics;
  * @version 1.0.0, 2011-02-13
  */
 public abstract interface DBTemplateRemoteServiceAsync<E extends
-    DomainDataBaseBasics> {
+    AbstractDomainDBBasics> {
     /**
      * save entry to database.
      * @param currentEntry

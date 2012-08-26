@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.shared.fields;
 
@@ -27,7 +25,7 @@ package de.knightsoft.DBNavigationBar.shared.fields;
  * <code>EMailField</code> is a class to define a EMail field.
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2012-05-17
+ * @version $Rev$, $Date$
  */
 public class EMailField extends StringField {
 

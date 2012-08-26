@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2011-2012 Manfred Tremmel
  *
- * --
- *  Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.server;
 
@@ -28,12 +26,12 @@ import java.sql.SQLException;
 import de.knightsoft.DBNavigationBar.client.domain.DomainDataBaseInterface;
 
 /**
- * The <code>DBTemplate</code> class is the interface for the
+ * The <code>AbstractDBTemplate</code> class is the interface for the
  * database templates.
  * @param <E> DataBase Domain structure
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2011-07-18
+ * @version $Rev$, $Date$
  */
 public interface DBTemplateInterface<E extends DomainDataBaseInterface> {
 

@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2011-2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.server;
 
@@ -33,7 +31,7 @@ import de.knightsoft.DBNavigationBar.shared.Constants;
  * masking all non allowed signs to prevent against SQL-Injection.
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2011-01-02
+ * @version $Rev$, $Date$
  */
 public final class StringToSQL {
 
@@ -82,7 +80,7 @@ public final class StringToSQL {
 
         if (javaString != null && javaString.length() > 0) {
             char[] sqlStringTab  = new char[2 * javaString.length()];
-            char[] javaStringTab = javaString.toCharArray();
+            final char[] javaStringTab = javaString.toCharArray();
             int j = 0;
 
             for (int i = 0; i < javaString.length(); i++) {
@@ -183,7 +181,7 @@ public final class StringToSQL {
 
         if (javaString != null && javaString.length() > 0) {
             char[] sqlStringTab  = new char[2 + (2 * javaString.length())];
-            char[] javaStringTab = javaString.toCharArray();
+            final char[] javaStringTab = javaString.toCharArray();
             int j = 0;
 
             sqlStringTab[j++]    =    '\'';
@@ -252,7 +250,7 @@ public final class StringToSQL {
 
         if (javaString != null && javaString.length() > 0) {
             char[] sqlStringTab  = new char[2 + (2 * javaString.length())];
-            char[] javaStringTab = javaString.toCharArray();
+            final char[] javaStringTab = javaString.toCharArray();
             int j = 0;
 
             sqlStringTab[j++]    =    '\'';
@@ -362,7 +360,7 @@ public final class StringToSQL {
 
         if (javaString != null && javaString.length() > 0) {
             char[] sqlStringTab  = new char[ javaString.length() ];
-            char[] javaStringTab = javaString.toCharArray();
+            final char[] javaStringTab = javaString.toCharArray();
             int j = 0;
 
             for (int i = 0; i < javaString.length(); i++) {
@@ -456,7 +454,7 @@ public final class StringToSQL {
 
         if (javaString != null && javaString.length() > 0) {
             char[] sqlStringTab  = new char[2 + (2 * javaString.length())];
-            char[] javaStringTab = javaString.toCharArray();
+            final char[] javaStringTab = javaString.toCharArray();
             int j = 0;
             boolean    wildcard    =    false;
 
@@ -516,11 +514,12 @@ public final class StringToSQL {
             }
             sqlStringTab[j++]    =    '\'';
 
-            sqlString    = new String(sqlStringTab, 0, j);
             if (wildcard) {
-                sqlString = dbFieldname + " like " + sqlString;
+                sqlString = dbFieldname + " like "
+                        + new String(sqlStringTab, 0, j);
             } else {
-                sqlString = dbFieldname + "=" + sqlString;
+                sqlString = dbFieldname + "="
+                        + new String(sqlStringTab, 0, j);
             }
         }
 
@@ -544,7 +543,7 @@ public final class StringToSQL {
 
         if (javaString != null && javaString.length() > 0) {
             char[] sqlStringTab  = new char[2 + (2 * javaString.length())];
-            char[] javaStringTab = javaString.toCharArray();
+            final char[] javaStringTab = javaString.toCharArray();
             int j = 0;
             boolean wildcard  = false;
 
@@ -602,11 +601,12 @@ public final class StringToSQL {
             }
             sqlStringTab[j++]    =    '\'';
 
-            sqlString    = new String(sqlStringTab, 0, j);
             if (wildcard) {
-                sqlString    =    dbFieldname + " like " + sqlString;
+                sqlString    =    dbFieldname + " like "
+                        + new String(sqlStringTab, 0, j);
             } else {
-                sqlString    =    dbFieldname + "=" + sqlString;
+                sqlString    =    dbFieldname + "="
+                        + new String(sqlStringTab, 0, j);
             }
         }
 
@@ -649,11 +649,11 @@ public final class StringToSQL {
           final Timestamp javaDateTime) {
         String sqlString    =    null;
 
-        if (javaDateTime != null) {
-            sqlString =    "\'" + (new java.text.SimpleDateFormat(
-                 "yyyy-MM-dd HH:mm:ss.SSS")).format(javaDateTime) + "\'";
-        } else {
+        if (javaDateTime == null) {
             sqlString =    "null";
+        } else {
+            sqlString =    "\'" + (new java.text.SimpleDateFormat(
+                    "yyyy-MM-dd HH:mm:ss.SSS")).format(javaDateTime) + "\'";
         }
 
         return sqlString;
@@ -670,12 +670,12 @@ public final class StringToSQL {
           final Timestamp javaDateTime) {
         String sqlString    =    null;
 
-        if (javaDateTime != null) {
-            sqlString        =    "CONVERT(DATETIME, '" + (
-                 new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"))
-                    .format(javaDateTime) + "', 121)";
-        } else {
+        if (javaDateTime == null) {
             sqlString        =    "null";
+        } else {
+            sqlString        =    "CONVERT(DATETIME, '" + (
+                    new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"))
+                       .format(javaDateTime) + "', 121)";
         }
 
         return sqlString;

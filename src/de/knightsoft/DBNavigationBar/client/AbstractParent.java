@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2011-2012 Manfred Tremmel
  *
- * --
- *  Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.client;
 
@@ -46,19 +44,19 @@ import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 
-import de.knightsoft.DBNavigationBar.client.domain.DomainUser;
+import de.knightsoft.DBNavigationBar.client.domain.AbstractDomainUser;
 import de.knightsoft.DBNavigationBar.client.ui.BasicTemplateUIInterface;
 
 /**
  *
- * The <code>Parent</code> class is the entry point class which
+ * The <code>AbstractParent</code> class is the entry point class which
  * defines <code>onModuleLoad()</code> and is executed when the
  * website is loeded. Just a template that has to be implemented.
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2011-02-13
+ * @version $Rev$, $Date$
  */
-public abstract class Parent implements EntryPoint {
+public abstract class AbstractParent implements EntryPoint {
 
     /**
      * navigation panel width.
@@ -104,7 +102,7 @@ public abstract class Parent implements EntryPoint {
      * Get the data of the logged in user.
      * @return User
      */
-    public abstract DomainUser getUser();
+    public abstract AbstractDomainUser getUser();
 
     /**
      * get Copyright String.
@@ -131,7 +129,7 @@ public abstract class Parent implements EntryPoint {
      * @return true/false
      */
     protected abstract boolean loginMatchesMenu(String page,
-            DomainUser currentUser);
+            AbstractDomainUser currentUser);
 
     /**
      * get the Image of the Application.
@@ -157,7 +155,7 @@ public abstract class Parent implements EntryPoint {
      */
     public abstract boolean menuFind(
             String itemtext,
-            DomainUser currentUser);
+            AbstractDomainUser currentUser);
 
     /**
      * The <code>cleanUp</code> method can be called if user
@@ -175,7 +173,7 @@ public abstract class Parent implements EntryPoint {
      *            The logged in user, null if non is logged in
      * @return Navigation tree
      */
-    public abstract Tree buildNavTree(DomainUser user);
+    public abstract Tree buildNavTree(AbstractDomainUser user);
 
     /**
      * This is the entry point method.
@@ -192,7 +190,7 @@ public abstract class Parent implements EntryPoint {
         this.hPanel.setSize("100%", "100%");
 
         //ScrollPanel navScrollPanel = new ScrollPanel();
-        DockLayoutPanel navVPanel = new DockLayoutPanel(Unit.EM);
+        final DockLayoutPanel navVPanel = new DockLayoutPanel(Unit.EM);
         navVPanel.setSize("100%", "100%");
 
         setupNavPanelLogo(navVPanel);
@@ -210,9 +208,9 @@ public abstract class Parent implements EntryPoint {
         if (urlString.indexOf('#') >= 0) {
             urlString        =    urlString.substring(
                     urlString.indexOf('#') + 1);
-            String[] historyPares = urlString.split(";");
+            final String[] historyPares = urlString.split(";");
             for (int i = 0; i < historyPares.length; i++) {
-                String[] tokenPare = historyPares[i].split("=");
+                final String[] tokenPare = historyPares[i].split("=");
                 if (tokenPare.length == 2) {
                     this.paramHash.put(tokenPare[0],
                             URL.decode(tokenPare[1]));
@@ -222,7 +220,7 @@ public abstract class Parent implements EntryPoint {
 
         readLoginUser();
 
-        String page = this.paramHash.get("page");
+        final String page = this.paramHash.get("page");
         if (!this.menuFind(page, null)) {
             showLoginPanel();
         }
@@ -239,23 +237,24 @@ public abstract class Parent implements EntryPoint {
             @Override
             public void onSelection(
                     final SelectionEvent<TreeItem> event) {
-                TreeItem item = event.getSelectedItem();
+                final TreeItem item = event.getSelectedItem();
                 String itemtext = item.getText();
                 if (itemtext != null) {
                     itemtext = itemtext.trim();
                 }
-                String itemtitle = item.getTitle();
+                final String itemtitle = item.getTitle();
                 if (itemtitle != null
                  && itemtitle.length() > TITLE_CHECK_LENGTH) {
-                    if (Parent.this.paramHash == null) {
-                        Parent.this.paramHash =
+                    if (AbstractParent.this.paramHash == null) {
+                        AbstractParent.this.paramHash =
                                 new HashMap<String, String>();
                     }
-                    Parent.this.paramHash.put("period",
+                    AbstractParent.this.paramHash.put("period",
                             itemtitle.substring(0, TITLE_CHECK_LENGTH));
                 }
-                DomainUser currentUser = Parent.this.getUser();
-                Parent.this.menuFind(itemtext, currentUser);
+                final AbstractDomainUser currentUser =
+                        AbstractParent.this.getUser();
+                AbstractParent.this.menuFind(itemtext, currentUser);
             }
 
         });
@@ -267,32 +266,33 @@ public abstract class Parent implements EntryPoint {
             @Override
             public void onValueChange(
                     final ValueChangeEvent<String> event) {
-                DomainUser currentUser = getUser();
-                String historyToken = event.getValue();
-                String[] historyPares = historyToken.split(";");
-                HashMap<String, String> oldParamHash = Parent.this.paramHash;
-                Parent.this.paramHash = new HashMap<String, String>();
+                final AbstractDomainUser currentUser = getUser();
+                final String historyToken = event.getValue();
+                final String[] historyPares = historyToken.split(";");
+                final HashMap<String, String> oldParamHash =
+                        AbstractParent.this.paramHash;
+                AbstractParent.this.paramHash = new HashMap<String, String>();
                 for (int i = 0; i < historyPares.length; i++) {
-                    String[] tokenPare = historyPares[i].split("=");
+                    final String[] tokenPare = historyPares[i].split("=");
                     if (tokenPare.length == 2) {
-                        Parent.this.paramHash.put(tokenPare[0],
+                        AbstractParent.this.paramHash.put(tokenPare[0],
                                 URL.decode(tokenPare[1]));
                     }
                 }
-                String page = Parent.this.paramHash.get("page");
+                final String page = AbstractParent.this.paramHash.get("page");
                 String oldPage = null;
-                if (Parent.this.mainPanel.getWidget() != null
-                 && (Parent.this.mainPanel.getWidget()
+                if (AbstractParent.this.mainPanel.getWidget() != null
+                 && (AbstractParent.this.mainPanel.getWidget()
                              instanceof BasicTemplateUIInterface)) {
-                    oldPage = ((BasicTemplateUIInterface<Parent>)
-                            Parent.this.mainPanel.getWidget()).getMenuText();
+                    oldPage = ((BasicTemplateUIInterface<AbstractParent>)
+                            AbstractParent.this.mainPanel.getWidget())
+                            .getMenuText();
                 }
-                if (oldPage == null
-                 || !Parent.this.paramHash.equals(oldParamHash)) {
-                    if (!Parent.this.menuFind(page, currentUser)) {
-                        Parent.this.mainPanel.clear();
-                        Parent.this.loginMatchesMenu(page, null);
-                    }
+                if ((oldPage == null
+                 || !AbstractParent.this.paramHash.equals(oldParamHash))
+                 && !AbstractParent.this.menuFind(page, currentUser)) {
+                    AbstractParent.this.mainPanel.clear();
+                    AbstractParent.this.loginMatchesMenu(page, null);
                 }
             }
         });
@@ -340,15 +340,15 @@ public abstract class Parent implements EntryPoint {
      */
     protected final void setupNavPanelLogo(
             final DockLayoutPanel navVPanel) {
-        String title        =    getApplicationTitle();
-        FlexTable logoPanel = new FlexTable();
-        FlexCellFormatter fcf = logoPanel.getFlexCellFormatter();
+        final String title        =    getApplicationTitle();
+        final FlexTable logoPanel = new FlexTable();
+        final FlexCellFormatter fcf = logoPanel.getFlexCellFormatter();
         // Get the title from the internationalized constants
-        String pageTitle = "<h1>" + title + "</h1>";
-        Image img = getApplicationImage();
+        final String pageTitle = "<h1>" + title + "</h1>";
+        final Image img = getApplicationImage();
         img.getElement().setId("pc-template-img");
         img.setAltText(title);
-        HTML htmlPageTitle = new HTML(pageTitle);
+        final HTML htmlPageTitle = new HTML(pageTitle);
 
         // Add the title and some images to the title bar
         logoPanel.setWidget(0, 0, img);
@@ -374,7 +374,7 @@ public abstract class Parent implements EntryPoint {
             final DockLayoutPanel navVPanel,
             final Tree newNavTree) {
         // Add the title and some images to the title bar
-        ScrollPanel navScrollerPanel = new ScrollPanel();
+        final ScrollPanel navScrollerPanel = new ScrollPanel();
         navScrollerPanel.add(newNavTree);
         navScrollerPanel.setSize("100%", "100%");
 

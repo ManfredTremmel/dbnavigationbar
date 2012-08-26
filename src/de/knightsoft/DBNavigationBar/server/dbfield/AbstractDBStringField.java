@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.server.dbfield;
 
@@ -28,19 +26,20 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.text.ParseException;
 
 import de.knightsoft.DBNavigationBar.shared.fields.FieldInterface;
-import de.knightsoft.DBNavigationBar.shared.fields.IntegerField;
+import de.knightsoft.DBNavigationBar.shared.fields.StringField;
 
 /**
  *
- * <code>DBIntegerField</code> is a class to define a Integer field.
+ * <code>AbstractDBStringField</code> is a class to define a String field.
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2012-05-17
+ * @version $Rev$, $Date$
  */
-public abstract class DBIntegerField
-    implements Serializable, DBFieldInterface<IntegerField> {
+public abstract class AbstractDBStringField
+    implements Serializable, DBFieldInterface<StringField> {
 
     /**
      * Serial version id.
@@ -55,7 +54,7 @@ public abstract class DBIntegerField
     /**
      * string field.
      */
-    private final IntegerField field;
+    private final StringField field;
 
     /**
      * comment field.
@@ -63,33 +62,25 @@ public abstract class DBIntegerField
     private final String comment;
 
     /**
-     * is this field auto incremental.
-     */
-    private final boolean autoIncremental;
-
-    /**
      * constructor.
      * @param setDBFieldName db field name
      * @param setField the field to depend on
      * @param setComment comment
-     * @param setAutoIncremental auto increment field true/false
      */
-    public DBIntegerField(
+    public AbstractDBStringField(
             final String setDBFieldName,
-            final IntegerField setField,
-            final String setComment,
-            final boolean setAutoIncremental
+            final StringField setField,
+            final String setComment
             ) {
         this.dbFieldName = setDBFieldName;
         this.field = setField;
         this.comment = setComment;
         this.field.setValue(this.field.getDefaultValue());
-        this.autoIncremental = setAutoIncremental;
     }
 
     @Override
     public final int getFieldType() {
-        return Types.INTEGER;
+        return Types.VARCHAR;
     }
 
     @Override
@@ -98,13 +89,13 @@ public abstract class DBIntegerField
     }
 
     @Override
-    public final IntegerField getField() {
+    public final StringField getField() {
         return this.field;
     }
 
     @Override
     public final boolean isAutoIncrement() {
-        return this.autoIncremental;
+        return false;
     }
 
     @Override
@@ -128,8 +119,7 @@ public abstract class DBIntegerField
                    && this.field.isCanBeNull())
                   || ((rsmd.isNullable(i) == ResultSetMetaData.columnNoNulls)
                    && !this.field.isCanBeNull()))
-                 && (rsmd.getPrecision(i) == this.field.getMaxLength())
-                 && (rsmd.isAutoIncrement(i) == this.isAutoIncrement())) {
+                 && (rsmd.getPrecision(i) == this.field.getMaxLength())) {
                     changed = false;
                 }
             }
@@ -139,22 +129,19 @@ public abstract class DBIntegerField
 
     @Override
     public final void readFromResultSet(final ResultSet result,
-            final FieldInterface<?> fieldToFill) throws SQLException {
-        readFromResultSet(result, this.dbFieldName, fieldToFill);
+            final FieldInterface<?> fieldToFill
+            ) throws SQLException {
+        this.readFromResultSet(result, this.dbFieldName, fieldToFill);
     }
 
     @Override
     public final void readFromResultSet(final ResultSet result,
-            final String fieldName, final FieldInterface<?> fieldToFill
-            ) throws SQLException {
-        if (fieldToFill != null && fieldToFill instanceof IntegerField) {
-            final int intResult = result.getInt(this.dbFieldName);
-            if (result.wasNull()) {
-                fieldToFill.setValue(null);
-            } else {
-                ((IntegerField) fieldToFill).setValue(
-                        Integer.valueOf(intResult));
-            }
+            final String fieldName, final FieldInterface<?> fieldToFill)
+                    throws SQLException {
+        try {
+            fieldToFill.setString(result.getString(fieldName));
+        } catch (ParseException e) {
+            throw new SQLException(e);
         }
     }
 
@@ -162,14 +149,7 @@ public abstract class DBIntegerField
     public final int addToPreparedStatement(final PreparedStatement statement,
             final int pos, final FieldInterface<?> fieldToSet)
                     throws SQLException {
-        if (fieldToSet.getValue() == null) {
-            statement.setNull(pos, this.getFieldType());
-        } else if (fieldToSet instanceof IntegerField) {
-            statement.setInt(pos, ((IntegerField) fieldToSet).getValue()
-                    .intValue());
-        } else  {
-            statement.setNull(pos, this.getFieldType());
-        }
+        statement.setString(pos, fieldToSet.getString());
         return pos + 1;
     }
 

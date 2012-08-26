@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.shared.fields;
 
@@ -31,7 +29,7 @@ import java.text.ParseException;
  * @param <E> field type
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2012-05-17
+ * @version $Rev$, $Date$
  */
 public abstract class AbstractField<E>
     implements Serializable, Cloneable, FieldInterface<E> {
@@ -140,6 +138,9 @@ public abstract class AbstractField<E>
     @Override
     public abstract boolean isOK();
 
+    @SuppressWarnings("unchecked")
     @Override
-    public abstract AbstractField<E> clone() throws CloneNotSupportedException;
+    public final AbstractField<E> clone() throws CloneNotSupportedException {
+        return ((AbstractField<E>) super.clone());
+    }
 }

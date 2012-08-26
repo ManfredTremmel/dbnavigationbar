@@ -17,13 +17,11 @@
  *
  * Copyright (c) 2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.server.dbfield.mysql;
 
 import de.knightsoft.DBNavigationBar.server.StringToSQL;
-import de.knightsoft.DBNavigationBar.server.dbfield.DBIntegerField;
+import de.knightsoft.DBNavigationBar.server.dbfield.AbstractDBIntegerField;
 import de.knightsoft.DBNavigationBar.shared.Constants;
 import de.knightsoft.DBNavigationBar.shared.fields.IntegerField;
 
@@ -33,9 +31,9 @@ import de.knightsoft.DBNavigationBar.shared.fields.IntegerField;
  * including mysql specific parts.
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2012-05-17
+ * @version $Rev$, $Date$
  */
-public class MySQLDBIntegerField extends DBIntegerField {
+public class MySQLDBIntegerField extends AbstractDBIntegerField {
 
     /**
      * Serial version id.
@@ -60,7 +58,7 @@ public class MySQLDBIntegerField extends DBIntegerField {
 
     @Override
     public final String buildSQLFieldString() {
-        StringBuilder sqlString = new StringBuilder();
+        final StringBuilder sqlString = new StringBuilder();
         sqlString.append("`" + StringToSQL.convert(this.getDBFieldName(),
                 Constants.JDBC_CLASS_MYSQL) + "` ");
         sqlString.append("integer");

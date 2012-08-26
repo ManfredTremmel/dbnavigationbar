@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2011-2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.server;
 
@@ -33,15 +31,16 @@ import de.knightsoft.DBNavigationBar.shared.Constants;
 /**
  * The <code>RiPhoneDBHeadPosTemplate</code> class is the server
  * side implementation template for a simple database.
- * The same as DBHeadPosTemplate but without read and save
+ * The same as AbstractDBHeadPosTemplate but without read and save
  * implementations.
  *
  * @param <E> DataBase structure type
  * @author Manfred Tremmel
- * @version 1.0.0, 2011-02-08
+ * @version $Rev$, $Date$
  */
-public abstract class DBHeadPosTemplateRS<E extends DomainHeadPosDataBaseInt>
-    extends DBTemplate<E> {
+public abstract class AbstractDBHeadPosTemplateRS<E extends
+    DomainHeadPosDataBaseInt>
+    extends AbstractDBTemplate<E> {
 
     /**
      * Serial version id.
@@ -98,7 +97,7 @@ public abstract class DBHeadPosTemplateRS<E extends DomainHeadPosDataBaseInt>
      * @param setUpdatePosSQL
      *          update sql statement position
      */
-    public DBHeadPosTemplateRS(
+    public AbstractDBHeadPosTemplateRS(
             final Class<E> setType,
             final String setLookUpDataBase,
             final String setSessionUser,
@@ -182,7 +181,7 @@ public abstract class DBHeadPosTemplateRS<E extends DomainHeadPosDataBaseInt>
      * @param dbKey
      *             comparison number
      * @return SQL-String
-     * @throws Exception when error occurs
+     * @throws SQLException when error occurs
      */
     @Override
     protected final String searchSQLSelect(
@@ -192,10 +191,11 @@ public abstract class DBHeadPosTemplateRS<E extends DomainHeadPosDataBaseInt>
             final String searchMethodeEntry,
             final String searchFieldEntry,
             final String dbKeyVGL,
-            final String dbKey) throws Exception {
-        int mandator         =    this.getUser().getMandator();
+            final String dbKey) throws SQLException {
+        final int mandator         =    this.getUser().getMandator();
 
-        String sqlString =
+        final StringBuilder sqlString = new StringBuilder();
+        sqlString.append(
               "SELECT " + minMax + "(" + this.getKeyFieldName()
                         + ") AS dbnumber "
             + "FROM   " + this.getDataBaseTableName() + " "
@@ -204,22 +204,22 @@ public abstract class DBHeadPosTemplateRS<E extends DomainHeadPosDataBaseInt>
             + " AND   " + this.getKeyFieldName() + " " + dbKeyVGL
             + " " + StringToSQL.convertString(dbKey,
                     thisDataBase.getMetaData().getDatabaseProductName()) + " "
-            + " AND   ";
+            + " AND   ");
 
         if ("=".equals(searchMethodeEntry)) {
-            sqlString += StringToSQL.searchString(searchField,
+            sqlString.append(StringToSQL.searchString(searchField,
                     searchFieldEntry, thisDataBase.getMetaData()
-                    .getDatabaseProductName());
+                    .getDatabaseProductName()));
         } else if ("like".equals(searchMethodeEntry)) {
-            sqlString += StringToSQL.searchString(searchField,
+            sqlString.append(StringToSQL.searchString(searchField,
                     "*" + searchFieldEntry + "*", thisDataBase
-                    .getMetaData().getDatabaseProductName());
+                    .getMetaData().getDatabaseProductName()));
         } else {
-            sqlString += searchField + " " + searchMethodeEntry
+            sqlString.append(searchField + " " + searchMethodeEntry
                     + " " +  StringToSQL.convertString(searchFieldEntry,
-                       thisDataBase.getMetaData().getDatabaseProductName());
+                       thisDataBase.getMetaData().getDatabaseProductName()));
         }
-        return sqlString;
+        return sqlString.toString();
     }
 
     /**
@@ -307,10 +307,10 @@ public abstract class DBHeadPosTemplateRS<E extends DomainHeadPosDataBaseInt>
      * @param thisEntry
      *             Entry to fill
      * @return filled Entry
-     * @throws Exception when error occurs
+     * @throws SQLException when error occurs
      */
     protected abstract E fillPosFromResultSet(ResultSet resultPos,
-            E thisEntry) throws Exception;
+            E thisEntry) throws SQLException;
 
     /**
      * <code>insertPositionEntry</code> inserts a position into the database.

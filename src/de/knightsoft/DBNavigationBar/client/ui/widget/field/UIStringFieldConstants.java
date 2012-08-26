@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.client.ui.widget.field;
 
@@ -30,7 +28,7 @@ import com.google.gwt.i18n.client.Messages;
  * input field.
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2012-05-17
+ * @version $Rev$, $Date$
  */
 public interface UIStringFieldConstants extends Messages {
 

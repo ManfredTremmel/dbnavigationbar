@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.shared;
 
@@ -27,7 +25,7 @@ package de.knightsoft.DBNavigationBar.shared;
  * The <code>Constants</code> contains the fixed fields.
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2012-05-17
+ * @version $Rev$, $Date$
  */
 public class Constants {
 
@@ -35,6 +33,7 @@ public class Constants {
      * private constructor.
      */
     protected Constants() {
+        super();
     };
 
     /**

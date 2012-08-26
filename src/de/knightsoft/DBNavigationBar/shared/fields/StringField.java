@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2012 RI Solutions GmbH
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.shared.fields;
 
@@ -30,11 +28,11 @@ import java.text.ParseException;
  * <code>StringField</code> is a class to define a String field.
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2012-05-17
+ * @version $Rev$, $Date$
  */
 public class StringField
     extends AbstractField<String>
-    implements Serializable, FieldInterface<String> {
+    implements Serializable, Cloneable, FieldInterface<String> {
 
     /**
      * Serial version id.
@@ -103,14 +101,5 @@ public class StringField
             }
         }
         return checkOk;
-    }
-
-    /* (non-Javadoc)
-     * @see de.knightsoft.DBNavigationBar.shared.fields.AbstractField#clone()
-     */
-    @Override
-    public final StringField clone() throws CloneNotSupportedException {
-        return new StringField(isCanBeNull(), isPrimaryKey(), getMaxLength(),
-                getDefaultValue(), this.regExCheck);
     }
 }

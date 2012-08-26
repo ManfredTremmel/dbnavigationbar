@@ -17,15 +17,13 @@
  *
  * Copyright (c) 2011-2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.client.ui;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
 
-import de.knightsoft.DBNavigationBar.client.Parent;
-import de.knightsoft.DBNavigationBar.client.domain.DomainUser;
+import de.knightsoft.DBNavigationBar.client.AbstractParent;
+import de.knightsoft.DBNavigationBar.client.domain.AbstractDomainUser;
 
 /**
  * The <code>BasicTemplateUIInterface</code> defines the basic
@@ -34,9 +32,9 @@ import de.knightsoft.DBNavigationBar.client.domain.DomainUser;
  * @param <F> parent widget
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2011-07-23
+ * @version $Rev$, $Date$
  */
-public interface BasicTemplateUIInterface<F extends Parent> {
+public interface BasicTemplateUIInterface<F extends AbstractParent> {
 
     /**
      * The Method <code>getHeaderTitle</code> gets title text.
@@ -75,7 +73,7 @@ public interface BasicTemplateUIInterface<F extends Parent> {
      *            user information about the currently logged in user
      * @return true if it is allowed for this user
      */
-    boolean matchesMenu(final String itemtext, final DomainUser user);
+    boolean matchesMenu(final String itemtext, final AbstractDomainUser user);
 
     /**
      * The Method <code>allowedToSee</code> tells you if the currently logged
@@ -85,7 +83,7 @@ public interface BasicTemplateUIInterface<F extends Parent> {
      *            information about logged in user
      * @return true if it is allowed for this user
      */
-    boolean allowedToSee(DomainUser user);
+    boolean allowedToSee(AbstractDomainUser user);
 
     /**
      * The Method <code>allowedToChange</code> tells you if the currently
@@ -95,5 +93,5 @@ public interface BasicTemplateUIInterface<F extends Parent> {
      *            information about logged in user
      * @return true if it is allowed for this user
      */
-    boolean allowedToChange(DomainUser user);
+    boolean allowedToChange(AbstractDomainUser user);
 }

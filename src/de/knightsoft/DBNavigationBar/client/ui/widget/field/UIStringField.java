@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.client.ui.widget.field;
 
@@ -32,12 +30,12 @@ import com.google.gwt.user.client.ui.Widget;
 import de.knightsoft.DBNavigationBar.shared.fields.StringField;
 
 /**
-*
-* <code>UIStringField</code> is a class to define a String UI field.
-*
-* @author Manfred Tremmel
-* @version 1.0.0, 2012-05-17
-*/
+ *
+ * <code>UIStringField</code> is a class to define a String UI field.
+ *
+ * @author Manfred Tremmel
+ * @version $Rev$, $Date$
+ */
 public class UIStringField implements UIFieldInterface<String, StringField> {
 
     /**

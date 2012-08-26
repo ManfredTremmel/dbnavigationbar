@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2011-2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.server;
 
@@ -31,7 +29,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import de.knightsoft.DBNavigationBar.client.domain.DomainHeadDataBaseInterface;
-import de.knightsoft.DBNavigationBar.client.domain.DomainUser;
+import de.knightsoft.DBNavigationBar.client.domain.AbstractDomainUser;
 import de.knightsoft.DBNavigationBar.shared.Constants;
 
 /**
@@ -40,10 +38,11 @@ import de.knightsoft.DBNavigationBar.shared.Constants;
  *
  * @param <E> DataBase structure type
  * @author Manfred Tremmel
- * @version 1.0.0, 2011-02-08
+ * @version $Rev$, $Date$
  */
-public abstract class DBHeadTemplate<E extends DomainHeadDataBaseInterface>
-                      extends DBTemplate<E> {
+public abstract class AbstractDBHeadTemplate<E extends
+    DomainHeadDataBaseInterface>
+    extends AbstractDBTemplate<E> {
 
     /**
      * Serial version id.
@@ -83,7 +82,7 @@ public abstract class DBHeadTemplate<E extends DomainHeadDataBaseInterface>
      * @param setInvalidateHeadSQL
      *          sql statement to invalidate/delete a entry
      */
-    public DBHeadTemplate(
+    public AbstractDBHeadTemplate(
             final Class<E> setType,
             final String setLookUpDataBase,
             final String setSessionUser,
@@ -130,7 +129,7 @@ public abstract class DBHeadTemplate<E extends DomainHeadDataBaseInterface>
      * @param setUpdateHeadSQL
      *          update sql statement
      */
-    public DBHeadTemplate(
+    public AbstractDBHeadTemplate(
             final Class<E> setType,
             final String setLookUpDataBase,
             final String setSessionUser,
@@ -192,7 +191,7 @@ public abstract class DBHeadTemplate<E extends DomainHeadDataBaseInterface>
      * @param setReadHeadSQL
      *          sql statement to read the head data
      */
-    public DBHeadTemplate(
+    public AbstractDBHeadTemplate(
             final Class<E> setType,
             final String setLookUpDataBase,
             final String setSessionUser,
@@ -252,7 +251,7 @@ public abstract class DBHeadTemplate<E extends DomainHeadDataBaseInterface>
      * @param dbKey
      *             comparison number
      * @return SQL-String
-     * @throws Exception when error occurs
+     * @throws SQLException when error occurs
      */
     @Override
     protected final String searchSQLSelect(
@@ -262,10 +261,11 @@ public abstract class DBHeadTemplate<E extends DomainHeadDataBaseInterface>
             final String searchMethodeEntry,
             final String searchFieldEntry,
             final String dbKeyVGL,
-            final String dbKey) throws Exception {
-        int mandator         =    this.getUser().getMandator();
+            final String dbKey) throws SQLException {
+        final int mandator         =    this.getUser().getMandator();
 
-        String sqlString =
+        final StringBuilder sqlString = new StringBuilder();
+        sqlString.append(
               "SELECT " + minMax + "(" + this.getKeyFieldName()
                         + ") AS dbnumber "
             + "FROM   " + this.getDataBaseTableName() + " "
@@ -274,22 +274,22 @@ public abstract class DBHeadTemplate<E extends DomainHeadDataBaseInterface>
             + " AND   " + this.getKeyFieldName() + " " + dbKeyVGL
             + " " + StringToSQL.convertString(dbKey,
                     thisDataBase.getMetaData().getDatabaseProductName()) + " "
-            + " AND   ";
+            + " AND   ");
 
         if ("=".equals(searchMethodeEntry)) {
-            sqlString += StringToSQL.searchString(searchField,
+            sqlString.append(StringToSQL.searchString(searchField,
                     searchFieldEntry, thisDataBase.getMetaData()
-                    .getDatabaseProductName());
+                    .getDatabaseProductName()));
         } else if ("like".equals(searchMethodeEntry)) {
-            sqlString += StringToSQL.searchString(searchField,
+            sqlString.append(StringToSQL.searchString(searchField,
                     "*" + searchFieldEntry + "*", thisDataBase
-                    .getMetaData().getDatabaseProductName());
+                    .getMetaData().getDatabaseProductName()));
         } else {
-            sqlString += searchField + " " + searchMethodeEntry
+            sqlString.append(searchField + " " + searchMethodeEntry
                     + " " +  StringToSQL.convertString(searchFieldEntry,
-                       thisDataBase.getMetaData().getDatabaseProductName());
+                       thisDataBase.getMetaData().getDatabaseProductName()));
         }
-        return sqlString;
+        return sqlString.toString();
     }
 
     /**
@@ -351,23 +351,23 @@ public abstract class DBHeadTemplate<E extends DomainHeadDataBaseInterface>
     @Override
     public final E deleteEntry(final String currentEntry) {
         E resultValue = null;
-        DomainUser thisUser  =    this.getUser();
+        final AbstractDomainUser thisUser  =    this.getUser();
         if (thisUser != null) {
-            int mandator     =    thisUser.getMandator();
-            String user      =    thisUser.getUser();
+            final int mandator     =    thisUser.getMandator();
+            final String user      =    thisUser.getUser();
             Connection thisDataBase        =    null;
             PreparedStatement invalidateHeadSQLStatement = null;
 
             try {
                 // connect to database
-                InitialContext ic = new InitialContext();
-                DataSource lDataSource =
+                final InitialContext ic = new InitialContext();
+                final DataSource lDataSource =
                         (DataSource) ic.lookup(this.getLookUpDataBase());
                 thisDataBase = lDataSource.getConnection();
                 ic.close();
 
                 if (allowedToChange()) {
-                    E dbEntry = this.readEntry(currentEntry);
+                    final E dbEntry = this.readEntry(currentEntry);
                     // invalidate head number
                     invalidateHeadSQLStatement =
                             thisDataBase.prepareStatement(
@@ -439,17 +439,16 @@ public abstract class DBHeadTemplate<E extends DomainHeadDataBaseInterface>
                             currentEntry, false);
                 } else {
                     // Entry already exists, update it, if necessary
-                    if (!currentEntry.equals(dbEntry)) {
-                        if (!currentEntry.equalsEntry(dbEntry)) {
-                            // Invalidate old entry
-                            updateHeadSQLStatement =
-                                    thisDataBase.prepareStatement(
-                                            this.updateHeadSQL);
-                            updateHeadSQLStatement.clearParameters();
-                            this.fillUpdateHead(updateHeadSQLStatement,
-                                    mandator, user, currentEntry);
-                            updateHeadSQLStatement.executeUpdate();
-                        }
+                    if (!currentEntry.equals(dbEntry)
+                     && !currentEntry.equalsEntry(dbEntry)) {
+                        // Invalidate old entry
+                        updateHeadSQLStatement =
+                                thisDataBase.prepareStatement(
+                                        this.updateHeadSQL);
+                        updateHeadSQLStatement.clearParameters();
+                        this.fillUpdateHead(updateHeadSQLStatement,
+                                mandator, user, currentEntry);
+                        updateHeadSQLStatement.executeUpdate();
                     }
                 }
             } finally {

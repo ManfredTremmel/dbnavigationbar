@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2011-2012 Manfred Tremmel
  *
- * --
- *  Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.server;
 
@@ -33,10 +31,11 @@ import de.knightsoft.DBNavigationBar.client.domain.DomainHeadDataBaseInterface;
  *
  * @param <E> structure
  * @author Manfred Tremmel
- * @version 1.0.0, 2011-02-08
+ * @version $Rev$, $Date$
  */
-public abstract class DBHeadDateTemplate<E extends DomainHeadDataBaseInterface>
-    extends DBHeadDateTemplateR<E> {
+public abstract class AbstractDBHeadDateTemplate<E extends
+    DomainHeadDataBaseInterface>
+    extends AbstractDBHeadDateTemplateR<E> {
 
     /**
      * Serial version id.
@@ -68,7 +67,7 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBaseInterface>
      * @param setInvalidateHeadSQL
      *          sql statement to invalidate head entry
      */
-    public DBHeadDateTemplate(
+    public AbstractDBHeadDateTemplate(
             final Class<E> setType,
             final String setLookUpDataBase,
             final String setSessionUser,
@@ -109,7 +108,7 @@ public abstract class DBHeadDateTemplate<E extends DomainHeadDataBaseInterface>
      * @param setInsertHeadSQL
      *          sql statement to insert a new head entry
      */
-    public DBHeadDateTemplate(
+    public AbstractDBHeadDateTemplate(
             final Class<E> setType,
             final String setLookUpDataBase,
             final String setSessionUser,

@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.client.domain;
 
@@ -28,7 +26,7 @@ package de.knightsoft.DBNavigationBar.client.domain;
  * states of a DataBaseResult.
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2011-06-02
+ * @version $Rev$, $Date$
  */
 public enum EnumerationState {
     /**

@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2011-2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.client.ui;
 
@@ -30,7 +28,7 @@ import com.google.gwt.i18n.client.Constants;
  * messages for position template.
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2011-02-19
+ * @version $Rev$, $Date$
  */
 public interface DBHeadPosTemplateUIConstants extends Constants {
     /**

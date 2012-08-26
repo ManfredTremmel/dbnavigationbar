@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.client.domain;
 
@@ -32,7 +30,7 @@ import de.knightsoft.DBNavigationBar.shared.fields.FieldInterface;
  * functions for a data base domain.
  *
  * @author Manfred Tremmel
- * @version 1.0.0, 2012-06-02
+ * @version $Rev$, $Date$
  * @param <E> Type of the keyField
  */
 public interface InterfaceDataBase<E> {
@@ -41,7 +39,7 @@ public interface InterfaceDataBase<E> {
      *
      * @return isReadOnly
      */
-    boolean getIsReadOnly();
+    boolean isReadOnly();
 
     /**
      * set isReadOnly.

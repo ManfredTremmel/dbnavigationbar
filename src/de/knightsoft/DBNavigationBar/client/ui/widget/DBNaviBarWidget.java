@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2011-2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.client.ui.widget;
 
@@ -50,6 +48,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 /**
  * Database Navigation.
  * @author Manfred Tremmel
+ * @version $Rev$, $Date$
  */
 public class DBNaviBarWidget extends Composite
        implements HasClickHandlers {
@@ -205,8 +204,8 @@ public class DBNaviBarWidget extends Composite
                  * @author Manfred Tremmel
                  */
                 class OurClickEvent extends ClickEvent { }
-                DBNaviBarWidget.this.okPushButton.fireEvent((
-                        new OurClickEvent()));
+                DBNaviBarWidget.this.okPushButton.fireEvent(
+                        new OurClickEvent());
             }
         }
     }
@@ -241,7 +240,7 @@ public class DBNaviBarWidget extends Composite
      * Create a handler for the find toggle button.
      * @author Manfred Tremmel
      */
-    private ClickHandler myFindToggleClick = new ClickHandler() {
+    private final ClickHandler myFindToggleClick = new ClickHandler() {
         /**
          * on Click handler.
          */
@@ -436,10 +435,6 @@ public class DBNaviBarWidget extends Composite
      */
     private final DialogBox dialogYesNoBox;
 
-    /**
-     * user defined text.
-     */
-    private final String userdefinedText;
     /**
      * button state.
      */
@@ -694,13 +689,14 @@ public class DBNaviBarWidget extends Composite
      *         fields to search for
      * @param searchFieldsDisplay
      *         fields to search for display names
-     * @param newUserdefinedText
+     * @param userdefinedText
      *         user defined functions (null if not wanted)
      */
     public DBNaviBarWidget(
             final String[] searchfields,
             final String[] searchFieldsDisplay,
-            final String newUserdefinedText) {
+            final String userdefinedText) {
+        super();
 
         this.constants = (DBNaviBarWidgetConstants)
                 GWT.create(DBNaviBarWidgetConstants.class);
@@ -720,7 +716,6 @@ public class DBNaviBarWidget extends Composite
         this.maxEntry.setText("");
         this.currentLabel.setText(constants.labelCur());
         this.currentEntry.setText("");
-        this.userdefinedText    =    newUserdefinedText;
         this.hintText.setText("");
 
         int smi = 0;
@@ -808,18 +803,18 @@ public class DBNaviBarWidget extends Composite
         //this.searchgridpanel.setHeight("2.5em");
         this.searchpanel.setVisible(this.findToggleButton.isDown());
 
-        if (this.userdefinedText == null) {
+        if (userdefinedText == null) {
             this.userdefinedPushButton.setEnabled(false);
-            this.userdefinedPushButtonEnabled    =    false;
+            this.userdefinedPushButtonEnabled = false;
         } else {
             this.userdefinedPushButton.setTitle(userdefinedText);
         }
         this.setDBMinMaxCurNumber(null, null, null);
 
 
-        MyHandler handler = new MyHandler();
-        MyEntryHandler entryhandler    =    new MyEntryHandler();
-        MySearchHandler searchhandler  =    new MySearchHandler();
+        final MyHandler handler = new MyHandler();
+        final MyEntryHandler entryhandler = new MyEntryHandler();
+        final MySearchHandler searchhandler = new MySearchHandler();
         this.newPushButton.addClickHandler(handler);
         this.savePushButton.addClickHandler(handler);
         this.deletePushButton.addClickHandler(handler);
@@ -1151,20 +1146,18 @@ public class DBNaviBarWidget extends Composite
      *         new search fields
      */
     public final void changeSearchfields(final String[] searchFields) {
-        if (searchFields != null) {
-            if (this.fieldSelect.getItemCount() != searchFields.length
-             || this.fieldSelect.getItemText(0) != searchFields[0]) {
+        if (searchFields != null
+         && (this.fieldSelect.getItemCount() != searchFields.length
+          || this.fieldSelect.getItemText(0) != searchFields[0])) {
 
-                for (int j = this.fieldSelect.getItemCount() - 1;
-                        j >= 0; j--) {
-                    this.fieldSelect.removeItem(j);
-                }
+            for (int j = this.fieldSelect.getItemCount() - 1; j >= 0; j--) {
+                this.fieldSelect.removeItem(j);
+            }
 
-                for (int i = 0; i < searchFields.length; i++) {
-                    this.fieldSelect.addItem(searchFields[i]);
-                    if (searchFields[i].equals(this.searchFieldString)) {
-                        this.fieldSelect.setSelectedIndex(i);
-                    }
+            for (int i = 0; i < searchFields.length; i++) {
+                this.fieldSelect.addItem(searchFields[i]);
+                if (searchFields[i].equals(this.searchFieldString)) {
+                    this.fieldSelect.setSelectedIndex(i);
                 }
             }
         }
@@ -1408,18 +1401,18 @@ public class DBNaviBarWidget extends Composite
         dialogBox.setText(thisConstants.deleteDialogHeader());
 
         // Create a table to layout the content
-        VerticalPanel dialogContents = new VerticalPanel();
+        final VerticalPanel dialogContents = new VerticalPanel();
         dialogBox.setWidget(dialogContents);
 
         // Add some text to the top of the dialog
-        HTML details = new HTML(thisConstants.deleteDialogText());
+        final HTML details = new HTML(thisConstants.deleteDialogText());
         dialogContents.add(details);
         dialogContents.setHorizontalAlignment(
                 HasHorizontalAlignment.ALIGN_CENTER);
 
-        HorizontalPanel dialogButtons = new HorizontalPanel();
+        final HorizontalPanel dialogButtons = new HorizontalPanel();
         // Add a yes button at the bottom of the dialog
-        Button yesButton = new Button(thisConstants.yes(),
+        final Button yesButton = new Button(thisConstants.yes(),
             new ClickHandler() {
               @Override
             public void onClick(final ClickEvent event) {
@@ -1433,7 +1426,7 @@ public class DBNaviBarWidget extends Composite
         dialogButtons.setCellHorizontalAlignment(yesButton,
                 HasHorizontalAlignment.ALIGN_LEFT);
         // Add a no button at the bottom of the dialog
-        Button noButton = new Button(thisConstants.no(),
+        final Button noButton = new Button(thisConstants.no(),
             new ClickHandler() {
               @Override
             public void onClick(final ClickEvent event) {

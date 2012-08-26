@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2011-2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.client.ui;
 
@@ -33,6 +31,7 @@ import de.knightsoft.DBNavigationBar.client.domain.AbstractDataBaseDomain;
  *
  * @param <E> database domain structure
  * @author Manfred Tremmel
+ * @version $Rev$, $Date$
  */
 public abstract interface AbstractDBRemoteService
     <E extends AbstractDataBaseDomain<?>> extends XsrfProtectedService {

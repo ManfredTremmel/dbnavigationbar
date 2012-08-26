@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2011-2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.server;
 
@@ -34,7 +32,7 @@ import javax.sql.DataSource;
 import com.google.gwt.user.server.rpc.UnexpectedException;
 
 import de.knightsoft.DBNavigationBar.client.domain.DomainHeadPosDataBaseInt;
-import de.knightsoft.DBNavigationBar.client.domain.DomainUser;
+import de.knightsoft.DBNavigationBar.client.domain.AbstractDomainUser;
 import de.knightsoft.DBNavigationBar.shared.Constants;
 
 /**
@@ -45,10 +43,11 @@ import de.knightsoft.DBNavigationBar.shared.Constants;
  *
  * @param <E> Structure of the database
  * @author Manfred Tremmel
- * @version 1.0.0, 2011-02-08
+ * @version $Rev$, $Date$
  */
-public abstract class DBHeadPosDateTemplateR<E extends DomainHeadPosDataBaseInt>
-    extends DBTemplate<E> {
+public abstract class AbstractDBHeadPosDateTemplateR<E extends
+    DomainHeadPosDataBaseInt>
+    extends AbstractDBTemplate<E> {
 
     /**
      * Serial version id.
@@ -82,10 +81,6 @@ public abstract class DBHeadPosDateTemplateR<E extends DomainHeadPosDataBaseInt>
      *          key field of the database
      * @param setInsertHeadSQL
      *          sql statement to insert a new head entry
-     * @param setPosDataBaseTableName
-     *          database table name (position)
-     * @param setPosKeyFieldName
-     *          key field of the database (position)
      * @param setInsertPosSQL
      *          sql statement to insert a new head entry (position)
      * @param setReadMinMaxSQL
@@ -103,15 +98,13 @@ public abstract class DBHeadPosDateTemplateR<E extends DomainHeadPosDataBaseInt>
      * @param setInvalidatePosSQL
      *          sql statement to invalidate position entry
      */
-    public DBHeadPosDateTemplateR(
+    public AbstractDBHeadPosDateTemplateR(
             final Class<E> setType,
             final String setLookUpDataBase,
             final String setSessionUser,
             final String setDataBaseTableName,
             final String setKeyFieldName,
             final String setInsertHeadSQL,
-            final String setPosDataBaseTableName,
-            final String setPosKeyFieldName,
             final String setInsertPosSQL,
 
             final String setReadMinMaxSQL,
@@ -139,12 +132,13 @@ public abstract class DBHeadPosDateTemplateR<E extends DomainHeadPosDataBaseInt>
         Connection thisDataBase        =    null;
         try {
             // connect to database
-            InitialContext ic      = new InitialContext();
-            DataSource lDataSource = (DataSource) ic.lookup(setLookUpDataBase);
-            thisDataBase           = lDataSource.getConnection();
+            final InitialContext ic = new InitialContext();
+            final DataSource lDataSource =
+                    (DataSource) ic.lookup(setLookUpDataBase);
+            thisDataBase = lDataSource.getConnection();
             ic.close();
 
-            DataBaseDepending myDataBaseDepending =
+            final DataBaseDepending myDataBaseDepending =
                     new DataBaseDepending(thisDataBase.getMetaData()
                             .getDatabaseProductName());
 
@@ -172,15 +166,17 @@ public abstract class DBHeadPosDateTemplateR<E extends DomainHeadPosDataBaseInt>
                 .replace("NOW()", myDataBaseDepending.getSQLTimeNow());
             }
 
-        } catch (Exception e) {
-            throw new UnexpectedException(e.toString(), e.getCause());
+        } catch (SQLException e) {
+            throw new UnexpectedException(e.toString(), e);
+        } catch (NamingException e) {
+            throw new UnexpectedException(e.toString(), e);
         } finally {
             try {
                 if (thisDataBase != null) {
                     thisDataBase.close();
                 }
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
     }
@@ -206,7 +202,7 @@ public abstract class DBHeadPosDateTemplateR<E extends DomainHeadPosDataBaseInt>
      * @param setInsertPosSQL
      *          sql statement to insert a new head entry (position)
      */
-    public DBHeadPosDateTemplateR(
+    public AbstractDBHeadPosDateTemplateR(
             final Class<E> setType,
             final String setLookUpDataBase,
             final String setSessionUser,
@@ -223,8 +219,6 @@ public abstract class DBHeadPosDateTemplateR<E extends DomainHeadPosDataBaseInt>
              setDataBaseTableName,
              setKeyFieldName,
              setInsertHeadSQL,
-             setPosDataBaseTableName,
-             setPosKeyfieldName,
              setInsertPosSQL,
 
              "SELECT MIN(" + setKeyFieldName + ") AS min, "
@@ -303,7 +297,7 @@ public abstract class DBHeadPosDateTemplateR<E extends DomainHeadPosDataBaseInt>
      * @param setReadPosSQL
      *          sql statement to read position entry
      */
-    public DBHeadPosDateTemplateR(
+    public AbstractDBHeadPosDateTemplateR(
             final Class<E> setType,
             final String setLookUpDataBase,
             final String setSessionUser,
@@ -322,8 +316,6 @@ public abstract class DBHeadPosDateTemplateR<E extends DomainHeadPosDataBaseInt>
              setDataBaseTableName,
              setKeyFieldName,
              setInsertHeadSQL,
-             setPosDataBaseTableName,
-             setPosKeyfieldName,
              setInsertPosSQL,
 
              "SELECT MIN(" + setKeyFieldName + ") AS min, "
@@ -389,7 +381,7 @@ public abstract class DBHeadPosDateTemplateR<E extends DomainHeadPosDataBaseInt>
      * @param dbKey
      *             comparison number
      * @return SQL-String
-     * @throws Exception when error occurs
+     * @throws SQLException when error occurs
      */
     @Override
     protected final String searchSQLSelect(
@@ -399,13 +391,14 @@ public abstract class DBHeadPosDateTemplateR<E extends DomainHeadPosDataBaseInt>
             final String searchMethodeEntry,
             final String searchFieldEntry,
             final String dbKeyVGL,
-            final String dbKey) throws Exception {
-        int mandator         =    this.getUser().getMandator();
-        DataBaseDepending myDataBaseDepending =
+            final String dbKey) throws SQLException {
+        final int mandator = this.getUser().getMandator();
+        final DataBaseDepending myDataBaseDepending =
                 new DataBaseDepending(thisDataBase.getMetaData()
                         .getDatabaseProductName());
 
-        String sqlString =
+        final StringBuilder sqlString = new StringBuilder();
+        sqlString.append(
               "SELECT " + minMax + "(" + this.getKeyFieldName()
                         + ") AS dbnumber "
             + "FROM   " + this.getDataBaseTableName() + " "
@@ -418,22 +411,22 @@ public abstract class DBHeadPosDateTemplateR<E extends DomainHeadPosDataBaseInt>
                     + myDataBaseDepending.getSQLTimeNow() + " "
             + " AND    " + Constants.DB_FIELD_GLOBAL_DATE_TO + "   > "
                     + myDataBaseDepending.getSQLTimeNow() + " "
-            + " AND   ";
+            + " AND   ");
 
         if ("=".equals(searchMethodeEntry)) {
-            sqlString += StringToSQL.searchString(searchField,
+            sqlString.append(StringToSQL.searchString(searchField,
                     searchFieldEntry, thisDataBase.getMetaData()
-                    .getDatabaseProductName());
+                    .getDatabaseProductName()));
         } else if ("like".equals(searchMethodeEntry)) {
-            sqlString += StringToSQL.searchString(searchField,
+            sqlString.append(StringToSQL.searchString(searchField,
                     "*" + searchFieldEntry + "*", thisDataBase
-                    .getMetaData().getDatabaseProductName());
+                    .getMetaData().getDatabaseProductName()));
         } else {
-            sqlString += searchField + " " + searchMethodeEntry
+            sqlString.append(searchField + " " + searchMethodeEntry
                     + " " +  StringToSQL.convertString(searchFieldEntry,
-                       thisDataBase.getMetaData().getDatabaseProductName());
+                       thisDataBase.getMetaData().getDatabaseProductName()));
         }
-        return sqlString;
+        return sqlString.toString();
     }
 
     /**
@@ -469,10 +462,10 @@ public abstract class DBHeadPosDateTemplateR<E extends DomainHeadPosDataBaseInt>
      * @param thisEntry
      *             Entry to fill
      * @return filled Entry
-     * @throws Exception when error occurs
+     * @throws SQLException when error occurs
      */
     protected abstract E fillPosFromResultSet(ResultSet resultPos,
-            E thisEntry) throws Exception;
+            E thisEntry) throws SQLException;
 
 
     /**
@@ -485,24 +478,24 @@ public abstract class DBHeadPosDateTemplateR<E extends DomainHeadPosDataBaseInt>
     @Override
     public final E deleteEntry(final String currentEntry) {
         E resultValue = null;
-        DomainUser thisUser = this.getUser();
+        final AbstractDomainUser thisUser = this.getUser();
         if (thisUser != null) {
-            int mandator = thisUser.getMandator();
-            String user  = thisUser.getUser();
+            final int mandator = thisUser.getMandator();
+            final String user  = thisUser.getUser();
             Connection thisDataBase = null;
             PreparedStatement invalidateHeadSQLStatement = null;
             PreparedStatement invalidatePosSQLStatement  = null;
 
             try {
                 // connect to database
-                InitialContext ic      =  new InitialContext();
-                DataSource lDataSource =
+                final InitialContext ic      =  new InitialContext();
+                final DataSource lDataSource =
                         (DataSource) ic.lookup(this.getLookUpDataBase());
                 thisDataBase           = lDataSource.getConnection();
                 ic.close();
 
                 if (allowedToChange()) {
-                    E dbEntry    =    this.readEntry(currentEntry);
+                    final E dbEntry    =    this.readEntry(currentEntry);
                     // invalidate head number
                     if (this.getInvalidateHeadSQL() != null) {
                         invalidateHeadSQLStatement =

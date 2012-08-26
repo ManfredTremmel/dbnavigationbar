@@ -17,8 +17,6 @@
  *
  * Copyright (c) 2011-2012 Manfred Tremmel
  *
- * --
- *    Name        Date        Change
  */
 package de.knightsoft.DBNavigationBar.server;
 
@@ -34,7 +32,7 @@ import javax.sql.DataSource;
 import com.google.gwt.user.server.rpc.UnexpectedException;
 
 import de.knightsoft.DBNavigationBar.client.domain.DomainHead2PosDataBaseInt;
-import de.knightsoft.DBNavigationBar.client.domain.DomainUser;
+import de.knightsoft.DBNavigationBar.client.domain.AbstractDomainUser;
 import de.knightsoft.DBNavigationBar.shared.Constants;
 
 /**
@@ -43,11 +41,11 @@ import de.knightsoft.DBNavigationBar.shared.Constants;
  *
  * @param <E> Structure of the database
  * @author Manfred Tremmel
- * @version 1.0.0, 2011-02-08
+ * @version $Rev$, $Date$
  */
-public abstract class DBHead2PosDateTemplate
+public abstract class AbstractDBHead2PosDateTemplate
     <E extends DomainHead2PosDataBaseInt>
-    extends DBTemplate<E> {
+    extends AbstractDBTemplate<E> {
 
     /**
      * Serial version id.
@@ -106,7 +104,7 @@ public abstract class DBHead2PosDateTemplate
      * @param setPos2insertHeadSQL
      *          sql statement to insert a new head entry (second position)
      */
-    public DBHead2PosDateTemplate(
+    public AbstractDBHead2PosDateTemplate(
             final Class<E> setType,
             final String setLookUpDataBase,
             final String setSessionUser,
@@ -166,12 +164,13 @@ public abstract class DBHead2PosDateTemplate
         Connection thisDataBase        =    null;
         try {
             // connect to database
-            InitialContext ic      = new InitialContext();
-            DataSource lDataSource = (DataSource) ic.lookup(setLookUpDataBase);
+            final InitialContext ic      = new InitialContext();
+            final DataSource lDataSource =
+                    (DataSource) ic.lookup(setLookUpDataBase);
             thisDataBase           = lDataSource.getConnection();
             ic.close();
 
-            DataBaseDepending myDataBaseDepending =
+            final DataBaseDepending myDataBaseDepending =
                     new DataBaseDepending(thisDataBase.getMetaData()
                             .getDatabaseProductName());
 
@@ -228,14 +227,14 @@ public abstract class DBHead2PosDateTemplate
                 .replace("NOW()", myDataBaseDepending.getSQLTimeNow());
 
         } catch (Exception e) {
-            throw new UnexpectedException(e.toString(), e.getCause());
+            throw new UnexpectedException(e.toString(), e);
         } finally {
             try {
                 if (thisDataBase != null) {
                     thisDataBase.close();
                 }
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
     }
@@ -262,7 +261,7 @@ public abstract class DBHead2PosDateTemplate
      * @param dbKey
      *             comparison number
      * @return SQL-String
-     * @throws Exception when error occurs
+     * @throws SQLException when error occurs
      */
     @Override
     protected final String searchSQLSelect(
@@ -272,13 +271,14 @@ public abstract class DBHead2PosDateTemplate
             final String searchMethodeEntry,
             final String searchFieldEntry,
             final String dbKeyVGL,
-            final String dbKey) throws Exception {
-        int mandator         =    this.getUser().getMandator();
-        DataBaseDepending myDataBaseDepending =
+            final String dbKey) throws SQLException {
+        final int mandator         =    this.getUser().getMandator();
+        final DataBaseDepending myDataBaseDepending =
                 new DataBaseDepending(thisDataBase.getMetaData()
                         .getDatabaseProductName());
 
-        String sqlString =
+        final StringBuilder sqlString = new StringBuilder();
+        sqlString.append(
               "SELECT " + minMax + "(" + this.getKeyFieldName()
                         + ") AS dbnumber "
             + "FROM   " + this.getDataBaseTableName() + " "
@@ -291,22 +291,22 @@ public abstract class DBHead2PosDateTemplate
                     + myDataBaseDepending.getSQLTimeNow() + " "
             + " AND    " + Constants.DB_FIELD_GLOBAL_DATE_TO + "   > "
                     + myDataBaseDepending.getSQLTimeNow() + " "
-            + " AND   ";
+            + " AND   ");
 
         if ("=".equals(searchMethodeEntry)) {
-            sqlString += StringToSQL.searchString(searchField,
+            sqlString.append(StringToSQL.searchString(searchField,
                     searchFieldEntry, thisDataBase.getMetaData()
-                    .getDatabaseProductName());
+                    .getDatabaseProductName()));
         } else if ("like".equals(searchMethodeEntry)) {
-            sqlString += StringToSQL.searchString(searchField,
+            sqlString.append(StringToSQL.searchString(searchField,
                     "*" + searchFieldEntry + "*", thisDataBase
-                    .getMetaData().getDatabaseProductName());
+                    .getMetaData().getDatabaseProductName()));
         } else {
-            sqlString += searchField + " " + searchMethodeEntry
+            sqlString.append(searchField + " " + searchMethodeEntry
                     + " " +  StringToSQL.convertString(searchFieldEntry,
-                       thisDataBase.getMetaData().getDatabaseProductName());
+                       thisDataBase.getMetaData().getDatabaseProductName()));
         }
-        return sqlString;
+        return sqlString.toString();
     }
 
 
@@ -343,10 +343,10 @@ public abstract class DBHead2PosDateTemplate
      * @param thisEntry
      *             Entry to fill
      * @return filled Entry
-     * @throws Exception when error occurs
+     * @throws SQLException when error occurs
      */
     protected abstract E fillPosFromResultSet(ResultSet resultPos,
-            E thisEntry) throws Exception;
+            E thisEntry) throws SQLException;
 
 
 
@@ -383,10 +383,10 @@ public abstract class DBHead2PosDateTemplate
      * @param thisEntry
      *             Entry to fill
      * @return filled Entry
-     * @throws Exception when error occurs
+     * @throws SQLException when error occurs
      */
     protected abstract E fillPos2FromResultSet(ResultSet resultPos2,
-            E thisEntry) throws Exception;
+            E thisEntry) throws SQLException;
 
 
     /**
@@ -399,10 +399,10 @@ public abstract class DBHead2PosDateTemplate
     @Override
     public final E deleteEntry(final String currentEntry) {
         E resultValue = null;
-        DomainUser thisUser = this.getUser();
+        final AbstractDomainUser thisUser = this.getUser();
         if (thisUser !=    null) {
-            int mandator    =    thisUser.getMandator();
-            String user        =    thisUser.getUser();
+            final int mandator = thisUser.getMandator();
+            final String user  = thisUser.getUser();
 
             Connection thisDataBase =    null;
             PreparedStatement invalidateHeadSQLStatement  = null;
@@ -411,14 +411,14 @@ public abstract class DBHead2PosDateTemplate
 
             try {
                 // connect to database
-                InitialContext ic = new InitialContext();
-                DataSource lDataSource =
+                final InitialContext ic = new InitialContext();
+                final DataSource lDataSource =
                         (DataSource) ic.lookup(this.getLookUpDataBase());
                 thisDataBase =    lDataSource.getConnection();
                 ic.close();
 
                 if (allowedToChange()) {
-                    E dbEntry    =    this.readEntry(currentEntry);
+                    final E dbEntry = this.readEntry(currentEntry);
                     // invalidate head number
                     if (this.getInvalidateHeadSQL() != null) {
                         invalidateHeadSQLStatement =
@@ -615,9 +615,15 @@ public abstract class DBHead2PosDateTemplate
                 readPosSQLStatement.clearParameters();
                 readPosSQLStatement.setInt(1, mandator);
                 readPosSQLStatement.setString(2, entry);
-                ResultSet resultPos = readPosSQLStatement.executeQuery();
-                returnEntry = fillPosFromResultSet(resultPos, returnEntry);
-                resultPos.close();
+                ResultSet resultPos = null;
+                try {
+                    resultPos = readPosSQLStatement.executeQuery();
+                    returnEntry = fillPosFromResultSet(resultPos, returnEntry);
+                } finally {
+                    if (resultPos != null) {
+                        resultPos.close();
+                    }
+                }
             }
 
             if (returnEntry != null && returnEntry.getKeyCur() != null) {
@@ -626,9 +632,15 @@ public abstract class DBHead2PosDateTemplate
                 readPos2SQLStatement.clearParameters();
                 readPos2SQLStatement.setInt(1, mandator);
                 readPos2SQLStatement.setString(2, entry);
-                ResultSet resultPos2 = readPos2SQLStatement.executeQuery();
-                returnEntry = fillPos2FromResultSet(resultPos2, thisEntry);
-                resultPos2.close();
+                ResultSet resultPos2 = null;
+                try {
+                    resultPos2 = readPos2SQLStatement.executeQuery();
+                    returnEntry = fillPos2FromResultSet(resultPos2, thisEntry);
+                } finally {
+                    if (resultPos2 != null) {
+                        resultPos2.close();
+                    }
+                }
             }
         } catch (Exception nef) {
             returnEntry    =    null;
