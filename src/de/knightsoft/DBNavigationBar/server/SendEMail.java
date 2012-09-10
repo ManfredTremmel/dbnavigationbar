@@ -186,86 +186,111 @@ public class SendEMail {
     public final void sendEMailSendmail(final String eMailString,
                                         final String smtpServer
            ) throws IOException {
-        final Socket smtpSocket = new Socket(smtpServer, SMTP_PORT);
-        String responseline    = null;
-        final int mailTabStart = 3;
+        Socket smtpSocket = null;
+        DataOutputStream os = null;
+        BufferedReader br = null;
+        try {
+            smtpSocket = new Socket(smtpServer, SMTP_PORT);
+            String responseline    = null;
+            final int mailTabStart = 3;
 
-        if (smtpSocket != null) {
-            final DataOutputStream os =
-                    new DataOutputStream(smtpSocket.getOutputStream());
-            final BufferedReader   br =
-                    new BufferedReader(new InputStreamReader(
-                            smtpSocket.getInputStream()));
+            if (smtpSocket != null) {
+                os = new DataOutputStream(smtpSocket.getOutputStream());
+                br = new BufferedReader(new InputStreamReader(
+                                smtpSocket.getInputStream()));
 
-            final String[] mailTab = eMailString.split("\n");
-
-            responseline = br.readLine();
-            if (responseline != null
-             && responseline.startsWith("220")) {
-                os.writeBytes("HELO " + smtpServer + "\r\n");
+                final String[] mailTab = eMailString.split("\n");
 
                 responseline = br.readLine();
                 if (responseline != null
-                 && responseline.startsWith("250")) {
-                    os.writeBytes(mailTab[0] + "\r\n");
+                 && responseline.startsWith("220")) {
+                    os.writeBytes("HELO " + smtpServer + "\r\n");
 
                     responseline = br.readLine();
                     if (responseline != null
                      && responseline.startsWith("250")) {
-                        os.writeBytes(mailTab[1] + "\r\n");
+                        os.writeBytes(mailTab[0] + "\r\n");
 
                         responseline = br.readLine();
                         if (responseline != null
                          && responseline.startsWith("250")) {
-                            os.writeBytes(mailTab[2] + "\r\n");
+                            os.writeBytes(mailTab[1] + "\r\n");
 
                             responseline = br.readLine();
                             if (responseline != null
-                             && responseline.startsWith("354")) {
-                                for (int i = mailTabStart;
-                                     i < mailTab.length; i++) {
-                                    os.writeBytes(mailTab[i] + "\r\n");
-                                }
-                                os.writeBytes("\r\n.\r\n");
+                             && responseline.startsWith("250")) {
+                                os.writeBytes(mailTab[2] + "\r\n");
 
                                 responseline = br.readLine();
                                 if (responseline != null
-                                 && responseline.startsWith("250")) {
-                                    os.writeBytes("QUIT\r\n");
+                                 && responseline.startsWith("354")) {
+                                    for (int i = mailTabStart;
+                                         i < mailTab.length; i++) {
+                                        os.writeBytes(mailTab[i] + "\r\n");
+                                    }
+                                    os.writeBytes("\r\n.\r\n");
 
                                     responseline = br.readLine();
-                                    if (responseline == null
-                                     || !responseline.startsWith("221")) {
+                                    if (responseline != null
+                                     && responseline.startsWith("250")) {
+                                        os.writeBytes("QUIT\r\n");
+
+                                        responseline = br.readLine();
+                                        if (responseline == null
+                                         || !responseline.startsWith("221")) {
+                                            throw new IOException(
+                                              "Got no OK after QUIT: "
+                                            + responseline);
+                                        }
+                                    } else {
                                         throw new IOException(
-                                          "Got no OK after QUIT: "
+                                        "Server didn't accept Message "
+                                        + "for delivery: "
                                         + responseline);
                                     }
                                 } else {
                                     throw new IOException(
-                                    "Server didn't accept Message "
-                                    + "for delivery: "
-                                    + responseline);
+                                      "Server didn't allow to send Mailbody: "
+                                      + responseline);
                                 }
                             } else {
-                                throw new IOException(
-                                  "Server didn't allow to send Mailbody: "
-                                  + responseline);
+                                throw new IOException("Server was not happy "
+                                    + "with our Receiver: " + responseline);
                             }
                         } else {
-                            throw new IOException("Server was not happy "
-                                + "with our Receiver: " + responseline);
+                            throw new IOException("Server was not happy with "
+                                    + "our Sender: " + responseline);
                         }
                     } else {
-                        throw new IOException("Server was not happy with "
-                                + "our Sender: " + responseline);
+                        throw new IOException("Server was not happy with our "
+                                + "HELLO message: " + responseline);
                     }
                 } else {
-                    throw new IOException("Server was not happy with our "
-                            + "HELLO message: " + responseline);
+                    throw new IOException("Got no Hello from the Server: "
+                          + responseline);
                 }
-            } else {
-                throw new IOException("Got no Hello from the Server: "
-                      + responseline);
+            }
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (os != null) {
+                try {
+                    os.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (smtpSocket != null) {
+                try {
+                    smtpSocket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
