@@ -225,8 +225,8 @@ public abstract class AbstractDomainDBBasics
      *
      */
     public final void setUpDefaultEntryKey() {
-        this.readOnly                    =    false;
-        this.keyCur                        =    null;
+        this.readOnly = false;
+        this.keyCur = null;
     }
 
 }

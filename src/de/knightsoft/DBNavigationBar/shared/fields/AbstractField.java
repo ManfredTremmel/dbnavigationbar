@@ -32,7 +32,7 @@ import java.text.ParseException;
  * @version $Rev$, $Date$
  */
 public abstract class AbstractField<E>
-    implements Serializable, Cloneable, FieldInterface<E> {
+    implements Serializable, FieldInterface<E> {
 
     /**
      * Serial version id.
@@ -137,10 +137,4 @@ public abstract class AbstractField<E>
      */
     @Override
     public abstract boolean isOK();
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public final AbstractField<E> clone() throws CloneNotSupportedException {
-        return ((AbstractField<E>) super.clone());
-    }
 }

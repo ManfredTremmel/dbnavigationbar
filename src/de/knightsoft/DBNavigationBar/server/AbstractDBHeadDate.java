@@ -35,12 +35,21 @@ import javax.naming.NamingException;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.google.gwt.user.server.rpc.UnexpectedException;
 import com.google.gwt.user.server.rpc.XsrfProtectedServiceServlet;
 
 import de.knightsoft.DBNavigationBar.client.domain.AbstractDataBaseDomain;
 import de.knightsoft.DBNavigationBar.client.domain.AbstractDomainUser;
-import de.knightsoft.DBNavigationBar.client.domain.EnumerationState;
+import de.knightsoft.DBNavigationBar.client.exceptions.DeleteDataBaseException;
+import de.knightsoft.DBNavigationBar.client.exceptions.EmptyDataBaseException;
+import de.knightsoft.DBNavigationBar.client.exceptions.EntryNotFoundException;
+import de.knightsoft.DBNavigationBar.client.exceptions.InvalidDataException;
+import de.knightsoft.DBNavigationBar.client.exceptions.SaveDataBaseException;
+import de.knightsoft.DBNavigationBar.client.exceptions.ServerErrorException;
+import de.knightsoft.DBNavigationBar.client.exceptions.UserNotAllowedException;
+import de.knightsoft.DBNavigationBar.client.exceptions.UserNotLoggedInException;
 import de.knightsoft.DBNavigationBar.client.ui.AbstractDBRemoteService;
 import de.knightsoft.DBNavigationBar.server.dbfield.DBFieldFactory;
 import de.knightsoft.DBNavigationBar.server.dbfield.DBFieldInterface;
@@ -314,15 +323,23 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
      * <code>RiPhoneUser</code> is used to read the currently logged in user.
      *
      * @return logged in user
+     * @throws UserNotLoggedInException
+     *          if user is not logged in
      */
-    protected final AbstractDomainUser getUser() {
+    protected final AbstractDomainUser getUser()
+            throws UserNotLoggedInException {
         final HttpSession session =
                 this.getThreadLocalRequest().getSession(true);
 
         AbstractDomainUser thisUser = null;
-        if (session != null) {
+        if (session == null) {
+            throw new UserNotLoggedInException();
+        } else {
             thisUser =
                 (AbstractDomainUser) session.getAttribute(this.sessionUser);
+            if (thisUser == null) {
+                throw new UserNotLoggedInException();
+            }
         }
 
         return thisUser;
@@ -384,18 +401,18 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
      * @param thisEntry
      *             structure to be filled with user data
      * @return the filled structure
-     * @throws SQLException
+     * @throws ServerErrorException
+     *          thrown on errors on server
      */
     protected final E fillMinMax(
             final Connection thisDataBase,
             final int mandator,
             final E thisEntry
-          ) {
+          ) throws ServerErrorException {
         PreparedStatement readMinMaxSQLStatement    =    null;
         E returnEntry;
         if (thisEntry == null) {
             returnEntry = this.createDomainInstance();
-            returnEntry.setState(EnumerationState.UNDEFINED);
         } else {
             returnEntry = thisEntry;
         }
@@ -411,6 +428,12 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
                 if (result.next()) {
                     returnEntry.getKeyMin().setString(result.getString("min"));
                     returnEntry.getKeyMax().setString(result.getString("max"));
+                    if (returnEntry.getKeyMax().getString() == null) {
+                        // no entries in database
+                        throw new EmptyDataBaseException();
+                    }
+                } else {
+                    throw new EmptyDataBaseException();
                 }
             } finally {
                 if (result != null) {
@@ -419,12 +442,10 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            returnEntry.setState(EnumerationState.SERVER_ERROR);
-            returnEntry.setStateText(e.getMessage());
+            throw new ServerErrorException(e);
         } catch (ParseException e) {
             e.printStackTrace();
-            returnEntry.setState(EnumerationState.SERVER_ERROR);
-            returnEntry.setStateText(e.getMessage());
+            throw new ServerErrorException(e);
         } finally {
             try {
                 if (readMinMaxSQLStatement != null) {
@@ -459,6 +480,7 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
      *             comparison number
      * @return SQL-String
      * @throws SQLException if sql statement can not be created
+     * @throws UserNotLoggedInException if user is not logged in
      */
     protected final String searchSQLSelect(
             final Connection thisDataBase,
@@ -467,8 +489,8 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
             final String searchMethodeEntry,
             final String searchFieldEntry,
             final String dbKeyVGL,
-            final String dbKey) throws SQLException {
-        final int mandator         =    this.getUser().getMandator();
+            final String dbKey) throws SQLException, UserNotLoggedInException {
+        final int mandator = this.getUser().getMandator();
         final DataBaseDepending myDataBaseDepending =
                 new DataBaseDepending(thisDataBase.getMetaData()
                         .getDatabaseProductName());
@@ -518,10 +540,12 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
      * @param thisEntry
      *             structure to be filled
      * @return the filled structure
+     * @throws ServerErrorException
+     *          thrown on errors on server
      */
     protected final E readOneEntry(final Connection thisDataBase,
             final int mandator, final String entry,
-            final E thisEntry) {
+            final E thisEntry) throws ServerErrorException {
         PreparedStatement readHeadSQLStatement = null;
         if (thisEntry != null) {
             if (this.allowedToSee()) {
@@ -537,6 +561,7 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
                         resultHead = readHeadSQLStatement.executeQuery();
 
                         if (resultHead.next()) {
+                            // read is ok, fill fields
                             for (DBFieldInterface<?> dbField
                                     : this.dbFieldList) {
                                 dbField.readFromResultSet(resultHead,
@@ -545,7 +570,9 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
                             }
                             thisEntry.getKeyCur().setString(entry);
                         } else {
-                            thisEntry.setState(EnumerationState.READ_NOT_FOUND);
+                            // entry was not found
+                            throw new EntryNotFoundException(entry,
+                                    EntryNotFoundException.ReadTyp.READ_EQUAL);
                         }
                     } finally {
                         if (resultHead != null) {
@@ -555,12 +582,10 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
                     thisEntry.setIsReadOnly(!this.allowedToChange());
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    thisEntry.setState(EnumerationState.SERVER_ERROR);
-                    thisEntry.setStateText(e.getMessage());
+                    throw new ServerErrorException(e);
                 } catch (ParseException e) {
                     e.printStackTrace();
-                    thisEntry.setState(EnumerationState.SERVER_ERROR);
-                    thisEntry.setStateText(e.getMessage());
+                    throw new ServerErrorException(e);
                 } finally {
                     if (readHeadSQLStatement != null) {
                         try {
@@ -571,7 +596,8 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
                     }
                 }
             } else {
-                thisEntry.setState(EnumerationState.NOT_ALLOWED_TO_READ);
+                // user is not allowed to read entry
+                throw new UserNotAllowedException();
             }
         }
         return thisEntry;
@@ -582,48 +608,38 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
      * #readEntry(java.lang.String)
      */
     @Override
-    public final E readEntry(final String entry) {
+    public final E readEntry(final String entry)
+            throws ServerErrorException {
         E thisEntry = null;
-        final AbstractDomainUser thisUser = this.getUser();
-        if (thisUser ==    null) {
+        final int mandator = this.getUser().getMandator();
+        Connection thisDataBase = null;
+
+        try {
+            // connect to database
+            final InitialContext ic = new InitialContext();
+            final DataSource lDataSource =
+                    (DataSource) ic.lookup(this.lookUpDataBase);
+            thisDataBase =    lDataSource.getConnection();
+            ic.close();
+
+            thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
+            thisEntry = readOneEntry(thisDataBase, mandator, entry,
+                    thisEntry);
+        } catch (SQLException e) {
+            e.printStackTrace();
             thisEntry = this.createDomainInstance();
-            thisEntry.setState(EnumerationState.NOT_LOGGED_IN);
-        } else {
-            final int mandator = thisUser.getMandator();
-            Connection thisDataBase = null;
-
+            throw new ServerErrorException(e);
+        } catch (NamingException e) {
+            e.printStackTrace();
+            thisEntry = this.createDomainInstance();
+            throw new ServerErrorException(e);
+        } finally {
             try {
-                // connect to database
-                final InitialContext ic = new InitialContext();
-                final DataSource lDataSource =
-                        (DataSource) ic.lookup(this.lookUpDataBase);
-                thisDataBase =    lDataSource.getConnection();
-                ic.close();
-
-                thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
-                thisEntry = readOneEntry(thisDataBase, mandator, entry,
-                        thisEntry);
-                if (thisEntry.getState() == EnumerationState.UNDEFINED) {
-                    thisEntry.setState(EnumerationState.READ_OK);
+                if (thisDataBase != null) {
+                    thisDataBase.close();
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
-                thisEntry = this.createDomainInstance();
-                thisEntry.setState(EnumerationState.SERVER_ERROR);
-                thisEntry.setStateText(e.getMessage());
-            } catch (NamingException e) {
-                e.printStackTrace();
-                thisEntry = this.createDomainInstance();
-                thisEntry.setState(EnumerationState.SERVER_ERROR);
-                thisEntry.setStateText(e.getMessage());
-            } finally {
-                try {
-                    if (thisDataBase != null) {
-                        thisDataBase.close();
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
             }
         }
         return thisEntry;
@@ -638,83 +654,77 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
     public final E findFirstEntry(
             final String searchField,
             final String searchMethodEntry,
-            final String searchFieldEntry) {
+            final String searchFieldEntry) throws ServerErrorException {
         E thisEntry = null;
-        final AbstractDomainUser thisUser    =    this.getUser();
-        if (thisUser ==    null) {
-            thisEntry = this.createDomainInstance();
-            thisEntry.setState(EnumerationState.NOT_LOGGED_IN);
-        } else {
-            final int mandator    =    thisUser.getMandator();
-            Connection thisDataBase    =    null;
-            try {
-                if (searchFieldEntry == null || "".equals(searchFieldEntry)) {
-                    thisEntry = this.readFirstEntry();
-                } else {
-                    // connect to database
-                    final InitialContext ic =    new InitialContext();
-                    final DataSource lDataSource =
-                            (DataSource) ic.lookup(lookUpDataBase);
-                    thisDataBase = lDataSource.getConnection();
-                    ic.close();
+        final int mandator = this.getUser().getMandator();
+        Connection thisDataBase = null;
+        try {
+            if (StringUtils.isEmpty(searchFieldEntry)) {
+                thisEntry = this.readFirstEntry();
+            } else {
+                // connect to database
+                final InitialContext ic =    new InitialContext();
+                final DataSource lDataSource =
+                        (DataSource) ic.lookup(lookUpDataBase);
+                thisDataBase = lDataSource.getConnection();
+                ic.close();
 
-                    thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
-                    String newEntry = thisEntry.getKeyMin().getString();
+                thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
+                String newEntry = thisEntry.getKeyMin().getString();
 
-                    final String sqlString = this.searchSQLSelect(thisDataBase,
-                            "MIN", searchField, searchMethodEntry,
-                            searchFieldEntry, ">=", newEntry);
-                    if (sqlString == null) {
-                        newEntry = null;
+                final String sqlString = this.searchSQLSelect(thisDataBase,
+                        "MIN", searchField, searchMethodEntry,
+                        searchFieldEntry, ">=", newEntry);
+                Statement statement = null;
+                ResultSet result    = null;
+                try {
+                    statement = thisDataBase.createStatement();
+                    result = statement.executeQuery(sqlString);
+                    if (result.next()) {
+                        newEntry = result.getString("dbnumber");
+                        if (newEntry == null) {
+                            // entry not found
+                            throw new EntryNotFoundException(null,
+                                EntryNotFoundException.ReadTyp.SEARCH);
+                        }
                     } else {
-                        Statement statement = null;
-                        ResultSet result    = null;
+                        // entry not found
+                        throw new EntryNotFoundException(null,
+                                EntryNotFoundException.ReadTyp.SEARCH);
+                    }
+                } finally {
+                    if (result != null) {
                         try {
-                            statement = thisDataBase.createStatement();
-                            result = statement.executeQuery(sqlString);
-                            if (result.next()) {
-                                newEntry = result.getString("dbnumber");
-                            } else {
-                                newEntry = null;
-                            }
-                        } finally {
-                            if (result != null) {
-                                result.close();
-                            }
-                            if (statement != null) {
-                                statement.close();
-                            }
+                            result.close();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
                         }
                     }
-
-                    if (newEntry == null) {
-                        thisEntry.setState(
-                                EnumerationState.SEARCH_NOT_FOUND);
-                    } else {
-                        thisEntry.setState(
-                                EnumerationState.SEARCH_OK);
-                        thisEntry = readOneEntry(thisDataBase,
-                                mandator, newEntry, thisEntry);
+                    if (statement != null) {
+                        try {
+                            statement.close();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
                     }
+                }
+
+                thisEntry = readOneEntry(thisDataBase,
+                        mandator, newEntry, thisEntry);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new ServerErrorException(e);
+        } catch (NamingException e) {
+            e.printStackTrace();
+            throw new ServerErrorException(e);
+        } finally {
+            try {
+                if (thisDataBase != null) {
+                    thisDataBase.close();
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
-                thisEntry = this.createDomainInstance();
-                thisEntry.setState(EnumerationState.SERVER_ERROR);
-                thisEntry.setStateText(e.getMessage());
-            } catch (NamingException e) {
-                e.printStackTrace();
-                thisEntry = this.createDomainInstance();
-                thisEntry.setState(EnumerationState.SERVER_ERROR);
-                thisEntry.setStateText(e.getMessage());
-            } finally {
-                try {
-                    if (thisDataBase != null) {
-                        thisDataBase.close();
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
             }
         }
         return thisEntry;
@@ -728,83 +738,78 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
     public final E findLastEntry(
             final String searchField,
             final String searchMethodEntry,
-            final String searchFieldEntry) {
+            final String searchFieldEntry) throws ServerErrorException {
         E thisEntry = null;
-        final AbstractDomainUser thisUser    =    this.getUser();
-        if (thisUser ==    null) {
-            thisEntry = this.createDomainInstance();
-            thisEntry.setState(EnumerationState.NOT_LOGGED_IN);
-        } else {
-            final int mandator    =    thisUser.getMandator();
-            Connection thisDataBase    =    null;
-            try {
-                if (searchFieldEntry == null || "".equals(searchFieldEntry)) {
-                    thisEntry = this.readFirstEntry();
-                } else {
-                    // connect to database
-                    final InitialContext ic =    new InitialContext();
-                    final DataSource lDataSource =
-                            (DataSource) ic.lookup(lookUpDataBase);
-                    thisDataBase = lDataSource.getConnection();
-                    ic.close();
+        final int mandator = this.getUser().getMandator();
+        Connection thisDataBase = null;
+        try {
+            if (StringUtils.isEmpty(searchFieldEntry)) {
+                thisEntry = this.readFirstEntry();
+            } else {
+                // connect to database
+                final InitialContext ic =    new InitialContext();
+                final DataSource lDataSource =
+                        (DataSource) ic.lookup(lookUpDataBase);
+                thisDataBase = lDataSource.getConnection();
+                ic.close();
 
-                    thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
-                    String newEntry = thisEntry.getKeyMin().getString();
+                thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
+                String newEntry = thisEntry.getKeyMin().getString();
 
-                    final String sqlString = this.searchSQLSelect(thisDataBase,
-                            "MAX", searchField, searchMethodEntry,
-                            searchFieldEntry, "<=", newEntry);
-                    if (sqlString == null) {
-                        newEntry = null;
+                final String sqlString = this.searchSQLSelect(thisDataBase,
+                        "MAX", searchField, searchMethodEntry,
+                        searchFieldEntry, "<=", newEntry);
+                Statement statement = null;
+                ResultSet result    = null;
+                try {
+                    statement = thisDataBase.createStatement();
+                    result = statement.executeQuery(sqlString);
+                    if (result.next()) {
+                        newEntry = result.getString("dbnumber");
+                        if (newEntry == null) {
+                            // entry not found
+                            throw new EntryNotFoundException(null,
+                                EntryNotFoundException.ReadTyp.SEARCH);
+                        }
                     } else {
-                        Statement statement = null;
-                        ResultSet result    = null;
+                        // entry not found
+                        throw new EntryNotFoundException(null,
+                                EntryNotFoundException.ReadTyp.SEARCH);
+                    }
+                } finally {
+                    if (result != null) {
                         try {
-                            statement = thisDataBase.createStatement();
-                            result = statement.executeQuery(sqlString);
-                            if (result.next()) {
-                                newEntry = result.getString("dbnumber");
-                            } else {
-                                newEntry = null;
-                            }
-                        } finally {
-                            if (result != null) {
-                                result.close();
-                            }
-                            if (statement != null) {
-                                statement.close();
-                            }
+                            result.close();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
                         }
                     }
-
-                    if (newEntry == null) {
-                        thisEntry.setState(
-                                EnumerationState.SEARCH_NOT_FOUND);
-                    } else {
-                        thisEntry.setState(
-                                EnumerationState.SEARCH_OK);
-                        thisEntry = readOneEntry(thisDataBase,
-                                mandator, newEntry, thisEntry);
+                    if (statement != null) {
+                        try {
+                            statement.close();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
                     }
+                }
+
+                thisEntry = readOneEntry(thisDataBase,
+                        mandator, newEntry, thisEntry);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            thisEntry = this.createDomainInstance();
+            throw new ServerErrorException(e);
+        } catch (NamingException e) {
+            e.printStackTrace();
+            throw new ServerErrorException(e);
+        } finally {
+            try {
+                if (thisDataBase != null) {
+                    thisDataBase.close();
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
-                thisEntry = this.createDomainInstance();
-                thisEntry.setState(EnumerationState.SERVER_ERROR);
-                thisEntry.setStateText(e.getMessage());
-            } catch (NamingException e) {
-                e.printStackTrace();
-                thisEntry = this.createDomainInstance();
-                thisEntry.setState(EnumerationState.SERVER_ERROR);
-                thisEntry.setStateText(e.getMessage());
-            } finally {
-                try {
-                    if (thisDataBase != null) {
-                        thisDataBase.close();
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
             }
         }
         return thisEntry;
@@ -820,83 +825,77 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
             final String searchField,
             final String searchMethodEntry,
             final String searchFieldEntry,
-            final String currentEntry) {
+            final String currentEntry) throws ServerErrorException {
         E thisEntry = null;
-        final AbstractDomainUser thisUser    =    this.getUser();
-        if (thisUser ==    null) {
-            thisEntry = this.createDomainInstance();
-            thisEntry.setState(EnumerationState.NOT_LOGGED_IN);
-        } else {
-            final int mandator    =    thisUser.getMandator();
-            Connection thisDataBase    =    null;
-            try {
-                if (searchFieldEntry == null || "".equals(searchFieldEntry)) {
-                    thisEntry = this.readNextEntry(currentEntry);
-                } else {
-                    // connect to database
-                    final InitialContext ic =    new InitialContext();
-                    final DataSource lDataSource =
-                            (DataSource) ic.lookup(lookUpDataBase);
-                    thisDataBase = lDataSource.getConnection();
-                    ic.close();
+        final int mandator = this.getUser().getMandator();
+        Connection thisDataBase = null;
+        try {
+            if (StringUtils.isEmpty(searchFieldEntry)) {
+                thisEntry = this.readNextEntry(currentEntry);
+            } else {
+                // connect to database
+                final InitialContext ic = new InitialContext();
+                final DataSource lDataSource =
+                        (DataSource) ic.lookup(lookUpDataBase);
+                thisDataBase = lDataSource.getConnection();
+                ic.close();
 
-                    thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
-                    String newEntry = currentEntry;
+                thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
+                String newEntry = currentEntry;
 
-                    final String sqlString = this.searchSQLSelect(thisDataBase,
-                            "MIN", searchField, searchMethodEntry,
-                            searchFieldEntry, ">", newEntry);
-                    if (sqlString == null) {
-                        newEntry = null;
+                final String sqlString = this.searchSQLSelect(thisDataBase,
+                        "MIN", searchField, searchMethodEntry,
+                        searchFieldEntry, ">", newEntry);
+                Statement statement = null;
+                ResultSet result    = null;
+                try {
+                    statement = thisDataBase.createStatement();
+                    result = statement.executeQuery(sqlString);
+                    if (result.next()) {
+                        newEntry = result.getString("dbnumber");
+                        if (newEntry == null) {
+                            // entry not found
+                            throw new EntryNotFoundException(currentEntry,
+                                EntryNotFoundException.ReadTyp.SEARCH_NEXT);
+                        }
                     } else {
-                        Statement statement = null;
-                        ResultSet result    = null;
+                        // entry not found
+                        throw new EntryNotFoundException(currentEntry,
+                                EntryNotFoundException.ReadTyp.SEARCH_NEXT);
+                    }
+                } finally {
+                    if (result != null) {
                         try {
-                            statement = thisDataBase.createStatement();
-                            result = statement.executeQuery(sqlString);
-                            if (result.next()) {
-                                newEntry = result.getString("dbnumber");
-                            } else {
-                                newEntry = null;
-                            }
-                        } finally {
-                            if (result != null) {
-                                result.close();
-                            }
-                            if (statement != null) {
-                                statement.close();
-                            }
+                            result.close();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
                         }
                     }
-
-                    if (newEntry == null) {
-                        thisEntry.setState(
-                                EnumerationState.SEARCH_NOT_FOUND);
-                    } else {
-                        thisEntry.setState(
-                                EnumerationState.SEARCH_OK);
-                        thisEntry = readOneEntry(thisDataBase,
-                                mandator, newEntry, thisEntry);
+                    if (statement != null) {
+                        try {
+                            statement.close();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
                     }
+                }
+
+                thisEntry = readOneEntry(thisDataBase,
+                        mandator, newEntry, thisEntry);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new ServerErrorException(e);
+        } catch (NamingException e) {
+            e.printStackTrace();
+            throw new ServerErrorException(e);
+        } finally {
+            try {
+                if (thisDataBase != null) {
+                    thisDataBase.close();
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
-                thisEntry = this.createDomainInstance();
-                thisEntry.setState(EnumerationState.SERVER_ERROR);
-                thisEntry.setStateText(e.getMessage());
-            } catch (NamingException e) {
-                e.printStackTrace();
-                thisEntry = this.createDomainInstance();
-                thisEntry.setState(EnumerationState.SERVER_ERROR);
-                thisEntry.setStateText(e.getMessage());
-            } finally {
-                try {
-                    if (thisDataBase != null) {
-                        thisDataBase.close();
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
             }
         }
         return thisEntry;
@@ -912,83 +911,77 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
             final String searchField,
             final String searchMethodEntry,
             final String searchFieldEntry,
-            final String currentEntry) {
+            final String currentEntry) throws ServerErrorException {
         E thisEntry = null;
-        final AbstractDomainUser thisUser    =    this.getUser();
-        if (thisUser ==    null) {
-            thisEntry = this.createDomainInstance();
-            thisEntry.setState(EnumerationState.NOT_LOGGED_IN);
-        } else {
-            final int mandator    =    thisUser.getMandator();
-            Connection thisDataBase    =    null;
-            try {
-                if (searchFieldEntry == null || "".equals(searchFieldEntry)) {
-                    thisEntry = this.readPreviousEntry(currentEntry);
-                } else {
-                    // connect to database
-                    final InitialContext ic =    new InitialContext();
-                    final DataSource lDataSource =
-                            (DataSource) ic.lookup(lookUpDataBase);
-                    thisDataBase = lDataSource.getConnection();
-                    ic.close();
+        final int mandator = this.getUser().getMandator();
+        Connection thisDataBase = null;
+        try {
+            if (StringUtils.isEmpty(searchFieldEntry)) {
+                thisEntry = this.readPreviousEntry(currentEntry);
+            } else {
+                // connect to database
+                final InitialContext ic = new InitialContext();
+                final DataSource lDataSource =
+                        (DataSource) ic.lookup(lookUpDataBase);
+                thisDataBase = lDataSource.getConnection();
+                ic.close();
 
-                    thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
-                    String newEntry = currentEntry;
+                thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
+                String newEntry = currentEntry;
 
-                    final String sqlString = this.searchSQLSelect(thisDataBase,
-                            "MAX", searchField, searchMethodEntry,
-                            searchFieldEntry, "<", newEntry);
-                    if (sqlString == null) {
-                        newEntry = null;
+                final String sqlString = this.searchSQLSelect(thisDataBase,
+                        "MAX", searchField, searchMethodEntry,
+                        searchFieldEntry, "<", newEntry);
+                Statement statement = null;
+                ResultSet result    = null;
+                try {
+                    statement = thisDataBase.createStatement();
+                    result = statement.executeQuery(sqlString);
+                    if (result.next()) {
+                        newEntry = result.getString("dbnumber");
+                        if (newEntry == null) {
+                            // entry not found
+                            throw new EntryNotFoundException(currentEntry,
+                                EntryNotFoundException.ReadTyp.SEARCH_PREVIOUS);
+                        }
                     } else {
-                        Statement statement = null;
-                        ResultSet result    = null;
+                        // entry not found
+                        throw new EntryNotFoundException(currentEntry,
+                            EntryNotFoundException.ReadTyp.SEARCH_PREVIOUS);
+                    }
+                } finally {
+                    if (result != null) {
                         try {
-                            statement = thisDataBase.createStatement();
-                            result = statement.executeQuery(sqlString);
-                            if (result.next()) {
-                                newEntry = result.getString("dbnumber");
-                            } else {
-                                newEntry = null;
-                            }
-                        } finally {
-                            if (result != null) {
-                                result.close();
-                            }
-                            if (statement != null) {
-                                statement.close();
-                            }
+                            result.close();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
                         }
                     }
-
-                    if (newEntry == null) {
-                        thisEntry.setState(
-                                EnumerationState.SEARCH_NOT_FOUND);
-                    } else {
-                        thisEntry.setState(
-                                EnumerationState.SEARCH_OK);
-                        thisEntry = readOneEntry(thisDataBase,
-                                mandator, newEntry, thisEntry);
+                    if (statement != null) {
+                        try {
+                            statement.close();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
                     }
+                }
+
+                thisEntry = readOneEntry(thisDataBase,
+                        mandator, newEntry, thisEntry);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new ServerErrorException(e);
+        } catch (NamingException e) {
+            e.printStackTrace();
+            throw new ServerErrorException(e);
+        } finally {
+            try {
+                if (thisDataBase != null) {
+                    thisDataBase.close();
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
-                thisEntry = this.createDomainInstance();
-                thisEntry.setState(EnumerationState.SERVER_ERROR);
-                thisEntry.setStateText(e.getMessage());
-            } catch (NamingException e) {
-                e.printStackTrace();
-                thisEntry = this.createDomainInstance();
-                thisEntry.setState(EnumerationState.SERVER_ERROR);
-                thisEntry.setStateText(e.getMessage());
-            } finally {
-                try {
-                    if (thisDataBase != null) {
-                        thisDataBase.close();
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
             }
         }
         return thisEntry;
@@ -999,46 +992,37 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
      * #readFirstEntry()
      */
     @Override
-    public final E readFirstEntry() {
+    public final E readFirstEntry() throws ServerErrorException {
         E thisEntry = null;
-        final AbstractDomainUser thisUser    =    this.getUser();
-        if (thisUser ==    null) {
-            thisEntry = this.createDomainInstance();
-            thisEntry.setState(EnumerationState.NOT_LOGGED_IN);
-        } else {
-            final int mandator    =    thisUser.getMandator();
-            Connection thisDataBase    =    null;
+        final int mandator = this.getUser().getMandator();
+        Connection thisDataBase    =    null;
 
+        try {
+            // connect to database
+            final InitialContext ic = new InitialContext();
+            final DataSource lDataSource =
+                    (DataSource) ic.lookup(this.lookUpDataBase);
+            thisDataBase = lDataSource.getConnection();
+            ic.close();
+
+            thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
+            thisEntry = readOneEntry(thisDataBase, mandator,
+                    thisEntry.getKeyMin().getString(), thisEntry);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new ServerErrorException(e);
+        } catch (NamingException e) {
+            e.printStackTrace();
+            throw new ServerErrorException(e);
+        } catch (EntryNotFoundException e) {
+            throw new EmptyDataBaseException(); // NOPMD, no need for trace
+        } finally {
             try {
-                // connect to database
-                final InitialContext ic = new InitialContext();
-                final DataSource lDataSource =
-                        (DataSource) ic.lookup(this.lookUpDataBase);
-                thisDataBase = lDataSource.getConnection();
-                ic.close();
-
-                thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
-                thisEntry.setState(EnumerationState.READ_OK);
-                thisEntry = readOneEntry(thisDataBase, mandator,
-                        thisEntry.getKeyMin().getString(), thisEntry);
+                if (thisDataBase != null) {
+                    thisDataBase.close();
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
-                thisEntry = this.createDomainInstance();
-                thisEntry.setState(EnumerationState.SERVER_ERROR);
-                thisEntry.setStateText(e.getMessage());
-            } catch (NamingException e) {
-                e.printStackTrace();
-                thisEntry = this.createDomainInstance();
-                thisEntry.setState(EnumerationState.SERVER_ERROR);
-                thisEntry.setStateText(e.getMessage());
-            } finally {
-                try {
-                    if (thisDataBase != null) {
-                        thisDataBase.close();
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
             }
         }
         return thisEntry;
@@ -1049,45 +1033,36 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
      * #readLastEntry()
      */
     @Override
-    public final E readLastEntry() {
+    public final E readLastEntry() throws ServerErrorException {
         E thisEntry = null;
-        final AbstractDomainUser thisUser    =    this.getUser();
-        if (thisUser ==    null) {
-            thisEntry = this.createDomainInstance();
-            thisEntry.setState(EnumerationState.NOT_LOGGED_IN);
-        } else {
-            final int mandator = thisUser.getMandator();
-            Connection thisDataBase = null;
-            try {
-                // connect to database
-                final InitialContext ic = new InitialContext();
-                final DataSource lDataSource =
-                        (DataSource) ic.lookup(this.lookUpDataBase);
-                thisDataBase = lDataSource.getConnection();
-                ic.close();
+        final int mandator = this.getUser().getMandator();
+        Connection thisDataBase = null;
+        try {
+            // connect to database
+            final InitialContext ic = new InitialContext();
+            final DataSource lDataSource =
+                    (DataSource) ic.lookup(this.lookUpDataBase);
+            thisDataBase = lDataSource.getConnection();
+            ic.close();
 
-                thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
-                thisEntry.setState(EnumerationState.READ_OK);
-                thisEntry = readOneEntry(thisDataBase, mandator,
-                        thisEntry.getKeyMax().getString(), thisEntry);
+            thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
+            thisEntry = readOneEntry(thisDataBase, mandator,
+                    thisEntry.getKeyMax().getString(), thisEntry);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new ServerErrorException(e);
+        } catch (NamingException e) {
+            e.printStackTrace();
+            throw new ServerErrorException(e);
+        } catch (EntryNotFoundException e) {
+            throw new EmptyDataBaseException(); // NOPMD, no need for trace
+        } finally {
+            try {
+                if (thisDataBase != null) {
+                    thisDataBase.close();
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
-                thisEntry = this.createDomainInstance();
-                thisEntry.setState(EnumerationState.SERVER_ERROR);
-                thisEntry.setStateText(e.getMessage());
-            } catch (NamingException e) {
-                e.printStackTrace();
-                thisEntry = this.createDomainInstance();
-                thisEntry.setState(EnumerationState.SERVER_ERROR);
-                thisEntry.setStateText(e.getMessage());
-            } finally {
-                try {
-                    if (thisDataBase != null) {
-                        thisDataBase.close();
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
             }
         }
         return thisEntry;
@@ -1098,68 +1073,72 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
      * #readNextEntry(java.lang.String)
      */
     @Override
-    public final E readNextEntry(final String currentEntry) {
+    public final E readNextEntry(final String currentEntry)
+            throws ServerErrorException {
         E thisEntry = null;
-        final AbstractDomainUser thisUser = this.getUser();
-        if (thisUser ==    null) {
-            thisEntry = this.createDomainInstance();
-            thisEntry.setState(EnumerationState.NOT_LOGGED_IN);
-        } else {
-            final int mandator = thisUser.getMandator();
-            Connection thisDataBase =    null;
-            PreparedStatement readNextSQLStatement = null;
+        final int mandator = this.getUser().getMandator();
+        Connection thisDataBase =    null;
+        PreparedStatement readNextSQLStatement = null;
 
-            try {
-                // connect to database
-                final InitialContext ic = new InitialContext();
-                final DataSource lDataSource =
-                        (DataSource) ic.lookup(this.lookUpDataBase);
-                thisDataBase = lDataSource.getConnection();
-                ic.close();
+        try {
+            // connect to database
+            final InitialContext ic = new InitialContext();
+            final DataSource lDataSource =
+                    (DataSource) ic.lookup(this.lookUpDataBase);
+            thisDataBase = lDataSource.getConnection();
+            ic.close();
 
-                thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
-                String newEntryName = thisEntry.getKeyMax().getString();
-                thisEntry.setState(EnumerationState.SEARCH_NOT_FOUND);
-                if (currentEntry != null && !"".equals(currentEntry)) {
-                    readNextSQLStatement = thisDataBase.prepareStatement(
-                                    this.readNextSQL);
-                    readNextSQLStatement.clearParameters();
-                    readNextSQLStatement.setInt(1, mandator);
-                    readNextSQLStatement.setString(2, currentEntry);
-                    ResultSet result = null;
-                    try {
-                        result = readNextSQLStatement.executeQuery();
+            thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
+            String newEntryName = thisEntry.getKeyMax().getString();
+            if (StringUtils.isEmpty(currentEntry)) {
+                thisEntry = this.readFirstEntry();
+            } else {
+                readNextSQLStatement = thisDataBase.prepareStatement(
+                                this.readNextSQL);
+                readNextSQLStatement.clearParameters();
+                readNextSQLStatement.setInt(1, mandator);
+                readNextSQLStatement.setString(2, currentEntry);
+                ResultSet result = null;
+                try {
+                    result = readNextSQLStatement.executeQuery();
 
-                        if (result.next()) {
-                            newEntryName = result.getString("dbnumber");
-                            thisEntry.setState(EnumerationState.READ_OK);
+                    if (result.next()) {
+                        newEntryName = result.getString("dbnumber");
+                        if (newEntryName == null) {
+                            // entry not found
+                            throw new EntryNotFoundException(currentEntry,
+                                EntryNotFoundException.ReadTyp.READ_NEXT);
                         }
-                    } finally {
-                        if (result != null) {
-                            result.close();
-                        }
+                    } else {
+                        // entry not found
+                        throw new EntryNotFoundException(currentEntry,
+                            EntryNotFoundException.ReadTyp.READ_NEXT);
+                    }
+                } finally {
+                    if (result != null) {
+                        result.close();
                     }
                 }
-                thisEntry = readOneEntry(thisDataBase, mandator,
-                        newEntryName, thisEntry);
-            } catch (SQLException e) {
-                e.printStackTrace();
-                thisEntry = this.createDomainInstance();
-                thisEntry.setState(EnumerationState.SERVER_ERROR);
-                thisEntry.setStateText(e.getMessage());
-            } catch (NamingException e) {
-                e.printStackTrace();
-                thisEntry = this.createDomainInstance();
-                thisEntry.setState(EnumerationState.SERVER_ERROR);
-                thisEntry.setStateText(e.getMessage());
-            } finally {
+            }
+            thisEntry = readOneEntry(thisDataBase, mandator,
+                    newEntryName, thisEntry);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new ServerErrorException(e);
+        } catch (NamingException e) {
+            e.printStackTrace();
+            throw new ServerErrorException(e);
+        } finally {
+            if (readNextSQLStatement != null) {
                 try {
-                    if (readNextSQLStatement != null) {
-                        readNextSQLStatement.close();
-                    }
-                    if (thisDataBase != null) {
-                        thisDataBase.close();
-                    }
+                    readNextSQLStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (thisDataBase != null) {
+                try {
+                    thisDataBase.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -1173,69 +1152,73 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
      * #readPreviousEntry(java.lang.String)
      */
     @Override
-    public final E readPreviousEntry(final String currentEntry) {
+    public final E readPreviousEntry(final String currentEntry)
+            throws ServerErrorException {
         E thisEntry = null;
-        final AbstractDomainUser thisUser = this.getUser();
-        if (thisUser ==    null) {
-            thisEntry = this.createDomainInstance();
-            thisEntry.setState(EnumerationState.NOT_LOGGED_IN);
-        } else {
-            final int mandator = thisUser.getMandator();
-            Connection thisDataBase =    null;
-            PreparedStatement readPrevSQLStatement = null;
+        final int mandator = this.getUser().getMandator();
+        Connection thisDataBase =    null;
+        PreparedStatement readPrevSQLStatement = null;
 
-            try {
-                // connect to database
-                final InitialContext ic = new InitialContext();
-                final DataSource lDataSource =
-                        (DataSource) ic.lookup(this.lookUpDataBase);
-                thisDataBase = lDataSource.getConnection();
-                ic.close();
+        try {
+            // connect to database
+            final InitialContext ic = new InitialContext();
+            final DataSource lDataSource =
+                    (DataSource) ic.lookup(this.lookUpDataBase);
+            thisDataBase = lDataSource.getConnection();
+            ic.close();
 
-                thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
-                String newEntryName = thisEntry.getKeyMax().getString();
-                thisEntry.setState(EnumerationState.SEARCH_NOT_FOUND);
-                if (currentEntry != null && !"".equals(currentEntry)) {
-                    readPrevSQLStatement =
-                            thisDataBase.prepareStatement(
-                                    this.readPrevSQL);
-                    readPrevSQLStatement.clearParameters();
-                    readPrevSQLStatement.setInt(1, mandator);
-                    readPrevSQLStatement.setString(2, currentEntry);
-                    ResultSet result = null;
-                    try {
-                        result = readPrevSQLStatement.executeQuery();
+            thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
+            String newEntryName = thisEntry.getKeyMax().getString();
+            if (StringUtils.isEmpty(currentEntry)) {
+                thisEntry = this.readLastEntry();
+            } else {
+                readPrevSQLStatement =
+                        thisDataBase.prepareStatement(
+                                this.readPrevSQL);
+                readPrevSQLStatement.clearParameters();
+                readPrevSQLStatement.setInt(1, mandator);
+                readPrevSQLStatement.setString(2, currentEntry);
+                ResultSet result = null;
+                try {
+                    result = readPrevSQLStatement.executeQuery();
 
-                        if (result.next()) {
-                            newEntryName = result.getString("dbnumber");
-                            thisEntry.setState(EnumerationState.READ_OK);
+                    if (result.next()) {
+                        newEntryName = result.getString("dbnumber");
+                        if (newEntryName == null) {
+                            // entry not found
+                            throw new EntryNotFoundException(currentEntry,
+                                EntryNotFoundException.ReadTyp.READ_PREVIOUS);
                         }
-                    } finally {
-                        if (result != null) {
-                            result.close();
-                        }
+                    } else {
+                        // entry not found
+                        throw new EntryNotFoundException(currentEntry,
+                            EntryNotFoundException.ReadTyp.READ_PREVIOUS);
+                    }
+                } finally {
+                    if (result != null) {
+                        result.close();
                     }
                 }
-                thisEntry = readOneEntry(thisDataBase, mandator,
-                        newEntryName, thisEntry);
-            } catch (SQLException e) {
-                e.printStackTrace();
-                thisEntry = this.createDomainInstance();
-                thisEntry.setState(EnumerationState.SERVER_ERROR);
-                thisEntry.setStateText(e.getMessage());
-            } catch (NamingException e) {
-                e.printStackTrace();
-                thisEntry = this.createDomainInstance();
-                thisEntry.setState(EnumerationState.SERVER_ERROR);
-                thisEntry.setStateText(e.getMessage());
-            } finally {
+            }
+            thisEntry = readOneEntry(thisDataBase, mandator,
+                    newEntryName, thisEntry);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new ServerErrorException(e);
+        } catch (NamingException e) {
+            e.printStackTrace();
+            throw new ServerErrorException(e);
+        } finally {
+            if (readPrevSQLStatement != null) {
                 try {
-                    if (readPrevSQLStatement != null) {
-                        readPrevSQLStatement.close();
-                    }
-                    if (thisDataBase != null) {
-                        thisDataBase.close();
-                    }
+                    readPrevSQLStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (thisDataBase != null) {
+                try {
+                    thisDataBase.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -1351,16 +1334,15 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
      * .AbstractDataBaseDomain)
      */
     @Override
-    public final E saveEntry(final E currentEntry) {
-        final AbstractDomainUser thisUser    =    this.getUser();
+    public final E saveEntry(final E currentEntry)
+            throws ServerErrorException {
+        final AbstractDomainUser thisUser = this.getUser();
         E returnEntry = currentEntry;
-        if (thisUser == null) {
-            returnEntry.setState(EnumerationState.NOT_LOGGED_IN);
-        } else if (returnEntry.isFieldSetOk()) {
+        if (returnEntry.isFieldSetOk()) {
             final int mandator = thisUser.getMandator();
             final String user = thisUser.getUser();
             String saveKeyString = returnEntry.getKeyCur().getString();
-            if (saveKeyString == null || "".equals(saveKeyString)) {
+            if (StringUtils.isEmpty(saveKeyString)) {
                 saveKeyString = returnEntry.getKeyNew().getString();
             }
 
@@ -1375,14 +1357,17 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
                     thisDataBase = lDataSource.getConnection();
                     ic.close();
 
-                    E dbEntry = fillMinMax(thisDataBase, mandator, null);
-                    dbEntry = readOneEntry(thisDataBase, mandator,
+                    E dbEntry;
+                    try {
+                        dbEntry = fillMinMax(thisDataBase, mandator, null);
+                        dbEntry = readOneEntry(thisDataBase, mandator,
                             saveKeyString, dbEntry);
-                    if ((dbEntry != null) && (dbEntry.getKeyCur() == null)) {
-                        dbEntry    =    null;
+                    } catch (EmptyDataBaseException e) {
+                        dbEntry = null;
+                    } catch (EntryNotFoundException e) {
+                        dbEntry = null;
                     }
 
-                    returnEntry.setState(EnumerationState.WRITE_OK);
                     this.saveEntry(currentEntry, dbEntry, thisDataBase,
                             mandator, user, saveKeyString);
 
@@ -1393,18 +1378,20 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
                             mandator, returnEntry.getKeyNew().getString(),
                             returnEntry);
                 } else {
-                    returnEntry.setState(EnumerationState.NOT_ALLOWED_TO_WRITE);
+                    throw new UserNotAllowedException();
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
-                returnEntry = this.createDomainInstance();
-                returnEntry.setState(EnumerationState.SERVER_ERROR);
-                returnEntry.setStateText(e.getMessage());
+                throw new SaveDataBaseException(e);
             } catch (NamingException e) {
                 e.printStackTrace();
-                returnEntry = this.createDomainInstance();
-                returnEntry.setState(EnumerationState.SERVER_ERROR);
-                returnEntry.setStateText(e.getMessage());
+                throw new ServerErrorException(e);
+            } catch (EmptyDataBaseException e) {
+                e.printStackTrace();
+                throw new ServerErrorException(e);
+            } catch (EntryNotFoundException e) {
+                e.printStackTrace();
+                throw new ServerErrorException(e);
             } finally {
                 try {
                     if (thisDataBase != null) {
@@ -1415,7 +1402,7 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
                 }
             }
         } else {
-            returnEntry.setState(EnumerationState.DATA_WRONG);
+            throw new InvalidDataException();
         }
         return returnEntry;
     }
@@ -1425,63 +1412,66 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
      * #deleteEntry(java.lang.String)
      */
     @Override
-    public final E deleteEntry(final String currentEntry) {
+    public final E deleteEntry(final String currentEntry)
+            throws ServerErrorException {
         E resultValue = null;
-        final AbstractDomainUser thisUser  =    this.getUser();
-        if (thisUser ==    null) {
-            resultValue = this.createDomainInstance();
-            resultValue.setState(EnumerationState.NOT_LOGGED_IN);
-        } else {
-            final int mandator     =    thisUser.getMandator();
-            final String user      =    thisUser.getUser();
-            Connection thisDataBase        =    null;
-            PreparedStatement invalidateHeadSQLStatement = null;
+        final AbstractDomainUser thisUser = this.getUser();
+        final int mandator = thisUser.getMandator();
+        final String user = thisUser.getUser();
+        Connection thisDataBase = null;
+        PreparedStatement invalidateHeadSQLStatement = null;
 
-            try {
-                // connect to database
-                final InitialContext ic = new InitialContext();
-                final DataSource lDataSource =
-                        (DataSource) ic.lookup(this.lookUpDataBase);
-                thisDataBase = lDataSource.getConnection();
-                ic.close();
+        try {
+            // connect to database
+            final InitialContext ic = new InitialContext();
+            final DataSource lDataSource =
+                    (DataSource) ic.lookup(this.lookUpDataBase);
+            thisDataBase = lDataSource.getConnection();
+            ic.close();
 
-                if (allowedToChange()) {
-                    final E dbEntry = this.readEntry(currentEntry);
-                    // invalidate head number
-                    invalidateHeadSQLStatement =
-                            thisDataBase.prepareStatement(
-                                    this.invalidateHeadSQL);
-                    invalidateHeadSQLStatement.clearParameters();
-                    invalidateHeadSQLStatement.setInt(1, mandator);
-                    invalidateHeadSQLStatement.setString(2,
-                            currentEntry);
-                    invalidateHeadSQLStatement.executeUpdate();
-                    this.insertEntry(thisDataBase, mandator,
-                            user, dbEntry, true);
-                    resultValue    = readNextEntry(currentEntry);
-                    resultValue.setState(EnumerationState.DELETE_OK);
-                } else {
-                    resultValue    = readEntry(currentEntry);
-                    resultValue.setState(EnumerationState.NOT_ALLOWED_TO_WRITE);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                resultValue = this.createDomainInstance();
-                resultValue.setState(EnumerationState.SERVER_ERROR);
-                resultValue.setStateText(e.getMessage());
-            } catch (NamingException e) {
-                e.printStackTrace();
-                resultValue = this.createDomainInstance();
-                resultValue.setState(EnumerationState.SERVER_ERROR);
-                resultValue.setStateText(e.getMessage());
-            } finally {
+            if (allowedToChange()) {
+                E dbEntry;
                 try {
-                    if (invalidateHeadSQLStatement != null) {
-                        invalidateHeadSQLStatement.close();
-                    }
-                    if (thisDataBase != null) {
-                        thisDataBase.close();
-                    }
+                    dbEntry = this.readEntry(currentEntry);
+                } catch (EmptyDataBaseException e) {
+                    dbEntry = null;
+                } catch (EntryNotFoundException e) {
+                    dbEntry = null;
+                }
+                // invalidate head number
+                invalidateHeadSQLStatement = thisDataBase.prepareStatement(
+                        this.invalidateHeadSQL);
+                invalidateHeadSQLStatement.clearParameters();
+                invalidateHeadSQLStatement.setInt(1, mandator);
+                invalidateHeadSQLStatement.setString(2, currentEntry);
+                invalidateHeadSQLStatement.executeUpdate();
+                this.insertEntry(thisDataBase, mandator,
+                        user, dbEntry, true);
+                try {
+                    resultValue = readNextEntry(currentEntry);
+                } catch (EntryNotFoundException e) {
+                    resultValue = readLastEntry();
+                }
+            } else {
+                throw new UserNotAllowedException();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DeleteDataBaseException(e);
+        } catch (NamingException e) {
+            e.printStackTrace();
+            throw new ServerErrorException(e);
+        } finally {
+            if (invalidateHeadSQLStatement != null) {
+                try {
+                    invalidateHeadSQLStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (thisDataBase != null) {
+                try {
+                    thisDataBase.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

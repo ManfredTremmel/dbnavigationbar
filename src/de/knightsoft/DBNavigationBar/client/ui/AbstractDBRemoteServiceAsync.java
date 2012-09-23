@@ -23,6 +23,7 @@ package de.knightsoft.DBNavigationBar.client.ui;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import de.knightsoft.DBNavigationBar.client.domain.AbstractDataBaseDomain;
+import de.knightsoft.DBNavigationBar.client.exceptions.ServerErrorException;
 
 /**
  *
@@ -41,52 +42,75 @@ public abstract interface AbstractDBRemoteServiceAsync<E extends
      *         entry to save
      * @param callback
      *         class which gets back response
+     * @throws ServerErrorException
+     *          thrown on errors on server
      */
-    void saveEntry(E currentEntry, AsyncCallback<E> callback);
+    void saveEntry(E currentEntry, AsyncCallback<E> callback)
+            throws ServerErrorException;
     /**
      * delete a entry from database.
      * @param currentEntry
      *         entry to delete
      * @param callback
      *         class which gets back response
+     * @throws ServerErrorException
+     *          thrown on errors on server
      */
-    void deleteEntry(String currentEntry, AsyncCallback<E> callback);
+    void deleteEntry(String currentEntry, AsyncCallback<E> callback)
+            throws ServerErrorException;
     /**
      * read on entry by key from database.
      * @param entry
      *         database key
      * @param callback
      *         class which gets back response
+     * @throws ServerErrorException
+     *          thrown on errors on server
      */
-    void readEntry(String entry, AsyncCallback<E> callback);
+    void readEntry(String entry, AsyncCallback<E> callback)
+            throws ServerErrorException;
     /**
      * read first database entry.
      * @param callback
      *         class which gets back response
+     * @throws ServerErrorException
+     *          thrown on errors on server
      */
-    void readFirstEntry(AsyncCallback<E> callback);
+    void readFirstEntry(AsyncCallback<E> callback)
+            throws ServerErrorException;
+
     /**
      * read previous entry.
      * @param currentEntry
      *         key of current entry
      * @param callback
      *         class which gets back response
+     * @throws ServerErrorException
+     *          thrown on errors on server
      */
-    void readPreviousEntry(String currentEntry, AsyncCallback<E> callback);
+    void readPreviousEntry(String currentEntry, AsyncCallback<E> callback)
+            throws ServerErrorException;
     /**
      * read next entry.
      * @param currentEntry
      *         key of current entry
      * @param callback
      *         class which gets back response
+     * @throws ServerErrorException
+     *          thrown on errors on server
      */
-    void readNextEntry(String currentEntry, AsyncCallback<E> callback);
+    void readNextEntry(String currentEntry, AsyncCallback<E> callback)
+            throws ServerErrorException;
     /**
      * read the last entry of the database.
      * @param callback
      *         class which gets back response
+     * @throws ServerErrorException
+     *          thrown on errors on server
      */
-    void readLastEntry(AsyncCallback<E> callback);
+    void readLastEntry(AsyncCallback<E> callback)
+            throws ServerErrorException;
+
     /**
      * find a entry in the database, start with the first one.
      * @param searchField
@@ -97,9 +121,13 @@ public abstract interface AbstractDBRemoteServiceAsync<E extends
      *         search text
      * @param callback
      *         class which gets back response
+     * @throws ServerErrorException
+     *          thrown on errors on server
      */
     void findFirstEntry(String searchField, String searchMethodEntry,
-            String searchFieldEntry, AsyncCallback<E> callback);
+            String searchFieldEntry, AsyncCallback<E> callback)
+                    throws ServerErrorException;
+
     /**
      * find a entry in the database backward, start with the current one.
      * @param searchField
@@ -112,10 +140,12 @@ public abstract interface AbstractDBRemoteServiceAsync<E extends
      *         key of the current entry
      * @param callback
      *         class which gets back response
+     * @throws ServerErrorException
+     *          thrown on errors on server
      */
     void findPreviousEntry(String searchField, String searchMethodEntry,
             String searchFieldEntry, String currentEntry,
-            AsyncCallback<E> callback);
+            AsyncCallback<E> callback) throws ServerErrorException;
     /**
      * find a entry in the database forward, start with the current one.
      * @param searchField
@@ -128,10 +158,12 @@ public abstract interface AbstractDBRemoteServiceAsync<E extends
      *         key of the current entry
      * @param callback
      *         class which gets back response
+     * @throws ServerErrorException
+     *          thrown on errors on server
      */
     void findNextEntry(String searchField, String searchMethodEntry,
             String searchFieldEntry, String currentEntry,
-            AsyncCallback<E> callback);
+            AsyncCallback<E> callback) throws ServerErrorException;
     /**
      * find a entry in the database backward, start with the last one.
      * @param searchField
@@ -142,7 +174,10 @@ public abstract interface AbstractDBRemoteServiceAsync<E extends
      *         search text
      * @param callback
      *         class which gets back response
+     * @throws ServerErrorException
+     *          thrown on errors on server
      */
     void findLastEntry(String searchField, String searchMethodEntry,
-            String searchFieldEntry, AsyncCallback<E> callback);
+            String searchFieldEntry, AsyncCallback<E> callback)
+                    throws ServerErrorException;
 }

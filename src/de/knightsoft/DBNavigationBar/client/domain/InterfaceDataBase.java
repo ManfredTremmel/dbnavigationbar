@@ -56,34 +56,6 @@ public interface InterfaceDataBase<E> {
     void setIsReadOnly(final Boolean newIsReadOnly);
 
     /**
-     * get state.
-     *
-     * @return state
-     */
-    EnumerationState getState();
-
-    /**
-     * set state.
-     *
-     * @param newState new state
-     */
-    void setState(final EnumerationState newState);
-
-    /**
-     * get stateText.
-     *
-     * @return stateText
-     */
-    String getStateText();
-
-    /**
-     * set stateText.
-     *
-     * @param newStateText new stateText
-     */
-    void setStateText(final String newStateText);
-
-    /**
      * get keyMin.
      *
      * @return keyMin

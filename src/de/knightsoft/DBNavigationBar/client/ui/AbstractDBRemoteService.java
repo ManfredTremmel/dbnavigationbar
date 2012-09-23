@@ -23,6 +23,7 @@ package de.knightsoft.DBNavigationBar.client.ui;
 import com.google.gwt.user.client.rpc.XsrfProtectedService;
 
 import de.knightsoft.DBNavigationBar.client.domain.AbstractDataBaseDomain;
+import de.knightsoft.DBNavigationBar.client.exceptions.ServerErrorException;
 
 /**
  *
@@ -40,46 +41,60 @@ public abstract interface AbstractDBRemoteService
      * @param currentEntry
      *         entry to save
      * @return saved entry
+     * @throws ServerErrorException
+     *          thrown on errors on server
      */
-    E saveEntry(E currentEntry);
+    E saveEntry(E currentEntry) throws ServerErrorException;
     /**
      * delete a entry from database.
      * @param currentEntry
      *         entry to delete
      * @return entry to display after deletion
+     * @throws ServerErrorException
+     *          thrown on errors on server
      */
-    E deleteEntry(String currentEntry);
+    E deleteEntry(String currentEntry) throws ServerErrorException;
     /**
      * read on entry by key from database.
      * @param entry
      *         database key
      * @return entry read from database
+     * @throws ServerErrorException
+     *          thrown on errors on server
      */
-    E readEntry(String entry);
+    E readEntry(String entry) throws ServerErrorException;
     /**
      * read first database entry.
      * @return entry read from database
+     * @throws ServerErrorException
+     *          thrown on errors on server
      */
-    E readFirstEntry();
+    E readFirstEntry() throws ServerErrorException;
     /**
      * read previous entry.
      * @param currentEntry
      *         key of current entry
      * @return entry read from database
+     * @throws ServerErrorException
+     *          thrown on errors on server
      */
-    E readPreviousEntry(String currentEntry);
+    E readPreviousEntry(String currentEntry) throws ServerErrorException;
     /**
      * read next entry.
      * @param currentEntry
      *         key of current entry
      * @return entry read from database
+     * @throws ServerErrorException
+     *          thrown on errors on server
      */
-    E readNextEntry(String currentEntry);
+    E readNextEntry(String currentEntry) throws ServerErrorException;
     /**
      * read the last entry of the database.
      * @return entry read from database
+     * @throws ServerErrorException
+     *          thrown on errors on server
      */
-    E readLastEntry();
+    E readLastEntry() throws ServerErrorException;
     /**
      * find a entry in the database, start with the first one.
      * @param searchField
@@ -89,9 +104,11 @@ public abstract interface AbstractDBRemoteService
      * @param searchFieldEntry
      *         search text
      * @return entry read from database
+     * @throws ServerErrorException
+     *          thrown on errors on server
      */
     E findFirstEntry(String searchField, String searchMethodEntry,
-            String searchFieldEntry);
+            String searchFieldEntry) throws ServerErrorException;
     /**
      * find a entry in the database backward, start with the current one.
      * @param searchField
@@ -103,9 +120,12 @@ public abstract interface AbstractDBRemoteService
      * @param currentEntry
      *         key of the current entry
      * @return entry read from database
+     * @throws ServerErrorException
+     *          thrown on errors on server
      */
     E findPreviousEntry(String searchField, String searchMethodEntry,
-            String searchFieldEntry, String currentEntry);
+            String searchFieldEntry, String currentEntry)
+                    throws ServerErrorException;
     /**
      * find a entry in the database forward, start with the current one.
      * @param searchField
@@ -117,9 +137,12 @@ public abstract interface AbstractDBRemoteService
      * @param currentEntry
      *         key of the current entry
      * @return entry read from database
+     * @throws ServerErrorException
+     *          thrown on errors on server
      */
     E findNextEntry(String searchField, String searchMethodEntry,
-            String searchFieldEntry, String currentEntry);
+            String searchFieldEntry, String currentEntry)
+                    throws ServerErrorException;
     /**
      * find a entry in the database backward, start with the last one.
      * @param searchField
@@ -129,7 +152,9 @@ public abstract interface AbstractDBRemoteService
      * @param searchFieldEntry
      *         search text
      * @return entry read from database
+     * @throws ServerErrorException
+     *          thrown on errors on server
      */
     E findLastEntry(String searchField, String searchMethodEntry,
-            String searchFieldEntry);
+            String searchFieldEntry) throws ServerErrorException;
 }

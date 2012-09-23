@@ -42,16 +42,6 @@ public abstract class AbstractDataBaseDomain<E>
     private boolean readOnly;
 
     /**
-     * state of the entry.
-     */
-    private EnumerationState enumerationState;
-
-    /**
-     * additional text to state.
-     */
-    private String stateText;
-
-    /**
      * lowest key in database.
      */
     private final FieldInterface<E> keyMin;
@@ -82,8 +72,6 @@ public abstract class AbstractDataBaseDomain<E>
                     throws InstantiationException, IllegalAccessException {
         super();
         this.readOnly = false;
-        this.enumerationState = EnumerationState.UNDEFINED;
-        this.stateText = null;
         this.keyMin = keyType.newInstance();
         this.keyMax = keyType.newInstance();
         this.keyCur = keyType.newInstance();
@@ -119,43 +107,6 @@ public abstract class AbstractDataBaseDomain<E>
         } else {
             this.readOnly = newIsReadOnly.booleanValue();
         }
-    }
-
-    /* (non-Javadoc)
-     * @see de.knightsoft.DBNavigationBar.client.domain
-     *  .InterfaceDataBase#getState()
-     */
-    @Override
-    public final EnumerationState getState() {
-        return this.enumerationState;
-    }
-
-    /* (non-Javadoc)
-     * @see de.knightsoft.DBNavigationBar.client.domain
-     *  .InterfaceDataBase#setState(de.knightsoft.DBNavigationBar
-     *  .client.domain.EnumerationState)
-     */
-    @Override
-    public final void setState(final EnumerationState newState) {
-        this.enumerationState = newState;
-    }
-
-    /* (non-Javadoc)
-     * @see de.knightsoft.DBNavigationBar.client.domain
-     *  .InterfaceDataBase#getStateText()
-     */
-    @Override
-    public final String getStateText() {
-        return this.stateText;
-    }
-
-    /* (non-Javadoc)
-     * @see de.knightsoft.DBNavigationBar.client.domain
-     *  .InterfaceDataBase#setStateText(java.lang.String)
-     */
-    @Override
-    public final void setStateText(final String newStateText) {
-        this.stateText = newStateText;
     }
 
     /* (non-Javadoc)
@@ -303,15 +254,11 @@ public abstract class AbstractDataBaseDomain<E>
      */
     @Override
     public final boolean equalsEntry(final InterfaceDataBase<E> vglEntry) {
-        boolean entriesAreEqual = true;
-        entriesAreEqual &= (this.readOnly == vglEntry.isReadOnly());
-        entriesAreEqual &= (this.enumerationState == vglEntry.getState());
-        entriesAreEqual &= objectEquals(this.stateText,
-                vglEntry.getStateText());
-        entriesAreEqual &= objectEquals(this.keyCur.getValue(),
-                vglEntry.getKeyCur().getValue());
-        entriesAreEqual &= (this.fieldMap.size()
-                == vglEntry.getFieldMap().size());
+        boolean entriesAreEqual =
+                (this.readOnly == vglEntry.isReadOnly())
+                && objectEquals(this.keyCur.getValue(),
+                        vglEntry.getKeyCur().getValue())
+                && (this.fieldMap.size() == vglEntry.getFieldMap().size());
         if (entriesAreEqual) {
             for (String key : this.fieldMap.keySet()) {
                 entriesAreEqual &= objectEquals(this.getFieldEntry(key),

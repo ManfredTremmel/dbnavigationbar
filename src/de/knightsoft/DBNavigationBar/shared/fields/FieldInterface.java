@@ -30,7 +30,7 @@ import java.text.ParseException;
  * @author Manfred Tremmel
  * @version $Rev$, $Date$
  */
-public interface FieldInterface<E> extends Cloneable {
+public interface FieldInterface<E> {
 
     /**
      * @return the value

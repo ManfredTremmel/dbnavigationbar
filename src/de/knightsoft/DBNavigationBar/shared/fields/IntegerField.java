@@ -32,7 +32,7 @@ import java.text.ParseException;
  */
 public class IntegerField
     extends AbstractField<Integer>
-    implements Serializable, Cloneable, FieldInterface<Integer> {
+    implements Serializable, FieldInterface<Integer> {
 
     /**
      * Serial version id.
