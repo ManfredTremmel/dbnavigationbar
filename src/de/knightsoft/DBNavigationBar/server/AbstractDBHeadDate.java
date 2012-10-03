@@ -25,7 +25,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -35,7 +34,7 @@ import javax.naming.NamingException;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.google.gwt.user.server.rpc.UnexpectedException;
 import com.google.gwt.user.server.rpc.XsrfProtectedServiceServlet;
@@ -64,9 +63,8 @@ import de.knightsoft.DBNavigationBar.shared.fields.FieldInterface;
  * @version $Rev$, $Date$
  *
  * @param <E> Type of the database domain
- * @param <F> Type of the keyField
  */
-public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
+public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain,
     F extends AbstractField<?>> extends XsrfProtectedServiceServlet
     implements AbstractDBRemoteService<E> {
 
@@ -426,9 +424,9 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
                 result = readMinMaxSQLStatement.executeQuery();
 
                 if (result.next()) {
-                    returnEntry.getKeyMin().setString(result.getString("min"));
-                    returnEntry.getKeyMax().setString(result.getString("max"));
-                    if (returnEntry.getKeyMax().getString() == null) {
+                    returnEntry.setKeyMin(result.getString("min"));
+                    returnEntry.setKeyMax(result.getString("max"));
+                    if (returnEntry.getKeyMax() == null) {
                         // no entries in database
                         throw new EmptyDataBaseException();
                     }
@@ -441,9 +439,6 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new ServerErrorException(e);
-        } catch (ParseException e) {
             e.printStackTrace();
             throw new ServerErrorException(e);
         } finally {
@@ -568,7 +563,7 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
                                         thisEntry.getFieldMap().get(
                                         dbField.getDBFieldName()));
                             }
-                            thisEntry.getKeyCur().setString(entry);
+                            thisEntry.setKeyCur(entry);
                         } else {
                             // entry was not found
                             throw new EntryNotFoundException(entry,
@@ -581,9 +576,6 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
                     }
                     thisEntry.setIsReadOnly(!this.allowedToChange());
                 } catch (SQLException e) {
-                    e.printStackTrace();
-                    throw new ServerErrorException(e);
-                } catch (ParseException e) {
                     e.printStackTrace();
                     throw new ServerErrorException(e);
                 } finally {
@@ -670,7 +662,7 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
                 ic.close();
 
                 thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
-                String newEntry = thisEntry.getKeyMin().getString();
+                String newEntry = thisEntry.getKeyMin();
 
                 final String sqlString = this.searchSQLSelect(thisDataBase,
                         "MIN", searchField, searchMethodEntry,
@@ -754,7 +746,7 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
                 ic.close();
 
                 thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
-                String newEntry = thisEntry.getKeyMin().getString();
+                String newEntry = thisEntry.getKeyMin();
 
                 final String sqlString = this.searchSQLSelect(thisDataBase,
                         "MAX", searchField, searchMethodEntry,
@@ -1007,7 +999,7 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
 
             thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
             thisEntry = readOneEntry(thisDataBase, mandator,
-                    thisEntry.getKeyMin().getString(), thisEntry);
+                    thisEntry.getKeyMin(), thisEntry);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new ServerErrorException(e);
@@ -1047,7 +1039,7 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
 
             thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
             thisEntry = readOneEntry(thisDataBase, mandator,
-                    thisEntry.getKeyMax().getString(), thisEntry);
+                    thisEntry.getKeyMax(), thisEntry);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new ServerErrorException(e);
@@ -1089,7 +1081,7 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
             ic.close();
 
             thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
-            String newEntryName = thisEntry.getKeyMax().getString();
+            String newEntryName = thisEntry.getKeyMax();
             if (StringUtils.isEmpty(currentEntry)) {
                 thisEntry = this.readFirstEntry();
             } else {
@@ -1168,7 +1160,7 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
             ic.close();
 
             thisEntry = fillMinMax(thisDataBase, mandator, thisEntry);
-            String newEntryName = thisEntry.getKeyMax().getString();
+            String newEntryName = thisEntry.getKeyMax();
             if (StringUtils.isEmpty(currentEntry)) {
                 thisEntry = this.readLastEntry();
             } else {
@@ -1341,9 +1333,9 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
         if (returnEntry.isFieldSetOk()) {
             final int mandator = thisUser.getMandator();
             final String user = thisUser.getUser();
-            String saveKeyString = returnEntry.getKeyCur().getString();
+            String saveKeyString = returnEntry.getKeyCur();
             if (StringUtils.isEmpty(saveKeyString)) {
-                saveKeyString = returnEntry.getKeyNew().getString();
+                saveKeyString = returnEntry.getKeyNew();
             }
 
             Connection thisDataBase =    null;
@@ -1371,11 +1363,11 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain<F>,
                     this.saveEntry(currentEntry, dbEntry, thisDataBase,
                             mandator, user, saveKeyString);
 
-                    returnEntry.getKeyCur().setValue(returnEntry.getKeyNew());
+                    returnEntry.setKeyCur(returnEntry.getKeyNew());
                     this.fillMinMax(thisDataBase, mandator,
                             returnEntry);
                     returnEntry = readOneEntry(thisDataBase,
-                            mandator, returnEntry.getKeyNew().getString(),
+                            mandator, returnEntry.getKeyNew(),
                             returnEntry);
                 } else {
                     throw new UserNotAllowedException();

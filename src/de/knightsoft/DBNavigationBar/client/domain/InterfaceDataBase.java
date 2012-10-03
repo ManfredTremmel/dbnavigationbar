@@ -31,9 +31,8 @@ import de.knightsoft.DBNavigationBar.shared.fields.FieldInterface;
  *
  * @author Manfred Tremmel
  * @version $Rev$, $Date$
- * @param <E> Type of the keyField
  */
-public interface InterfaceDataBase<E> {
+public interface InterfaceDataBase {
     /**
      * get isReadOnly.
      *
@@ -60,48 +59,48 @@ public interface InterfaceDataBase<E> {
      *
      * @return keyMin
      */
-    FieldInterface<E> getKeyMin();
+    String getKeyMin();
 
     /**
      * set keyMin.
      *
      * @param newKeyMin new keyMin
      */
-    void setKeyMin(final FieldInterface<E> newKeyMin);
+    void setKeyMin(final String newKeyMin);
 
     /**
      * get keyMax.
      *
      * @return keyMax
      */
-    FieldInterface<E> getKeyMax();
+    String getKeyMax();
 
     /**
      * set keyMax.
      *
      * @param newKeyMax new keyMax
      */
-    void setKeyMax(final FieldInterface<E> newKeyMax);
+    void setKeyMax(final String newKeyMax);
 
     /**
      * get keyCur.
      *
      * @return keyCur
      */
-    FieldInterface<E> getKeyCur();
+    String getKeyCur();
 
     /**
      * set keyCur.
      *
      * @param newKeyCur key to set
      */
-    void setKeyCur(final FieldInterface<E> newKeyCur);
+    void setKeyCur(final String newKeyCur);
 
     /**
      * get KeyNew.
      * @return Key of new Entry
      */
-    E getKeyNew();
+    String getKeyNew();
 
     /**
      * set new field map.
@@ -175,5 +174,5 @@ public interface InterfaceDataBase<E> {
      * @param vglEntry entry to compare with entry of this class
      * @return true if both contain the same entries, otherwise false
      */
-    boolean equalsEntry(final InterfaceDataBase<E> vglEntry);
+    boolean equalsEntry(final InterfaceDataBase vglEntry);
 }

@@ -35,7 +35,7 @@ import de.knightsoft.DBNavigationBar.client.exceptions.ServerErrorException;
  * @version $Rev$, $Date$
  */
 public abstract interface AbstractDBRemoteService
-    <E extends AbstractDataBaseDomain<?>> extends XsrfProtectedService {
+    <E extends AbstractDataBaseDomain> extends XsrfProtectedService {
     /**
      * save entry to database.
      * @param currentEntry

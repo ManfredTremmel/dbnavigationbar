@@ -35,7 +35,7 @@ import de.knightsoft.DBNavigationBar.client.exceptions.ServerErrorException;
  * @version $Rev$, $Date$
  */
 public abstract interface AbstractDBRemoteServiceAsync<E extends
-    AbstractDataBaseDomain<?>> {
+    AbstractDataBaseDomain> {
     /**
      * save entry to database.
      * @param currentEntry

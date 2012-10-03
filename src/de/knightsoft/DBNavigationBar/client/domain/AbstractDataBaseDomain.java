@@ -31,10 +31,9 @@ import de.knightsoft.DBNavigationBar.shared.fields.FieldInterface;
  *
  * @author Manfred Tremmel
  * @version $Rev$, $Date$
- * @param <E> Type of the keyField
  */
-public abstract class AbstractDataBaseDomain<E>
-    implements InterfaceDataBase<E> {
+public abstract class AbstractDataBaseDomain
+    implements InterfaceDataBase {
 
     /**
      * read only entry.
@@ -44,17 +43,17 @@ public abstract class AbstractDataBaseDomain<E>
     /**
      * lowest key in database.
      */
-    private final FieldInterface<E> keyMin;
+    private String keyMin;
 
     /**
      * highest key in database.
      */
-    private final FieldInterface<E> keyMax;
+    private String keyMax;
 
     /**
      * current key of the entry.
      */
-    private final FieldInterface<E> keyCur;
+    private String keyCur;
 
     /**
      * map of fields.
@@ -63,18 +62,13 @@ public abstract class AbstractDataBaseDomain<E>
 
     /**
      * default constructor.
-     * @param keyType the type of the key field
-     * @throws IllegalAccessException if instantiation fails
-     * @throws InstantiationException if instantiation fails
      */
-    public AbstractDataBaseDomain(
-            final Class<FieldInterface<E>> keyType)
-                    throws InstantiationException, IllegalAccessException {
+    public AbstractDataBaseDomain() {
         super();
         this.readOnly = false;
-        this.keyMin = keyType.newInstance();
-        this.keyMax = keyType.newInstance();
-        this.keyCur = keyType.newInstance();
+        this.keyMin = null;
+        this.keyMax = null;
+        this.keyCur = null;
         this.fieldMap = new HashMap<String, FieldInterface<?>>();
     }
 
@@ -114,7 +108,7 @@ public abstract class AbstractDataBaseDomain<E>
      *  .InterfaceDataBase#getKeyMin()
      */
     @Override
-    public final FieldInterface<E> getKeyMin() {
+    public final String getKeyMin() {
         return this.keyMin;
     }
 
@@ -124,8 +118,8 @@ public abstract class AbstractDataBaseDomain<E>
      *  .fields.FieldInterface)
      */
     @Override
-    public final void setKeyMin(final FieldInterface<E> newKeyMin) {
-        this.keyMin.setValue(newKeyMin.getValue());
+    public final void setKeyMin(final String newKeyMin) {
+        this.keyMin = newKeyMin;
     }
 
     /* (non-Javadoc)
@@ -133,7 +127,7 @@ public abstract class AbstractDataBaseDomain<E>
      *  .InterfaceDataBase#getKeyMax()
      */
     @Override
-    public final FieldInterface<E> getKeyMax() {
+    public final String getKeyMax() {
         return this.keyMax;
     }
 
@@ -143,8 +137,8 @@ public abstract class AbstractDataBaseDomain<E>
      *  .fields.FieldInterface)
      */
     @Override
-    public final void setKeyMax(final FieldInterface<E> newKeyMax) {
-        this.keyMax.setValue(newKeyMax.getValue());
+    public final void setKeyMax(final String newKeyMax) {
+        this.keyMax = newKeyMax;
     }
 
     /* (non-Javadoc)
@@ -152,7 +146,7 @@ public abstract class AbstractDataBaseDomain<E>
      *  .InterfaceDataBase#getKeyCur()
      */
     @Override
-    public final FieldInterface<E> getKeyCur() {
+    public final String getKeyCur() {
         return this.keyCur;
     }
 
@@ -162,8 +156,8 @@ public abstract class AbstractDataBaseDomain<E>
      *  .fields.FieldInterface)
      */
     @Override
-    public final void setKeyCur(final FieldInterface<E> newKeyCur) {
-        this.keyCur.setValue(newKeyCur.getValue());
+    public final void setKeyCur(final String newKeyCur) {
+        this.keyCur = newKeyCur;
     }
 
     /*
@@ -172,11 +166,11 @@ public abstract class AbstractDataBaseDomain<E>
      *  .InterfaceDataBase#getKeyNew()
      */
     @Override
-    public final E getKeyNew() {
+    public final String getKeyNew() {
         if (this.keyCur == null) {
             return null;
         } else {
-            return this.keyCur.getDefaultValue();
+            return this.keyCur;
         }
     }
 
@@ -253,11 +247,11 @@ public abstract class AbstractDataBaseDomain<E>
      *  .domain.InterfaceDataBase)
      */
     @Override
-    public final boolean equalsEntry(final InterfaceDataBase<E> vglEntry) {
+    public final boolean equalsEntry(final InterfaceDataBase vglEntry) {
         boolean entriesAreEqual =
                 (this.readOnly == vglEntry.isReadOnly())
-                && objectEquals(this.keyCur.getValue(),
-                        vglEntry.getKeyCur().getValue())
+                && objectEquals(this.keyCur,
+                        vglEntry.getKeyCur())
                 && (this.fieldMap.size() == vglEntry.getFieldMap().size());
         if (entriesAreEqual) {
             for (String key : this.fieldMap.keySet()) {

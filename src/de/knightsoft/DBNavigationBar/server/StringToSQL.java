@@ -22,6 +22,8 @@ package de.knightsoft.DBNavigationBar.server;
 
 import java.sql.Timestamp;
 
+import org.apache.commons.lang3.StringUtils;
+
 import de.knightsoft.DBNavigationBar.shared.Constants;
 
 
@@ -78,7 +80,7 @@ public final class StringToSQL {
           ) {
         String sqlString    =    null;
 
-        if (javaString != null && javaString.length() > 0) {
+        if (StringUtils.isNotEmpty(javaString)) {
             char[] sqlStringTab  = new char[2 * javaString.length()];
             final char[] javaStringTab = javaString.toCharArray();
             int j = 0;
@@ -179,7 +181,7 @@ public final class StringToSQL {
     private static String convertMySQL(final String javaString) {
         String sqlString    =    null;
 
-        if (javaString != null && javaString.length() > 0) {
+        if (StringUtils.isNotEmpty(javaString)) {
             char[] sqlStringTab  = new char[2 + (2 * javaString.length())];
             final char[] javaStringTab = javaString.toCharArray();
             int j = 0;
@@ -248,7 +250,7 @@ public final class StringToSQL {
     private static String convertMSSQL(final String javaString) {
         String sqlString    =    null;
 
-        if (javaString != null && javaString.length() > 0) {
+        if (StringUtils.isNotEmpty(javaString)) {
             char[] sqlStringTab  = new char[2 + (2 * javaString.length())];
             final char[] javaStringTab = javaString.toCharArray();
             int j = 0;
@@ -358,7 +360,7 @@ public final class StringToSQL {
           ) {
         String sqlString    =    null;
 
-        if (javaString != null && javaString.length() > 0) {
+        if (StringUtils.isNotEmpty(javaString)) {
             char[] sqlStringTab  = new char[ javaString.length() ];
             final char[] javaStringTab = javaString.toCharArray();
             int j = 0;
@@ -452,7 +454,7 @@ public final class StringToSQL {
           ) {
         String sqlString    =    "";
 
-        if (javaString != null && javaString.length() > 0) {
+        if (StringUtils.isNotEmpty(javaString)) {
             char[] sqlStringTab  = new char[2 + (2 * javaString.length())];
             final char[] javaStringTab = javaString.toCharArray();
             int j = 0;
@@ -541,7 +543,7 @@ public final class StringToSQL {
           ) {
         String sqlString    =    "";
 
-        if (javaString != null && javaString.length() > 0) {
+        if (StringUtils.isNotEmpty(javaString)) {
             char[] sqlStringTab  = new char[2 + (2 * javaString.length())];
             final char[] javaStringTab = javaString.toCharArray();
             int j = 0;
