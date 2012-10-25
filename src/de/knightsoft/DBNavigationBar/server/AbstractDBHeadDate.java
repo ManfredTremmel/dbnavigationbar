@@ -63,6 +63,7 @@ import de.knightsoft.DBNavigationBar.shared.fields.FieldInterface;
  * @version $Rev$, $Date$
  *
  * @param <E> Type of the database domain
+ * @param <F> Type of the key field
  */
 public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain,
     F extends AbstractField<?>> extends XsrfProtectedServiceServlet
