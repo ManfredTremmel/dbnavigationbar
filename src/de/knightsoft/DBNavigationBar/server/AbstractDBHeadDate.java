@@ -156,7 +156,8 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain,
         this.sessionUser = sessionUserSet;
 
         // build database field list out of the fields
-        this.dbFieldList = new ArrayList<DBFieldInterface<?>>();
+        this.dbFieldList = new ArrayList<DBFieldInterface<?>>(
+                dataBaseDomain.getFieldMap().size());
         DBFieldInterface<?> dbKeyFieldTmp = null;
         for (final Entry<String, FieldInterface<?>> entry
                 : dataBaseDomain.getFieldMap().entrySet()) {
