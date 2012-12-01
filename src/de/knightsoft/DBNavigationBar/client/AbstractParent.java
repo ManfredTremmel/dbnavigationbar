@@ -271,7 +271,8 @@ public abstract class AbstractParent implements EntryPoint {
                 final String[] historyPares = historyToken.split(";");
                 final HashMap<String, String> oldParamHash =
                         AbstractParent.this.paramHash;
-                AbstractParent.this.paramHash = new HashMap<String, String>();
+                AbstractParent.this.paramHash =
+                        new HashMap<String, String>(oldParamHash.size());
                 for (int i = 0; i < historyPares.length; i++) {
                     final String[] tokenPare = historyPares[i].split("=");
                     if (tokenPare.length == 2) {
