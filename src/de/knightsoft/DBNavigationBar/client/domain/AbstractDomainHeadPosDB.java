@@ -109,6 +109,10 @@ public abstract class AbstractDomainHeadPosDB
      */
     @Override
     public final int hashCode() {
-        return this.getKeyCur().hashCode();
+        if (this.getKeyCur() == null) {
+            return 1;
+        } else {
+            return this.getKeyCur().hashCode();
+        }
     }
 }
