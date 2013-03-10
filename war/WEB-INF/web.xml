@@ -12,7 +12,7 @@
   <!-- Servlets -->
   <servlet>
     <servlet-name>greetServlet</servlet-name>
-    <servlet-class>de.knightsoft.DBNavigationBar.server.GreetingServiceImpl</servlet-class>
+    <servlet-class>de.knightsoft.dbnavigationbar.server.GreetingServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
