@@ -85,6 +85,16 @@ public abstract class AbstractParent implements EntryPoint
   private ScrollPanel mainPanel;
 
   /**
+   * image to display on top left.
+   */
+  private Image img;
+
+  /**
+   * title of the page, displayed south of image.
+   */
+  private HTML htmlPageTitle;
+
+  /**
    * split layout panel left navigation right content.
    */
   private final SplitLayoutPanel hPanel = new SplitLayoutPanel();
@@ -363,6 +373,22 @@ public abstract class AbstractParent implements EntryPoint
   }
 
   /**
+   * @return the img
+   */
+  public final Image getImg()
+  {
+    return this.img;
+  }
+
+  /**
+   * @return the htmlPageTitle
+   */
+  public final HTML getHtmlPageTitle()
+  {
+    return this.htmlPageTitle;
+  }
+
+  /**
    * Create the logo.
    * 
    * @param navVPanel
@@ -375,16 +401,16 @@ public abstract class AbstractParent implements EntryPoint
     final FlexCellFormatter fcf = logoPanel.getFlexCellFormatter();
     // Get the title from the internationalized constants
     final String pageTitle = "<h1>" + title + "</h1>";
-    final Image img = this.getApplicationImage();
-    img.getElement().setId("pc-template-img");
-    img.setAltText(title);
-    final HTML htmlPageTitle = new HTML(pageTitle);
+    this.img = this.getApplicationImage();
+    this.img.getElement().setId("pc-template-img");
+    this.img.setAltText(title);
+    this.htmlPageTitle = new HTML(pageTitle);
 
     // Add the title and some images to the title bar
-    logoPanel.setWidget(0, 0, img);
+    logoPanel.setWidget(0, 0, this.img);
     fcf.setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_MIDDLE);
     fcf.setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
-    logoPanel.setWidget(1, 0, htmlPageTitle);
+    logoPanel.setWidget(1, 0, this.htmlPageTitle);
     fcf.setVerticalAlignment(1, 0, HasVerticalAlignment.ALIGN_MIDDLE);
     fcf.setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_CENTER);
     logoPanel.setSize("100%", "100%");
