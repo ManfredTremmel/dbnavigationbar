@@ -113,7 +113,7 @@ public abstract class AbstractBasicTemplateUI<F extends AbstractParent>
       this.setUpMask(user);
       this.parentwidget.getMainPanel().add(this);
       matches = true;
-      History.newItem("page=" + this.getMenuText());
+      History.newItem("page=" + this.getMenuText(), false);
       Scheduler.get().scheduleFixedDelay(new RepeatingCommand()
       {
         @Override
