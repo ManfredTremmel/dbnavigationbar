@@ -1493,6 +1493,24 @@ public class DBNaviBarWidget extends Composite
   }
 
   /**
+   * enable user defined button.
+   */
+  public final void enableUserdefinedPushButtonEnabled()
+  {
+    this.userdefinedPushButtonEnabled = true;
+    this.refreshButtonState();
+  }
+
+  /**
+   * disable user defined button.
+   */
+  public final void disableUserdefinedPushButtonEnabled()
+  {
+    this.userdefinedPushButtonEnabled = false;
+    this.refreshButtonState();
+  }
+
+  /**
    * enable min/max field.
    */
   public final void enableMinMax()
