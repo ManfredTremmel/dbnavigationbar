@@ -196,7 +196,8 @@ public abstract class AbstractDBHeadPosTemplateRS<E extends DomainHeadPosDataBas
   {
     final int mandator = this.getUser().getMandator();
 
-    final StringBuilder sqlString = new StringBuilder();
+    final int sqlLength = 60;
+    final StringBuilder sqlString = new StringBuilder(sqlLength);
     sqlString.append(
         "SELECT " + minMax + "(" + this.getKeyFieldName() + ") AS dbnumber "
             + "FROM   " + this.getDataBaseTableName() + " "

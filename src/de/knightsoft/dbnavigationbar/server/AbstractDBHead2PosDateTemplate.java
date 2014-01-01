@@ -271,21 +271,19 @@ public abstract class AbstractDBHead2PosDateTemplate<E extends DomainHead2PosDat
     final int mandator = this.getUser().getMandator();
     final DataBaseDepending myDataBaseDepending = new DataBaseDepending(thisDataBase.getMetaData().getDatabaseProductName());
 
-    final StringBuilder sqlString = new StringBuilder();
-    sqlString.append(
-        "SELECT " + minMax + "(" + this.getKeyFieldName()
-            + ") AS dbnumber "
-            + "FROM   " + this.getDataBaseTableName() + " "
-            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = "
-            + Integer.toString(mandator) + " "
-            + " AND   " + this.getKeyFieldName() + " " + dbKeyVGL
-            + " " + StringToSQL.convertString(dbKey,
-                thisDataBase.getMetaData().getDatabaseProductName()) + " "
-            + " AND    " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= "
-            + myDataBaseDepending.getSQLTimeNow() + " "
-            + " AND    " + Constants.DB_FIELD_GLOBAL_DATE_TO + "   > "
-            + myDataBaseDepending.getSQLTimeNow() + " "
-            + " AND   ");
+    final int sqlStringLengthMin = 87;
+    final StringBuilder sqlString = new StringBuilder(sqlStringLengthMin);
+    sqlString.append("SELECT ").append(minMax).append('(').append(this.getKeyFieldName()).append(") AS dbnumber ")
+        .append("FROM   ").append(this.getDataBaseTableName()).append(' ')
+        .append("WHERE  ").append(Constants.DB_FIELD_GLOBAL_MANDATOR).append(" = ").append(Integer.toString(mandator))
+        .append(' ')
+        .append(" AND   ").append(this.getKeyFieldName()).append(' ').append(dbKeyVGL).append(' ')
+        .append(StringToSQL.convertString(dbKey, thisDataBase.getMetaData().getDatabaseProductName())).append(' ')
+        .append(" AND   ").append(Constants.DB_FIELD_GLOBAL_DATE_FROM).append(" <= ")
+        .append(myDataBaseDepending.getSQLTimeNow()).append(' ')
+        .append(" AND   ").append(Constants.DB_FIELD_GLOBAL_DATE_TO).append("   > ")
+        .append(myDataBaseDepending.getSQLTimeNow()).append(' ')
+        .append(" AND   ");
 
     if ("=".equals(searchMethodeEntry))
     {

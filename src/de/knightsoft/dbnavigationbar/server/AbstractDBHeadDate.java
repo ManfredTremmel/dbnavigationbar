@@ -197,7 +197,8 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain, F ext
             new DataBaseDepending(thisDataBase.getMetaData().getDatabaseProductName());
 
         // build sql statement to read one entry by key.
-        final StringBuilder readHeadSB = new StringBuilder();
+        final int sqlLength = 77;
+        final StringBuilder readHeadSB = new StringBuilder(sqlLength);
         readHeadSB.append("SELECT ");
         boolean firstEntry = true;
         for (final DBFieldInterface<?> dbField : this.dbFieldList)
@@ -218,11 +219,12 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain, F ext
         readHeadSB.append(myDataBaseDepending.getSQLTimeNow());
         readHeadSB.append(" AND Date_to > ");
         readHeadSB.append(myDataBaseDepending.getSQLTimeNow());
-        readHeadSB.append(";");
+        readHeadSB.append(';');
         this.readHeadSQL = readHeadSB.toString();
 
         // build sql statement to read min and max key entries.
-        final StringBuilder readMinMaxSB = new StringBuilder();
+        final int sqlLengthMinMax = 94;
+        final StringBuilder readMinMaxSB = new StringBuilder(sqlLengthMinMax);
         readMinMaxSB.append("SELECT MIN(");
         readMinMaxSB.append(dbKeyFieldTmp.getDBFieldName());
         readMinMaxSB.append(") AS min, ");
@@ -235,11 +237,12 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain, F ext
         readMinMaxSB.append(myDataBaseDepending.getSQLTimeNow());
         readMinMaxSB.append(" AND Date_to > ");
         readMinMaxSB.append(myDataBaseDepending.getSQLTimeNow());
-        readMinMaxSB.append(";");
+        readMinMaxSB.append(';');
         this.readMinMaxSQL = readMinMaxSB.toString();
 
         // build sql statement to read next key entries.
-        final StringBuilder readNextSB = new StringBuilder();
+        final int sqlLengthNext = 93;
+        final StringBuilder readNextSB = new StringBuilder(sqlLengthNext);
         readNextSB.append("SELECT MIN(");
         readNextSB.append(dbKeyFieldTmp.getDBFieldName());
         readNextSB.append(") AS dbnumber ");
@@ -253,11 +256,12 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain, F ext
         readNextSB.append(myDataBaseDepending.getSQLTimeNow());
         readNextSB.append(" AND Date_to > ");
         readNextSB.append(myDataBaseDepending.getSQLTimeNow());
-        readNextSB.append(";");
+        readNextSB.append(';');
         this.readNextSQL = readNextSB.toString();
 
         // build sql statement to read previous key entries.
-        final StringBuilder readPrevSB = new StringBuilder();
+        final int sqlLengthPrev = 85;
+        final StringBuilder readPrevSB = new StringBuilder(sqlLengthPrev);
         readPrevSB.append("SELECT MAX(");
         readPrevSB.append(dbKeyFieldTmp.getDBFieldName());
         readPrevSB.append(") AS dbnumber ");
@@ -271,11 +275,12 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain, F ext
         readPrevSB.append(myDataBaseDepending.getSQLTimeNow());
         readPrevSB.append(" AND Date_to > ");
         readPrevSB.append(myDataBaseDepending.getSQLTimeNow());
-        readPrevSB.append(";");
+        readPrevSB.append(';');
         this.readPrevSQL = readPrevSB.toString();
 
         // build sql statement to insert a entry into db.
-        final StringBuilder insertHeadSQLSB = new StringBuilder();
+        final int sqlLengthInsert = 114;
+        final StringBuilder insertHeadSQLSB = new StringBuilder(sqlLengthInsert);
         insertHeadSQLSB.append("INSERT INTO ");
         insertHeadSQLSB.append(this.dataBaseTableName);
         insertHeadSQLSB.append(" (Mandator, Date_from, Date_to, Username");
@@ -298,7 +303,8 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain, F ext
         this.insertHeadSQL = insertHeadSQLSB.toString();
 
         // build sql statement to insert a entry into db.
-        final StringBuilder invalidateHeadSQLSB = new StringBuilder();
+        final int sqlLengthInvalidate = 85;
+        final StringBuilder invalidateHeadSQLSB = new StringBuilder(sqlLengthInvalidate);
         invalidateHeadSQLSB.append("UPDATE ");
         invalidateHeadSQLSB.append(this.dataBaseTableName);
         invalidateHeadSQLSB.append(" SET Date_to = ");
@@ -311,7 +317,7 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain, F ext
         invalidateHeadSQLSB.append(myDataBaseDepending.getSQLTimeNow());
         invalidateHeadSQLSB.append(" AND Date_to > ");
         invalidateHeadSQLSB.append(myDataBaseDepending.getSQLTimeNow());
-        invalidateHeadSQLSB.append(";");
+        invalidateHeadSQLSB.append(';');
         this.invalidateHeadSQL = invalidateHeadSQLSB.toString();
       }
       ic.close();
@@ -511,7 +517,8 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain, F ext
     final DataBaseDepending myDataBaseDepending =
         new DataBaseDepending(thisDataBase.getMetaData().getDatabaseProductName());
 
-    final StringBuilder sqlString = new StringBuilder();
+    final int sqlLength = 87;
+    final StringBuilder sqlString = new StringBuilder(sqlLength);
     sqlString.append(
         "SELECT " + minMax + "(" + this.dbKeyField.getDBFieldName() + ") AS dbnumber "
             + "FROM   " + this.dataBaseTableName + " "

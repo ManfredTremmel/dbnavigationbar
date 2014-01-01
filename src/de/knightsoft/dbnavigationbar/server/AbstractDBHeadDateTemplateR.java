@@ -211,7 +211,8 @@ public abstract class AbstractDBHeadDateTemplateR<E extends DomainHeadDataBaseIn
         new DataBaseDepending(thisDataBase.getMetaData()
             .getDatabaseProductName());
 
-    final StringBuilder sqlString = new StringBuilder();
+    final int sqlLength = 85;
+    final StringBuilder sqlString = new StringBuilder(sqlLength);
     sqlString.append(
         "SELECT " + minMax + "(" + this.getKeyFieldName() + ") AS dbnumber "
             + "FROM   " + this.getDataBaseTableName() + " "

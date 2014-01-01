@@ -401,7 +401,8 @@ public abstract class AbstractDBHeadPosDateTemplateR<E extends DomainHeadPosData
     final int mandator = this.getUser().getMandator();
     final DataBaseDepending myDataBaseDepending = new DataBaseDepending(thisDataBase.getMetaData().getDatabaseProductName());
 
-    final StringBuilder sqlString = new StringBuilder();
+    final int sqlLength = 85;
+    final StringBuilder sqlString = new StringBuilder(sqlLength);
     sqlString.append(
         "SELECT " + minMax + "(" + this.getKeyFieldName() + ") AS dbnumber "
             + "FROM   " + this.getDataBaseTableName() + " "

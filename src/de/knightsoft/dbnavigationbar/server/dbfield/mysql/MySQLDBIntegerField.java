@@ -65,7 +65,8 @@ public class MySQLDBIntegerField extends AbstractDBIntegerField
   @Override
   public final String buildSQLFieldString()
   {
-    final StringBuilder sqlString = new StringBuilder();
+    final int sqlLength = 47;
+    final StringBuilder sqlString = new StringBuilder(sqlLength);
     sqlString.append("`" + StringToSQL.convert(this.getDBFieldName(),
         Constants.JDBC_CLASS_MYSQL) + "` ");
     sqlString.append("integer");
@@ -79,7 +80,7 @@ public class MySQLDBIntegerField extends AbstractDBIntegerField
       }
       else
       {
-        sqlString.append(" DEFAULT " + this.getField().getDefaultValue()
+        sqlString.append(" DEFAULT ").append(this.getField().getDefaultValue()
             .toString());
       }
     }
@@ -88,7 +89,7 @@ public class MySQLDBIntegerField extends AbstractDBIntegerField
       sqlString.append(" NOT NULL");
       if (this.getField().getDefaultValue() != null)
       {
-        sqlString.append(" DEFAULT " + this.getField().getDefaultValue()
+        sqlString.append(" DEFAULT ").append(this.getField().getDefaultValue()
             .toString());
       }
     }

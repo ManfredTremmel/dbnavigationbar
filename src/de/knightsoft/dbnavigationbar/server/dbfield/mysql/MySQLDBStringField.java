@@ -67,7 +67,8 @@ public class MySQLDBStringField extends AbstractDBStringField
   @Override
   public final String buildSQLFieldString()
   {
-    final StringBuilder sqlString = new StringBuilder();
+    final int sqlLength = 35;
+    final StringBuilder sqlString = new StringBuilder(sqlLength);
     sqlString.append("`" + StringToSQL.convert(this.getDBFieldName(),
         Constants.JDBC_CLASS_MYSQL) + "` ");
     if (this.getField().getMaxLength() > VARCHAR_MAX_LENGTH)
