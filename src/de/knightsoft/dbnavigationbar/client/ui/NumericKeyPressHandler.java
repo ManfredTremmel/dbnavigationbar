@@ -23,7 +23,7 @@ package de.knightsoft.dbnavigationbar.client.ui;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.ValueBoxBase;
 
 /**
  * The <code>NumericKeyPressHandler</code> class is KeyPress Handler
@@ -67,7 +67,7 @@ public class NumericKeyPressHandler implements KeyPressHandler
             || charCode == 'v'))
             && !Character.isDigit(charCode))
         {
-          ((TextBox) event.getSource()).cancelKey();
+          ((ValueBoxBase<?>) event.getSource()).cancelKey();
         }
         break;
     }
