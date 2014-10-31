@@ -1,22 +1,22 @@
 /**
  * This file is part of DBNavigationBar.
- * 
+ *
  * RiPhone is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
- * 
+ *
  * RiPhone is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with RiPhone. If not, see <http://www.gnu.org/licenses/>
- * 
- * 
+ *
+ *
  * Copyright (c) 2011-2012 Manfred Tremmel
- * 
+ *
  */
 package de.knightsoft.dbnavigationbar.client.ui.widget;
 
@@ -47,7 +47,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * Database Navigation.
- * 
+ *
  * @author Manfred Tremmel
  * @version $Rev$, $Date$
  */
@@ -82,7 +82,7 @@ public class DBNaviBarWidget extends Composite
 
   /**
    * Create a handler for the sendButton and nameField.
-   * 
+   *
    * @author Manfred Tremmel
    */
   class MyHandler implements ClickHandler
@@ -252,7 +252,7 @@ public class DBNaviBarWidget extends Composite
 
   /**
    * Key up handler.
-   * 
+   *
    * @author Manfred Tremmel
    */
   class MyEntryHandler implements KeyUpHandler
@@ -264,7 +264,7 @@ public class DBNaviBarWidget extends Composite
       {
         /**
          * Click Handler.
-         * 
+         *
          * @author Manfred Tremmel
          */
         class OurClickEvent extends ClickEvent
@@ -278,7 +278,7 @@ public class DBNaviBarWidget extends Composite
 
   /**
    * Search handler.
-   * 
+   *
    * @author Manfred Tremmel
    */
   class MySearchHandler implements KeyUpHandler
@@ -290,7 +290,7 @@ public class DBNaviBarWidget extends Composite
       {
         /**
          * Click event.
-         * 
+         *
          * @author Manfred Tremmel
          */
         class OurClickEvent extends ClickEvent
@@ -314,7 +314,7 @@ public class DBNaviBarWidget extends Composite
 
   /**
    * Create a handler for the find toggle button.
-   * 
+   *
    * @author Manfred Tremmel
    */
   private final ClickHandler myFindToggleClick = new ClickHandler()
@@ -362,7 +362,7 @@ public class DBNaviBarWidget extends Composite
 
   /**
    * Different button states.
-   * 
+   *
    * @author Manfred Tremmel
    */
   public static enum ButtonState
@@ -427,14 +427,14 @@ public class DBNaviBarWidget extends Composite
 
   /**
    * pictures.
-   * 
+   *
    * @author Manfred Tremmel
    */
   public interface DBNavigationBarImages extends ClientBundle
   {
     /**
      * new button picture.
-     * 
+     *
      * @return image
      */
     @Source("filenew.png")
@@ -442,7 +442,7 @@ public class DBNaviBarWidget extends Composite
 
     /**
      * save button picture.
-     * 
+     *
      * @return image
      */
     @Source("save.png")
@@ -450,7 +450,7 @@ public class DBNaviBarWidget extends Composite
 
     /**
      * delete button picture.
-     * 
+     *
      * @return image
      */
     @Source("delete.png")
@@ -458,7 +458,7 @@ public class DBNaviBarWidget extends Composite
 
     /**
      * find button picture.
-     * 
+     *
      * @return image
      */
     @Source("find.png")
@@ -466,7 +466,7 @@ public class DBNaviBarWidget extends Composite
 
     /**
      * stop button picture.
-     * 
+     *
      * @return image
      */
     @Source("stop.png")
@@ -474,7 +474,7 @@ public class DBNaviBarWidget extends Composite
 
     /**
      * fast back button picture.
-     * 
+     *
      * @return image
      */
     @Source("fback.png")
@@ -482,7 +482,7 @@ public class DBNaviBarWidget extends Composite
 
     /**
      * back button picture.
-     * 
+     *
      * @return image
      */
     @Source("back.png")
@@ -490,15 +490,15 @@ public class DBNaviBarWidget extends Composite
 
     /**
      * ok button picture.
-     * 
+     *
      * @return image
      */
     @Source("ok.png")
-    ImageResource ok();
+    ImageResource ok(); // NOPMD
 
     /**
      * forward button picture.
-     * 
+     *
      * @return image
      */
     @Source("forward.png")
@@ -506,7 +506,7 @@ public class DBNaviBarWidget extends Composite
 
     /**
      * fast forward button picture.
-     * 
+     *
      * @return image
      */
     @Source("fforward.png")
@@ -514,7 +514,7 @@ public class DBNaviBarWidget extends Composite
 
     /**
      * user defined button picture.
-     * 
+     *
      * @return image
      */
     @Source("userdefined.png")
@@ -752,7 +752,7 @@ public class DBNaviBarWidget extends Composite
 
   /**
    * Constructor.
-   * 
+   *
    * @param searchfields
    *        fields to search for
    * @param searchFieldsDisplay
@@ -885,7 +885,7 @@ public class DBNaviBarWidget extends Composite
 
   /**
    * Constructor.
-   * 
+   *
    * @param searchfields
    *        fields to search for
    * @param setUserdefinedText
@@ -900,7 +900,7 @@ public class DBNaviBarWidget extends Composite
 
   /**
    * Constructor.
-   * 
+   *
    * @param searchfields
    *        fields to search for
    * @param searchFieldsDisplay
@@ -915,7 +915,7 @@ public class DBNaviBarWidget extends Composite
 
   /**
    * Constructor.
-   * 
+   *
    * @param searchfields
    *        fields to search for
    */
@@ -985,7 +985,7 @@ public class DBNaviBarWidget extends Composite
 
   /**
    * get the constants.
-   * 
+   *
    * @return constants
    */
   public final DBNaviBarWidgetConstants getConstants()
@@ -995,7 +995,7 @@ public class DBNaviBarWidget extends Composite
 
   /**
    * get button state.
-   * 
+   *
    * @return buttonState
    */
   public final ButtonState getButtonState()
@@ -1005,7 +1005,7 @@ public class DBNaviBarWidget extends Composite
 
   /**
    * get current database number.
-   * 
+   *
    * @return currentDBNumber
    */
   public final String getCurrentDBNumber()
@@ -1015,7 +1015,7 @@ public class DBNaviBarWidget extends Composite
 
   /**
    * get old database number.
-   * 
+   *
    * @return oldDBNumber
    */
   public final String getOldDBNumber()
@@ -1025,7 +1025,7 @@ public class DBNaviBarWidget extends Composite
 
   /**
    * get search field.
-   * 
+   *
    * @return searchFieldString
    */
   public final String getSearchFieldField()
@@ -1035,7 +1035,7 @@ public class DBNaviBarWidget extends Composite
 
   /**
    * get search field entry.
-   * 
+   *
    * @return searchFieldEntry
    */
   public final String getSearchFieldEntry()
@@ -1045,7 +1045,7 @@ public class DBNaviBarWidget extends Composite
 
   /**
    * get search field method.
-   * 
+   *
    * @return searchFieldMethod
    */
   public final String getSearchFieldMethode()
@@ -1055,7 +1055,7 @@ public class DBNaviBarWidget extends Composite
 
   /**
    * display hint.
-   * 
+   *
    * @param hint
    *        text to display
    */
@@ -1221,7 +1221,7 @@ public class DBNaviBarWidget extends Composite
 
   /**
    * set database min max and current number.
-   * 
+   *
    * @param min
    *        minimum number
    * @param max
@@ -1245,7 +1245,7 @@ public class DBNaviBarWidget extends Composite
 
   /**
    * change search fields.
-   * 
+   *
    * @param searchFields
    *        new search fields
    */
@@ -1542,7 +1542,7 @@ public class DBNaviBarWidget extends Composite
 
   /**
    * create yes/no dialog box.
-   * 
+   *
    * @param thisConstants
    *        texts for box
    * @return DialogBox
@@ -1605,7 +1605,7 @@ public class DBNaviBarWidget extends Composite
 
   /**
    * add a click handler.
-   * 
+   *
    * @param handler
    *        handler to set
    * @return handler registration
@@ -1619,7 +1619,7 @@ public class DBNaviBarWidget extends Composite
 
   /**
    * add a key up handler.
-   * 
+   *
    * @param handler
    *        key up handler
    * @return handler registration
