@@ -1,22 +1,22 @@
 /**
  * This file is part of DBNavigation.
- * 
+ *
  * RiPhone is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
- * 
+ *
  * RiPhone is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with RiPhone. If not, see <http://www.gnu.org/licenses/>
- * 
- * 
+ *
+ *
  * Copyright (c) 2011-2012 Manfred Tremmel
- * 
+ *
  */
 package de.knightsoft.dbnavigationbar.client.ui;
 
@@ -26,20 +26,20 @@ import de.knightsoft.dbnavigationbar.client.domain.AbstractDataBaseDomain;
 import de.knightsoft.dbnavigationbar.shared.exceptions.ServerErrorException;
 
 /**
- * 
+ *
  * The <code>AbstractDBRemoteService</code> class is the synchronous
  * interface template for DataBase handling.
- * 
+ *
  * @param <E>
  *        database domain structure
  * @author Manfred Tremmel
  * @version $Rev$, $Date$
  */
-public abstract interface AbstractDBRemoteService<E extends AbstractDataBaseDomain> extends XsrfProtectedService
+public interface AbstractDBRemoteService<E extends AbstractDataBaseDomain> extends XsrfProtectedService
 {
   /**
    * save entry to database.
-   * 
+   *
    * @param currentEntry
    *        entry to save
    * @return saved entry
@@ -50,7 +50,7 @@ public abstract interface AbstractDBRemoteService<E extends AbstractDataBaseDoma
 
   /**
    * delete a entry from database.
-   * 
+   *
    * @param currentEntry
    *        entry to delete
    * @return entry to display after deletion
@@ -61,7 +61,7 @@ public abstract interface AbstractDBRemoteService<E extends AbstractDataBaseDoma
 
   /**
    * read on entry by key from database.
-   * 
+   *
    * @param entry
    *        database key
    * @return entry read from database
@@ -72,7 +72,7 @@ public abstract interface AbstractDBRemoteService<E extends AbstractDataBaseDoma
 
   /**
    * read first database entry.
-   * 
+   *
    * @return entry read from database
    * @throws ServerErrorException
    *         thrown on errors on server
@@ -81,7 +81,7 @@ public abstract interface AbstractDBRemoteService<E extends AbstractDataBaseDoma
 
   /**
    * read previous entry.
-   * 
+   *
    * @param currentEntry
    *        key of current entry
    * @return entry read from database
@@ -92,7 +92,7 @@ public abstract interface AbstractDBRemoteService<E extends AbstractDataBaseDoma
 
   /**
    * read next entry.
-   * 
+   *
    * @param currentEntry
    *        key of current entry
    * @return entry read from database
@@ -103,7 +103,7 @@ public abstract interface AbstractDBRemoteService<E extends AbstractDataBaseDoma
 
   /**
    * read the last entry of the database.
-   * 
+   *
    * @return entry read from database
    * @throws ServerErrorException
    *         thrown on errors on server
@@ -112,7 +112,7 @@ public abstract interface AbstractDBRemoteService<E extends AbstractDataBaseDoma
 
   /**
    * find a entry in the database, start with the first one.
-   * 
+   *
    * @param searchField
    *        database field to search for
    * @param searchMethodEntry
@@ -128,7 +128,7 @@ public abstract interface AbstractDBRemoteService<E extends AbstractDataBaseDoma
 
   /**
    * find a entry in the database backward, start with the current one.
-   * 
+   *
    * @param searchField
    *        database field to search for
    * @param searchMethodEntry
@@ -147,7 +147,7 @@ public abstract interface AbstractDBRemoteService<E extends AbstractDataBaseDoma
 
   /**
    * find a entry in the database forward, start with the current one.
-   * 
+   *
    * @param searchField
    *        database field to search for
    * @param searchMethodEntry
@@ -166,7 +166,7 @@ public abstract interface AbstractDBRemoteService<E extends AbstractDataBaseDoma
 
   /**
    * find a entry in the database backward, start with the last one.
-   * 
+   *
    * @param searchField
    *        database field to search for
    * @param searchMethodEntry

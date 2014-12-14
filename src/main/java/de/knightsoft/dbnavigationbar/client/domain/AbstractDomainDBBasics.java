@@ -1,39 +1,37 @@
 /**
  * This file is part of DBNavigationBar.
- * 
+ *
  * RiPhone is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
- * 
+ *
  * RiPhone is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with RiPhone. If not, see <http://www.gnu.org/licenses/>
- * 
- * 
+ *
+ *
  * Copyright (c) 2011-2012 Manfred Tremmel
- * 
+ *
  */
 package de.knightsoft.dbnavigationbar.client.domain;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
- * 
+ *
  * The <code>AbstractDomainDBBasics</code> class is a exchange structure
  * between the client and the servlet on the server with database
  * functions. This is a abstract basic class to setup on.
- * 
+ *
  * @author Manfred Tremmel
  * @version $Rev$, $Date$
  */
-public abstract class AbstractDomainDBBasics
-    implements DomainDataBaseInterface, Serializable
+public abstract class AbstractDomainDBBasics implements DomainDataBaseInterface, Serializable
 {
 
   /**
@@ -74,14 +72,13 @@ public abstract class AbstractDomainDBBasics
   /**
    * Copy Constructor, creates a new user with the same
    * entries as the one who's given as parameter.
-   * 
-   * @param copyEntry
+   *
+   * @param pEntry
    *        entry to copy
    */
-  public AbstractDomainDBBasics(
-      final AbstractDomainDBBasics copyEntry)
+  public AbstractDomainDBBasics(final AbstractDomainDBBasics pEntry)
   {
-    if (copyEntry == null)
+    if (pEntry == null)
     {
       this.setUpDefaultEntry();
       this.keyMin = null;
@@ -89,16 +86,16 @@ public abstract class AbstractDomainDBBasics
     }
     else
     {
-      this.readOnly = copyEntry.readOnly;
-      this.keyMin = copyEntry.keyMin;
-      this.keyMax = copyEntry.keyMax;
-      this.keyCur = copyEntry.keyCur;
+      this.readOnly = pEntry.readOnly;
+      this.keyMin = pEntry.keyMin;
+      this.keyMax = pEntry.keyMax;
+      this.keyCur = pEntry.keyCur;
     }
   }
 
   /**
    * get readOnly.
-   * 
+   *
    * @return readOnly
    */
   @Override
@@ -109,31 +106,31 @@ public abstract class AbstractDomainDBBasics
 
   /**
    * set readOnly.
-   * 
-   * @param newIsReadOnly
+   *
+   * @param pIsReadOnly
    *        new readOnly
    */
   @Override
-  public final void setIsReadOnly(final boolean newIsReadOnly)
+  public final void setIsReadOnly(final boolean pIsReadOnly)
   {
-    this.readOnly = newIsReadOnly;
+    this.readOnly = pIsReadOnly;
   }
 
   /**
    * set readOnly.
-   * 
-   * @param newIsReadOnly
+   *
+   * @param pIsReadOnly
    *        new readOnly
    */
   @Override
-  public final void setIsReadOnly(final Boolean newIsReadOnly)
+  public final void setIsReadOnly(final Boolean pIsReadOnly)
   {
-    this.readOnly = newIsReadOnly;
+    this.readOnly = pIsReadOnly;
   }
 
   /**
    * get keyMin.
-   * 
+   *
    * @return keyMin
    */
   @Override
@@ -144,19 +141,19 @@ public abstract class AbstractDomainDBBasics
 
   /**
    * set keyMin.
-   * 
-   * @param newKeyMin
+   *
+   * @param pKeyMin
    *        new keyMin
    */
   @Override
-  public final void setKeyMin(final String newKeyMin)
+  public final void setKeyMin(final String pKeyMin)
   {
-    this.keyMin = newKeyMin;
+    this.keyMin = pKeyMin;
   }
 
   /**
    * get keyMax.
-   * 
+   *
    * @return keyMax
    */
   @Override
@@ -167,19 +164,19 @@ public abstract class AbstractDomainDBBasics
 
   /**
    * set keyMax.
-   * 
-   * @param newKeyMax
+   *
+   * @param pKeyMax
    *        new keyMax
    */
   @Override
-  public final void setKeyMax(final String newKeyMax)
+  public final void setKeyMax(final String pKeyMax)
   {
-    this.keyMax = newKeyMax;
+    this.keyMax = pKeyMax;
   }
 
   /**
    * get keyCur.
-   * 
+   *
    * @return keyCur
    */
   @Override
@@ -190,74 +187,23 @@ public abstract class AbstractDomainDBBasics
 
   /**
    * set keyCur.
-   * 
-   * @param newKeyCur
+   *
+   * @param pKeyCur
    *        key to set
    */
   @Override
-  public final void setKeyCur(final String newKeyCur)
+  public final void setKeyCur(final String pKeyCur)
   {
-    this.keyCur = newKeyCur;
-  }
-
-  /**
-   * stringEquals compares two String entries.
-   * 
-   * @param thisString
-   *        a string to compare with vglString
-   * @param vglString
-   *        entry to compare with thisString
-   * @return true if both contain the same entries, otherwise false
-   */
-  protected final boolean stringEquals(final String thisString,
-      final String vglString)
-  {
-    String compareThisString = thisString;
-    String compareVglString = vglString;
-    if (compareThisString == null)
-    {
-      compareThisString = "";
-    }
-    if (compareVglString == null)
-    {
-      compareVglString = "";
-    }
-    return compareThisString.equals(compareVglString);
-  }
-
-  /**
-   * dateEquals compares two Date entries.
-   * 
-   * @param thisEntry
-   *        entry to compare with vglEntry
-   * @param vglEntry
-   *        entry to compare with thisEntry
-   * @return true if both contain the same entries, otherwise false
-   */
-  protected final boolean dateEquals(final Date thisEntry,
-      final Date vglEntry)
-  {
-    Date compareThisEntry = thisEntry;
-    Date compareVglEntry = vglEntry;
-    if (compareThisEntry == null)
-    {
-      compareThisEntry = new Date(0);
-    }
-    if (compareVglEntry == null)
-    {
-      compareVglEntry = new Date(0);
-    }
-    return compareThisEntry.equals(compareVglEntry);
+    this.keyCur = pKeyCur;
   }
 
   /**
    * set up a default key and read only entries.
-   * 
+   *
    */
   public final void setUpDefaultEntryKey()
   {
     this.readOnly = false;
     this.keyCur = null;
   }
-
 }

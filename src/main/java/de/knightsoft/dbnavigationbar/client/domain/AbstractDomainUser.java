@@ -1,35 +1,37 @@
 /**
  * This file is part of DBNavigationBar.
- * 
+ *
  * RiPhone is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
- * 
+ *
  * RiPhone is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with RiPhone. If not, see <http://www.gnu.org/licenses/>
- * 
- * 
+ *
+ *
  * Copyright (c) 2011-2012 Manfred Tremmel
- * 
+ *
  */
 package de.knightsoft.dbnavigationbar.client.domain;
 
 import java.io.Serializable;
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
- * 
+ *
  * The <code>AbstractDomainUser</code> class is a exchange structure
  * between the login and user mask on the client and the servlet
  * on the server, it's abstract and has to be fully implemented
  * in depending classes.
- * 
+ *
  * @author Manfred Tremmel
  * @version $Rev$, $Date$
  */
@@ -88,27 +90,27 @@ public abstract class AbstractDomainUser extends AbstractDomainHeadPosDB
   /**
    * Copy Constructor, creates a new user with the same
    * entries as the one who's given as parameter.
-   * 
-   * @param copyUser
+   *
+   * @param pUser
    *        entry to copy
    */
-  public AbstractDomainUser(final AbstractDomainUser copyUser)
+  public AbstractDomainUser(final AbstractDomainUser pUser)
   {
-    super(copyUser);
-    if (copyUser == null)
+    super(pUser);
+    if (pUser == null)
     {
       this.setUpDefaultUser(1, true, "batch", null);
     }
     else
     {
-      this.useLDAP = copyUser.useLDAP;
+      this.useLDAP = pUser.useLDAP;
 
-      this.mandator = copyUser.mandator;
-      this.user = copyUser.user;
-      this.password = copyUser.password;
-      this.logonErrorCount = copyUser.logonErrorCount;
-      this.logonErrorDate = copyUser.logonErrorDate;
-      this.logonDate = copyUser.logonDate;
+      this.mandator = pUser.mandator;
+      this.user = pUser.user;
+      this.password = pUser.password;
+      this.logonErrorCount = pUser.logonErrorCount;
+      this.logonErrorDate = pUser.logonErrorDate;
+      this.logonDate = pUser.logonDate;
     }
   }
 
@@ -120,7 +122,7 @@ public abstract class AbstractDomainUser extends AbstractDomainHeadPosDB
 
   /**
    * get useLDAP.
-   * 
+   *
    * @return useLDAP
    */
   public final Boolean getUseLDAP()
@@ -130,29 +132,29 @@ public abstract class AbstractDomainUser extends AbstractDomainHeadPosDB
 
   /**
    * set useLDAP.
-   * 
-   * @param newUseLDAP
+   *
+   * @param pUseLDAP
    *        use ldap true/false
    */
-  public final void setUseLDAP(final boolean newUseLDAP)
+  public final void setUseLDAP(final boolean pUseLDAP)
   {
-    this.useLDAP = newUseLDAP;
+    this.useLDAP = pUseLDAP;
   }
 
   /**
    * set useLDAP.
-   * 
-   * @param newUseLDAP
+   *
+   * @param pUseLDAP
    *        use ldap true/false
    */
-  public final void setUseLDAP(final Boolean newUseLDAP)
+  public final void setUseLDAP(final Boolean pUseLDAP)
   {
-    this.useLDAP = newUseLDAP;
+    this.useLDAP = pUseLDAP;
   }
 
   /**
    * get mandator.
-   * 
+   *
    * @return mandator
    */
   public final int getMandator()
@@ -162,18 +164,18 @@ public abstract class AbstractDomainUser extends AbstractDomainHeadPosDB
 
   /**
    * set mandator.
-   * 
-   * @param newMandator
+   *
+   * @param pMandator
    *        to set
    */
-  public final void setMandator(final int newMandator)
+  public final void setMandator(final int pMandator)
   {
-    this.mandator = newMandator;
+    this.mandator = pMandator;
   }
 
   /**
    * get user.
-   * 
+   *
    * @return user
    */
   public final String getUser()
@@ -183,18 +185,18 @@ public abstract class AbstractDomainUser extends AbstractDomainHeadPosDB
 
   /**
    * set user.
-   * 
-   * @param newUser
+   *
+   * @param pUser
    *        to set
    */
-  public final void setUser(final String newUser)
+  public final void setUser(final String pUser)
   {
-    this.user = newUser;
+    this.user = pUser;
   }
 
   /**
    * get password.
-   * 
+   *
    * @return password
    */
   public final String getPassword()
@@ -204,18 +206,18 @@ public abstract class AbstractDomainUser extends AbstractDomainHeadPosDB
 
   /**
    * set password.
-   * 
-   * @param newPassword
+   *
+   * @param pPassword
    *        to set
    */
-  public final void setPassword(final String newPassword)
+  public final void setPassword(final String pPassword)
   {
-    this.password = newPassword;
+    this.password = pPassword;
   }
 
   /**
    * get logonErrorCount.
-   * 
+   *
    * @return logonErrorCount
    */
   public final int getLogonErrorCount()
@@ -225,18 +227,18 @@ public abstract class AbstractDomainUser extends AbstractDomainHeadPosDB
 
   /**
    * set logonErrorCount.
-   * 
-   * @param newLogonErrorCount
+   *
+   * @param pLogonErrorCount
    *        to set
    */
-  public final void setLogonErrorCount(final int newLogonErrorCount)
+  public final void setLogonErrorCount(final int pLogonErrorCount)
   {
-    this.logonErrorCount = newLogonErrorCount;
+    this.logonErrorCount = pLogonErrorCount;
   }
 
   /**
    * get logonErrorDate.
-   * 
+   *
    * @return logonErrorDate
    */
   public final Date getLogonErrorDate()
@@ -246,18 +248,18 @@ public abstract class AbstractDomainUser extends AbstractDomainHeadPosDB
 
   /**
    * set logonErrorDate.
-   * 
-   * @param newLogonErrorDate
+   *
+   * @param pLogonErrorDate
    *        to set
    */
-  public final void setLogonErrorDate(final Date newLogonErrorDate)
+  public final void setLogonErrorDate(final Date pLogonErrorDate)
   {
-    this.logonErrorDate = newLogonErrorDate;
+    this.logonErrorDate = pLogonErrorDate;
   }
 
   /**
    * get logonDate.
-   * 
+   *
    * @return logonDate
    */
   public final Date getlogonDate()
@@ -267,34 +269,34 @@ public abstract class AbstractDomainUser extends AbstractDomainHeadPosDB
 
   /**
    * set logonDate.
-   * 
-   * @param newLogonDate
+   *
+   * @param pLogonDate
    *        to set
    */
-  public final void setLogonDate(final Date newLogonDate)
+  public final void setLogonDate(final Date pLogonDate)
   {
-    this.logonDate = newLogonDate;
+    this.logonDate = pLogonDate;
   }
 
   /**
    * equalsHeadUser compares the user part of two users.
-   * 
-   * @param vglUser
+   *
+   * @param compareUser
    *        user to compare with user of this class
    * @return true if both contain the same entries, otherwise false
    */
-  public final boolean equalsHeadUser(final AbstractDomainUser vglUser)
+  public final boolean equalsHeadUser(final AbstractDomainUser compareUser)
   {
     boolean isequal = true;
-    if (vglUser == null)
+    if (compareUser == null)
     {
       isequal = false;
     }
     else
     {
-      isequal &= this.mandator == vglUser.mandator;
-      isequal &= this.stringEquals(this.user, vglUser.user);
-      isequal &= this.stringEquals(this.password, vglUser.password);
+      isequal &= this.mandator == compareUser.mandator;
+      isequal &= StringUtils.equals(this.user, compareUser.user);
+      isequal &= StringUtils.equals(this.password, compareUser.password);
     }
 
     return isequal;
@@ -302,44 +304,44 @@ public abstract class AbstractDomainUser extends AbstractDomainHeadPosDB
 
   /**
    * equalsUser compares the user part of two users.
-   * 
-   * @param vglUser
+   *
+   * @param compareUser
    *        user to compare with user of this class
    * @return true if both contain the same entries, otherwise false
    */
-  public abstract boolean equalsUser(final AbstractDomainUser vglUser);
+  public abstract boolean equalsUser(final AbstractDomainUser compareUser);
 
   @Override
-  public final boolean equalsEntry(final DomainDataBaseInterface vglEntry)
+  public final boolean equalsEntry(final DomainDataBaseInterface compareEntry)
   {
-    return this.equalsUser((AbstractDomainUser) vglEntry);
+    return this.equalsUser((AbstractDomainUser) compareEntry);
   }
 
   /**
    * set up a user with default entries.
-   * 
-   * @param defaultMandator
+   *
+   * @param pMandator
    *        to set
-   * @param defaultUseLDAP
+   * @param pUseLDAP
    *        use ldap (true/false)
-   * @param defaultUser
+   * @param pUser
    *        name of the user
-   * @param defaultPassword
+   * @param pPassword
    *        of the user
    */
   public final void setUpHeadDefaultUser(
-      final int defaultMandator,
-      final boolean defaultUseLDAP,
-      final String defaultUser,
-      final String defaultPassword)
+      final int pMandator,
+      final boolean pUseLDAP,
+      final String pUser,
+      final String pPassword)
   {
     super.setUpDefaultEntryKey();
 
-    this.useLDAP = defaultUseLDAP;
+    this.useLDAP = pUseLDAP;
 
-    this.mandator = defaultMandator;
-    this.user = defaultUser;
-    this.password = defaultPassword;
+    this.mandator = pMandator;
+    this.user = pUser;
+    this.password = pPassword;
     this.logonErrorCount = 0;
     this.logonErrorDate = null;
     this.logonDate = null;
@@ -347,43 +349,43 @@ public abstract class AbstractDomainUser extends AbstractDomainHeadPosDB
 
   /**
    * set up a default user.
-   * 
-   * @param initMandator
+   *
+   * @param pMandator
    *        to set
-   * @param initUseLDAP
+   * @param pUseLDAP
    *        use ldap (true/false)
-   * @param initUser
+   * @param pUser
    *        name of the user
-   * @param initPassword
+   * @param pPassword
    *        of the user
    */
   public abstract void setUpDefaultUser(
-      final int initMandator,
-      final boolean initUseLDAP,
-      final String initUser,
-      final String initPassword);
+      final int pMandator,
+      final boolean pUseLDAP,
+      final String pUser,
+      final String pPassword);
 
   /**
    * set up a initial user.
-   * 
-   * @param initMandator
+   *
+   * @param pMandator
    *        to set
-   * @param initUseLDAP
+   * @param pUseLDAP
    *        use ldap (true/false)
-   * @param initUser
+   * @param pUser
    *        name of the user
-   * @param initPassword
+   * @param pPassword
    *        of the user
    */
   public abstract void setUpInitUser(
-      final int initMandator,
-      final boolean initUseLDAP,
-      final String initUser,
-      final String initPassword);
+      final int pMandator,
+      final boolean pUseLDAP,
+      final String pUser,
+      final String pPassword);
 
   /**
    * set up a default entries.
-   * 
+   *
    */
   @Override
   public final void setUpDefaultEntry()

@@ -9,16 +9,16 @@
   <groupId>de.knightsoft</groupId>
   <artifactId>dbnavigationbar</artifactId>
   <packaging>jar</packaging>
-  <version>0.8</version>
+  <version>0.8.1</version>
   <name>DBNavigationBar</name>
   <url>http://www.knightsoft-net.de/maven/</url>
 
   <properties>
     <jdk.version>1.7</jdk.version>
     <!-- Convenience property to set the GWT version -->
-    <gwt.version>2.6.1</gwt.version>
-    <junit.version>4.7</junit.version>
-    <commonsLang.version>3.3.2</commonsLang.version>
+    <gwt.version>2.7.0</gwt.version>
+    <junit.version>4.11</junit.version>
+    <gwtCommonsLang.version>3.3.2-SNAPSHOT</gwtCommonsLang.version>
     <mavenCompiler.version>2.3.2</mavenCompiler.version>
     <checkstyle.version>2.13</checkstyle.version>
     <pmd.version>3.2</pmd.version>
@@ -49,9 +49,16 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>${commonsLang.version}</version>
+      <groupId>gwt-commons-lang3</groupId>
+      <artifactId>gwt-commons-lang3</artifactId>
+      <version>${gwtCommonsLang.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>gwt-commons-lang3</groupId>
+      <artifactId>gwt-commons-lang3</artifactId>
+      <version>${gwtCommonsLang.version}</version>
+      <classifier>sources</classifier>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 

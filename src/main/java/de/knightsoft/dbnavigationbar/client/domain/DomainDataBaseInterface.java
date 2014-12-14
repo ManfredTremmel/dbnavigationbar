@@ -40,18 +40,18 @@ public interface DomainDataBaseInterface
   /**
    * set isReadOnly.
    * 
-   * @param newIsReadOnly
+   * @param pIsReadOnly
    *        new isReadOnly
    */
-  void setIsReadOnly(final boolean newIsReadOnly);
+  void setIsReadOnly(final boolean pIsReadOnly);
 
   /**
    * set isReadOnly.
    * 
-   * @param newIsReadOnly
+   * @param pIsReadOnly
    *        new isReadOnly
    */
-  void setIsReadOnly(final Boolean newIsReadOnly);
+  void setIsReadOnly(final Boolean pIsReadOnly);
 
   /**
    * get keyMin.
@@ -63,10 +63,10 @@ public interface DomainDataBaseInterface
   /**
    * set keyMin.
    * 
-   * @param newKeyMin
+   * @param pKeyMin
    *        new keyMin
    */
-  void setKeyMin(final String newKeyMin);
+  void setKeyMin(final String pKeyMin);
 
   /**
    * get keyMax.
@@ -78,10 +78,10 @@ public interface DomainDataBaseInterface
   /**
    * set keyMax.
    * 
-   * @param newKeyMax
+   * @param pKeyMax
    *        new keyMax
    */
-  void setKeyMax(final String newKeyMax);
+  void setKeyMax(final String pKeyMax);
 
   /**
    * get keyCur.
@@ -93,10 +93,10 @@ public interface DomainDataBaseInterface
   /**
    * set keyCur.
    * 
-   * @param newKeyCur
+   * @param pKeyCur
    *        key to set
    */
-  void setKeyCur(final String newKeyCur);
+  void setKeyCur(final String pKeyCur);
 
   /**
    * get KeyNew.
@@ -108,11 +108,11 @@ public interface DomainDataBaseInterface
   /**
    * equals compares two entries.
    * 
-   * @param obj
+   * @param pObj
    *        entry to compare with entry of this class
    * @return true if both contain the same entries, otherwise false
    */
-  boolean equals(final Object obj);
+  boolean equals(final Object pObj);
 
   /**
    * hashCode implementation.
@@ -130,9 +130,9 @@ public interface DomainDataBaseInterface
   /**
    * equalsEntry compares the head part of two entries.
    * 
-   * @param vglEntry
+   * @param pCompareEntry
    *        entry to compare with entry of this class
    * @return true if both contain the same entries, otherwise false
    */
-  boolean equalsEntry(final DomainDataBaseInterface vglEntry);
+  boolean equalsEntry(final DomainDataBaseInterface pCompareEntry);
 }

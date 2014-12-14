@@ -669,7 +669,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * search field select.
    */
-  private final ListBox fieldSelect = new ListBox(false);
+  private final ListBox fieldSelect = new ListBox();
   /**
    * search entry label.
    */
@@ -681,7 +681,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * search method.
    */
-  private final ListBox searchMethodSelect = new ListBox(false);
+  private final ListBox searchMethodSelect = new ListBox();
   /**
    * search methods label.
    */

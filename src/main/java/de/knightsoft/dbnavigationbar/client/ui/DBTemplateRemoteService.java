@@ -1,22 +1,22 @@
 /**
  * This file is part of DBNavigation.
- * 
+ *
  * RiPhone is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
- * 
+ *
  * RiPhone is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with RiPhone. If not, see <http://www.gnu.org/licenses/>
- * 
- * 
+ *
+ *
  * Copyright (c) 2011-2012 Manfred Tremmel
- * 
+ *
  * --
  * Name Date Change
  */
@@ -27,20 +27,20 @@ import com.google.gwt.user.client.rpc.XsrfProtectedService;
 import de.knightsoft.dbnavigationbar.client.domain.AbstractDomainDBBasics;
 
 /**
- * 
+ *
  * The <code>DBTemplateRemoteService</code> class is the synchronous
  * interface template for DataBase Head.
- * 
+ *
  * @param <E>
  *        database structure
  * @author Manfred Tremmel
  * @version 1.0.0, 2011-02-13
  */
-public abstract interface DBTemplateRemoteService<E extends AbstractDomainDBBasics> extends XsrfProtectedService
+public interface DBTemplateRemoteService<E extends AbstractDomainDBBasics> extends XsrfProtectedService
 {
   /**
    * save entry to database.
-   * 
+   *
    * @param currentEntry
    *        entry to save
    * @return saved entry
@@ -49,7 +49,7 @@ public abstract interface DBTemplateRemoteService<E extends AbstractDomainDBBasi
 
   /**
    * delete a entry from database.
-   * 
+   *
    * @param currentEntry
    *        entry to delete
    * @return entry to display after deletion
@@ -58,7 +58,7 @@ public abstract interface DBTemplateRemoteService<E extends AbstractDomainDBBasi
 
   /**
    * read on entry by key from database.
-   * 
+   *
    * @param entry
    *        database key
    * @return entry read from database
@@ -67,14 +67,14 @@ public abstract interface DBTemplateRemoteService<E extends AbstractDomainDBBasi
 
   /**
    * read first database entry.
-   * 
+   *
    * @return entry read from database
    */
   E readFirstEntry();
 
   /**
    * read previous entry.
-   * 
+   *
    * @param currentEntry
    *        key of current entry
    * @return entry read from database
@@ -83,7 +83,7 @@ public abstract interface DBTemplateRemoteService<E extends AbstractDomainDBBasi
 
   /**
    * read next entry.
-   * 
+   *
    * @param currentEntry
    *        key of current entry
    * @return entry read from database
@@ -92,14 +92,14 @@ public abstract interface DBTemplateRemoteService<E extends AbstractDomainDBBasi
 
   /**
    * read the last entry of the database.
-   * 
+   *
    * @return entry read from database
    */
   E readLastEntry();
 
   /**
    * find a entry in the database, start with the first one.
-   * 
+   *
    * @param searchField
    *        database field to search for
    * @param searchMethodEntry
@@ -113,7 +113,7 @@ public abstract interface DBTemplateRemoteService<E extends AbstractDomainDBBasi
 
   /**
    * find a entry in the database backward, start with the current one.
-   * 
+   *
    * @param searchField
    *        database field to search for
    * @param searchMethodEntry
@@ -129,7 +129,7 @@ public abstract interface DBTemplateRemoteService<E extends AbstractDomainDBBasi
 
   /**
    * find a entry in the database forward, start with the current one.
-   * 
+   *
    * @param searchField
    *        database field to search for
    * @param searchMethodEntry
@@ -145,7 +145,7 @@ public abstract interface DBTemplateRemoteService<E extends AbstractDomainDBBasi
 
   /**
    * find a entry in the database backward, start with the last one.
-   * 
+   *
    * @param searchField
    *        database field to search for
    * @param searchMethodEntry

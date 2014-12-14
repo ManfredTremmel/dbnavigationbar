@@ -1,38 +1,37 @@
 /**
  * This file is part of DBNavigationBar.
- * 
+ *
  * RiPhone is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of
  * the License, or (at your option) any later version.
- * 
+ *
  * RiPhone is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with RiPhone. If not, see <http://www.gnu.org/licenses/>
- * 
- * 
+ *
+ *
  * Copyright (c) 2011-2012 Manfred Tremmel
- * 
+ *
  */
 package de.knightsoft.dbnavigationbar.client.domain;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * The <code>RiPhoneDomaneHeadPosDataBase</code> class is a exchange structure
  * between the client and the servlet on the server.
- * 
+ *
  * @author Manfred Tremmel
  * @version $Rev$, $Date$
  */
-public abstract class AbstractDomainHead2PosDB
-    extends AbstractDomainDBBasics
-    implements DomainHeadDataBaseInterface, DomainHeadPosDataBaseInt,
-    DomainHead2PosDataBaseInt, Serializable
+public abstract class AbstractDomainHead2PosDB extends AbstractDomainDBBasics
+    implements DomainHeadDataBaseInterface, DomainHeadPosDataBaseInt, DomainHead2PosDataBaseInt, Serializable
 {
 
   /**
@@ -51,45 +50,43 @@ public abstract class AbstractDomainHead2PosDB
   /**
    * Copy Constructor, creates a new user with the same
    * entries as the one who's given as parameter.
-   * 
-   * @param copyEntry
+   *
+   * @param pEntry
    *        entry to copy
    */
-  public AbstractDomainHead2PosDB(
-      final AbstractDomainHead2PosDB copyEntry)
+  public AbstractDomainHead2PosDB(final AbstractDomainHead2PosDB pEntry)
   {
-    super(copyEntry);
+    super(pEntry);
   }
 
   /**
    * equals compares two entries.
-   * 
-   * @param obj
+   *
+   * @param pObj
    *        entry to compare with entry of this class
    * @return true if both contain the same entries, otherwise false
    */
   @Override
-  public final boolean equals(final Object obj)
+  public final boolean equals(final Object pObj)
   {
-    if (this == obj)
+    if (this == pObj)
     {
       return true;
     }
-    if (obj == null)
+    if (pObj == null)
     {
       return false;
     }
-    if (!obj.getClass().equals(this.getClass()))
+    if (!pObj.getClass().equals(this.getClass()))
     {
       return false;
     }
 
-    boolean isequal = this.equalsEntry((AbstractDomainDBBasics) obj);
+    boolean isequal = this.equalsEntry((AbstractDomainDBBasics) pObj);
     if (isequal)
     {
       String[] posKeys = this.getKeyPos();
-      String[] vglPosKeys =
-          ((AbstractDomainHead2PosDB) obj).getKeyPos();
+      String[] vglPosKeys = ((AbstractDomainHead2PosDB) pObj).getKeyPos();
       if (posKeys == null)
       {
         posKeys = new String[0];
@@ -100,10 +97,9 @@ public abstract class AbstractDomainHead2PosDB
       }
       if (posKeys.length == vglPosKeys.length)
       {
-        for (int pos = 0; (pos < posKeys.length)
-            && isequal; pos++)
+        for (int pos = 0; (pos < posKeys.length) && isequal; pos++)
         {
-          isequal &= this.equalsPosition((AbstractDomainHead2PosDB) obj, pos, pos);
+          isequal &= this.equalsPosition((AbstractDomainHead2PosDB) pObj, pos, pos);
         }
       }
       else
@@ -115,7 +111,7 @@ public abstract class AbstractDomainHead2PosDB
     {
       String[] pos2Keys = this.getKeyPos2();
       String[] vglPos2Keys =
-          ((AbstractDomainHead2PosDB) obj).getKeyPos2();
+          ((AbstractDomainHead2PosDB) pObj).getKeyPos2();
       if (pos2Keys == null)
       {
         pos2Keys = new String[0];
@@ -126,10 +122,9 @@ public abstract class AbstractDomainHead2PosDB
       }
       if (pos2Keys.length == vglPos2Keys.length)
       {
-        for (int pos2 = 0; (pos2 < pos2Keys.length)
-            && isequal; pos2++)
+        for (int pos2 = 0; (pos2 < pos2Keys.length) && isequal; pos2++)
         {
-          isequal &= this.equalsPosition2((AbstractDomainHead2PosDB) obj, pos2, pos2);
+          isequal &= this.equalsPosition2((AbstractDomainHead2PosDB) pObj, pos2, pos2);
         }
       }
       else
@@ -142,49 +137,40 @@ public abstract class AbstractDomainHead2PosDB
 
   /**
    * compare to positions.
-   * 
-   * @param vgl
+   *
+   * @param pCompare
    *        comparison position
-   * @param posthis
+   * @param pPosThis
    *        position of this structure
-   * @param posvgl
+   * @param pPosCompare
    *        position of the comparison structure
    * @return true if equal otherwise false
    */
   @Override
-  public abstract boolean equalsPosition(DomainHeadPosDataBaseInt vgl,
-      int posthis, int posvgl);
+  public abstract boolean equalsPosition(DomainHeadPosDataBaseInt pCompare, int pPosThis, int pPosCompare);
 
   /**
    * compare two positions.
-   * 
-   * @param vgl
+   *
+   * @param pCompare
    *        comparison position
-   * @param posthis
+   * @param pPosThis
    *        position of this structure
-   * @param posvgl
+   * @param pPosCompare
    *        position of the comparison structure
    * @return true if equal otherwise false
    */
   @Override
-  public abstract boolean equalsPosition2(DomainHead2PosDataBaseInt vgl,
-      int posthis, int posvgl);
+  public abstract boolean equalsPosition2(DomainHead2PosDataBaseInt pCompare, int pPosThis, int pPosCompare);
 
   /**
    * hashCode implementation.
-   * 
+   *
    * @return hash code of the key
    */
   @Override
   public final int hashCode()
   {
-    if (this.getKeyCur() == null)
-    {
-      return 1;
-    }
-    else
-    {
-      return this.getKeyCur().hashCode();
-    }
+    return Objects.hashCode(this.getKeyCur());
   }
 }
