@@ -1,13 +1,13 @@
 /**
- * This file is part of DBNavigation.
+ * This file is part of DBNavigationBar.
  *
- * RiPhone is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  *
- * RiPhone is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with RiPhone. If not, see <a
+ * You should have received a copy of the GNU General Public License along with DBNavigationBar. If not, see <a
  * href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
  *
  *
@@ -153,7 +153,7 @@ public abstract class AbstractParent implements EntryPoint {
 
   /**
    * The <code>menuFind</code> method checks if a given menu entry or history selection belongs to one of the subpages of
-   * RiPhone.
+   * DBNavigationBar.
    *
    * @param pItemtext Name of the selection
    * @param pCurrentUser The logged in user, null if non is logged in

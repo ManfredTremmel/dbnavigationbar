@@ -1,13 +1,13 @@
 /**
- * This file is part of DBNavigation.
+ * This file is part of DBNavigationBar.
  *
- * RiPhone is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  *
- * RiPhone is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with RiPhone. If not, see <a
+ * You should have received a copy of the GNU General Public License along with DBNavigationBar. If not, see <a
  * href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
  *
  *
@@ -493,7 +493,7 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain, F ext
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see de.knightsoft.dbnavigationbar.client.ui.AbstractDBRemoteService #readEntry(java.lang.String)
    */
   @Override
@@ -524,7 +524,7 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain, F ext
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see de.knightsoft.dbnavigationbar.client.ui.AbstractDBRemoteService #findFirstEntry(java.lang.String, java.lang.String,
    * java.lang.String)
    */
@@ -578,7 +578,7 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain, F ext
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see de.knightsoft.dbnavigationbar.client.ui.AbstractDBRemoteService #findLastEntry(java.lang.String, java.lang.String,
    * java.lang.String)
    */
@@ -632,7 +632,7 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain, F ext
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see de.knightsoft.dbnavigationbar.client.ui.AbstractDBRemoteService #findNextEntry(java.lang.String, java.lang.String,
    * java.lang.String, java.lang.String)
    */
@@ -686,7 +686,7 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain, F ext
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see de.knightsoft.dbnavigationbar.client.ui.AbstractDBRemoteService #findPreviousEntry(java.lang.String, java.lang.String,
    * java.lang.String, java.lang.String)
    */
@@ -740,7 +740,7 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain, F ext
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see de.knightsoft.dbnavigationbar.client.ui.AbstractDBRemoteService #readFirstEntry()
    */
   @Override
@@ -771,7 +771,7 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain, F ext
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see de.knightsoft.dbnavigationbar.client.ui.AbstractDBRemoteService #readLastEntry()
    */
   @Override
@@ -801,7 +801,7 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain, F ext
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see de.knightsoft.dbnavigationbar.client.ui.AbstractDBRemoteService #readNextEntry(java.lang.String)
    */
   @Override
@@ -852,7 +852,7 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain, F ext
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see de.knightsoft.dbnavigationbar.client.ui.AbstractDBRemoteService #readPreviousEntry(java.lang.String)
    */
   @Override
@@ -960,7 +960,7 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain, F ext
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see de.knightsoft.dbnavigationbar.client.ui.AbstractDBRemoteService #saveEntry(de.knightsoft.dbnavigationbar.client.domain
    * .AbstractDataBaseDomain)
    */
@@ -1023,7 +1023,7 @@ public abstract class AbstractDBHeadDate<E extends AbstractDataBaseDomain, F ext
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see de.knightsoft.dbnavigationbar.client.ui.AbstractDBRemoteService #deleteEntry(java.lang.String)
    */
   @Override
