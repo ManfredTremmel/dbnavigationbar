@@ -1,172 +1,130 @@
 /**
  * This file is part of DBNavigation.
  *
- * RiPhone is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version.
+ * RiPhone is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  *
- * RiPhone is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
+ * RiPhone is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with RiPhone. If not, see <http://www.gnu.org/licenses/>
+ * You should have received a copy of the GNU General Public License along with RiPhone. If not, see <a
+ * href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
  *
  *
- * Copyright (c) 2011-2012 Manfred Tremmel
+ * Copyright (c) 2011-2015 Manfred Tremmel
  *
- * --
- * Name Date Change
  */
-package de.knightsoft.dbnavigationbar.client.ui;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+package de.knightsoft.dbnavigationbar.client.ui;
 
 import de.knightsoft.dbnavigationbar.client.domain.AbstractDomainDBBasics;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 /**
  *
- * The <code>DBTemplateRemoteServiceAsync</code> class is the asynchronous
- * interface template for DataBase Head.
+ * The <code>DBTemplateRemoteServiceAsync</code> class is the asynchronous interface template for DataBase Head.
  *
- * @param <E>
- *        database structure
+ * @param <E> database structure
  * @author Manfred Tremmel
  * @version 1.0.0, 2011-02-13
  */
-public interface DBTemplateRemoteServiceAsync<E extends AbstractDomainDBBasics>
-{
+public interface DBTemplateRemoteServiceAsync<E extends AbstractDomainDBBasics> {
   /**
    * save entry to database.
    *
-   * @param currentEntry
-   *        entry to save
-   * @param callback
-   *        class which gets back response
+   * @param pCurrentEntry entry to save
+   * @param pCallback class which gets back response
    */
-  void saveEntry(E currentEntry, AsyncCallback<E> callback);
+  void saveEntry(E pCurrentEntry, AsyncCallback<E> pCallback);
 
   /**
    * delete a entry from database.
    *
-   * @param currentEntry
-   *        entry to delete
-   * @param callback
-   *        class which gets back response
+   * @param pCurrentEntry entry to delete
+   * @param pCallback class which gets back response
    */
-  void deleteEntry(String currentEntry, AsyncCallback<E> callback);
+  void deleteEntry(String pCurrentEntry, AsyncCallback<E> pCallback);
 
   /**
    * read on entry by key from database.
    *
-   * @param entry
-   *        database key
-   * @param callback
-   *        class which gets back response
+   * @param pEntry database key
+   * @param pCallback class which gets back response
    */
-  void readEntry(String entry, AsyncCallback<E> callback);
+  void readEntry(String pEntry, AsyncCallback<E> pCallback);
 
   /**
    * read first database entry.
    *
-   * @param callback
-   *        class which gets back response
+   * @param pCallback class which gets back response
    */
-  void readFirstEntry(AsyncCallback<E> callback);
+  void readFirstEntry(AsyncCallback<E> pCallback);
 
   /**
    * read previous entry.
    *
-   * @param currentEntry
-   *        key of current entry
-   * @param callback
-   *        class which gets back response
+   * @param pCurrentEntry key of current entry
+   * @param pCallback class which gets back response
    */
-  void readPreviousEntry(String currentEntry, AsyncCallback<E> callback);
+  void readPreviousEntry(String pCurrentEntry, AsyncCallback<E> pCallback);
 
   /**
    * read next entry.
    *
-   * @param currentEntry
-   *        key of current entry
-   * @param callback
-   *        class which gets back response
+   * @param pCurrentEntry key of current entry
+   * @param pCallback class which gets back response
    */
-  void readNextEntry(String currentEntry, AsyncCallback<E> callback);
+  void readNextEntry(String pCurrentEntry, AsyncCallback<E> pCallback);
 
   /**
    * read the last entry of the database.
    *
-   * @param callback
-   *        class which gets back response
+   * @param pCallback class which gets back response
    */
-  void readLastEntry(AsyncCallback<E> callback);
+  void readLastEntry(AsyncCallback<E> pCallback);
 
   /**
    * find a entry in the database, start with the first one.
    *
-   * @param searchField
-   *        database field to search for
-   * @param searchMethodEntry
-   *        method to use for searching
-   * @param searchFieldEntry
-   *        search text
-   * @param callback
-   *        class which gets back response
+   * @param pSearchField database field to search for
+   * @param pSearchMethodEntry method to use for searching
+   * @param pSearchFieldEntry search text
+   * @param pCallback class which gets back response
    */
-  void findFirstEntry(String searchField, String searchMethodEntry,
-      String searchFieldEntry, AsyncCallback<E> callback);
+  void findFirstEntry(String pSearchField, String pSearchMethodEntry, String pSearchFieldEntry, AsyncCallback<E> pCallback);
 
   /**
    * find a entry in the database backward, start with the current one.
    *
-   * @param searchField
-   *        database field to search for
-   * @param searchMethodEntry
-   *        method to use for searching
-   * @param searchFieldEntry
-   *        search text
-   * @param currentEntry
-   *        key of the current entry
-   * @param callback
-   *        class which gets back response
+   * @param pSearchField database field to search for
+   * @param pSearchMethodEntry method to use for searching
+   * @param pSearchFieldEntry search text
+   * @param pCurrentEntry key of the current entry
+   * @param pCallback class which gets back response
    */
-  void findPreviousEntry(String searchField, String searchMethodEntry,
-      String searchFieldEntry, String currentEntry,
-      AsyncCallback<E> callback);
+  void findPreviousEntry(String pSearchField, String pSearchMethodEntry, String pSearchFieldEntry, String pCurrentEntry,
+      AsyncCallback<E> pCallback);
 
   /**
    * find a entry in the database forward, start with the current one.
    *
-   * @param searchField
-   *        database field to search for
-   * @param searchMethodEntry
-   *        method to use for searching
-   * @param searchFieldEntry
-   *        search text
-   * @param currentEntry
-   *        key of the current entry
-   * @param callback
-   *        class which gets back response
+   * @param pSearchField database field to search for
+   * @param pSearchMethodEntry method to use for searching
+   * @param pSearchFieldEntry search text
+   * @param pCurrentEntry key of the current entry
+   * @param pCallback class which gets back response
    */
-  void findNextEntry(String searchField, String searchMethodEntry,
-      String searchFieldEntry, String currentEntry,
-      AsyncCallback<E> callback);
+  void findNextEntry(String pSearchField, String pSearchMethodEntry, String pSearchFieldEntry, String pCurrentEntry,
+      AsyncCallback<E> pCallback);
 
   /**
    * find a entry in the database backward, start with the last one.
    *
-   * @param searchField
-   *        database field to search for
-   * @param searchMethodEntry
-   *        method to use for searching
-   * @param searchFieldEntry
-   *        search text
-   * @param callback
-   *        class which gets back response
+   * @param pSearchField database field to search for
+   * @param pSearchMethodEntry method to use for searching
+   * @param pSearchFieldEntry search text
+   * @param pCallback class which gets back response
    */
-  void findLastEntry(String searchField, String searchMethodEntry,
-      String searchFieldEntry, AsyncCallback<E> callback);
+  void findLastEntry(String pSearchField, String pSearchMethodEntry, String pSearchFieldEntry, AsyncCallback<E> pCallback);
 }

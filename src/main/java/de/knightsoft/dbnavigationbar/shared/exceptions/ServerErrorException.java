@@ -1,37 +1,32 @@
 /**
- * This file is part of DBNavigationBar.
- * 
- * RiPhone is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version.
- * 
- * RiPhone is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with RiPhone. If not, see <http://www.gnu.org/licenses/>
- * 
- * 
- * Copyright (c) 2012 Manfred Tremmel
- * 
+ * This file is part of DBNavigation.
+ *
+ * RiPhone is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * RiPhone is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with RiPhone. If not, see <a
+ * href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
+ *
+ *
+ * Copyright (c) 2012-2015 Manfred Tremmel
+ *
  */
+
 package de.knightsoft.dbnavigationbar.shared.exceptions;
 
 import java.io.Serializable;
 
 /**
- * 
- * The <code>ServerErrorException</code> is thrown, when a error on server
- * occurs.
- * 
+ *
+ * The <code>ServerErrorException</code> is thrown, when a error on server occurs.
+ *
  * @author Manfred Tremmel
  * @version $Rev$, $Date$
  */
-public class ServerErrorException extends Exception implements Serializable
-{
+public class ServerErrorException extends Exception implements Serializable {
 
   /**
    * serial version uid.
@@ -45,42 +40,33 @@ public class ServerErrorException extends Exception implements Serializable
   /**
    * default constructor.
    */
-  public ServerErrorException()
-  {
+  public ServerErrorException() {
     super();
     this.message = "unknown error";
   }
 
   /**
    * constructor with given message.
-   * 
-   * @param messageInit
-   *        a message to set.
+   *
+   * @param pMessage a message to set.
    */
-  public ServerErrorException(final String messageInit)
-  {
+  public ServerErrorException(final String pMessage) {
     super();
-    this.message = messageInit;
+    this.message = pMessage;
   }
 
   /**
    * constructor with given message.
-   * 
-   * @param exception
-   *        a message to set.
+   *
+   * @param pException a message to set.
    */
-  public ServerErrorException(final Exception exception)
-  {
+  public ServerErrorException(final Exception pException) {
     super();
-    this.message = exception.getMessage();
+    this.message = pException.getMessage();
   }
 
-  /**
-   * @return the message
-   */
   @Override
-  public final String getMessage()
-  {
+  public final String getMessage() {
     return this.message;
   }
 }

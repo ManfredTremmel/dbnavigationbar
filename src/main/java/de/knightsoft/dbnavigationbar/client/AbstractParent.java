@@ -1,26 +1,24 @@
 /**
  * This file is part of DBNavigation.
- * 
- * RiPhone is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version.
- * 
- * RiPhone is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with RiPhone. If not, see <http://www.gnu.org/licenses/>
- * 
- * 
- * Copyright (c) 2011-2012 Manfred Tremmel
- * 
+ *
+ * RiPhone is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * RiPhone is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with RiPhone. If not, see <a
+ * href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
+ *
+ *
+ * Copyright (c) 2011-2015 Manfred Tremmel
+ *
  */
+
 package de.knightsoft.dbnavigationbar.client;
 
-import java.util.HashMap;
+import de.knightsoft.dbnavigationbar.client.domain.AbstractDomainUser;
+import de.knightsoft.dbnavigationbar.client.ui.BasicTemplateUIInterface;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Style.Unit;
@@ -44,20 +42,17 @@ import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 
-import de.knightsoft.dbnavigationbar.client.domain.AbstractDomainUser;
-import de.knightsoft.dbnavigationbar.client.ui.BasicTemplateUIInterface;
+import java.util.HashMap;
 
 /**
- * 
- * The <code>AbstractParent</code> class is the entry point class which
- * defines <code>onModuleLoad()</code> and is executed when the
- * website is loeded. Just a template that has to be implemented.
- * 
+ *
+ * The <code>AbstractParent</code> class is the entry point class which defines <code>onModuleLoad()</code> and is executed when
+ * the website is loeded. Just a template that has to be implemented.
+ *
  * @author Manfred Tremmel
  * @version $Rev$, $Date$
  */
-public abstract class AbstractParent implements EntryPoint
-{
+public abstract class AbstractParent implements EntryPoint {
 
   /**
    * navigation panel width.
@@ -111,14 +106,14 @@ public abstract class AbstractParent implements EntryPoint
 
   /**
    * Get the data of the logged in user.
-   * 
+   *
    * @return User
    */
   public abstract AbstractDomainUser getUser();
 
   /**
    * get Copyright String.
-   * 
+   *
    * @return Copyright String
    */
   protected abstract String getCopyrightString();
@@ -135,68 +130,56 @@ public abstract class AbstractParent implements EntryPoint
 
   /**
    * check if login window matches menu entry.
-   * 
-   * @param page
-   *        page the compare
-   * @param currentUser
-   *        current logged in user
+   *
+   * @param pPage page the compare
+   * @param pCurrentUser current logged in user
    * @return true/false
    */
-  protected abstract boolean loginMatchesMenu(String page,
-      AbstractDomainUser currentUser);
+  protected abstract boolean loginMatchesMenu(String pPage, AbstractDomainUser pCurrentUser);
 
   /**
    * get the Image of the Application.
-   * 
+   *
    * @return Image
    */
   protected abstract Image getApplicationImage();
 
   /**
    * get the Application Title.
-   * 
+   *
    * @return Application Title
    */
   protected abstract String getApplicationTitle();
 
   /**
-   * The <code>menuFind</code> method checks if a given menu entry or
-   * history selection belongs to one of the subpages of RiPhone.
-   * 
-   * @param itemtext
-   *        Name of the selection
-   * @param currentUser
-   *        The logged in user, null if non is logged in
+   * The <code>menuFind</code> method checks if a given menu entry or history selection belongs to one of the subpages of
+   * RiPhone.
+   *
+   * @param pItemtext Name of the selection
+   * @param pCurrentUser The logged in user, null if non is logged in
    * @return true if a entry matches, false if non is found
    */
-  public abstract boolean menuFind(
-      String itemtext,
-      AbstractDomainUser currentUser);
+  public abstract boolean menuFind(String pItemtext, AbstractDomainUser pCurrentUser);
 
   /**
-   * The <code>cleanUp</code> method can be called if user
-   * logs off or session is timed out.
-   * 
-   * @param text
-   *        to display
+   * The <code>cleanUp</code> method can be called if user logs off or session is timed out.
+   *
+   * @param pText to display
    */
-  public abstract void cleanUp(String text);
+  public abstract void cleanUp(String pText);
 
   /**
-   * The <code>buildNavTree</code> method builds the navigation
-   * tree.
-   * 
-   * @param user
-   *        The logged in user, null if non is logged in
+   * The <code>buildNavTree</code> method builds the navigation tree.
+   *
+   * @param pUser The logged in user, null if non is logged in
    * @return Navigation tree
    */
-  public abstract Tree buildNavTree(AbstractDomainUser user);
+  public abstract Tree buildNavTree(AbstractDomainUser pUser);
 
   /**
    * This is the entry point method.
    */
-  public final void onModuleLoadBase()
-  {
+  public final void onModuleLoadBase() {
 
     // Get the title from the internationalized constants
     this.buildNavTree(null);
@@ -223,18 +206,13 @@ public abstract class AbstractParent implements EntryPoint
 
     this.paramHash = new HashMap<String, String>();
     String urlString = Window.Location.getHref();
-    if (urlString.indexOf('#') >= 0)
-    {
-      urlString = urlString.substring(
-          urlString.indexOf('#') + 1);
+    if (urlString.indexOf('#') >= 0) {
+      urlString = urlString.substring(urlString.indexOf('#') + 1);
       final String[] historyPares = urlString.split(";");
-      for (final String historyPare : historyPares)
-      {
+      for (final String historyPare : historyPares) {
         final String[] tokenPare = historyPare.split("=");
-        if (tokenPare.length == 2)
-        {
-          this.paramHash.put(tokenPare[0],
-              URL.decode(tokenPare[1]));
+        if (tokenPare.length == 2) {
+          this.paramHash.put(tokenPare[0], URL.decode(tokenPare[1]));
         }
       }
     }
@@ -242,8 +220,7 @@ public abstract class AbstractParent implements EntryPoint
     this.readLoginUser();
 
     final String page = this.paramHash.get("page");
-    if (!this.menuFind(page, null))
-    {
+    if (!this.menuFind(page, null)) {
       this.showLoginPanel();
     }
 
@@ -253,76 +230,52 @@ public abstract class AbstractParent implements EntryPoint
     RootLayoutPanel.get().add(this.hPanel);
 
     // Selection handler to handle clicks on the navigation tree
-    this.navTree.addSelectionHandler(
-        new SelectionHandler<TreeItem>()
-        {
-          @Override
-          public void onSelection(final SelectionEvent<TreeItem> event)
-          {
-            final TreeItem item = event.getSelectedItem();
-            String itemtext = item.getText();
-            if (itemtext != null)
-            {
-              itemtext = itemtext.trim();
-            }
-            final String itemtitle = item.getTitle();
-            if (itemtitle != null
-                && itemtitle.length() > TITLE_CHECK_LENGTH)
-            {
-              if (AbstractParent.this.paramHash == null)
-              {
-                AbstractParent.this.paramHash =
-                    new HashMap<String, String>();
-              }
-              AbstractParent.this.paramHash.put("period",
-                  itemtitle.substring(0, TITLE_CHECK_LENGTH));
-            }
-            final AbstractDomainUser currentUser =
-                AbstractParent.this.getUser();
-            AbstractParent.this.menuFind(itemtext, currentUser);
+    this.navTree.addSelectionHandler(new SelectionHandler<TreeItem>() {
+      @Override
+      public void onSelection(final SelectionEvent<TreeItem> pEvent) {
+        final TreeItem item = pEvent.getSelectedItem();
+        String itemtext = item.getText();
+        if (itemtext != null) {
+          itemtext = itemtext.trim();
+        }
+        final String itemtitle = item.getTitle();
+        if (itemtitle != null && itemtitle.length() > TITLE_CHECK_LENGTH) {
+          if (AbstractParent.this.paramHash == null) {
+            AbstractParent.this.paramHash = new HashMap<String, String>();
           }
+          AbstractParent.this.paramHash.put("period", itemtitle.substring(0, TITLE_CHECK_LENGTH));
+        }
+        final AbstractDomainUser currentUser = AbstractParent.this.getUser();
+        AbstractParent.this.menuFind(itemtext, currentUser);
+      }
 
-        });
+    });
 
     // Handler to handle page changes, to get back and
     // forward button work even in AJAX application.
-    History.addValueChangeHandler(new ValueChangeHandler<String>()
-    {
+    History.addValueChangeHandler(new ValueChangeHandler<String>() {
       @SuppressWarnings("unchecked")
       @Override
-      public void onValueChange(
-          final ValueChangeEvent<String> event)
-      {
+      public void onValueChange(final ValueChangeEvent<String> pEvent) {
         final AbstractDomainUser currentUser = AbstractParent.this.getUser();
-        final String historyToken = event.getValue();
+        final String historyToken = pEvent.getValue();
         final String[] historyPares = historyToken.split(";");
-        final HashMap<String, String> oldParamHash =
-            AbstractParent.this.paramHash;
-        AbstractParent.this.paramHash =
-            new HashMap<String, String>(oldParamHash.size());
-        for (final String historyPare : historyPares)
-        {
+        final HashMap<String, String> oldParamHash = AbstractParent.this.paramHash;
+        AbstractParent.this.paramHash = new HashMap<String, String>(oldParamHash.size());
+        for (final String historyPare : historyPares) {
           final String[] tokenPare = historyPare.split("=");
-          if (tokenPare.length == 2)
-          {
-            AbstractParent.this.paramHash.put(tokenPare[0],
-                URL.decode(tokenPare[1]));
+          if (tokenPare.length == 2) {
+            AbstractParent.this.paramHash.put(tokenPare[0], URL.decode(tokenPare[1]));
           }
         }
         final String page = AbstractParent.this.paramHash.get("page");
         String oldPage = null;
         if (AbstractParent.this.mainPanel.getWidget() != null
-            && (AbstractParent.this.mainPanel.getWidget()
-            instanceof BasicTemplateUIInterface))
-        {
-          oldPage = ((BasicTemplateUIInterface<AbstractParent>)
-              AbstractParent.this.mainPanel.getWidget())
-                  .getMenuText();
+            && (AbstractParent.this.mainPanel.getWidget() instanceof BasicTemplateUIInterface)) {
+          oldPage = ((BasicTemplateUIInterface<AbstractParent>) AbstractParent.this.mainPanel.getWidget()).getMenuText();
         }
-        if ((oldPage == null
-            || !AbstractParent.this.paramHash.equals(oldParamHash))
-            && !AbstractParent.this.menuFind(page, currentUser))
-        {
+        if ((oldPage == null || !AbstractParent.this.paramHash.equals(oldParamHash))
+            && !AbstractParent.this.menuFind(page, currentUser)) {
           AbstractParent.this.mainPanel.clear();
           AbstractParent.this.loginMatchesMenu(page, null);
         }
@@ -332,70 +285,55 @@ public abstract class AbstractParent implements EntryPoint
   }
 
   /**
-   * The <code>getNavTree</code> method returns the
-   * navigation tree, without building it once again.
-   * 
+   * The <code>getNavTree</code> method returns the navigation tree, without building it once again.
+   *
    * @return Navigation tree
    */
-  public final Tree getNavTree()
-  {
+  public final Tree getNavTree() {
     return this.navTree;
   }
 
   /**
    * return the mainPanel.
-   * 
+   *
    * @return main panel
    */
-  public final ScrollPanel getMainPanel()
-  {
+  public final ScrollPanel getMainPanel() {
     return this.mainPanel;
   }
 
   /**
    * return the split layout panel.
-   * 
+   *
    * @return the hPanel
    */
-  public final SplitLayoutPanel gethPanel()
-  {
+  public final SplitLayoutPanel gethPanel() {
     return this.hPanel;
   }
 
   /**
    * return the paramHash.
-   * 
+   *
    * @return hash parameter table
    */
-  public final HashMap<String, String> getParamHash()
-  {
+  public final HashMap<String, String> getParamHash() {
     return this.paramHash;
   }
 
-  /**
-   * @return the img
-   */
-  public final Image getImg()
-  {
+  public final Image getImg() {
     return this.img;
   }
 
-  /**
-   * @return the htmlPageTitle
-   */
-  public final HTML getHtmlPageTitle()
-  {
+  public final HTML getHtmlPageTitle() {
     return this.htmlPageTitle;
   }
 
   /**
    * Create the logo.
-   * 
-   * @param navVPanel
-   *        to add the logo
+   *
+   * @param pNavVPanel to add the logo
    */
-  protected final void setupNavPanelLogo(final DockLayoutPanel navVPanel)
-  {
+  protected final void setupNavPanelLogo(final DockLayoutPanel pNavVPanel) {
     final String title = this.getApplicationTitle();
     final FlexTable logoPanel = new FlexTable();
     final FlexCellFormatter fcf = logoPanel.getFlexCellFormatter();
@@ -416,36 +354,29 @@ public abstract class AbstractParent implements EntryPoint
     logoPanel.setSize("100%", "100%");
     logoPanel.setBorderWidth(0);
 
-    navVPanel.addNorth(logoPanel, LOGO_PANEL_HEIGHT);
+    pNavVPanel.addNorth(logoPanel, LOGO_PANEL_HEIGHT);
 
   }
 
   /**
    * Create the title bar at the top of the application.
-   * 
-   * @param navVPanel
-   *        the panel to add the navTree
-   * @param newNavTree
-   *        to add
+   *
+   * @param pNavVPanel the panel to add the navTree
+   * @param pNewNavTree to add
    */
-  protected final void setupNavPanelTree(
-      final DockLayoutPanel navVPanel,
-      final Tree newNavTree)
-  {
+  protected final void setupNavPanelTree(final DockLayoutPanel pNavVPanel, final Tree pNewNavTree) {
     // Add the title and some images to the title bar
     final ScrollPanel navScrollerPanel = new ScrollPanel();
-    navScrollerPanel.add(newNavTree);
+    navScrollerPanel.add(pNewNavTree);
     navScrollerPanel.setSize("100%", "100%");
 
-    navVPanel.add(navScrollerPanel);
+    pNavVPanel.add(navScrollerPanel);
   }
 
   /**
    * Create the title bar at the top of the application.
-   * 
-   * @param navVPanel
-   *        to add the CopyRight entry
+   *
+   * @param pNavVPanel to add the CopyRight entry
    */
-  protected abstract void setupNavPanelCopyRight(
-      final DockLayoutPanel navVPanel);
+  protected abstract void setupNavPanelCopyRight(final DockLayoutPanel pNavVPanel);
 }

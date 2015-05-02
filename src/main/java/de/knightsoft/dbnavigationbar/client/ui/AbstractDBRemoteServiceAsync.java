@@ -1,202 +1,144 @@
 /**
  * This file is part of DBNavigation.
  *
- * RiPhone is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version.
+ * RiPhone is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  *
- * RiPhone is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
+ * RiPhone is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with RiPhone. If not, see <http://www.gnu.org/licenses/>
+ * You should have received a copy of the GNU General Public License along with RiPhone. If not, see <a
+ * href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
  *
  *
- * Copyright (c) 2011-2012 Manfred Tremmel
+ * Copyright (c) 2011-2015 Manfred Tremmel
  *
  */
-package de.knightsoft.dbnavigationbar.client.ui;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+package de.knightsoft.dbnavigationbar.client.ui;
 
 import de.knightsoft.dbnavigationbar.client.domain.AbstractDataBaseDomain;
 import de.knightsoft.dbnavigationbar.shared.exceptions.ServerErrorException;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 /**
  *
- * The <code>AbstractDBRemoteServiceAsync</code> class is the asynchronous
- * interface template for DataBase handling.
+ * The <code>AbstractDBRemoteServiceAsync</code> class is the asynchronous interface template for DataBase handling.
  *
- * @param <E>
- *        database domain structure
+ * @param <E> database domain structure
  * @author Manfred Tremmel
  * @version $Rev$, $Date$
  */
-public interface AbstractDBRemoteServiceAsync<E extends AbstractDataBaseDomain>
-{
+public interface AbstractDBRemoteServiceAsync<E extends AbstractDataBaseDomain> {
   /**
    * save entry to database.
    *
-   * @param currentEntry
-   *        entry to save
-   * @param callback
-   *        class which gets back response
-   * @throws ServerErrorException
-   *         thrown on errors on server
+   * @param pCurrentEntry entry to save
+   * @param pCallback class which gets back response
+   * @throws ServerErrorException thrown on errors on server
    */
-  void saveEntry(E currentEntry, AsyncCallback<E> callback)
-      throws ServerErrorException;
+  void saveEntry(E pCurrentEntry, AsyncCallback<E> pCallback) throws ServerErrorException;
 
   /**
    * delete a entry from database.
    *
-   * @param currentEntry
-   *        entry to delete
-   * @param callback
-   *        class which gets back response
-   * @throws ServerErrorException
-   *         thrown on errors on server
+   * @param pCurrentEntry entry to delete
+   * @param pCallback class which gets back response
+   * @throws ServerErrorException thrown on errors on server
    */
-  void deleteEntry(String currentEntry, AsyncCallback<E> callback)
-      throws ServerErrorException;
+  void deleteEntry(String pCurrentEntry, AsyncCallback<E> pCallback) throws ServerErrorException;
 
   /**
    * read on entry by key from database.
    *
-   * @param entry
-   *        database key
-   * @param callback
-   *        class which gets back response
-   * @throws ServerErrorException
-   *         thrown on errors on server
+   * @param pEntry database key
+   * @param pCallback class which gets back response
+   * @throws ServerErrorException thrown on errors on server
    */
-  void readEntry(String entry, AsyncCallback<E> callback)
-      throws ServerErrorException;
+  void readEntry(String pEntry, AsyncCallback<E> pCallback) throws ServerErrorException;
 
   /**
    * read first database entry.
    *
-   * @param callback
-   *        class which gets back response
-   * @throws ServerErrorException
-   *         thrown on errors on server
+   * @param pCallback class which gets back response
+   * @throws ServerErrorException thrown on errors on server
    */
-  void readFirstEntry(AsyncCallback<E> callback)
-      throws ServerErrorException;
+  void readFirstEntry(AsyncCallback<E> pCallback) throws ServerErrorException;
 
   /**
    * read previous entry.
    *
-   * @param currentEntry
-   *        key of current entry
-   * @param callback
-   *        class which gets back response
-   * @throws ServerErrorException
-   *         thrown on errors on server
+   * @param pCurrentEntry key of current entry
+   * @param pCallback class which gets back response
+   * @throws ServerErrorException thrown on errors on server
    */
-  void readPreviousEntry(String currentEntry, AsyncCallback<E> callback)
-      throws ServerErrorException;
+  void readPreviousEntry(String pCurrentEntry, AsyncCallback<E> pCallback) throws ServerErrorException;
 
   /**
    * read next entry.
    *
-   * @param currentEntry
-   *        key of current entry
-   * @param callback
-   *        class which gets back response
-   * @throws ServerErrorException
-   *         thrown on errors on server
+   * @param pCurrentEntry key of current entry
+   * @param pCallback class which gets back response
+   * @throws ServerErrorException thrown on errors on server
    */
-  void readNextEntry(String currentEntry, AsyncCallback<E> callback)
-      throws ServerErrorException;
+  void readNextEntry(String pCurrentEntry, AsyncCallback<E> pCallback) throws ServerErrorException;
 
   /**
    * read the last entry of the database.
    *
-   * @param callback
-   *        class which gets back response
-   * @throws ServerErrorException
-   *         thrown on errors on server
+   * @param pCallback class which gets back response
+   * @throws ServerErrorException thrown on errors on server
    */
-  void readLastEntry(AsyncCallback<E> callback)
-      throws ServerErrorException;
+  void readLastEntry(AsyncCallback<E> pCallback) throws ServerErrorException;
 
   /**
    * find a entry in the database, start with the first one.
    *
-   * @param searchField
-   *        database field to search for
-   * @param searchMethodEntry
-   *        method to use for searching
-   * @param searchFieldEntry
-   *        search text
-   * @param callback
-   *        class which gets back response
-   * @throws ServerErrorException
-   *         thrown on errors on server
+   * @param pSearchField database field to search for
+   * @param pSearchMethodEntry method to use for searching
+   * @param pSearchFieldEntry search text
+   * @param pCallback class which gets back response
+   * @throws ServerErrorException thrown on errors on server
    */
-  void findFirstEntry(String searchField, String searchMethodEntry,
-      String searchFieldEntry, AsyncCallback<E> callback)
+  void findFirstEntry(String pSearchField, String pSearchMethodEntry, String pSearchFieldEntry, AsyncCallback<E> pCallback)
       throws ServerErrorException;
 
   /**
    * find a entry in the database backward, start with the current one.
    *
-   * @param searchField
-   *        database field to search for
-   * @param searchMethodEntry
-   *        method to use for searching
-   * @param searchFieldEntry
-   *        search text
-   * @param currentEntry
-   *        key of the current entry
-   * @param callback
-   *        class which gets back response
-   * @throws ServerErrorException
-   *         thrown on errors on server
+   * @param pSearchField database field to search for
+   * @param pSearchMethodEntry method to use for searching
+   * @param pSearchFieldEntry search text
+   * @param pCurrentEntry key of the current entry
+   * @param pCallback class which gets back response
+   * @throws ServerErrorException thrown on errors on server
    */
-  void findPreviousEntry(String searchField, String searchMethodEntry,
-      String searchFieldEntry, String currentEntry,
-      AsyncCallback<E> callback) throws ServerErrorException;
+  void findPreviousEntry(String pSearchField, String pSearchMethodEntry, String pSearchFieldEntry, String pCurrentEntry,
+      AsyncCallback<E> pCallback) throws ServerErrorException;
 
   /**
    * find a entry in the database forward, start with the current one.
    *
-   * @param searchField
-   *        database field to search for
-   * @param searchMethodEntry
-   *        method to use for searching
-   * @param searchFieldEntry
-   *        search text
-   * @param currentEntry
-   *        key of the current entry
-   * @param callback
-   *        class which gets back response
-   * @throws ServerErrorException
-   *         thrown on errors on server
+   * @param pSearchField database field to search for
+   * @param pSearchMethodEntry method to use for searching
+   * @param pSearchFieldEntry search text
+   * @param pCurrentEntry key of the current entry
+   * @param pCallback class which gets back response
+   * @throws ServerErrorException thrown on errors on server
    */
-  void findNextEntry(String searchField, String searchMethodEntry,
-      String searchFieldEntry, String currentEntry,
-      AsyncCallback<E> callback) throws ServerErrorException;
+  void findNextEntry(String pSearchField, String pSearchMethodEntry, String pSearchFieldEntry, String pCurrentEntry,
+      AsyncCallback<E> pCallback) throws ServerErrorException;
 
   /**
    * find a entry in the database backward, start with the last one.
    *
-   * @param searchField
-   *        database field to search for
-   * @param searchMethodEntry
-   *        method to use for searching
-   * @param searchFieldEntry
-   *        search text
-   * @param callback
-   *        class which gets back response
-   * @throws ServerErrorException
-   *         thrown on errors on server
+   * @param pSearchField database field to search for
+   * @param pSearchMethodEntry method to use for searching
+   * @param pSearchFieldEntry search text
+   * @param pCallback class which gets back response
+   * @throws ServerErrorException thrown on errors on server
    */
-  void findLastEntry(String searchField, String searchMethodEntry,
-      String searchFieldEntry, AsyncCallback<E> callback)
+  void findLastEntry(String pSearchField, String pSearchMethodEntry, String pSearchFieldEntry, AsyncCallback<E> pCallback)
       throws ServerErrorException;
 }

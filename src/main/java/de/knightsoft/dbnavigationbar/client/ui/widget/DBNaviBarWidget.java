@@ -1,23 +1,20 @@
 /**
- * This file is part of DBNavigationBar.
+ * This file is part of DBNavigation.
  *
- * RiPhone is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version.
+ * RiPhone is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  *
- * RiPhone is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
+ * RiPhone is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with RiPhone. If not, see <http://www.gnu.org/licenses/>
+ * You should have received a copy of the GNU General Public License along with RiPhone. If not, see <a
+ * href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
  *
  *
- * Copyright (c) 2011-2012 Manfred Tremmel
+ * Copyright (c) 2011-2015 Manfred Tremmel
  *
  */
+
 package de.knightsoft.dbnavigationbar.client.ui.widget;
 
 import com.google.gwt.core.client.GWT;
@@ -51,9 +48,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  * @author Manfred Tremmel
  * @version $Rev$, $Date$
  */
-public class DBNaviBarWidget extends Composite
-    implements HasClickHandlers
-{
+public class DBNaviBarWidget extends Composite implements HasClickHandlers {
 
   /**
    * pictures.
@@ -63,13 +58,11 @@ public class DBNaviBarWidget extends Composite
   /**
    * search methods small.
    */
-  private static final String[] SEARCH_METHODS_SMALL =
-  { "=", ">", ">=", "<=", "<", "like" };
+  private static final String[] SEARCH_METHODS_SMALL = {"=", ">", ">=", "<=", "<", "like"};
   /**
    * search methods display.
    */
-  private static final String[] SEARCH_METHODS =
-  { "=", ">", ">=", "<=", "<", "like" };
+  private static final String[] SEARCH_METHODS = {"=", ">", ">=", "<=", "<", "like"};
 
   /**
    * spacing.
@@ -85,167 +78,87 @@ public class DBNaviBarWidget extends Composite
    *
    * @author Manfred Tremmel
    */
-  class MyHandler implements ClickHandler
-  {
+  class MyHandler implements ClickHandler {
 
     @Override
-    public void onClick(final ClickEvent event)
-    {
+    public void onClick(final ClickEvent pEvent) {
       PushButton eventPushButton = null;
-      eventPushButton = (PushButton) event.getSource();
+      eventPushButton = (PushButton) pEvent.getSource();
 
       DBNaviBarWidget.this.hintText.setText("");
 
-      int fieldSelectedIndex = DBNaviBarWidget.this.fieldSelect
-          .getSelectedIndex();
-      if (fieldSelectedIndex < 0)
-      {
+      int fieldSelectedIndex = DBNaviBarWidget.this.fieldSelect.getSelectedIndex();
+      if (fieldSelectedIndex < 0) {
         fieldSelectedIndex = 0;
       }
-      int searchMethodeSelectedIndex = DBNaviBarWidget.this
-          .searchMethodSelect.getSelectedIndex();
-      if (searchMethodeSelectedIndex < 0)
-      {
+      int searchMethodeSelectedIndex = DBNaviBarWidget.this.searchMethodSelect.getSelectedIndex();
+      if (searchMethodeSelectedIndex < 0) {
         searchMethodeSelectedIndex = 0;
       }
 
-      if (DBNaviBarWidget.this.newPushButton.equals(
-          eventPushButton))
-      {
+      if (DBNaviBarWidget.this.newPushButton.equals(eventPushButton)) {
         DBNaviBarWidget.this.buttonState = ButtonState.NEW;
-        DBNaviBarWidget.this.fireEvent(event);
-      }
-      else if (DBNaviBarWidget.this.savePushButton.equals(
-          eventPushButton))
-      {
+        DBNaviBarWidget.this.fireEvent(pEvent);
+      } else if (DBNaviBarWidget.this.savePushButton.equals(eventPushButton)) {
         DBNaviBarWidget.this.buttonState = ButtonState.SAVE;
-        DBNaviBarWidget.this.fireEvent(event);
-      }
-      else if (DBNaviBarWidget.this.deletePushButton.equals(
-          eventPushButton))
-      {
+        DBNaviBarWidget.this.fireEvent(pEvent);
+      } else if (DBNaviBarWidget.this.deletePushButton.equals(eventPushButton)) {
         DBNaviBarWidget.this.dialogYesNoBox.center();
         DBNaviBarWidget.this.dialogYesNoBox.show();
-      }
-      else if (DBNaviBarWidget.this.stopPushButton.equals(
-          eventPushButton))
-      {
+      } else if (DBNaviBarWidget.this.stopPushButton.equals(eventPushButton)) {
         DBNaviBarWidget.this.buttonState = ButtonState.STOP;
-        DBNaviBarWidget.this.fireEvent(event);
-      }
-      else if (DBNaviBarWidget.this.fbackPushButton.equals(
-          eventPushButton))
-      {
-        DBNaviBarWidget.this.buttonState =
-            ButtonState.FAST_BACK;
-        if (DBNaviBarWidget.this.findToggleButton.isDown())
-        {
-          DBNaviBarWidget.this.searchFieldString =
-              DBNaviBarWidget.this.searchFieldsRemember[
-              fieldSelectedIndex];
-          DBNaviBarWidget.this.searchFieldMethod =
-              DBNaviBarWidget.SEARCH_METHODS_SMALL[
-              searchMethodeSelectedIndex];
-          DBNaviBarWidget.this.searchFieldEntry =
-              DBNaviBarWidget.this.fieldEntry.getText();
-          if (DBNaviBarWidget.this.searchFieldEntry != null
-              && !"".equals(DBNaviBarWidget.this
-                  .searchFieldEntry))
-          {
-            DBNaviBarWidget.this.buttonState =
-                ButtonState.FAST_BACK_FIND;
+        DBNaviBarWidget.this.fireEvent(pEvent);
+      } else if (DBNaviBarWidget.this.fbackPushButton.equals(eventPushButton)) {
+        DBNaviBarWidget.this.buttonState = ButtonState.FAST_BACK;
+        if (DBNaviBarWidget.this.findToggleButton.isDown()) {
+          DBNaviBarWidget.this.searchFieldString = DBNaviBarWidget.this.searchFieldsRemember[fieldSelectedIndex];
+          DBNaviBarWidget.this.searchFieldMethod = DBNaviBarWidget.SEARCH_METHODS_SMALL[searchMethodeSelectedIndex];
+          DBNaviBarWidget.this.searchFieldEntry = DBNaviBarWidget.this.fieldEntry.getText();
+          if (DBNaviBarWidget.this.searchFieldEntry != null && !"".equals(DBNaviBarWidget.this.searchFieldEntry)) {
+            DBNaviBarWidget.this.buttonState = ButtonState.FAST_BACK_FIND;
           }
         }
-        DBNaviBarWidget.this.fireEvent(event);
-      }
-      else if (DBNaviBarWidget.this.backPushButton
-          .equals(eventPushButton))
-      {
-        DBNaviBarWidget.this.buttonState =
-            ButtonState.BACK;
-        if (DBNaviBarWidget.this.findToggleButton.isDown())
-        {
-          DBNaviBarWidget.this.searchFieldString =
-              DBNaviBarWidget.this
-              .searchFieldsRemember[fieldSelectedIndex];
-          DBNaviBarWidget.this.searchFieldMethod =
-              DBNaviBarWidget.SEARCH_METHODS_SMALL[
-              searchMethodeSelectedIndex];
-          DBNaviBarWidget.this.searchFieldEntry =
-              DBNaviBarWidget.this.fieldEntry.getText();
-          if (DBNaviBarWidget.this.searchFieldEntry != null
-              && !"".equals(DBNaviBarWidget.this.searchFieldEntry))
-          {
-            DBNaviBarWidget.this.buttonState =
-                ButtonState.BACK_FIND;
+        DBNaviBarWidget.this.fireEvent(pEvent);
+      } else if (DBNaviBarWidget.this.backPushButton.equals(eventPushButton)) {
+        DBNaviBarWidget.this.buttonState = ButtonState.BACK;
+        if (DBNaviBarWidget.this.findToggleButton.isDown()) {
+          DBNaviBarWidget.this.searchFieldString = DBNaviBarWidget.this.searchFieldsRemember[fieldSelectedIndex];
+          DBNaviBarWidget.this.searchFieldMethod = DBNaviBarWidget.SEARCH_METHODS_SMALL[searchMethodeSelectedIndex];
+          DBNaviBarWidget.this.searchFieldEntry = DBNaviBarWidget.this.fieldEntry.getText();
+          if (DBNaviBarWidget.this.searchFieldEntry != null && !"".equals(DBNaviBarWidget.this.searchFieldEntry)) {
+            DBNaviBarWidget.this.buttonState = ButtonState.BACK_FIND;
           }
         }
-        DBNaviBarWidget.this.fireEvent(event);
-      }
-      else if (DBNaviBarWidget.this.okPushButton
-          .equals(eventPushButton))
-      {
-        DBNaviBarWidget.this.buttonState =
-            ButtonState.CHANGE;
-        DBNaviBarWidget.this.currentDBNumber =
-            DBNaviBarWidget.this.currentEntry.getText();
-        DBNaviBarWidget.this.fireEvent(event);
-      }
-      else if (DBNaviBarWidget.this.forwardPushButton
-          .equals(eventPushButton))
-      {
-        DBNaviBarWidget.this.buttonState =
-            ButtonState.FORWARD;
-        if (DBNaviBarWidget.this.findToggleButton.isDown())
-        {
-          DBNaviBarWidget.this.searchFieldString =
-              DBNaviBarWidget.this
-              .searchFieldsRemember[fieldSelectedIndex];
-          DBNaviBarWidget.this.searchFieldMethod =
-              DBNaviBarWidget.SEARCH_METHODS_SMALL[
-              searchMethodeSelectedIndex];
-          DBNaviBarWidget.this.searchFieldEntry =
-              DBNaviBarWidget.this.fieldEntry.getText();
-          if (DBNaviBarWidget.this.searchFieldEntry != null
-              && !"".equals(DBNaviBarWidget.this
-                  .searchFieldEntry))
-          {
-            DBNaviBarWidget.this.buttonState =
-                ButtonState.FORWARD_FIND;
+        DBNaviBarWidget.this.fireEvent(pEvent);
+      } else if (DBNaviBarWidget.this.okPushButton.equals(eventPushButton)) {
+        DBNaviBarWidget.this.buttonState = ButtonState.CHANGE;
+        DBNaviBarWidget.this.currentDBNumber = DBNaviBarWidget.this.currentEntry.getText();
+        DBNaviBarWidget.this.fireEvent(pEvent);
+      } else if (DBNaviBarWidget.this.forwardPushButton.equals(eventPushButton)) {
+        DBNaviBarWidget.this.buttonState = ButtonState.FORWARD;
+        if (DBNaviBarWidget.this.findToggleButton.isDown()) {
+          DBNaviBarWidget.this.searchFieldString = DBNaviBarWidget.this.searchFieldsRemember[fieldSelectedIndex];
+          DBNaviBarWidget.this.searchFieldMethod = DBNaviBarWidget.SEARCH_METHODS_SMALL[searchMethodeSelectedIndex];
+          DBNaviBarWidget.this.searchFieldEntry = DBNaviBarWidget.this.fieldEntry.getText();
+          if (DBNaviBarWidget.this.searchFieldEntry != null && !"".equals(DBNaviBarWidget.this.searchFieldEntry)) {
+            DBNaviBarWidget.this.buttonState = ButtonState.FORWARD_FIND;
           }
         }
-        DBNaviBarWidget.this.fireEvent(event);
-      }
-      else if (DBNaviBarWidget.this.fforwardPushButton
-          .equals(eventPushButton))
-      {
-        DBNaviBarWidget.this.buttonState =
-            ButtonState.FAST_FORWARD;
-        if (DBNaviBarWidget.this.findToggleButton.isDown())
-        {
-          DBNaviBarWidget.this.searchFieldString =
-              DBNaviBarWidget.this.searchFieldsRemember[
-              fieldSelectedIndex];
-          DBNaviBarWidget.this.searchFieldMethod =
-              DBNaviBarWidget.SEARCH_METHODS_SMALL[
-              searchMethodeSelectedIndex];
-          DBNaviBarWidget.this.searchFieldEntry =
-              DBNaviBarWidget.this.fieldEntry.getText();
-          if (DBNaviBarWidget.this.searchFieldEntry
-                != null && !"".equals(DBNaviBarWidget.this.searchFieldEntry))
-          {
-            DBNaviBarWidget.this.buttonState =
-                ButtonState.FAST_FORWARD_FIND;
+        DBNaviBarWidget.this.fireEvent(pEvent);
+      } else if (DBNaviBarWidget.this.fforwardPushButton.equals(eventPushButton)) {
+        DBNaviBarWidget.this.buttonState = ButtonState.FAST_FORWARD;
+        if (DBNaviBarWidget.this.findToggleButton.isDown()) {
+          DBNaviBarWidget.this.searchFieldString = DBNaviBarWidget.this.searchFieldsRemember[fieldSelectedIndex];
+          DBNaviBarWidget.this.searchFieldMethod = DBNaviBarWidget.SEARCH_METHODS_SMALL[searchMethodeSelectedIndex];
+          DBNaviBarWidget.this.searchFieldEntry = DBNaviBarWidget.this.fieldEntry.getText();
+          if (DBNaviBarWidget.this.searchFieldEntry != null && !"".equals(DBNaviBarWidget.this.searchFieldEntry)) {
+            DBNaviBarWidget.this.buttonState = ButtonState.FAST_FORWARD_FIND;
           }
         }
-        DBNaviBarWidget.this.fireEvent(event);
-      }
-      else if (DBNaviBarWidget.this.userdefinedPushButton
-          .equals(eventPushButton))
-      {
-        DBNaviBarWidget.this.buttonState =
-            ButtonState.USER_DEFINED;
-        DBNaviBarWidget.this.fireEvent(event);
+        DBNaviBarWidget.this.fireEvent(pEvent);
+      } else if (DBNaviBarWidget.this.userdefinedPushButton.equals(eventPushButton)) {
+        DBNaviBarWidget.this.buttonState = ButtonState.USER_DEFINED;
+        DBNaviBarWidget.this.fireEvent(pEvent);
       }
     }
   }
@@ -255,23 +168,19 @@ public class DBNaviBarWidget extends Composite
    *
    * @author Manfred Tremmel
    */
-  class MyEntryHandler implements KeyUpHandler
-  {
+  class MyEntryHandler implements KeyUpHandler {
     @Override
-    public void onKeyUp(final KeyUpEvent event)
-    {
-      if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
-      {
+    public void onKeyUp(final KeyUpEvent pEvent) {
+      if (pEvent.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
         /**
          * Click Handler.
          *
          * @author Manfred Tremmel
          */
-        class OurClickEvent extends ClickEvent
-        {
+        class OurClickEvent extends ClickEvent {
         }
-        DBNaviBarWidget.this.okPushButton.fireEvent(
-            new OurClickEvent());
+
+        DBNaviBarWidget.this.okPushButton.fireEvent(new OurClickEvent());
       }
     }
   }
@@ -281,32 +190,22 @@ public class DBNaviBarWidget extends Composite
    *
    * @author Manfred Tremmel
    */
-  class MySearchHandler implements KeyUpHandler
-  {
+  class MySearchHandler implements KeyUpHandler {
     @Override
-    public void onKeyUp(final KeyUpEvent event)
-    {
-      if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
-      {
+    public void onKeyUp(final KeyUpEvent pEvent) {
+      if (pEvent.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
         /**
          * Click event.
          *
          * @author Manfred Tremmel
          */
-        class OurClickEvent extends ClickEvent
-        {
+        class OurClickEvent extends ClickEvent {
         }
-        if (DBNaviBarWidget.this.fbackPushButton.isEnabled()
-            && DBNaviBarWidget.this.fbackPushButton
-                .isVisible())
-        {
-          DBNaviBarWidget.this.fbackPushButton.fireEvent(
-              new OurClickEvent());
-        }
-        else
-        {
-          DBNaviBarWidget.this.forwardPushButton.fireEvent(
-              new OurClickEvent());
+
+        if (DBNaviBarWidget.this.fbackPushButton.isEnabled() && DBNaviBarWidget.this.fbackPushButton.isVisible()) {
+          DBNaviBarWidget.this.fbackPushButton.fireEvent(new OurClickEvent());
+        } else {
+          DBNaviBarWidget.this.forwardPushButton.fireEvent(new OurClickEvent());
         }
       }
     }
@@ -317,45 +216,24 @@ public class DBNaviBarWidget extends Composite
    *
    * @author Manfred Tremmel
    */
-  private final ClickHandler myFindToggleClick = new ClickHandler()
-  {
+  private final ClickHandler myFindToggleClick = new ClickHandler() {
     /**
      * on Click handler.
      */
     @Override
-    public void onClick(final ClickEvent event)
-    {
-      if (((ToggleButton) event.getSource()).isDown())
-      {
+    public void onClick(final ClickEvent pEvent) {
+      if (((ToggleButton) pEvent.getSource()).isDown()) {
         DBNaviBarWidget.this.searchpanel.setVisible(true);
-        DBNaviBarWidget.this.fbackPushButton
-            .setTitle(DBNaviBarWidget.this.constants
-                .buttonFBackMessageFind());
-        DBNaviBarWidget.this.backPushButton
-            .setTitle(DBNaviBarWidget.this.constants
-                .buttonBackMessageFind());
-        DBNaviBarWidget.this.forwardPushButton
-            .setTitle(DBNaviBarWidget.this.constants
-                .buttonForwardMessageFind());
-        DBNaviBarWidget.this.fforwardPushButton
-            .setTitle(DBNaviBarWidget.this.constants
-                .buttonFForwardMessageFind());
-      }
-      else
-      {
+        DBNaviBarWidget.this.fbackPushButton.setTitle(DBNaviBarWidget.this.constants.buttonFBackMessageFind());
+        DBNaviBarWidget.this.backPushButton.setTitle(DBNaviBarWidget.this.constants.buttonBackMessageFind());
+        DBNaviBarWidget.this.forwardPushButton.setTitle(DBNaviBarWidget.this.constants.buttonForwardMessageFind());
+        DBNaviBarWidget.this.fforwardPushButton.setTitle(DBNaviBarWidget.this.constants.buttonFForwardMessageFind());
+      } else {
         DBNaviBarWidget.this.searchpanel.setVisible(false);
-        DBNaviBarWidget.this.fbackPushButton
-            .setTitle(DBNaviBarWidget.this.constants
-                .buttonFBackMessage());
-        DBNaviBarWidget.this.backPushButton
-            .setTitle(DBNaviBarWidget.this.constants
-                .buttonBackMessage());
-        DBNaviBarWidget.this.forwardPushButton
-            .setTitle(DBNaviBarWidget.this.constants
-                .buttonForwardMessage());
-        DBNaviBarWidget.this.fforwardPushButton
-            .setTitle(DBNaviBarWidget.this.constants
-                .buttonFForwardMessage());
+        DBNaviBarWidget.this.fbackPushButton.setTitle(DBNaviBarWidget.this.constants.buttonFBackMessage());
+        DBNaviBarWidget.this.backPushButton.setTitle(DBNaviBarWidget.this.constants.buttonBackMessage());
+        DBNaviBarWidget.this.forwardPushButton.setTitle(DBNaviBarWidget.this.constants.buttonForwardMessage());
+        DBNaviBarWidget.this.fforwardPushButton.setTitle(DBNaviBarWidget.this.constants.buttonFForwardMessage());
       }
     }
   };
@@ -365,8 +243,7 @@ public class DBNaviBarWidget extends Composite
    *
    * @author Manfred Tremmel
    */
-  public static enum ButtonState
-  {
+  public static enum ButtonState {
     /**
      * New.
      */
@@ -430,8 +307,7 @@ public class DBNaviBarWidget extends Composite
    *
    * @author Manfred Tremmel
    */
-  public interface DBNavigationBarImages extends ClientBundle
-  {
+  public interface DBNavigationBarImages extends ClientBundle {
     /**
      * new button picture.
      *
@@ -580,38 +456,31 @@ public class DBNaviBarWidget extends Composite
   /**
    * new button.
    */
-  private final PushButton newPushButton = new PushButton(
-      new Image(IMAGES.filenew()));
+  private final PushButton newPushButton = new PushButton(new Image(IMAGES.filenew()));
   /**
    * save button.
    */
-  private final PushButton savePushButton = new PushButton(
-      new Image(IMAGES.save()));
+  private final PushButton savePushButton = new PushButton(new Image(IMAGES.save()));
   /**
    * delete button.
    */
-  private final PushButton deletePushButton = new PushButton(
-      new Image(IMAGES.delete()));
+  private final PushButton deletePushButton = new PushButton(new Image(IMAGES.delete()));
   /**
    * find button.
    */
-  private final ToggleButton findToggleButton = new ToggleButton(
-      new Image(IMAGES.find()));
+  private final ToggleButton findToggleButton = new ToggleButton(new Image(IMAGES.find()));
   /**
    * stop button.
    */
-  private final PushButton stopPushButton = new PushButton(
-      new Image(IMAGES.stop()));
+  private final PushButton stopPushButton = new PushButton(new Image(IMAGES.stop()));
   /**
    * fast back button.
    */
-  private final PushButton fbackPushButton = new PushButton(
-      new Image(IMAGES.fback()));
+  private final PushButton fbackPushButton = new PushButton(new Image(IMAGES.fback()));
   /**
    * back button.
    */
-  private final PushButton backPushButton = new PushButton(
-      new Image(IMAGES.back()));
+  private final PushButton backPushButton = new PushButton(new Image(IMAGES.back()));
   /**
    * min/max grid.
    */
@@ -753,27 +622,19 @@ public class DBNaviBarWidget extends Composite
   /**
    * Constructor.
    *
-   * @param searchfields
-   *        fields to search for
-   * @param searchFieldsDisplay
-   *        fields to search for display names
-   * @param userdefinedText
-   *        user defined functions (null if not wanted)
+   * @param pSearchfields fields to search for
+   * @param pSearchFieldsDisplay fields to search for display names
+   * @param pUserdefinedText user defined functions (null if not wanted)
    */
-  public DBNaviBarWidget(
-      final String[] searchfields,
-      final String[] searchFieldsDisplay,
-      final String userdefinedText)
-  {
+  public DBNaviBarWidget(final String[] pSearchfields, final String[] pSearchFieldsDisplay, final String pUserdefinedText) {
     super();
 
-    this.constants = (DBNaviBarWidgetConstants)
-        GWT.create(DBNaviBarWidgetConstants.class);
+    this.constants = (DBNaviBarWidgetConstants) GWT.create(DBNaviBarWidgetConstants.class);
 
     this.dialogYesNoBox = this.createYesNoDialogBox(this.constants);
     this.dialogYesNoBox.hide();
 
-    this.searchFieldsRemember = searchfields;
+    this.searchFieldsRemember = pSearchfields;
 
     this.initWidget(this.bigpanel);
     this.bigpanel.setBorderWidth(1);
@@ -833,17 +694,13 @@ public class DBNaviBarWidget extends Composite
 
     this.fieldSelectLabel.setText(this.constants.fieldNameLabel());
     this.fieldEntryLabel.setText(this.constants.fieldEntryLabel());
-    if (searchfields != null && searchFieldsDisplay != null)
-    {
-      for (int i = 0; i < searchfields.length && i < searchFieldsDisplay.length; i++)
-      {
-        this.fieldSelect.addItem(searchFieldsDisplay[i],
-            searchfields[i]);
+    if (pSearchfields != null && pSearchFieldsDisplay != null) {
+      for (int i = 0; i < pSearchfields.length && i < pSearchFieldsDisplay.length; i++) {
+        this.fieldSelect.addItem(pSearchFieldsDisplay[i], pSearchfields[i]);
       }
     }
     this.searchMethodsLabel.setText(this.constants.findTypeLabel());
-    for (final String element2 : SEARCH_METHODS)
-    {
+    for (final String element2 : SEARCH_METHODS) {
       this.searchMethodSelect.addItem(element2);
     }
     this.fieldSelect.setAccessKey(this.constants.findFieldKey().trim().charAt(0));
@@ -853,14 +710,11 @@ public class DBNaviBarWidget extends Composite
     // this.searchgridpanel.setHeight("2.5em");
     this.searchpanel.setVisible(this.findToggleButton.isDown());
 
-    if (userdefinedText == null)
-    {
+    if (pUserdefinedText == null) {
       this.userdefinedPushButton.setEnabled(false);
       this.userdefinedPushButtonEnabled = false;
-    }
-    else
-    {
-      this.userdefinedPushButton.setTitle(userdefinedText);
+    } else {
+      this.userdefinedPushButton.setTitle(pUserdefinedText);
     }
     this.setDBMinMaxCurNumber(null, null, null);
 
@@ -886,50 +740,36 @@ public class DBNaviBarWidget extends Composite
   /**
    * Constructor.
    *
-   * @param searchfields
-   *        fields to search for
-   * @param setUserdefinedText
-   *        user defined text
+   * @param pSearchfields fields to search for
+   * @param pUserdefinedText user defined text
    */
-  public DBNaviBarWidget(
-      final String[] searchfields,
-      final String setUserdefinedText)
-  {
-    this(searchfields, searchfields, setUserdefinedText);
+  public DBNaviBarWidget(final String[] pSearchfields, final String pUserdefinedText) {
+    this(pSearchfields, pSearchfields, pUserdefinedText);
   }
 
   /**
    * Constructor.
    *
-   * @param searchfields
-   *        fields to search for
-   * @param searchFieldsDisplay
-   *        fields to search for display names
+   * @param pSearchfields fields to search for
+   * @param pSearchFieldsDisplay fields to search for display names
    */
-  public DBNaviBarWidget(
-      final String[] searchfields,
-      final String[] searchFieldsDisplay)
-  {
-    this(searchfields, searchFieldsDisplay, null);
+  public DBNaviBarWidget(final String[] pSearchfields, final String[] pSearchFieldsDisplay) {
+    this(pSearchfields, pSearchFieldsDisplay, null);
   }
 
   /**
    * Constructor.
    *
-   * @param searchfields
-   *        fields to search for
+   * @param pSearchfields fields to search for
    */
-  public DBNaviBarWidget(
-      final String[] searchfields)
-  {
-    this(searchfields, searchfields, null);
+  public DBNaviBarWidget(final String[] pSearchfields) {
+    this(pSearchfields, pSearchfields, null);
   }
 
   /**
    * layout components.
    */
-  private void layoutComponents()
-  {
+  private void layoutComponents() {
     this.panel.add(this.newPushButton);
     this.panel.add(this.savePushButton);
     this.panel.add(this.deletePushButton);
@@ -965,18 +805,11 @@ public class DBNaviBarWidget extends Composite
     this.searchgridpanel.setWidget(1, 2, this.fieldEntry);
     this.searchpanel.add(this.searchgridpanel);
     /*
-     * VerticalPanel Searchfield = new VerticalPanel();
-     * Searchfield.add(this.fieldSelectLabel);
-     * Searchfield.add(this.fieldSelect);
-     * VerticalPanel Searchmethodes = new VerticalPanel();
-     * Searchmethodes.add(this.SearchMethodesLabel);
-     * Searchmethodes.add(this.searchMethodeSelect);
-     * VerticalPanel Searchentry = new VerticalPanel();
-     * Searchentry.add(this.fieldEntryLabel);
-     * Searchentry.add(this.fieldEntry);
-     * this.searchpanel.add(Searchfield);
-     * this.searchpanel.add(Searchmethodes);
-     * this.searchpanel.add(Searchentry);
+     * VerticalPanel Searchfield = new VerticalPanel(); Searchfield.add(this.fieldSelectLabel);
+     * Searchfield.add(this.fieldSelect); VerticalPanel Searchmethodes = new VerticalPanel();
+     * Searchmethodes.add(this.SearchMethodesLabel); Searchmethodes.add(this.searchMethodeSelect); VerticalPanel Searchentry =
+     * new VerticalPanel(); Searchentry.add(this.fieldEntryLabel); Searchentry.add(this.fieldEntry);
+     * this.searchpanel.add(Searchfield); this.searchpanel.add(Searchmethodes); this.searchpanel.add(Searchentry);
      */
     this.bigpanel.add(this.panel);
     this.bigpanel.add(this.searchpanel);
@@ -988,8 +821,7 @@ public class DBNaviBarWidget extends Composite
    *
    * @return constants
    */
-  public final DBNaviBarWidgetConstants getConstants()
-  {
+  public final DBNaviBarWidgetConstants getConstants() {
     return this.constants;
   }
 
@@ -998,8 +830,7 @@ public class DBNaviBarWidget extends Composite
    *
    * @return buttonState
    */
-  public final ButtonState getButtonState()
-  {
+  public final ButtonState getButtonState() {
     return this.buttonState;
   }
 
@@ -1008,8 +839,7 @@ public class DBNaviBarWidget extends Composite
    *
    * @return currentDBNumber
    */
-  public final String getCurrentDBNumber()
-  {
+  public final String getCurrentDBNumber() {
     return this.currentDBNumber;
   }
 
@@ -1018,8 +848,7 @@ public class DBNaviBarWidget extends Composite
    *
    * @return oldDBNumber
    */
-  public final String getOldDBNumber()
-  {
+  public final String getOldDBNumber() {
     return this.oldDBNumber;
   }
 
@@ -1028,8 +857,7 @@ public class DBNaviBarWidget extends Composite
    *
    * @return searchFieldString
    */
-  public final String getSearchFieldField()
-  {
+  public final String getSearchFieldField() {
     return this.searchFieldString;
   }
 
@@ -1038,8 +866,7 @@ public class DBNaviBarWidget extends Composite
    *
    * @return searchFieldEntry
    */
-  public final String getSearchFieldEntry()
-  {
+  public final String getSearchFieldEntry() {
     return this.searchFieldEntry;
   }
 
@@ -1048,27 +875,23 @@ public class DBNaviBarWidget extends Composite
    *
    * @return searchFieldMethod
    */
-  public final String getSearchFieldMethode()
-  {
+  public final String getSearchFieldMethode() {
     return this.searchFieldMethod;
   }
 
   /**
    * display hint.
    *
-   * @param hint
-   *        text to display
+   * @param pHint text to display
    */
-  public final void displayHint(final String hint)
-  {
-    this.hintText.setText(hint);
+  public final void displayHint(final String pHint) {
+    this.hintText.setText(pHint);
   }
 
   /**
    * enable all buttons.
    */
-  public final void enableAllButtons()
-  {
+  public final void enableAllButtons() {
     this.newPushButton.setEnabled(true);
     this.savePushButton.setEnabled(true);
     this.deletePushButton.setEnabled(true);
@@ -1086,11 +909,9 @@ public class DBNaviBarWidget extends Composite
   /**
    * refresh button state.
    */
-  private void refreshButtonState()
-  {
+  private void refreshButtonState() {
     this.panel.setVisible(false);
-    if (this.minDBNumber == null || this.maxDBNumber == null)
-    {
+    if (this.minDBNumber == null || this.maxDBNumber == null) {
       this.newPushButton.setEnabled(false);
       this.savePushButton.setEnabled(this.savePushButtonEnabled);
       this.deletePushButton.setEnabled(false);
@@ -1102,13 +923,9 @@ public class DBNaviBarWidget extends Composite
       this.okPushButton.setEnabled(false);
       this.forwardPushButton.setEnabled(false);
       this.fforwardPushButton.setEnabled(false);
-      this.userdefinedPushButton.setEnabled(
-          this.userdefinedPushButtonEnabled);
-    }
-    else
-    {
-      if (this.oldDBNumber == null)
-      {
+      this.userdefinedPushButton.setEnabled(this.userdefinedPushButtonEnabled);
+    } else {
+      if (this.oldDBNumber == null) {
         this.newPushButton.setEnabled(false);
         this.deletePushButton.setEnabled(false);
         this.savePushButton.setEnabled(this.savePushButtonEnabled);
@@ -1122,94 +939,61 @@ public class DBNaviBarWidget extends Composite
         this.okPushButton.setEnabled(this.okPushButtonEnabled);
         this.forwardPushButton.setEnabled(false);
         this.fforwardPushButton.setEnabled(false);
-        this.userdefinedPushButton.setEnabled(
-            this.userdefinedPushButtonEnabled);
-      }
-      else
-      {
+        this.userdefinedPushButton.setEnabled(this.userdefinedPushButtonEnabled);
+      } else {
         this.newPushButton.setEnabled(this.newPushButtonEnabled);
-        if (this.newPushButtonEnabled)
-        {
-          this.newPushButton.getUpFace().setImage(
-              new Image(IMAGES.filenew()));
+        if (this.newPushButtonEnabled) {
+          this.newPushButton.getUpFace().setImage(new Image(IMAGES.filenew()));
         }
         this.savePushButton.setEnabled(this.savePushButtonEnabled);
-        if (this.savePushButtonEnabled)
-        {
-          this.savePushButton.getUpFace().setImage(
-              new Image(IMAGES.save()));
+        if (this.savePushButtonEnabled) {
+          this.savePushButton.getUpFace().setImage(new Image(IMAGES.save()));
         }
         this.deletePushButton.setEnabled(this.deletePushButtonEnabled);
-        if (this.deletePushButtonEnabled)
-        {
-          this.deletePushButton.getUpFace().setImage(
-              new Image(IMAGES.delete()));
+        if (this.deletePushButtonEnabled) {
+          this.deletePushButton.getUpFace().setImage(new Image(IMAGES.delete()));
         }
         this.findToggleButton.setEnabled(this.findPushButtonEnabled);
-        if (this.findPushButtonEnabled)
-        {
-          this.findToggleButton.getUpFace().setImage(
-              new Image(IMAGES.find()));
+        if (this.findPushButtonEnabled) {
+          this.findToggleButton.getUpFace().setImage(new Image(IMAGES.find()));
         }
         this.stopPushButton.setEnabled(this.stopPushButtonEnabled);
-        if (this.stopPushButtonEnabled)
-        {
-          this.stopPushButton.getUpFace().setImage(
-              new Image(IMAGES.stop()));
+        if (this.stopPushButtonEnabled) {
+          this.stopPushButton.getUpFace().setImage(new Image(IMAGES.stop()));
         }
 
-        if (this.oldDBNumber.equals(this.minDBNumber))
-        {
+        if (this.oldDBNumber.equals(this.minDBNumber)) {
           this.fbackPushButton.setEnabled(false);
           this.backPushButton.setEnabled(false);
-        }
-        else
-        {
-          this.fbackPushButton.setEnabled(
-              this.fbackPushButtonEnabled);
+        } else {
+          this.fbackPushButton.setEnabled(this.fbackPushButtonEnabled);
           this.backPushButton.setEnabled(this.backPushButtonEnabled);
-          if (this.fbackPushButtonEnabled)
-          {
-            this.fbackPushButton.getUpFace().setImage(
-                new Image(IMAGES.fback()));
+          if (this.fbackPushButtonEnabled) {
+            this.fbackPushButton.getUpFace().setImage(new Image(IMAGES.fback()));
           }
-          if (this.backPushButtonEnabled)
-          {
-            this.backPushButton.getUpFace().setImage(
-                new Image(IMAGES.back()));
+          if (this.backPushButtonEnabled) {
+            this.backPushButton.getUpFace().setImage(new Image(IMAGES.back()));
           }
         }
         this.currentEntry.setEnabled(this.currentEntryEnabled);
         this.okPushButton.setEnabled(this.okPushButtonEnabled);
-        if (this.okPushButtonEnabled)
-        {
-          this.okPushButton.getUpFace().setImage(
-              new Image(IMAGES.ok()));
+        if (this.okPushButtonEnabled) {
+          this.okPushButton.getUpFace().setImage(new Image(IMAGES.ok()));
         }
-        if (this.oldDBNumber.equals(this.maxDBNumber))
-        {
+        if (this.oldDBNumber.equals(this.maxDBNumber)) {
           this.forwardPushButton.setEnabled(false);
           this.fforwardPushButton.setEnabled(false);
-        }
-        else
-        {
-          this.forwardPushButton.setEnabled(
-              this.forwardPushButtonEnabled);
-          this.fforwardPushButton.setEnabled(
-              this.fforwardPushButtonEnabled);
-          if (this.forwardPushButtonEnabled)
-          {
-            this.forwardPushButton.getUpFace().setImage(
-                new Image(IMAGES.forward()));
+        } else {
+          this.forwardPushButton.setEnabled(this.forwardPushButtonEnabled);
+          this.fforwardPushButton.setEnabled(this.fforwardPushButtonEnabled);
+          if (this.forwardPushButtonEnabled) {
+            this.forwardPushButton.getUpFace().setImage(new Image(IMAGES.forward()));
           }
-          if (this.fforwardPushButtonEnabled)
-          {
-            this.fforwardPushButton.getUpFace().setImage(
-                new Image(IMAGES.fforward()));
+          if (this.fforwardPushButtonEnabled) {
+            this.fforwardPushButton.getUpFace().setImage(new Image(IMAGES.fforward()));
           }
         }
-        this.userdefinedPushButton.setEnabled(
-            this.userdefinedPushButtonEnabled);
+        this.userdefinedPushButton.setEnabled(this.userdefinedPushButtonEnabled);
       }
     }
     this.minLabel.setVisible(this.minMaxEnabled);
@@ -1222,23 +1006,18 @@ public class DBNaviBarWidget extends Composite
   /**
    * set database min max and current number.
    *
-   * @param min
-   *        minimum number
-   * @param max
-   *        maximum number
-   * @param cur
-   *        current number
+   * @param pMin minimum number
+   * @param pMax maximum number
+   * @param pCur current number
    */
-  public final void setDBMinMaxCurNumber(
-      final String min, final String max, final String cur)
-  {
-    this.currentDBNumber = cur;
-    this.oldDBNumber = cur;
-    this.minDBNumber = min;
-    this.maxDBNumber = max;
-    this.minEntry.setText(min);
-    this.maxEntry.setText(max);
-    this.currentEntry.setText(cur);
+  public final void setDBMinMaxCurNumber(final String pMin, final String pMax, final String pCur) {
+    this.currentDBNumber = pCur;
+    this.oldDBNumber = pCur;
+    this.minDBNumber = pMin;
+    this.maxDBNumber = pMax;
+    this.minEntry.setText(pMin);
+    this.maxEntry.setText(pMax);
+    this.currentEntry.setText(pCur);
 
     this.refreshButtonState();
   }
@@ -1246,37 +1025,29 @@ public class DBNaviBarWidget extends Composite
   /**
    * change search fields.
    *
-   * @param searchFields
-   *        new search fields
+   * @param pSearchFields new search fields
    */
-  public final void changeSearchfields(final String[] searchFields)
-  {
-    if (searchFields != null
-        && (this.fieldSelect.getItemCount() != searchFields.length
-        || this.fieldSelect.getItemText(0) != searchFields[0]))
-    {
+  public final void changeSearchfields(final String[] pSearchFields) {
+    if (pSearchFields != null
+        && (this.fieldSelect.getItemCount() != pSearchFields.length || this.fieldSelect.getItemText(0) != pSearchFields[0])) {
 
-      for (int j = this.fieldSelect.getItemCount() - 1; j >= 0; j--)
-      {
+      for (int j = this.fieldSelect.getItemCount() - 1; j >= 0; j--) {
         this.fieldSelect.removeItem(j);
       }
 
-      for (int i = 0; i < searchFields.length; i++)
-      {
-        this.fieldSelect.addItem(searchFields[i]);
-        if (searchFields[i].equals(this.searchFieldString))
-        {
+      for (int i = 0; i < pSearchFields.length; i++) {
+        this.fieldSelect.addItem(pSearchFields[i]);
+        if (pSearchFields[i].equals(this.searchFieldString)) {
           this.fieldSelect.setSelectedIndex(i);
         }
       }
     }
-  };
+  }
 
   /**
    * set read only.
    */
-  public final void setReadOnly()
-  {
+  public final void setReadOnly() {
     this.newPushButtonEnabled = false;
     this.deletePushButtonEnabled = false;
     this.savePushButtonEnabled = false;
@@ -1286,8 +1057,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * set to read/write.
    */
-  public final void setReadWrite()
-  {
+  public final void setReadWrite() {
     this.newPushButtonEnabled = true;
     this.deletePushButtonEnabled = true;
     this.savePushButtonEnabled = true;
@@ -1297,8 +1067,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * enable new button.
    */
-  public final void enablenewPushButton()
-  {
+  public final void enablenewPushButton() {
     this.newPushButtonEnabled = true;
     this.refreshButtonState();
   }
@@ -1306,8 +1075,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * disable new button.
    */
-  public final void disablenewPushButton()
-  {
+  public final void disablenewPushButton() {
     this.newPushButtonEnabled = false;
     this.refreshButtonState();
   }
@@ -1315,8 +1083,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * enable save button.
    */
-  public final void enablesavePushButton()
-  {
+  public final void enablesavePushButton() {
     this.savePushButtonEnabled = true;
     this.refreshButtonState();
   }
@@ -1324,8 +1091,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * disable save button.
    */
-  public final void disablesavePushButton()
-  {
+  public final void disablesavePushButton() {
     this.savePushButtonEnabled = false;
     this.refreshButtonState();
   }
@@ -1333,8 +1099,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * enable delete button.
    */
-  public final void enabledeletePushButton()
-  {
+  public final void enabledeletePushButton() {
     this.deletePushButtonEnabled = true;
     this.refreshButtonState();
   }
@@ -1342,8 +1107,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * disable delete button.
    */
-  public final void disabledeletePushButton()
-  {
+  public final void disabledeletePushButton() {
     this.deletePushButtonEnabled = false;
     this.refreshButtonState();
   }
@@ -1351,8 +1115,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * enable find button.
    */
-  public final void enablefindPushButton()
-  {
+  public final void enablefindPushButton() {
     this.findPushButtonEnabled = true;
     this.refreshButtonState();
   }
@@ -1360,8 +1123,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * disable find button.
    */
-  public final void disablefindPushButton()
-  {
+  public final void disablefindPushButton() {
     this.findPushButtonEnabled = false;
     this.refreshButtonState();
   }
@@ -1369,8 +1131,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * enable stop button.
    */
-  public final void enablestopPushButton()
-  {
+  public final void enablestopPushButton() {
     this.stopPushButtonEnabled = true;
     this.refreshButtonState();
   }
@@ -1378,8 +1139,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * disable stop button.
    */
-  public final void disablestopPushButton()
-  {
+  public final void disablestopPushButton() {
     this.stopPushButtonEnabled = false;
     this.refreshButtonState();
   }
@@ -1387,8 +1147,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * enable fast back button.
    */
-  public final void enablefbackPushButton()
-  {
+  public final void enablefbackPushButton() {
     this.fbackPushButtonEnabled = true;
     this.refreshButtonState();
   }
@@ -1396,8 +1155,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * disable fast back button.
    */
-  public final void disablefbackPushButton()
-  {
+  public final void disablefbackPushButton() {
     this.fbackPushButtonEnabled = false;
     this.refreshButtonState();
   }
@@ -1405,8 +1163,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * enable back button.
    */
-  public final void enablebackPushButton()
-  {
+  public final void enablebackPushButton() {
     this.backPushButtonEnabled = true;
     this.refreshButtonState();
   }
@@ -1414,8 +1171,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * disable back button.
    */
-  public final void disablebackPushButton()
-  {
+  public final void disablebackPushButton() {
     this.backPushButtonEnabled = false;
     this.refreshButtonState();
   }
@@ -1423,8 +1179,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * enable current entry.
    */
-  public final void enablecurrentEntry()
-  {
+  public final void enablecurrentEntry() {
     this.currentEntryEnabled = true;
     this.refreshButtonState();
   }
@@ -1432,8 +1187,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * disable current entry.
    */
-  public final void disablecurrentEntry()
-  {
+  public final void disablecurrentEntry() {
     this.currentEntryEnabled = false;
     this.refreshButtonState();
   }
@@ -1441,8 +1195,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * enable ok button.
    */
-  public final void enableokPushButton()
-  {
+  public final void enableokPushButton() {
     this.okPushButtonEnabled = true;
     this.refreshButtonState();
   }
@@ -1450,8 +1203,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * disable ok button.
    */
-  public final void disableokPushButton()
-  {
+  public final void disableokPushButton() {
     this.okPushButtonEnabled = false;
     this.refreshButtonState();
   }
@@ -1459,8 +1211,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * enable forward button.
    */
-  public final void enableforwardPushButton()
-  {
+  public final void enableforwardPushButton() {
     this.forwardPushButtonEnabled = true;
     this.refreshButtonState();
   }
@@ -1468,8 +1219,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * disable forward button.
    */
-  public final void disableforwardPushButton()
-  {
+  public final void disableforwardPushButton() {
     this.forwardPushButtonEnabled = false;
     this.refreshButtonState();
   }
@@ -1477,8 +1227,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * enable fast forward button.
    */
-  public final void enablefforwardPushButton()
-  {
+  public final void enablefforwardPushButton() {
     this.fforwardPushButtonEnabled = true;
     this.refreshButtonState();
   }
@@ -1486,8 +1235,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * disable fast forward button.
    */
-  public final void disablefforwardPushButton()
-  {
+  public final void disablefforwardPushButton() {
     this.fforwardPushButtonEnabled = false;
     this.refreshButtonState();
   }
@@ -1495,8 +1243,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * enable user defined button.
    */
-  public final void enableUserdefinedPushButtonEnabled()
-  {
+  public final void enableUserdefinedPushButtonEnabled() {
     this.userdefinedPushButtonEnabled = true;
     this.refreshButtonState();
   }
@@ -1504,8 +1251,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * disable user defined button.
    */
-  public final void disableUserdefinedPushButtonEnabled()
-  {
+  public final void disableUserdefinedPushButtonEnabled() {
     this.userdefinedPushButtonEnabled = false;
     this.refreshButtonState();
   }
@@ -1513,8 +1259,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * enable min/max field.
    */
-  public final void enableMinMax()
-  {
+  public final void enableMinMax() {
     this.minMaxEnabled = true;
     this.refreshButtonState();
   }
@@ -1522,8 +1267,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * disable min/max field.
    */
-  public final void disableMinMax()
-  {
+  public final void disableMinMax() {
     this.minMaxEnabled = false;
     this.refreshButtonState();
   }
@@ -1531,8 +1275,7 @@ public class DBNaviBarWidget extends Composite
   /**
    * set a new entry.
    */
-  public final void setNewEntry()
-  {
+  public final void setNewEntry() {
     this.currentDBNumber = null;
     this.oldDBNumber = null;
     this.currentEntry.setText(null);
@@ -1543,59 +1286,47 @@ public class DBNaviBarWidget extends Composite
   /**
    * create yes/no dialog box.
    *
-   * @param thisConstants
-   *        texts for box
+   * @param pConstants texts for box
    * @return DialogBox
    */
-  private DialogBox createYesNoDialogBox(
-      final DBNaviBarWidgetConstants thisConstants)
-  {
+  private DialogBox createYesNoDialogBox(final DBNaviBarWidgetConstants pConstants) {
     // Create a dialog box and set the caption text
     final DialogBox dialogBox = new DialogBox();
     dialogBox.ensureDebugId("yesNoDialogBox");
-    dialogBox.setText(thisConstants.deleteDialogHeader());
+    dialogBox.setText(pConstants.deleteDialogHeader());
 
     // Create a table to layout the content
     final VerticalPanel dialogContents = new VerticalPanel();
     dialogBox.setWidget(dialogContents);
 
     // Add some text to the top of the dialog
-    final HTML details = new HTML(thisConstants.deleteDialogText());
+    final HTML details = new HTML(pConstants.deleteDialogText());
     dialogContents.add(details);
-    dialogContents.setHorizontalAlignment(
-        HasHorizontalAlignment.ALIGN_CENTER);
+    dialogContents.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
     final HorizontalPanel dialogButtons = new HorizontalPanel();
     // Add a yes button at the bottom of the dialog
-    final Button yesButton = new Button(thisConstants.yes(),
-        new ClickHandler()
-        {
-          @Override
-          public void onClick(final ClickEvent event)
-          {
-            dialogBox.hide();
-            DBNaviBarWidget.this.buttonState = ButtonState.DELETE;
-            DBNaviBarWidget.this.fireEvent(event);
-          }
-        });
-    yesButton.setAccessKey(thisConstants.yesKey().trim().charAt(0));
+    final Button yesButton = new Button(pConstants.yes(), new ClickHandler() {
+      @Override
+      public void onClick(final ClickEvent pEvent) {
+        dialogBox.hide();
+        DBNaviBarWidget.this.buttonState = ButtonState.DELETE;
+        DBNaviBarWidget.this.fireEvent(pEvent);
+      }
+    });
+    yesButton.setAccessKey(pConstants.yesKey().trim().charAt(0));
     dialogButtons.add(yesButton);
-    dialogButtons.setCellHorizontalAlignment(yesButton,
-        HasHorizontalAlignment.ALIGN_LEFT);
+    dialogButtons.setCellHorizontalAlignment(yesButton, HasHorizontalAlignment.ALIGN_LEFT);
     // Add a no button at the bottom of the dialog
-    final Button noButton = new Button(thisConstants.no(),
-        new ClickHandler()
-        {
-          @Override
-          public void onClick(final ClickEvent event)
-          {
-            dialogBox.hide();
-          }
-        });
-    noButton.setAccessKey(thisConstants.noKey().trim().charAt(0));
+    final Button noButton = new Button(pConstants.no(), new ClickHandler() {
+      @Override
+      public void onClick(final ClickEvent pEvent) {
+        dialogBox.hide();
+      }
+    });
+    noButton.setAccessKey(pConstants.noKey().trim().charAt(0));
     dialogButtons.add(noButton);
-    dialogButtons.setCellHorizontalAlignment(noButton,
-        HasHorizontalAlignment.ALIGN_RIGHT);
+    dialogButtons.setCellHorizontalAlignment(noButton, HasHorizontalAlignment.ALIGN_RIGHT);
     dialogButtons.setWidth("80%");
     dialogContents.add(dialogButtons);
 
@@ -1606,27 +1337,21 @@ public class DBNaviBarWidget extends Composite
   /**
    * add a click handler.
    *
-   * @param handler
-   *        handler to set
+   * @param pHandler handler to set
    * @return handler registration
    */
   @Override
-  public final HandlerRegistration addClickHandler(
-      final ClickHandler handler)
-  {
-    return super.addHandler(handler, ClickEvent.getType());
+  public final HandlerRegistration addClickHandler(final ClickHandler pHandler) {
+    return super.addHandler(pHandler, ClickEvent.getType());
   }
 
   /**
    * add a key up handler.
    *
-   * @param handler
-   *        key up handler
+   * @param pHandler key up handler
    * @return handler registration
    */
-  public final HandlerRegistration addKeyUpHandler(
-      final KeyUpHandler handler)
-  {
-    return super.addHandler(handler, KeyUpEvent.getType());
+  public final HandlerRegistration addKeyUpHandler(final KeyUpHandler pHandler) {
+    return super.addHandler(pHandler, KeyUpEvent.getType());
   }
 }

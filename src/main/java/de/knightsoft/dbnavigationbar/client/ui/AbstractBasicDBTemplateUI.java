@@ -1,26 +1,26 @@
 /**
  * This file is part of DBNavigation.
- * 
- * RiPhone is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version.
- * 
- * RiPhone is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with RiPhone. If not, see <http://www.gnu.org/licenses/>
- * 
- * 
- * Copyright (c) 2011-2012 Manfred Tremmel
- * 
- * --
- * Name Date Change
+ *
+ * RiPhone is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * RiPhone is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with RiPhone. If not, see <a
+ * href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
+ *
+ *
+ * Copyright (c) 2011-2015 Manfred Tremmel
+ *
  */
+
 package de.knightsoft.dbnavigationbar.client.ui;
+
+import de.knightsoft.dbnavigationbar.client.AbstractParent;
+import de.knightsoft.dbnavigationbar.client.domain.AbstractDomainDBBasics;
+import de.knightsoft.dbnavigationbar.client.domain.AbstractDomainUser;
+import de.knightsoft.dbnavigationbar.client.ui.widget.DBNaviBarWidget;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -37,26 +37,17 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import de.knightsoft.dbnavigationbar.client.AbstractParent;
-import de.knightsoft.dbnavigationbar.client.domain.AbstractDomainDBBasics;
-import de.knightsoft.dbnavigationbar.client.domain.AbstractDomainUser;
-import de.knightsoft.dbnavigationbar.client.ui.widget.DBNaviBarWidget;
-
 /**
- * 
- * The <code>AbstractBasicDBTemplateUI</code> class is a template for database
- * input mask.
- * 
- * @param <E>
- *        data structure
- * @param <F>
- *        parent widget
+ *
+ * The <code>AbstractBasicDBTemplateUI</code> class is a template for database input mask.
+ *
+ * @param <E> data structure
+ * @param <F> parent widget
  * @author Manfred Tremmel
  * @version 1.0.0, 2011-02-14
  */
-public abstract class AbstractBasicDBTemplateUI<E extends AbstractDomainDBBasics, F extends AbstractParent>
-    extends AbstractBasicTemplateUI<F> implements AsyncCallback<E>
-{
+public abstract class AbstractBasicDBTemplateUI<E extends AbstractDomainDBBasics, F extends AbstractParent> extends
+    AbstractBasicTemplateUI<F> implements AsyncCallback<E> {
 
   /**
    * images.
@@ -81,11 +72,10 @@ public abstract class AbstractBasicDBTemplateUI<E extends AbstractDomainDBBasics
   /**
    * Pictures used.
    */
-  public interface Images extends ClientBundle
-  {
+  public interface Images extends ClientBundle {
     /**
      * db head picture.
-     * 
+     *
      * @return image
      */
     @Source("BasicDBTemplateUI.png")
@@ -93,7 +83,7 @@ public abstract class AbstractBasicDBTemplateUI<E extends AbstractDomainDBBasics
 
     /**
      * delete position picture.
-     * 
+     *
      * @return image
      */
     @Source("DeletePosition.png")
@@ -122,27 +112,20 @@ public abstract class AbstractBasicDBTemplateUI<E extends AbstractDomainDBBasics
 
   /**
    * Constructor.
-   * 
-   * @param parentwidget
-   *        the parent widget, where this frame is displayed
-   * @param thisWidgetlist
-   *        list of widgets to display
-   * @param userdefinedfunction
-   *        special function to include into the navigation bar
+   *
+   * @param pParentwidget the parent widget, where this frame is displayed
+   * @param pThisWidgetlist list of widgets to display
+   * @param pUserdefinedfunction special function to include into the navigation bar
    */
-  public AbstractBasicDBTemplateUI(
-      final F parentwidget,
-      final Widget[] thisWidgetlist,
-      final String userdefinedfunction)
-  {
+  public AbstractBasicDBTemplateUI(final F pParentwidget, final Widget[] pThisWidgetlist, final String pUserdefinedfunction) {
 
-    super(parentwidget);
+    super(pParentwidget);
     this.maskSetUp = false;
-    this.widgetlist = thisWidgetlist;
+    this.widgetlist = pThisWidgetlist;
 
     this.constants = (BasicDBTemplateUIConstants) GWT.create(BasicDBTemplateUIConstants.class);
 
-    this.myNavigationBar = new DBNaviBarWidget(this.getSearchFields(), this.getSearchFieldsDisplay(), userdefinedfunction);
+    this.myNavigationBar = new DBNaviBarWidget(this.getSearchFields(), this.getSearchFieldsDisplay(), pUserdefinedfunction);
     this.form = new FormPanel();
 
     this.initWidget(this.form);
@@ -151,15 +134,12 @@ public abstract class AbstractBasicDBTemplateUI<E extends AbstractDomainDBBasics
 
   /**
    * set up the mask.
-   * 
-   * @param user
-   *        user information about the currently logged in user
+   *
+   * @param pUser user information about the currently logged in user
    */
   @Override
-  protected final void setUpMask(final AbstractDomainUser user)
-  {
-    if (!this.maskSetUp)
-    {
+  protected final void setUpMask(final AbstractDomainUser pUser) {
+    if (!this.maskSetUp) {
       final VerticalPanel myPanel = new VerticalPanel();
       myPanel.setWidth("100%");
       myPanel.setHeight("100%");
@@ -180,16 +160,13 @@ public abstract class AbstractBasicDBTemplateUI<E extends AbstractDomainDBBasics
 
       this.form.add(myPanel);
 
-      this.myNavigationBar.addClickHandler(new ClickHandler()
-      {
+      this.myNavigationBar.addClickHandler(new ClickHandler() {
         @Override
-        public void onClick(final ClickEvent event)
-        {
+        public void onClick(final ClickEvent pEvent) {
           AbstractBasicDBTemplateUI.this.dosave = false;
           final DBTemplateRemoteServiceAsync<E> service = AbstractBasicDBTemplateUI.this.getServiceFactory();
 
-          switch (AbstractBasicDBTemplateUI.this.myNavigationBar.getButtonState())
-          {
+          switch (AbstractBasicDBTemplateUI.this.myNavigationBar.getButtonState()) {
             case NEW:
               AbstractBasicDBTemplateUI.this.newEntry();
               break;
@@ -204,52 +181,40 @@ public abstract class AbstractBasicDBTemplateUI<E extends AbstractDomainDBBasics
               service.readFirstEntry(AbstractBasicDBTemplateUI.this);
               break;
             case FAST_BACK_FIND:
-              service.findFirstEntry(
-                  AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldField(),
+              service.findFirstEntry(AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldField(),
                   AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldMethode(),
-                  AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldEntry(),
-                  AbstractBasicDBTemplateUI.this);
+                  AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldEntry(), AbstractBasicDBTemplateUI.this);
               break;
             case BACK:
-              service.readPreviousEntry(
-                  AbstractBasicDBTemplateUI.this.myNavigationBar.getOldDBNumber(),
+              service.readPreviousEntry(AbstractBasicDBTemplateUI.this.myNavigationBar.getOldDBNumber(),
                   AbstractBasicDBTemplateUI.this);
               break;
             case BACK_FIND:
-              service.findPreviousEntry(
-                  AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldField(),
+              service.findPreviousEntry(AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldField(),
                   AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldMethode(),
                   AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldEntry(),
-                  AbstractBasicDBTemplateUI.this.myNavigationBar.getCurrentDBNumber(),
-                  AbstractBasicDBTemplateUI.this);
+                  AbstractBasicDBTemplateUI.this.myNavigationBar.getCurrentDBNumber(), AbstractBasicDBTemplateUI.this);
               break;
             case FORWARD:
-              service.readNextEntry(
-                  AbstractBasicDBTemplateUI.this.myNavigationBar.getOldDBNumber(),
+              service.readNextEntry(AbstractBasicDBTemplateUI.this.myNavigationBar.getOldDBNumber(),
                   AbstractBasicDBTemplateUI.this);
               break;
             case FORWARD_FIND:
-              service.findNextEntry(
-                  AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldField(),
+              service.findNextEntry(AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldField(),
                   AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldMethode(),
                   AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldEntry(),
-                  AbstractBasicDBTemplateUI.this.myNavigationBar.getCurrentDBNumber(),
-                  AbstractBasicDBTemplateUI.this);
+                  AbstractBasicDBTemplateUI.this.myNavigationBar.getCurrentDBNumber(), AbstractBasicDBTemplateUI.this);
               break;
             case FAST_FORWARD:
-              service.readLastEntry(
-                  AbstractBasicDBTemplateUI.this);
+              service.readLastEntry(AbstractBasicDBTemplateUI.this);
               break;
             case FAST_FORWARD_FIND:
-              service.findLastEntry(
-                  AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldField(),
+              service.findLastEntry(AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldField(),
                   AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldMethode(),
-                  AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldEntry(),
-                  AbstractBasicDBTemplateUI.this);
+                  AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldEntry(), AbstractBasicDBTemplateUI.this);
               break;
             case CHANGE:
-              service.readEntry(
-                  AbstractBasicDBTemplateUI.this.myNavigationBar.getCurrentDBNumber(),
+              service.readEntry(AbstractBasicDBTemplateUI.this.myNavigationBar.getCurrentDBNumber(),
                   AbstractBasicDBTemplateUI.this);
               break;
             case USER_DEFINED:
@@ -257,9 +222,7 @@ public abstract class AbstractBasicDBTemplateUI<E extends AbstractDomainDBBasics
               break;
             default:
               final E saveentry = AbstractBasicDBTemplateUI.this.checkInput();
-              if (saveentry != null
-                  && !saveentry.equals(AbstractBasicDBTemplateUI.this.dbEntry))
-              {
+              if (saveentry != null && !saveentry.equals(AbstractBasicDBTemplateUI.this.dbEntry)) {
                 AbstractBasicDBTemplateUI.this.dosave = true;
                 service.saveEntry(saveentry, AbstractBasicDBTemplateUI.this);
               }
@@ -273,28 +236,28 @@ public abstract class AbstractBasicDBTemplateUI<E extends AbstractDomainDBBasics
 
   /**
    * get the service to use.
-   * 
+   *
    * @return new service
    */
   protected abstract DBTemplateRemoteServiceAsync<E> getServiceFactory();
 
   /**
    * get fieldlist of search fields.
-   * 
+   *
    * @return fieldlist
    */
   protected abstract String[] getSearchFields();
 
   /**
    * get fieldlist to display of search fields.
-   * 
+   *
    * @return fieldlist to display
    */
   protected abstract String[] getSearchFieldsDisplay();
 
   /**
    * <code>checkInput</code> check the input.
-   * 
+   *
    * @return input data or null if something went wrong
    */
   protected abstract E checkInput();
@@ -302,8 +265,7 @@ public abstract class AbstractBasicDBTemplateUI<E extends AbstractDomainDBBasics
   /**
    * <code>newEntry</code> creates a new entry.
    */
-  protected final void newEntry()
-  {
+  protected final void newEntry() {
     this.myNavigationBar.setNewEntry();
     this.dbEntry.setUpDefaultEntry();
 
@@ -314,140 +276,100 @@ public abstract class AbstractBasicDBTemplateUI<E extends AbstractDomainDBBasics
 
   /**
    * <code>createAndFormatContentPanel</code> create the panel.
-   * 
+   *
    * @return Panel
    */
   protected abstract Panel createAndFormatContentPanel();
 
   /**
    * <code>enableKeyField</code> enables/disables KeyField.
-   * 
-   * @param enable
-   *        true/false to enable/disable key for input
+   *
+   * @param pEnable true/false to enable/disable key for input
    */
-  protected abstract void enableKeyField(boolean enable);
+  protected abstract void enableKeyField(boolean pEnable);
 
   /**
-   * <code>UserDefinedFunction</code> can be used for additional
-   * functionality that can be used by a button in the navigation widget.
+   * <code>UserDefinedFunction</code> can be used for additional functionality that can be used by a button in the navigation
+   * widget.
    */
-  protected void userDefinedFunction()
-  {
+  protected void userDefinedFunction() {
     // redefine if you want to include a user defined function
   }
 
   /**
-   * <code>onFailure</code> is called, when server side an
-   * exception is thrown.
-   * 
-   * @param caught
-   *        the thrown exception
+   * <code>onFailure</code> is called, when server side an exception is thrown.
+   *
+   * @param pCaught the thrown exception
    */
   @Override
-  public final void onFailure(final Throwable caught)
-  {
-    try
-    {
-      throw caught;
-    }
-    catch (final RpcTokenException e)
-    {
+  public final void onFailure(final Throwable pCaught) {
+    try {
+      throw pCaught;
+    } catch (final RpcTokenException e) {
       this.getParentwidget().cleanUp(e.getLocalizedMessage());
-    }
-    catch (final Throwable e)
-    {
+    } catch (final Throwable e) {
       this.myNavigationBar.displayHint(e.toString());
     }
   }
 
   /**
-   * <code>onSuccess</code> is called, when server side call
-   * was successfully.
-   * 
-   * @param entry
-   *        the returnvalue of the serverside function
+   * <code>onSuccess</code> is called, when server side call was successfully.
+   *
+   * @param pEntry the returnvalue of the serverside function
    */
   @Override
-  public final void onSuccess(final E entry)
-  {
-    if (entry == null)
-    {
+  public final void onSuccess(final E pEntry) {
+    if (pEntry == null) {
       this.getParentwidget().cleanUp(null);
-    }
-    else if (entry.getKeyCur() == null)
-    {
-      if (this.dbEntry != null)
-      {
-        this.myNavigationBar.setDBMinMaxCurNumber(
-            this.dbEntry.getKeyMin(),
-            this.dbEntry.getKeyMax(),
-            this.dbEntry.getKeyCur());
+    } else if (pEntry.getKeyCur() == null) {
+      if (this.dbEntry != null) {
+        this.myNavigationBar.setDBMinMaxCurNumber(this.dbEntry.getKeyMin(), this.dbEntry.getKeyMax(), this.dbEntry.getKeyCur());
       }
       this.myNavigationBar.displayHint(this.constants.searchErrorMessage());
-    }
-    else
-    {
-      this.dbEntry = entry;
-      this.myNavigationBar.setDBMinMaxCurNumber(entry.getKeyMin(), entry.getKeyMax(), entry.getKeyCur());
-      if (entry.isReadOnly())
-      {
+    } else {
+      this.dbEntry = pEntry;
+      this.myNavigationBar.setDBMinMaxCurNumber(pEntry.getKeyMin(), pEntry.getKeyMax(), pEntry.getKeyCur());
+      if (pEntry.isReadOnly()) {
         this.myNavigationBar.setReadOnly();
-      }
-      else
-      {
+      } else {
         this.myNavigationBar.setReadWrite();
       }
 
-      if (this.dosave)
-      {
+      if (this.dosave) {
         this.myNavigationBar.displayHint(this.constants.savedSuccessfully());
-      }
-      else
-      {
+      } else {
         this.myNavigationBar.displayHint(null);
       }
 
-      this.enableKeyField(entry.getKeyCur() == null || "".equals(entry.getKeyCur()));
-      this.fillEntry(entry);
+      this.enableKeyField(pEntry.getKeyCur() == null || "".equals(pEntry.getKeyCur()));
+      this.fillEntry(pEntry);
     }
   }
 
   /**
    * <code>fillEntry</code> is called, to display a user.
-   * 
-   * @param entry
-   *        entry to display
+   *
+   * @param pEntry entry to display
    */
-  protected abstract void fillEntry(E entry);
+  protected abstract void fillEntry(E pEntry);
 
   /**
-   * The Method <code>matchesMenu</code> looks if this UI is selected and
-   * makes the necessary changes.
-   * 
-   * @param itemtext
-   *        selected menu item
-   * @param user
-   *        user information about the currently logged in user
+   * The Method <code>matchesMenu</code> looks if this UI is selected and makes the necessary changes.
+   *
+   * @param pItemtext selected menu item
+   * @param pUser user information about the currently logged in user
    * @return true if it is allowed for this user
    */
   @Override
-  public final boolean matchesMenu(
-      final String itemtext,
-      final AbstractDomainUser user)
-  {
-    final boolean matches = super.matchesMenuSimple(itemtext, user);
-    if (matches)
-    {
-      if (this.allowedToChange(user))
-      {
+  public final boolean matchesMenu(final String pItemtext, final AbstractDomainUser pUser) {
+    final boolean matches = super.matchesMenuSimple(pItemtext, pUser);
+    if (matches) {
+      if (this.allowedToChange(pUser)) {
         this.myNavigationBar.setReadWrite();
-      }
-      else
-      {
+      } else {
         this.myNavigationBar.setReadOnly();
       }
-      if (this.myNavigationBar.getOldDBNumber() == null)
-      {
+      if (this.myNavigationBar.getOldDBNumber() == null) {
         final DBTemplateRemoteServiceAsync<E> service = this.getServiceFactory();
         service.readLastEntry(AbstractBasicDBTemplateUI.this);
       }
@@ -455,83 +377,35 @@ public abstract class AbstractBasicDBTemplateUI<E extends AbstractDomainDBBasics
     return matches;
   }
 
-  /**
-   * get navigation bar.
-   * 
-   * @return myNavigationBar
-   */
-  protected final DBNaviBarWidget getMyNavigationBar()
-  {
+  protected final DBNaviBarWidget getMyNavigationBar() {
     return this.myNavigationBar;
   }
 
-  /**
-   * get dosave.
-   * 
-   * @return dosave
-   */
-  protected final boolean isDosave()
-  {
+  protected final boolean isDosave() {
     return this.dosave;
   }
 
-  /**
-   * set dosave.
-   * 
-   * @param newDosave
-   *        new entry for dosave
-   */
-  protected final void setDosave(final boolean newDosave)
-  {
-    this.dosave = newDosave;
+  protected final void setDosave(final boolean pDosave) {
+    this.dosave = pDosave;
   }
 
-  /**
-   * get db entry.
-   * 
-   * @return dbEntry
-   */
-  protected final E getDbEntry()
-  {
+  protected final E getDbEntry() {
     return this.dbEntry;
   }
 
-  /**
-   * set db entry.
-   * 
-   * @param newDbEntry
-   *        new database entry
-   */
-  protected final void setDbEntry(final E newDbEntry)
-  {
-    this.dbEntry = newDbEntry;
+  protected final void setDbEntry(final E pDbEntry) {
+    this.dbEntry = pDbEntry;
   }
 
-  /**
-   * get constants.
-   * 
-   * @return constants
-   */
-  protected final BasicDBTemplateUIConstants getConstants()
-  {
+  protected final BasicDBTemplateUIConstants getConstants() {
     return this.constants;
   }
 
-  /**
-   * get widget list.
-   * 
-   * @return widgetlist
-   */
-  protected final Widget[] getWidgetlist()
-  {
+  protected final Widget[] getWidgetlist() {
     return this.widgetlist;
   }
 
-  /**
-   * @return the maskSetUp
-   */
-  public final boolean isMaskSetUp()
-  {
+  public final boolean isMaskSetUp() {
     return this.maskSetUp;
   }
 }

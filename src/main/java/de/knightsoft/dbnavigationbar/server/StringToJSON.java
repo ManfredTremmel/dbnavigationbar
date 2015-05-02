@@ -1,34 +1,30 @@
 /**
- * This file is part of knightsoft db navigation.
- * 
- * RiPhone is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version.
- * 
- * RiPhone is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with RiPhone. If not, see <http://www.gnu.org/licenses/>
- * 
- * 
- * Copyright (c) 2011-2012 RI Solutions GmbH
- * 
+ * This file is part of DBNavigation.
+ *
+ * RiPhone is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * RiPhone is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with RiPhone. If not, see <a
+ * href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
+ *
+ *
+ * Copyright (c) 2011-2015 Manfred Tremmel
+ *
  */
+
 package de.knightsoft.dbnavigationbar.server;
 
 /**
- * 
+ *
  * <code>StringToJSON</code> is a class to convert a string to JSON.
- * 
+ *
  * @author Manfred Tremmel
  * @version $Rev$, $Date$
  */
-public final class StringToJSON
-{
+public final class StringToJSON {
 
   /**
    * multiplicator maximum growth of the string.
@@ -46,84 +42,72 @@ public final class StringToJSON
   /**
    * Private Constructor.
    */
-  private StringToJSON()
-  {
+  private StringToJSON() {
     super();
   }
 
   /**
-   * The <code>convert</code> method converts the string to
-   * html equivalent.
-   * 
-   * @param javaString
-   *        Java string to convert
+   * The <code>convert</code> method converts the string to html equivalent.
+   *
+   * @param pJavaString Java string to convert
    * @return string as JSON
    */
-  public static String convert(final String javaString
-      )
-  {
+  public static String convert(final String pJavaString) {
     String jsonString = "";
 
-    if (javaString != null && javaString.length() > 0)
-    {
-      final char[] jsonStringTab = new char[MULTI * javaString.length()];
-      final char[] javaStringTab = javaString.toCharArray();
-      int j = 0;
+    if (pJavaString != null && pJavaString.length() > 0) {
+      final char[] jsonStringTab = new char[MULTI * pJavaString.length()];
+      final char[] javaStringTab = pJavaString.toCharArray();
+      int pos = 0;
 
-      for (int i = 0; i < javaString.length(); i++)
-      {
-        switch (javaStringTab[i])
-        {
+      for (int i = 0; i < pJavaString.length(); i++) {
+        switch (javaStringTab[i]) {
           case '\"':
           case '\\':
           case '/':
-            jsonStringTab[j++] = '\\';
-            jsonStringTab[j++] = javaStringTab[i];
+            jsonStringTab[pos++] = '\\';
+            jsonStringTab[pos++] = javaStringTab[i];
             break;
           case '\b':
-            jsonStringTab[j++] = '\\';
-            jsonStringTab[j++] = 'b';
+            jsonStringTab[pos++] = '\\';
+            jsonStringTab[pos++] = 'b';
             break;
           case '\f':
-            jsonStringTab[j++] = '\\';
-            jsonStringTab[j++] = 'f';
+            jsonStringTab[pos++] = '\\';
+            jsonStringTab[pos++] = 'f';
             break;
           case '\n':
-            jsonStringTab[j++] = '\\';
-            jsonStringTab[j++] = 'n';
+            jsonStringTab[pos++] = '\\';
+            jsonStringTab[pos++] = 'n';
             break;
           case '\r':
-            jsonStringTab[j++] = '\\';
-            jsonStringTab[j++] = 'r';
+            jsonStringTab[pos++] = '\\';
+            jsonStringTab[pos++] = 'r';
             break;
           case '\t':
-            jsonStringTab[j++] = '\\';
-            jsonStringTab[j++] = 't';
+            jsonStringTab[pos++] = '\\';
+            jsonStringTab[pos++] = 't';
             break;
           default:
             final int test = javaStringTab[i];
-            if (test > MAX_LENGTH)
-            {
-              jsonStringTab[j++] = '\\';
-              jsonStringTab[j++] = 'u';
-              final String jasonHex =
-                  String.format("%04x", Integer.valueOf(test));
-              jsonStringTab[j++] = jasonHex.charAt(0);
-              jsonStringTab[j++] = jasonHex.charAt(1);
-              jsonStringTab[j++] = jasonHex.charAt(2);
-              jsonStringTab[j++] = jasonHex.charAt(THREE);
-            }
-            else
-            {
-              jsonStringTab[j++] = javaStringTab[i];
+            if (test > MAX_LENGTH) {
+              jsonStringTab[pos++] = '\\';
+              jsonStringTab[pos++] = 'u';
+              final String jasonHex = String.format("%04x", Integer.valueOf(test));
+              jsonStringTab[pos++] = jasonHex.charAt(0);
+              jsonStringTab[pos++] = jasonHex.charAt(1);
+              jsonStringTab[pos++] = jasonHex.charAt(2);
+              jsonStringTab[pos++] = jasonHex.charAt(THREE);
+            } else {
+              jsonStringTab[pos++] = javaStringTab[i];
             }
             break;
         }
       }
 
-      jsonString = new String(jsonStringTab, 0, j);
+      jsonString = new String(jsonStringTab, 0, pos);
     }
 
     return jsonString;
   }
-};
+}

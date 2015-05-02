@@ -1,52 +1,45 @@
 /**
- * This file is part of DBNavigationBar.
- * 
- * RiPhone is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version.
- * 
- * RiPhone is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with RiPhone. If not, see <http://www.gnu.org/licenses/>
- * 
- * 
- * Copyright (c) 2012 Manfred Tremmel
- * 
+ * This file is part of DBNavigation.
+ *
+ * RiPhone is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * RiPhone is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with RiPhone. If not, see <a
+ * href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
+ *
+ *
+ * Copyright (c) 2012-2015 Manfred Tremmel
+ *
  */
+
 package de.knightsoft.dbnavigationbar.shared.exceptions;
 
 import java.io.Serializable;
 
 /**
- * 
- * The <code>EntryNotFoundException</code> is thrown, when a entry which should
- * be read from database could not be found.
- * 
+ *
+ * The <code>EntryNotFoundException</code> is thrown, when a entry which should be read from database could not be found.
+ *
  * @author Manfred Tremmel
  * @version $Rev$, $Date$
  */
-public class EntryNotFoundException extends ServerErrorException
-    implements Serializable
-{
+public class EntryNotFoundException extends ServerErrorException implements Serializable {
   /**
    * serial version uid.
    */
   private static final long serialVersionUID = -6326451380001601358L;
 
   /**
-   * 
+   *
    * The <code>ReadTyp</code> defines which way the read was done.
-   * 
+   *
    * @author Manfred Tremmel
    * @version $Rev$, $Date$
    */
-  public enum ReadTyp
-  {
+  public enum ReadTyp {
     /**
      * read the exact key.
      */
@@ -86,59 +79,35 @@ public class EntryNotFoundException extends ServerErrorException
   /**
    * default constructor.
    */
-  public EntryNotFoundException()
-  {
+  public EntryNotFoundException() {
     super();
   }
 
   /**
    * constructor with initial data.
-   * 
-   * @param keyInit
-   *        initial key to set
-   * @param readTypInit
-   *        initial read type to set
+   *
+   * @param pKey initial key to set
+   * @param pReadTyp initial read type to set
    */
-  public EntryNotFoundException(
-      final String keyInit,
-      final ReadTyp readTypInit)
-  {
+  public EntryNotFoundException(final String pKey, final ReadTyp pReadTyp) {
     super();
-    this.key = keyInit;
-    this.readTyp = readTypInit;
+    this.key = pKey;
+    this.readTyp = pReadTyp;
   }
 
-  /**
-   * @return the key
-   */
-  public final String getKey()
-  {
+  public final String getKey() {
     return this.key;
   }
 
-  /**
-   * @param keySet
-   *        the key to set
-   */
-  public final void setKey(final String keySet)
-  {
-    this.key = keySet;
+  public final void setKey(final String pKey) {
+    this.key = pKey;
   }
 
-  /**
-   * @return the readTyp
-   */
-  public final ReadTyp getReadTyp()
-  {
+  public final ReadTyp getReadTyp() {
     return this.readTyp;
   }
 
-  /**
-   * @param readTypSet
-   *        the readTyp to set
-   */
-  public final void setReadTyp(final ReadTyp readTypSet)
-  {
-    this.readTyp = readTypSet;
+  public final void setReadTyp(final ReadTyp pReadTyp) {
+    this.readTyp = pReadTyp;
   }
 }

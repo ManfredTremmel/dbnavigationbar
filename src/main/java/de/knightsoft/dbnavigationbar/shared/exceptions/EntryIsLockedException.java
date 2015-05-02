@@ -1,38 +1,32 @@
 /**
- * This file is part of DBNavigationBar.
- * 
- * RiPhone is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version.
- * 
- * RiPhone is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with RiPhone. If not, see <http://www.gnu.org/licenses/>
- * 
- * 
- * Copyright (c) 2012 Manfred Tremmel
- * 
+ * This file is part of DBNavigation.
+ *
+ * RiPhone is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * RiPhone is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with RiPhone. If not, see <a
+ * href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
+ *
+ *
+ * Copyright (c) 2012-2015 Manfred Tremmel
+ *
  */
+
 package de.knightsoft.dbnavigationbar.shared.exceptions;
 
 import java.io.Serializable;
 
 /**
- * 
- * The <code>EntryIsLockedException</code> is thrown, when a entry which should
- * be updated or deleted.
- * 
+ *
+ * The <code>EntryIsLockedException</code> is thrown, when a entry which should be updated or deleted.
+ *
  * @author Manfred Tremmel
  * @version $Rev$, $Date$
  */
-public class EntryIsLockedException extends ServerErrorException
-    implements Serializable
-{
+public class EntryIsLockedException extends ServerErrorException implements Serializable {
   /**
    * serial version uid.
    */
@@ -51,59 +45,35 @@ public class EntryIsLockedException extends ServerErrorException
   /**
    * default constructor.
    */
-  public EntryIsLockedException()
-  {
+  public EntryIsLockedException() {
     super();
   }
 
   /**
    * constructor with initial data.
-   * 
-   * @param keyInit
-   *        initial key to set
-   * @param userInit
-   *        initial user set
+   *
+   * @param pKey initial key to set
+   * @param pUser initial user set
    */
-  public EntryIsLockedException(
-      final String keyInit,
-      final String userInit)
-  {
+  public EntryIsLockedException(final String pKey, final String pUser) {
     super();
-    this.key = keyInit;
-    this.user = userInit;
+    this.key = pKey;
+    this.user = pUser;
   }
 
-  /**
-   * @return the key
-   */
-  public final String getKey()
-  {
+  public final String getKey() {
     return this.key;
   }
 
-  /**
-   * @param keySet
-   *        the key to set
-   */
-  public final void setKey(final String keySet)
-  {
-    this.key = keySet;
+  public final void setKey(final String pKey) {
+    this.key = pKey;
   }
 
-  /**
-   * @return the user
-   */
-  public final String getUser()
-  {
+  public final String getUser() {
     return this.user;
   }
 
-  /**
-   * @param userSet
-   *        the user to set
-   */
-  public final void setUser(final String userSet)
-  {
-    this.user = userSet;
+  public final void setUser(final String pUser) {
+    this.user = pUser;
   }
 }

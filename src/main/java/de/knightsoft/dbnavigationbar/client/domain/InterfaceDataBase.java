@@ -1,39 +1,34 @@
 /**
- * This file is part of DBNavigationBar.
+ * This file is part of DBNavigation.
  *
- * RiPhone is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version.
+ * RiPhone is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
  *
- * RiPhone is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
+ * RiPhone is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with RiPhone. If not, see <http://www.gnu.org/licenses/>
+ * You should have received a copy of the GNU General Public License along with RiPhone. If not, see <a
+ * href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
  *
  *
- * Copyright (c) 2012 Manfred Tremmel
+ * Copyright (c) 2012-2015 Manfred Tremmel
  *
  */
-package de.knightsoft.dbnavigationbar.client.domain;
 
-import java.util.HashMap;
+package de.knightsoft.dbnavigationbar.client.domain;
 
 import de.knightsoft.dbnavigationbar.shared.fields.FieldInterface;
 
+import java.util.HashMap;
+
 /**
  *
- * The <code>InterfaceDataBase</code> interface defines the base
- * functions for a data base domain.
+ * The <code>InterfaceDataBase</code> interface defines the base functions for a data base domain.
  *
  * @author Manfred Tremmel
  * @version $Rev$, $Date$
  */
-public interface InterfaceDataBase
-{
+public interface InterfaceDataBase {
   /**
    * get isReadOnly.
    *
@@ -44,16 +39,14 @@ public interface InterfaceDataBase
   /**
    * set isReadOnly.
    *
-   * @param pIsReadOnly
-   *        new isReadOnly
+   * @param pIsReadOnly new isReadOnly
    */
   void setIsReadOnly(final boolean pIsReadOnly);
 
   /**
    * set isReadOnly.
    *
-   * @param pIsReadOnly
-   *        new isReadOnly
+   * @param pIsReadOnly new isReadOnly
    */
   void setIsReadOnly(final Boolean pIsReadOnly);
 
@@ -67,8 +60,7 @@ public interface InterfaceDataBase
   /**
    * set keyMin.
    *
-   * @param pKeyMin
-   *        new keyMin
+   * @param pKeyMin new keyMin
    */
   void setKeyMin(final String pKeyMin);
 
@@ -82,8 +74,7 @@ public interface InterfaceDataBase
   /**
    * set keyMax.
    *
-   * @param pKeyMax
-   *        new keyMax
+   * @param pKeyMax new keyMax
    */
   void setKeyMax(final String pKeyMax);
 
@@ -97,8 +88,7 @@ public interface InterfaceDataBase
   /**
    * set keyCur.
    *
-   * @param pKeyCur
-   *        key to set
+   * @param pKeyCur key to set
    */
   void setKeyCur(final String pKeyCur);
 
@@ -112,8 +102,7 @@ public interface InterfaceDataBase
   /**
    * set new field map.
    *
-   * @param pFieldMap
-   *        FieldMap to set
+   * @param pFieldMap FieldMap to set
    */
   void setFildMap(final HashMap<String, FieldInterface<?>> pFieldMap);
 
@@ -127,18 +116,15 @@ public interface InterfaceDataBase
   /**
    * add or update a entry in field map.
    *
-   * @param pFieldName
-   *        name of the field
-   * @param pEntry
-   *        entry to add or update
+   * @param pFieldName name of the field
+   * @param pEntry entry to add or update
    */
   void addUpdateFieldEntry(final String pFieldName, final FieldInterface<?> pEntry);
 
   /**
    * get field entry.
    *
-   * @param pFieldName
-   *        name of the field to read
+   * @param pFieldName name of the field to read
    * @return field
    */
   FieldInterface<?> getFieldEntry(final String pFieldName);
@@ -160,8 +146,7 @@ public interface InterfaceDataBase
   /**
    * equals compares two entries.
    *
-   * @param pObj
-   *        entry to compare with entry of this class
+   * @param pObj entry to compare with entry of this class
    * @return true if both contain the same entries, otherwise false
    */
   @Override
@@ -184,8 +169,7 @@ public interface InterfaceDataBase
   /**
    * equalsEntry compares the head part of two entries.
    *
-   * @param pCompareEntry
-   *        entry to compare with entry of this class
+   * @param pCompareEntry entry to compare with entry of this class
    * @return true if both contain the same entries, otherwise false
    */
   boolean equalsEntry(final InterfaceDataBase pCompareEntry);

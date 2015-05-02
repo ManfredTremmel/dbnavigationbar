@@ -1,42 +1,35 @@
 /**
- * This file is part of DBNavigationBar.
- * 
- * RiPhone is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version.
- * 
- * RiPhone is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with RiPhone. If not, see <http://www.gnu.org/licenses/>
- * 
- * 
- * Copyright (c) 2011-2012 Manfred Tremmel
- * 
+ * This file is part of DBNavigation.
+ *
+ * RiPhone is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * RiPhone is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with RiPhone. If not, see <a
+ * href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
+ *
+ *
+ * Copyright (c) 2011-2015 Manfred Tremmel
+ *
  */
-package de.knightsoft.dbnavigationbar.server;
 
-import java.sql.Connection;
+package de.knightsoft.dbnavigationbar.server;
 
 import de.knightsoft.dbnavigationbar.client.domain.DomainHeadDataBaseInterface;
 
+import java.sql.Connection;
+
 /**
- * 
- * The <code>RiPhoneDBHeadDateTemplate</code> class is the server side
- * implementation template for a simple database.
- * 
- * @param <E>
- *        structure
+ *
+ * The <code>RiPhoneDBHeadDateTemplate</code> class is the server side implementation template for a simple database.
+ *
+ * @param <E> structure
  * @author Manfred Tremmel
  * @version $Rev$, $Date$
  */
-public abstract class AbstractDBHeadDateTemplate<E extends DomainHeadDataBaseInterface>
-    extends AbstractDBHeadDateTemplateR<E>
-{
+public abstract class AbstractDBHeadDateTemplate<E extends DomainHeadDataBaseInterface> extends AbstractDBHeadDateTemplateR<E> {
 
   /**
    * Serial version id.
@@ -45,108 +38,52 @@ public abstract class AbstractDBHeadDateTemplate<E extends DomainHeadDataBaseInt
 
   /**
    * Constructor, set up database connection.
-   * 
-   * @param setType
-   *        - class instance of E
-   * @param setLookUpDataBase
-   *        look up of the data base
-   * @param setSessionUser
-   *        user session key
-   * @param setDataBaseTableName
-   *        database table name
-   * @param setKeyFieldName
-   *        key field of the database
-   * @param setInsertHeadSQL
-   *        sql statement to insert a new head entry
-   * @param setReadMinMaxSQL
-   *        sql statement for min/max read
-   * @param setReadNextSQL
-   *        sql statement to read next key
-   * @param setReadPrevSQL
-   *        sql statement to read previous key
-   * @param setReadHeadSQL
-   *        sql statement to read head entry
-   * @param setInvalidateHeadSQL
-   *        sql statement to invalidate head entry
+   *
+   * @param pType - class instance of E
+   * @param pLookUpDataBase look up of the data base
+   * @param pSessionUser user session key
+   * @param pDataBaseTableName database table name
+   * @param pKeyFieldName key field of the database
+   * @param pInsertHeadSQL sql statement to insert a new head entry
+   * @param pReadMinMaxSQL sql statement for min/max read
+   * @param pReadNextSQL sql statement to read next key
+   * @param pReadPrevSQL sql statement to read previous key
+   * @param pReadHeadSQL sql statement to read head entry
+   * @param pInvalidateHeadSQL sql statement to invalidate head entry
    */
-  public AbstractDBHeadDateTemplate(
-      final Class<E> setType,
-      final String setLookUpDataBase,
-      final String setSessionUser,
-      final String setDataBaseTableName,
-      final String setKeyFieldName,
-      final String setInsertHeadSQL,
-      final String setReadMinMaxSQL,
-      final String setReadNextSQL,
-      final String setReadPrevSQL,
-      final String setReadHeadSQL,
-      final String setInvalidateHeadSQL)
-  {
-    super(setType,
-        setLookUpDataBase,
-        setSessionUser,
-        setDataBaseTableName,
-        setKeyFieldName,
-        setInsertHeadSQL,
-        setReadMinMaxSQL,
-        setReadNextSQL,
-        setReadPrevSQL,
-        setReadHeadSQL,
-        setInvalidateHeadSQL);
+  public AbstractDBHeadDateTemplate(final Class<E> pType, final String pLookUpDataBase, final String pSessionUser,
+      final String pDataBaseTableName, final String pKeyFieldName, final String pInsertHeadSQL, final String pReadMinMaxSQL,
+      final String pReadNextSQL, final String pReadPrevSQL, final String pReadHeadSQL, final String pInvalidateHeadSQL) {
+    super(pType, pLookUpDataBase, pSessionUser, pDataBaseTableName, pKeyFieldName, pInsertHeadSQL, pReadMinMaxSQL,
+        pReadNextSQL, pReadPrevSQL, pReadHeadSQL, pInvalidateHeadSQL);
   }
 
   /**
    * Constructor, set up database connection.
-   * 
-   * @param setType
-   *        - class instance of E
-   * @param setLookUpDataBase
-   *        look up of the data base
-   * @param setSessionUser
-   *        user session key
-   * @param setDataBaseTableName
-   *        database table name
-   * @param setKeyFieldName
-   *        key field of the database
-   * @param setInsertHeadSQL
-   *        sql statement to insert a new head entry
+   *
+   * @param pType - class instance of E
+   * @param pLookUpDataBase look up of the data base
+   * @param pSessionUser user session key
+   * @param pDataBaseTableName database table name
+   * @param pKeyFieldName key field of the database
+   * @param pInsertHeadSQL sql statement to insert a new head entry
    */
-  public AbstractDBHeadDateTemplate(
-      final Class<E> setType,
-      final String setLookUpDataBase,
-      final String setSessionUser,
-      final String setDataBaseTableName,
-      final String setKeyFieldName,
-      final String setInsertHeadSQL)
-  {
-    super(setType,
-        setLookUpDataBase,
-        setSessionUser,
-        setDataBaseTableName,
-        setKeyFieldName,
-        setInsertHeadSQL);
+  public AbstractDBHeadDateTemplate(final Class<E> pType, final String pLookUpDataBase, final String pSessionUser,
+      final String pDataBaseTableName, final String pKeyFieldName, final String pInsertHeadSQL) {
+    super(pType, pLookUpDataBase, pSessionUser, pDataBaseTableName, pKeyFieldName, pInsertHeadSQL);
   }
 
   /**
-   * <code>readOneEntry</code> is used to read a
-   * given entry from database.
-   * 
-   * @param thisDataBase
-   *        Database Connection
-   * @param mandator
-   *        mandator is a keyfield
-   * @param entry
-   *        the Entry to read
-   * @param thisEntry
-   *        structure to be filled
+   * <code>readOneEntry</code> is used to read a given entry from database.
+   *
+   * @param pDataBase Database Connection
+   * @param pMandator mandator is a keyfield
+   * @param pEntry the Entry to read
+   * @param pThisEntry structure to be filled
    * @return the filled structure
-   * @throws SQLException
    */
   @Override
-  protected final E readOneEntry(final Connection thisDataBase,
-      final int mandator, final String entry,
-      final E thisEntry)
-  {
-    return super.readHeadEntry(thisDataBase, mandator, entry, thisEntry);
+  protected final E readOneEntry(final Connection pDataBase, final int pMandator, final String pEntry, final E pThisEntry) {
+    return super.readHeadEntry(pDataBase, pMandator, pEntry, pThisEntry);
   }
 }
