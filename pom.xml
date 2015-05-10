@@ -33,6 +33,19 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
+  <repositories>
+    <repository>    
+      <id>de.knightsoft-net</id>    
+      <url>http://www.knightsoft-net.de/maven/</url>    
+      <snapshots>      
+        <enabled>true</enabled> 
+      </snapshots>    
+      <releases>      
+        <enabled>true</enabled>
+      </releases>  
+    </repository>
+  </repositories>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
