@@ -19,7 +19,7 @@
   <groupId>de.knightsoft-net</groupId>
   <artifactId>dbnavigationbar</artifactId>
   <packaging>jar</packaging>
-  <version>0.8.3</version>
+  <version>0.8.4-SNAPSHOT</version>
   <name>DBNavigationBar</name>
   <inceptionYear>2011</inceptionYear>
   <description>
@@ -90,10 +90,12 @@
     <gwt.version>2.7.0</gwt.version>
     <junit.version>4.12</junit.version>
     <gwt-commons-lang3.version>3.4-1</gwt-commons-lang3.version>
+    <gwtp.version>1.5.1</gwtp.version>
+    <gin.version>2.1.2</gin.version>
     <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
     <maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
-    <checkstyle.version>6.12.1</checkstyle.version>
-    <maven-pmd-plugin.version>3.5</maven-pmd-plugin.version>
+    <checkstyle.version>6.13</checkstyle.version>
+    <maven-pmd-plugin.version>3.6</maven-pmd-plugin.version>
     <findbugs-maven-plugin.version>3.0.3</findbugs-maven-plugin.version>
     <cobertura-maven-plugin.version>2.7</cobertura-maven-plugin.version>
     <maven-jxr-plugin.version>2.5</maven-jxr-plugin.version>
@@ -149,6 +151,16 @@
       <version>${gwt-commons-lang3.version}</version>
       <classifier>sources</classifier>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.gwtplatform</groupId>
+      <artifactId>gwtp-mvp-client</artifactId>
+      <version>${gwtp.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.gwt.inject</groupId>
+      <artifactId>gin</artifactId>
+      <version>${gin.version}</version>
     </dependency>
   </dependencies>
 

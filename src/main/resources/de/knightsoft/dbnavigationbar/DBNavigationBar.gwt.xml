@@ -18,15 +18,6 @@
   <!-- apache commons lang3 -->
   <inherits name="org.apache.commons.GWTCommonsLang3" />
 
-  <!-- German language, independent of country -->
-  <extend-property name="locale" values="de"/>
-
-  <!-- Austrian German language, independent of country -->
-  <extend-property name="locale" values="de_AT"/>
-
-  <!-- English language, independent of country
-  <extend-property name="locale" values="en"/> -->
-
   <!-- Specify the app entry point class.                         -->
   <entry-point class='de.knightsoft.dbnavigationbar.client.DBNavigationBar'/>
 

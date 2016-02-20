@@ -1,14 +1,16 @@
 /**
  * This file is part of DBNavigationBar.
  *
- * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
  *
- * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with DBNavigationBar. If not, see <a
- * href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
+ * You should have received a copy of the GNU General Public License along with DBNavigationBar. If
+ * not, see <a href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
  *
  *
  * Copyright (c) 2011-2015 Manfred Tremmel
@@ -17,7 +19,6 @@
 
 package de.knightsoft.dbnavigationbar.client.ui;
 
-import de.knightsoft.dbnavigationbar.client.AbstractParent;
 import de.knightsoft.dbnavigationbar.client.domain.AbstractDomainHeadPosDB;
 import de.knightsoft.dbnavigationbar.client.ui.widget.DBNaviBarWidgetConstants;
 
@@ -39,12 +40,11 @@ import com.google.gwt.user.client.ui.Widget;
  * The <code>AbstractDBHeadTemplateUI</code> class is a template for database input mask.
  *
  * @param <E> Structure Type
- * @param <F> AbstractParent panel
  * @author Manfred Tremmel
  * @version 1.0.0, 2011-02-19
  */
-public abstract class AbstractDBHeadPosTemplateUI<E extends AbstractDomainHeadPosDB, F extends AbstractParent> extends
-    AbstractBasicDBTemplateUI<E, F> {
+public abstract class AbstractDBHeadPosTemplateUI<E extends AbstractDomainHeadPosDB>
+    extends AbstractBasicDBTemplateUI<E> {
 
   /**
    * constantsPos.
@@ -83,9 +83,10 @@ public abstract class AbstractDBHeadPosTemplateUI<E extends AbstractDomainHeadPo
    * @param pWidgetlist list of widgets to display
    * @param pUserdefinedfunction special function to include into the navigation bar
    */
-  public AbstractDBHeadPosTemplateUI(final F pParentwidget, final Widget[] pWidgetlist, final String pUserdefinedfunction) {
+  public AbstractDBHeadPosTemplateUI(final Widget[] pWidgetlist,
+      final String pUserdefinedfunction) {
 
-    super(pParentwidget, pWidgetlist, pUserdefinedfunction);
+    super(pWidgetlist, pUserdefinedfunction);
 
     this.setNewPositionButton();
 
@@ -99,16 +100,19 @@ public abstract class AbstractDBHeadPosTemplateUI<E extends AbstractDomainHeadPo
    */
   protected final void setNewPositionButton() {
     if (this.getConstantsPos() == null) {
-      this.setConstantsPos((DBHeadPosTemplateUIConstants) GWT.create(DBHeadPosTemplateUIConstants.class));
+      this.setConstantsPos(
+          (DBHeadPosTemplateUIConstants) GWT.create(DBHeadPosTemplateUIConstants.class));
     }
 
     if (this.newPositionButton == null) {
-      this.newPositionButton = new Button(this.getConstantsPos().addPositionButton(), new ClickHandler() {
-        @Override
-        public void onClick(final ClickEvent pEvent) {
-          AbstractDBHeadPosTemplateUI.this.fillPosition(AbstractDBHeadPosTemplateUI.this.getPosTable().getRowCount(), null);
-        }
-      });
+      this.newPositionButton =
+          new Button(this.getConstantsPos().addPositionButton(), new ClickHandler() {
+            @Override
+            public void onClick(final ClickEvent pEvent) {
+              AbstractDBHeadPosTemplateUI.this
+                  .fillPosition(AbstractDBHeadPosTemplateUI.this.getPosTable().getRowCount(), null);
+            }
+          });
     }
   }
 
@@ -162,7 +166,8 @@ public abstract class AbstractDBHeadPosTemplateUI<E extends AbstractDomainHeadPo
         this.getPosTable().removeRow(i);
       }
     } else {
-      for (int i = this.getPosTable().getRowCount() - 1; i > pEntry.getKeyPos().length && i > 0; i--) {
+      for (int i = this.getPosTable().getRowCount() - 1; i > pEntry.getKeyPos().length
+          && i > 0; i--) {
         this.getPosTable().removeRow(i);
       }
 
@@ -187,8 +192,8 @@ public abstract class AbstractDBHeadPosTemplateUI<E extends AbstractDomainHeadPo
    * @return PushButton
    */
   protected final PushButton getDeleteButton() {
-    final PushButton deleteButton =
-        new PushButton(new Image(AbstractBasicDBTemplateUI.IMAGES.deletePosition()), new ClickHandler() {
+    final PushButton deleteButton = new PushButton(
+        new Image(AbstractBasicDBTemplateUI.IMAGES.deletePosition()), new ClickHandler() {
           @Override
           public void onClick(final ClickEvent pEvent) {
             final PushButton sender = (PushButton) pEvent.getSource();
@@ -233,7 +238,8 @@ public abstract class AbstractDBHeadPosTemplateUI<E extends AbstractDomainHeadPo
       @Override
       public void onClick(final ClickEvent pEvent) {
         dialogBox.hide();
-        AbstractDBHeadPosTemplateUI.this.getPosTable().removeRow(AbstractDBHeadPosTemplateUI.this.rowToDelete);
+        AbstractDBHeadPosTemplateUI.this.getPosTable()
+            .removeRow(AbstractDBHeadPosTemplateUI.this.rowToDelete);
       }
     });
     yesButton.setAccessKey(pConstants.yesKey().trim().charAt(0));
