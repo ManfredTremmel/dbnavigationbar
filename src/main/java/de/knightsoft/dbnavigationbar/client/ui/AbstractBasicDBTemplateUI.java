@@ -152,7 +152,6 @@ public abstract class AbstractBasicDBTemplateUI<E extends AbstractDomainDBBasics
           this.getSearchFieldsDisplay(), this.userDefFunction);
       final VerticalPanel myPanel = new VerticalPanel();
       myPanel.setWidth("100%");
-      myPanel.setHeight("100%");
       myPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
       final HorizontalPanel titlePanel = new HorizontalPanel();
