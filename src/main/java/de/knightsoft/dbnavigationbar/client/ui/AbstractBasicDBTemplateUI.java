@@ -24,6 +24,7 @@ import de.knightsoft.dbnavigationbar.client.domain.AbstractDomainUser;
 import de.knightsoft.dbnavigationbar.client.ui.widget.DBNaviBarWidget;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ClientBundle;
@@ -58,7 +59,7 @@ public abstract class AbstractBasicDBTemplateUI<E extends AbstractDomainDBBasics
   /**
    * navigation bar.
    */
-  private final DBNaviBarWidget myNavigationBar;
+  private DBNaviBarWidget myNavigationBar;
 
   /**
    * form panel.
@@ -107,6 +108,11 @@ public abstract class AbstractBasicDBTemplateUI<E extends AbstractDomainDBBasics
   private final Widget[] widgetlist;
 
   /**
+   * user defined function.
+   */
+  private final String userDefFunction;
+
+  /**
    * mask is set up.
    */
   private boolean maskSetUp;
@@ -124,11 +130,10 @@ public abstract class AbstractBasicDBTemplateUI<E extends AbstractDomainDBBasics
     super();
     this.maskSetUp = false;
     this.widgetlist = pThisWidgetlist;
+    this.userDefFunction = pUserdefinedfunction;
 
     this.constants = (BasicDBTemplateUIConstants) GWT.create(BasicDBTemplateUIConstants.class);
 
-    this.myNavigationBar = new DBNaviBarWidget(this.getSearchFields(),
-        this.getSearchFieldsDisplay(), pUserdefinedfunction);
     this.form = new FormPanel();
 
     this.initWidget(this.form);
@@ -143,6 +148,8 @@ public abstract class AbstractBasicDBTemplateUI<E extends AbstractDomainDBBasics
   @Override
   protected final void setUpMask(final AbstractDomainUser pUser) {
     if (!this.maskSetUp) {
+      this.myNavigationBar = new DBNaviBarWidget(this.getSearchFields(),
+          this.getSearchFieldsDisplay(), this.userDefFunction);
       final VerticalPanel myPanel = new VerticalPanel();
       myPanel.setWidth("100%");
       myPanel.setHeight("100%");
@@ -162,6 +169,9 @@ public abstract class AbstractBasicDBTemplateUI<E extends AbstractDomainDBBasics
       myPanel.add(this.createAndFormatContentPanel());
 
       this.form.add(myPanel);
+      this.form.setWidth("100%");
+      this.form.setHeight("100%");
+      this.form.getElement().getStyle().setOverflow(Overflow.AUTO);
 
       this.myNavigationBar.addClickHandler(new ClickHandler() {
         @Override
