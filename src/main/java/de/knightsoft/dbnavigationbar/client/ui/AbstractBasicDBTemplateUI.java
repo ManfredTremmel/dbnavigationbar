@@ -115,7 +115,7 @@ public abstract class AbstractBasicDBTemplateUI<E extends AbstractDomainDBBasics
   /**
    * mask is set up.
    */
-  private boolean maskSetUp;
+  protected boolean maskSetUp;
 
   /**
    * Constructor.
@@ -146,7 +146,7 @@ public abstract class AbstractBasicDBTemplateUI<E extends AbstractDomainDBBasics
    * @param pUser user information about the currently logged in user
    */
   @Override
-  protected final void setUpMask(final AbstractDomainUser pUser) {
+  protected void setUpMask(final AbstractDomainUser pUser) {
     if (!this.maskSetUp) {
       this.myNavigationBar = new DBNaviBarWidget(this.getSearchFields(),
           this.getSearchFieldsDisplay(), this.userDefFunction);

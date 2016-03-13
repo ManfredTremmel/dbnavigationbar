@@ -20,6 +20,7 @@
 package de.knightsoft.dbnavigationbar.client.ui;
 
 import de.knightsoft.dbnavigationbar.client.domain.AbstractDomainHeadPosDB;
+import de.knightsoft.dbnavigationbar.client.domain.AbstractDomainUser;
 import de.knightsoft.dbnavigationbar.client.ui.widget.DBNaviBarWidgetConstants;
 
 import com.google.gwt.core.client.GWT;
@@ -74,7 +75,7 @@ public abstract class AbstractDBHeadPosTemplateUI<E extends AbstractDomainHeadPo
   /**
    * yes/no dialog box.
    */
-  private final DialogBox dialogYesNoBox;
+  private DialogBox dialogYesNoBox;
 
   /**
    * Constructor.
@@ -88,11 +89,24 @@ public abstract class AbstractDBHeadPosTemplateUI<E extends AbstractDomainHeadPo
 
     super(pWidgetlist, pUserdefinedfunction);
 
-    this.setNewPositionButton();
+  }
 
-    this.rowToDelete = -1;
-    this.dialogYesNoBox = this.createYesNoDialogBox(this.getMyNavigationBar().getConstants());
-    this.dialogYesNoBox.hide();
+  /**
+   * set up the mask.
+   *
+   * @param pUser user information about the currently logged in user
+   */
+  @Override
+  protected void setUpMask(final AbstractDomainUser pUser) {
+    if (!this.maskSetUp) {
+      super.setUpMask(pUser);
+
+      this.setNewPositionButton();
+
+      this.rowToDelete = -1;
+      this.dialogYesNoBox = this.createYesNoDialogBox(this.getMyNavigationBar().getConstants());
+      this.dialogYesNoBox.hide();
+    }
   }
 
   /**
