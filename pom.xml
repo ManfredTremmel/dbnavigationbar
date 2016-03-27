@@ -90,7 +90,7 @@
     <gwt.version>2.7.0</gwt.version>
     <junit.version>4.12</junit.version>
     <gwt-commons-lang3.version>3.4-1</gwt-commons-lang3.version>
-    <gwtp.version>1.5.2</gwtp.version>
+    <gwtp.version>1.5.3</gwtp.version>
     <gin.version>2.1.2</gin.version>
     <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
     <maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
