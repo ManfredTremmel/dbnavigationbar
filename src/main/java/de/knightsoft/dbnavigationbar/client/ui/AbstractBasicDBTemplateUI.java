@@ -30,6 +30,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
+import com.google.gwt.user.client.rpc.RpcTokenException;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -324,9 +326,15 @@ public abstract class AbstractBasicDBTemplateUI<E extends AbstractDomainDBBasics
    * @param pCaught the thrown exception
    */
   @Override
-  public final void onFailure(final Throwable pCaught) {
+  public void onFailure(final Throwable pCaught) {
     try {
       throw pCaught;
+    } catch (final RpcTokenException e) { // NOPMD
+      // handled by global exception handler
+      throw e;
+    } catch (final IncompatibleRemoteServiceException e) { // NOPMD
+      // handled by global exception handler
+      throw e;
     } catch (final Throwable e) {
       this.myNavigationBar.displayHint(e.toString());
     }
