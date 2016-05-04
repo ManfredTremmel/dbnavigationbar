@@ -122,7 +122,6 @@ public abstract class AbstractBasicDBTemplateUI<E extends AbstractDomainDBBasics
   /**
    * Constructor.
    *
-   * @param pParentwidget the parent widget, where this frame is displayed
    * @param pThisWidgetlist list of widgets to display
    * @param pUserdefinedfunction special function to include into the navigation bar
    */
@@ -134,7 +133,7 @@ public abstract class AbstractBasicDBTemplateUI<E extends AbstractDomainDBBasics
     this.widgetlist = pThisWidgetlist;
     this.userDefFunction = pUserdefinedfunction;
 
-    this.constants = (BasicDBTemplateUIConstants) GWT.create(BasicDBTemplateUIConstants.class);
+    this.constants = GWT.create(BasicDBTemplateUIConstants.class);
 
     this.form = new FormPanel();
 

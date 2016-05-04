@@ -1,14 +1,16 @@
 /**
  * This file is part of DBNavigationBar.
  *
- * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
  *
- * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with DBNavigationBar. If not, see <a
- * href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
+ * You should have received a copy of the GNU General Public License along with DBNavigationBar. If
+ * not, see <a href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
  *
  *
  * Copyright (c) 2011-2015 Manfred Tremmel
@@ -25,27 +27,28 @@ import com.google.gwt.user.server.rpc.XsrfProtectedServiceServlet;
 
 import org.apache.commons.lang3.StringUtils;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.servlet.http.HttpSession;
-import javax.sql.DataSource;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.servlet.http.HttpSession;
+import javax.sql.DataSource;
+
 /**
  *
- * The <code>RiPhoneDBHeadDateTemplate</code> class is the server side implementation template for a simple database.
+ * The <code>RiPhoneDBHeadDateTemplate</code> class is the server side implementation template for a
+ * simple database.
  *
  * @param <E> structure
  * @author Manfred Tremmel
  * @version $Rev$, $Date$
  */
-public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface> extends XsrfProtectedServiceServlet implements
-    DBTemplateInterface<E> {
+public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface>
+    extends XsrfProtectedServiceServlet implements DBTemplateInterface<E> {
 
   /**
    * Serial version id.
@@ -115,9 +118,10 @@ public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface> exte
    * @param pReadHeadSQL sql statement to read head entry
    * @param pInvalidateHeadSQL sql statement to invalidate head entry
    */
-  public AbstractDBTemplate(final Class<E> pType, final String pLookUpDataBase, final String pSessionUser,
-      final String pDataBaseTableName, final String pKeyFieldName, final String pInsertHeadSQL, final String pReadMinMaxSQL,
-      final String pReadNextSQL, final String pReadPrevSQL, final String pReadHeadSQL, final String pInvalidateHeadSQL) {
+  public AbstractDBTemplate(final Class<E> pType, final String pLookUpDataBase,
+      final String pSessionUser, final String pDataBaseTableName, final String pKeyFieldName,
+      final String pInsertHeadSQL, final String pReadMinMaxSQL, final String pReadNextSQL,
+      final String pReadPrevSQL, final String pReadHeadSQL, final String pInvalidateHeadSQL) {
     super();
     this.type = pType;
     this.lookUpDataBase = pLookUpDataBase;
@@ -138,43 +142,43 @@ public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface> exte
           this.readMinMaxSQL = null;
         } else {
           this.readMinMaxSQL =
-              pReadMinMaxSQL.replace("OUTDATE()", myDataBaseDepending.getSQLTimeOutdate()).replace("NOW()",
-                  myDataBaseDepending.getSQLTimeNow());
+              pReadMinMaxSQL.replace("OUTDATE()", myDataBaseDepending.getSQLTimeOutdate())
+                  .replace("NOW()", myDataBaseDepending.getSQLTimeNow());
         }
         if (pReadNextSQL == null) {
           this.readNextSQL = null;
         } else {
           this.readNextSQL =
-              pReadNextSQL.replace("OUTDATE()", myDataBaseDepending.getSQLTimeOutdate()).replace("NOW()",
-                  myDataBaseDepending.getSQLTimeNow());
+              pReadNextSQL.replace("OUTDATE()", myDataBaseDepending.getSQLTimeOutdate())
+                  .replace("NOW()", myDataBaseDepending.getSQLTimeNow());
         }
         if (pReadPrevSQL == null) {
           this.readPrevSQL = null;
         } else {
           this.readPrevSQL =
-              pReadPrevSQL.replace("OUTDATE()", myDataBaseDepending.getSQLTimeOutdate()).replace("NOW()",
-                  myDataBaseDepending.getSQLTimeNow());
+              pReadPrevSQL.replace("OUTDATE()", myDataBaseDepending.getSQLTimeOutdate())
+                  .replace("NOW()", myDataBaseDepending.getSQLTimeNow());
         }
         if (pReadHeadSQL == null) {
           this.readHeadSQL = null;
         } else {
           this.readHeadSQL =
-              pReadHeadSQL.replace("OUTDATE()", myDataBaseDepending.getSQLTimeOutdate()).replace("NOW()",
-                  myDataBaseDepending.getSQLTimeNow());
+              pReadHeadSQL.replace("OUTDATE()", myDataBaseDepending.getSQLTimeOutdate())
+                  .replace("NOW()", myDataBaseDepending.getSQLTimeNow());
         }
         if (pInvalidateHeadSQL == null) {
           this.invalidateHeadSQL = null;
         } else {
           this.invalidateHeadSQL =
-              pInvalidateHeadSQL.replace("OUTDATE()", myDataBaseDepending.getSQLTimeOutdate()).replace("NOW()",
-                  myDataBaseDepending.getSQLTimeNow());
+              pInvalidateHeadSQL.replace("OUTDATE()", myDataBaseDepending.getSQLTimeOutdate())
+                  .replace("NOW()", myDataBaseDepending.getSQLTimeNow());
         }
         if (pInsertHeadSQL == null) {
           this.insertHeadSQL = null;
         } else {
           this.insertHeadSQL =
-              pInsertHeadSQL.replace("OUTDATE()", myDataBaseDepending.getSQLTimeOutdate()).replace("NOW()",
-                  myDataBaseDepending.getSQLTimeNow());
+              pInsertHeadSQL.replace("OUTDATE()", myDataBaseDepending.getSQLTimeOutdate())
+                  .replace("NOW()", myDataBaseDepending.getSQLTimeNow());
         }
       }
       ic.close();
@@ -208,7 +212,8 @@ public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface> exte
    * @return filled Entry
    * @throws SQLException when error occurs
    */
-  protected abstract E fillHeadFromResultSet(ResultSet pResultHead, E pThisEntry) throws SQLException;
+  protected abstract E fillHeadFromResultSet(ResultSet pResultHead, E pThisEntry)
+      throws SQLException;
 
   /**
    * <code>RiPhoneUser</code> is used to read the currently logged in user.
@@ -227,16 +232,19 @@ public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface> exte
   }
 
   /**
-   * <code>FillMinMax</code> method is called to fill the min and max entries of this database table for navigation.
+   * <code>FillMinMax</code> method is called to fill the min and max entries of this database table
+   * for navigation.
    *
    * @param pThisDataBase Connection to the database
    * @param pMandator mandator to read from
    * @param pThisEntry structure to be filled with user data
    * @return the filled structure
    */
-  protected final E fillMinMax(final Connection pThisDataBase, final int pMandator, final E pThisEntry) {
+  protected final E fillMinMax(final Connection pThisDataBase, final int pMandator,
+      final E pThisEntry) {
     E returnEntry = pThisEntry;
-    try (final PreparedStatement readMinMaxSQLStatement = pThisDataBase.prepareStatement(this.readMinMaxSQL)) {
+    try (final PreparedStatement readMinMaxSQLStatement =
+        pThisDataBase.prepareStatement(this.readMinMaxSQL)) {
       readMinMaxSQLStatement.clearParameters();
       readMinMaxSQLStatement.setInt(1, pMandator);
       try (final ResultSet result = readMinMaxSQLStatement.executeQuery()) {
@@ -266,12 +274,13 @@ public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface> exte
    * @return SQL-String
    * @throws SQLException when error occurs
    */
-  protected abstract String searchSQLSelect(final Connection pDataBase, final String pMinMax, final String pSearchField,
-      final String pSearchMethodEntry, final String pSearchFieldEntry, final String pDbKeyVGL, final String pDbKey)
-      throws SQLException;
+  protected abstract String searchSQLSelect(final Connection pDataBase, final String pMinMax,
+      final String pSearchField, final String pSearchMethodEntry, final String pSearchFieldEntry,
+      final String pDbKeyVGL, final String pDbKey) throws SQLException;
 
   /**
-   * <code>findFirstEntry</code> is called to search for the first entry which fulfills the search parameters.
+   * <code>findFirstEntry</code> is called to search for the first entry which fulfills the search
+   * parameters.
    *
    * @param pSearchField input field to search for
    * @param pSearchMethodEntry input search method
@@ -279,7 +288,8 @@ public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface> exte
    * @return the found entry or null if none is found
    */
   @Override
-  public final E findFirstEntry(final String pSearchField, final String pSearchMethodEntry, final String pSearchFieldEntry) {
+  public final E findFirstEntry(final String pSearchField, final String pSearchMethodEntry,
+      final String pSearchFieldEntry) {
     E thisEntry = null;
     final AbstractDomainUser thisUser = this.getUser();
     if (thisUser == null) {
@@ -287,7 +297,7 @@ public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface> exte
     } else {
       final int mandator = thisUser.getMandator();
       try {
-        if (pSearchFieldEntry == null || "".equals(pSearchFieldEntry)) {
+        if (StringUtils.isEmpty(pSearchFieldEntry)) {
           thisEntry = this.readFirstEntry();
         } else {
           thisEntry = this.createInstance();
@@ -299,8 +309,8 @@ public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface> exte
             thisEntry = this.fillMinMax(thisDataBase, mandator, thisEntry);
             String newEntry = thisEntry.getKeyMin();
 
-            final String sqlString =
-                this.searchSQLSelect(thisDataBase, "MIN", pSearchField, pSearchMethodEntry, pSearchFieldEntry, ">=", newEntry);
+            final String sqlString = this.searchSQLSelect(thisDataBase, "MIN", pSearchField,
+                pSearchMethodEntry, pSearchFieldEntry, ">=", newEntry);
             if (sqlString == null) {
               newEntry = null;
             } else {
@@ -344,7 +354,8 @@ public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface> exte
   }
 
   /**
-   * <code>findLastEntry</code> is called to search for the last entry which fulfills the search parameters.
+   * <code>findLastEntry</code> is called to search for the last entry which fulfills the search
+   * parameters.
    *
    * @param pSearchField input field to search for
    * @param pSearchMethodEntry input search method
@@ -352,7 +363,8 @@ public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface> exte
    * @return the found entry or null if none is found
    */
   @Override
-  public final E findLastEntry(final String pSearchField, final String pSearchMethodEntry, final String pSearchFieldEntry) {
+  public final E findLastEntry(final String pSearchField, final String pSearchMethodEntry,
+      final String pSearchFieldEntry) {
     E thisEntry = null;
     final AbstractDomainUser thisUser = this.getUser();
     if (thisUser == null) {
@@ -372,8 +384,8 @@ public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface> exte
             thisEntry = this.fillMinMax(thisDataBase, mandator, thisEntry);
             String newEntry = thisEntry.getKeyMax();
 
-            final String sqlString =
-                this.searchSQLSelect(thisDataBase, "MAX", pSearchField, pSearchMethodEntry, pSearchFieldEntry, "<=", newEntry);
+            final String sqlString = this.searchSQLSelect(thisDataBase, "MAX", pSearchField,
+                pSearchMethodEntry, pSearchFieldEntry, "<=", newEntry);
             if (sqlString == null) {
               newEntry = null;
             } else {
@@ -408,7 +420,8 @@ public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface> exte
   }
 
   /**
-   * <code>findNextEntry</code> is called to search for the next entry which fulfills the search parameters.
+   * <code>findNextEntry</code> is called to search for the next entry which fulfills the search
+   * parameters.
    *
    * @param pSearchField input field to search for
    * @param pSearchMethodEntry input search method
@@ -417,8 +430,8 @@ public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface> exte
    * @return the found entry or null if none is found
    */
   @Override
-  public final E findNextEntry(final String pSearchField, final String pSearchMethodEntry, final String pSearchFieldEntry,
-      final String pCurrentEntry) {
+  public final E findNextEntry(final String pSearchField, final String pSearchMethodEntry,
+      final String pSearchFieldEntry, final String pCurrentEntry) {
     E thisEntry = null;
     final AbstractDomainUser thisUser = this.getUser();
     if (thisUser == null) {
@@ -426,7 +439,7 @@ public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface> exte
     } else {
       final int mandator = thisUser.getMandator();
       try {
-        if (pSearchFieldEntry == null || "".equals(pSearchFieldEntry)) {
+        if (StringUtils.isEmpty(pSearchFieldEntry)) {
           thisEntry = this.readFirstEntry();
         } else {
           thisEntry = this.createInstance();
@@ -438,8 +451,8 @@ public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface> exte
             thisEntry = this.fillMinMax(thisDataBase, mandator, thisEntry);
             String newEntry = pCurrentEntry;
 
-            final String sqlString =
-                this.searchSQLSelect(thisDataBase, "MIN", pSearchField, pSearchMethodEntry, pSearchFieldEntry, ">", newEntry);
+            final String sqlString = this.searchSQLSelect(thisDataBase, "MIN", pSearchField,
+                pSearchMethodEntry, pSearchFieldEntry, ">", newEntry);
             if (sqlString == null) {
               newEntry = null;
             } else {
@@ -483,7 +496,8 @@ public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface> exte
   }
 
   /**
-   * <code>findPreviousEntry</code> is called to search for the previous entry which fulfills the search parameters.
+   * <code>findPreviousEntry</code> is called to search for the previous entry which fulfills the
+   * search parameters.
    *
    * @param pSearchField input field to search for
    * @param pSearchMethodEntry input search method
@@ -492,8 +506,8 @@ public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface> exte
    * @return the found entry or null if none is found
    */
   @Override
-  public final E findPreviousEntry(final String pSearchField, final String pSearchMethodEntry, final String pSearchFieldEntry,
-      final String pCurrentEntry) {
+  public final E findPreviousEntry(final String pSearchField, final String pSearchMethodEntry,
+      final String pSearchFieldEntry, final String pCurrentEntry) {
     E thisEntry = null;
     final AbstractDomainUser thisUser = this.getUser();
     if (thisUser == null) {
@@ -501,7 +515,7 @@ public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface> exte
     } else {
       final int mandator = thisUser.getMandator();
       try {
-        if (pSearchFieldEntry == null || "".equals(pSearchFieldEntry)) {
+        if (StringUtils.isEmpty(pSearchFieldEntry)) {
           thisEntry = this.readFirstEntry();
         } else {
           thisEntry = this.createInstance();
@@ -513,8 +527,8 @@ public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface> exte
             thisEntry = this.fillMinMax(thisDataBase, mandator, thisEntry);
             String newEntry = pCurrentEntry;
 
-            final String sqlString =
-                this.searchSQLSelect(thisDataBase, "MAX", pSearchField, pSearchMethodEntry, pSearchFieldEntry, "<", newEntry);
+            final String sqlString = this.searchSQLSelect(thisDataBase, "MAX", pSearchField,
+                pSearchMethodEntry, pSearchFieldEntry, "<", newEntry);
             if (sqlString == null) {
               newEntry = null;
             } else {
@@ -566,13 +580,15 @@ public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface> exte
    * @param pThisEntry structure to be filled
    * @return the filled structure
    */
-  protected final E readHeadEntry(final Connection pDataBase, final int pMandator, final String pEntry, final E pThisEntry) {
+  protected final E readHeadEntry(final Connection pDataBase, final int pMandator,
+      final String pEntry, final E pThisEntry) {
     E returnEntry = pThisEntry;
     try {
       if (pThisEntry != null && this.allowedToSee()) {
         returnEntry.setIsReadOnly(!this.allowedToChange());
         returnEntry.setKeyCur(pEntry);
-        try (final PreparedStatement readHeadSQLStatement = pDataBase.prepareStatement(this.readHeadSQL)) {
+        try (final PreparedStatement readHeadSQLStatement =
+            pDataBase.prepareStatement(this.readHeadSQL)) {
           readHeadSQLStatement.clearParameters();
           readHeadSQLStatement.setInt(1, pMandator);
           readHeadSQLStatement.setString(2, pEntry);
@@ -603,7 +619,8 @@ public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface> exte
    * @param pThisEntry structure to be filled
    * @return the filled structure
    */
-  protected abstract E readOneEntry(final Connection pDataBase, final int pMandator, final String pEntry, final E pThisEntry);
+  protected abstract E readOneEntry(final Connection pDataBase, final int pMandator,
+      final String pEntry, final E pThisEntry);
 
   /**
    * <code>readEntry</code> is used to read a given entry from database.
@@ -747,7 +764,8 @@ public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface> exte
           if (thisEntry != null) {
             String newEntryName = thisEntry.getKeyMax();
             if (StringUtils.isNotEmpty(pCurrentEntry)) {
-              try (final PreparedStatement readNextSQLStatement = thisDataBase.prepareStatement(this.readNextSQL)) {
+              try (final PreparedStatement readNextSQLStatement =
+                  thisDataBase.prepareStatement(this.readNextSQL)) {
                 readNextSQLStatement.clearParameters();
                 readNextSQLStatement.setInt(1, mandator);
                 readNextSQLStatement.setString(2, pCurrentEntry);
@@ -799,7 +817,8 @@ public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface> exte
           if (thisEntry != null) {
             String newEntryName = thisEntry.getKeyMin();
             if (StringUtils.isNotEmpty(pCurrentEntry)) {
-              try (final PreparedStatement readPrevSQLStatement = thisDataBase.prepareStatement(this.readPrevSQL)) {
+              try (final PreparedStatement readPrevSQLStatement =
+                  thisDataBase.prepareStatement(this.readPrevSQL)) {
                 readPrevSQLStatement.clearParameters();
                 readPrevSQLStatement.setInt(1, mandator);
                 readPrevSQLStatement.setString(2, pCurrentEntry);
@@ -836,10 +855,11 @@ public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface> exte
    * @return effected database entries (should always be 1)
    * @throws SQLException when sql error occours
    */
-  protected final int insertEntry(final Connection pDataBase, final int pMandator, final String pUser, final E pSaveEntry,
-      final boolean pDelete) throws SQLException {
+  protected final int insertEntry(final Connection pDataBase, final int pMandator,
+      final String pUser, final E pSaveEntry, final boolean pDelete) throws SQLException {
     int num = -1;
-    try (final PreparedStatement insertHeadSQLStatement = pDataBase.prepareStatement(this.insertHeadSQL)) {
+    try (final PreparedStatement insertHeadSQLStatement =
+        pDataBase.prepareStatement(this.insertHeadSQL)) {
       insertHeadSQLStatement.clearParameters();
       this.fillInsertHead(insertHeadSQLStatement, pMandator, pUser, pSaveEntry, pDelete);
       num = insertHeadSQLStatement.executeUpdate();
@@ -877,7 +897,7 @@ public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface> exte
       final int mandator = thisUser.getMandator();
       final String user = thisUser.getUser();
       String saveKeyString = returnEntry.getKeyCur();
-      if (saveKeyString == null || "".equals(saveKeyString)) {
+      if (StringUtils.isEmpty(saveKeyString)) {
         saveKeyString = returnEntry.getKeyNew();
       }
 
@@ -898,7 +918,8 @@ public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface> exte
 
             returnEntry.setKeyCur(returnEntry.getKeyNew());
             this.fillMinMax(thisDataBase, mandator, returnEntry);
-            returnEntry = this.readOneEntry(thisDataBase, mandator, returnEntry.getKeyNew(), returnEntry);
+            returnEntry =
+                this.readOneEntry(thisDataBase, mandator, returnEntry.getKeyNew(), returnEntry);
           }
           ic.close();
         }
@@ -924,8 +945,9 @@ public abstract class AbstractDBTemplate<E extends DomainDataBaseInterface> exte
    * @param pSaveKeyString key of the entry to save
    * @throws SQLException if something's going wrong
    */
-  protected abstract void saveEntry(final E pCurrentEntry, final E pDbEntry, final Connection pDataBase, final int pMandator,
-      final String pUser, final String pSaveKeyString) throws SQLException;
+  protected abstract void saveEntry(final E pCurrentEntry, final E pDbEntry,
+      final Connection pDataBase, final int pMandator, final String pUser,
+      final String pSaveKeyString) throws SQLException;
 
   /**
    * get database table name.

@@ -19,7 +19,7 @@
   <groupId>de.knightsoft-net</groupId>
   <artifactId>dbnavigationbar</artifactId>
   <packaging>jar</packaging>
-  <version>0.8.7</version>
+  <version>0.8.8</version>
   <name>DBNavigationBar</name>
   <inceptionYear>2011</inceptionYear>
   <description>
@@ -89,7 +89,7 @@
     <!-- Convenience property to set the GWT version -->
     <gwt.version>2.7.0</gwt.version>
     <junit.version>4.12</junit.version>
-    <gwt-commons-lang3.version>3.4-1</gwt-commons-lang3.version>
+    <gwt-commons-lang3.version>3.4-2</gwt-commons-lang3.version>
     <gwtp.version>1.5.3</gwtp.version>
     <gin.version>2.1.2</gin.version>
     <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
@@ -146,13 +146,6 @@
       <version>${gwt-commons-lang3.version}</version>
     </dependency>
     <dependency>
-      <groupId>de.knightsoft-net</groupId>
-      <artifactId>gwt-commons-lang3</artifactId>
-      <version>${gwt-commons-lang3.version}</version>
-      <classifier>sources</classifier>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>com.gwtplatform</groupId>
       <artifactId>gwtp-mvp-client</artifactId>
       <version>${gwtp.version}</version>
@@ -175,30 +168,6 @@
           <target>${jdk.version}</target>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>attach-sources</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <!--  <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>attach-javadoc</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin> -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>

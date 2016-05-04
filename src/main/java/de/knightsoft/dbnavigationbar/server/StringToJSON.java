@@ -1,14 +1,16 @@
 /**
  * This file is part of DBNavigationBar.
  *
- * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
  *
- * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with DBNavigationBar. If not, see <a
- * href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
+ * You should have received a copy of the GNU General Public License along with DBNavigationBar. If
+ * not, see <a href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
  *
  *
  * Copyright (c) 2011-2015 Manfred Tremmel
@@ -16,6 +18,8 @@
  */
 
 package de.knightsoft.dbnavigationbar.server;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -53,10 +57,10 @@ public final class StringToJSON {
    * @return string as JSON
    */
   public static String convert(final String pJavaString) {
-    String jsonString = "";
+    String jsonString = StringUtils.EMPTY;
 
     if (pJavaString != null && pJavaString.length() > 0) {
-      final char[] jsonStringTab = new char[MULTI * pJavaString.length()];
+      final char[] jsonStringTab = new char[StringToJSON.MULTI * pJavaString.length()];
       final char[] javaStringTab = pJavaString.toCharArray();
       int pos = 0;
 
@@ -90,14 +94,14 @@ public final class StringToJSON {
             break;
           default:
             final int test = javaStringTab[i];
-            if (test > MAX_LENGTH) {
+            if (test > StringToJSON.MAX_LENGTH) {
               jsonStringTab[pos++] = '\\';
               jsonStringTab[pos++] = 'u';
               final String jasonHex = String.format("%04x", Integer.valueOf(test));
               jsonStringTab[pos++] = jasonHex.charAt(0);
               jsonStringTab[pos++] = jasonHex.charAt(1);
               jsonStringTab[pos++] = jasonHex.charAt(2);
-              jsonStringTab[pos++] = jasonHex.charAt(THREE);
+              jsonStringTab[pos++] = jasonHex.charAt(StringToJSON.THREE);
             } else {
               jsonStringTab[pos++] = javaStringTab[i];
             }

@@ -1,14 +1,16 @@
 /**
  * This file is part of DBNavigationBar.
  *
- * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
  *
- * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with DBNavigationBar. If not, see <a
- * href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
+ * You should have received a copy of the GNU General Public License along with DBNavigationBar. If
+ * not, see <a href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
  *
  *
  * Copyright (c) 2011-2015 Manfred Tremmel
@@ -16,6 +18,8 @@
  */
 
 package de.knightsoft.dbnavigationbar.server;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -53,11 +57,12 @@ public class SendEMail {
    * @param pSmtpServer server to send the mail
    * @throws IOException when sending fails
    */
-  public SendEMail(final String pFrom, final String pOrganization, final String pTo, final String pReplyTo,
-      final String pSubject, final String pMailtext, final String pSmtpServer) throws IOException {
+  public SendEMail(final String pFrom, final String pOrganization, final String pTo,
+      final String pReplyTo, final String pSubject, final String pMailtext,
+      final String pSmtpServer) throws IOException {
     String replyToText = pReplyTo;
-    if (replyToText == null || "".equals(replyToText)) {
-      replyToText = "";
+    if (StringUtils.isEmpty(replyToText)) {
+      replyToText = StringUtils.EMPTY;
     } else {
       replyToText = "\nReply-To: " + pReplyTo;
     }
@@ -90,8 +95,8 @@ public class SendEMail {
    * @param pSmtpServer server to send the mail
    * @throws IOException when sending fails
    */
-  public SendEMail(final String pFrom, final String pOrganization, final String pTo, final String pSubject,
-      final String pMailtext, final String pSmtpServer) throws IOException {
+  public SendEMail(final String pFrom, final String pOrganization, final String pTo,
+      final String pSubject, final String pMailtext, final String pSmtpServer) throws IOException {
     this(pFrom, pOrganization, pTo, null, pSubject, pMailtext, pSmtpServer);
   }
 
@@ -105,9 +110,9 @@ public class SendEMail {
    * @param pMailtext text of the email
    * @throws IOException when sending fails
    */
-  public SendEMail(final String pFrom, final String pOrganization, final String pTo, final String pSubject,
-      final String pMailtext) throws IOException {
-    this(pFrom, pOrganization, pTo, null, pSubject, pMailtext, LOCALHOST);
+  public SendEMail(final String pFrom, final String pOrganization, final String pTo,
+      final String pSubject, final String pMailtext) throws IOException {
+    this(pFrom, pOrganization, pTo, null, pSubject, pMailtext, SendEMail.LOCALHOST);
   }
 
   /**
@@ -117,7 +122,7 @@ public class SendEMail {
    * @throws IOException when sending fails
    */
   public SendEMail(final String pEMailString) throws IOException {
-    this(pEMailString, LOCALHOST);
+    this(pEMailString, SendEMail.LOCALHOST);
   }
 
   /**
@@ -138,51 +143,54 @@ public class SendEMail {
    * @param pSmtpServer server to send the mail
    * @throws IOException when sending fails
    */
-  public final void sendEMailSendmail(final String pEMailString, final String pSmtpServer) throws IOException {
-    try (final Socket smtpSocket = new Socket(pSmtpServer, SMTP_PORT)) {
+  public final void sendEMailSendmail(final String pEMailString, final String pSmtpServer)
+      throws IOException {
+    try (final Socket smtpSocket = new Socket(pSmtpServer, SendEMail.SMTP_PORT)) {
 
       String responseline = null;
       final int mailTabStart = 3;
 
       if (smtpSocket != null) {
         try (final DataOutputStream os = new DataOutputStream(smtpSocket.getOutputStream());
-            final BufferedReader br = new BufferedReader(new InputStreamReader(smtpSocket.getInputStream()))) {
+            final BufferedReader br =
+                new BufferedReader(new InputStreamReader(smtpSocket.getInputStream()))) {
 
           final String[] mailTab = pEMailString.split("\n");
 
           responseline = br.readLine();
-          if (responseline != null && responseline.startsWith("220")) {
+          if (StringUtils.startsWith(responseline, "220")) {
             os.writeBytes("HELO " + pSmtpServer + "\r\n");
 
             responseline = br.readLine();
-            if (responseline != null && responseline.startsWith("250")) {
+            if (StringUtils.startsWith(responseline, "250")) {
               os.writeBytes(mailTab[0] + "\r\n");
 
               responseline = br.readLine();
-              if (responseline != null && responseline.startsWith("250")) {
+              if (StringUtils.startsWith(responseline, "250")) {
                 os.writeBytes(mailTab[1] + "\r\n");
 
                 responseline = br.readLine();
-                if (responseline != null && responseline.startsWith("250")) {
+                if (StringUtils.startsWith(responseline, "250")) {
                   os.writeBytes(mailTab[2] + "\r\n");
 
                   responseline = br.readLine();
-                  if (responseline != null && responseline.startsWith("354")) {
+                  if (StringUtils.startsWith(responseline, "354")) {
                     for (int i = mailTabStart; i < mailTab.length; i++) {
                       os.writeBytes(mailTab[i] + "\r\n");
                     }
                     os.writeBytes("\r\n.\r\n");
 
                     responseline = br.readLine();
-                    if (responseline != null && responseline.startsWith("250")) {
+                    if (StringUtils.startsWith(responseline, "250")) {
                       os.writeBytes("QUIT\r\n");
 
                       responseline = br.readLine();
-                      if (responseline == null || !responseline.startsWith("221")) {
+                      if (!StringUtils.startsWith(responseline, "221")) {
                         throw new IOException("Got no OK after QUIT: " + responseline);
                       }
                     } else {
-                      throw new IOException("Server didn't accept Message for delivery: " + responseline);
+                      throw new IOException(
+                          "Server didn't accept Message for delivery: " + responseline);
                     }
                   } else {
                     throw new IOException("Server didn't allow to send Mailbody: " + responseline);

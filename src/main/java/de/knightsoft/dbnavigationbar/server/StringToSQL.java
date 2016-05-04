@@ -1,14 +1,16 @@
 /**
  * This file is part of DBNavigationBar.
  *
- * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
  *
- * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with DBNavigationBar. If not, see <a
- * href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
+ * You should have received a copy of the GNU General Public License along with DBNavigationBar. If
+ * not, see <a href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
  *
  *
  * Copyright (c) 2011-2015 Manfred Tremmel
@@ -25,8 +27,8 @@ import java.sql.Timestamp;
 
 /**
  *
- * <code>StringToSQL</code> is a class to convert a string to a SQL string masking all non allowed signs to prevent against
- * SQL-Injection.
+ * <code>StringToSQL</code> is a class to convert a string to a SQL string masking all non allowed
+ * signs to prevent against SQL-Injection.
  *
  * @author Manfred Tremmel
  * @version $Rev$, $Date$
@@ -49,19 +51,19 @@ public final class StringToSQL {
   private StringToSQL() {}
 
   /**
-   * The <code>convertStringPrepared</code> method replaces &lt;br&gt; with LineFeed and the char 128 (stupid windows euro sign)
-   * to 164.
+   * The <code>convertStringPrepared</code> method replaces &lt;br&gt; with LineFeed and the char
+   * 128 (stupid windows euro sign) to 164.
    *
    * @param pJavaString Java string to convert
    * @return string as SQL
    */
   public static String convertStringPrepared(final String pJavaString) {
-    return convertStringPrepared(pJavaString, Constants.JDBC_CLASS_MYSQL);
+    return StringToSQL.convertStringPrepared(pJavaString, Constants.JDBC_CLASS_MYSQL);
   }
 
   /**
-   * The <code>convertStringPrepared</code> method replaces &lt;br&gt; with LineFeed and the char 128 (stupid windows euro sign)
-   * to 164.
+   * The <code>convertStringPrepared</code> method replaces &lt;br&gt; with LineFeed and the char
+   * 128 (stupid windows euro sign) to 164.
    *
    * @param pJavaString Java string to convert
    * @param pJdbcClass name of the JDBC class to detect DataBase
@@ -77,14 +79,14 @@ public final class StringToSQL {
 
       for (int i = 0; i < pJavaString.length(); i++) {
         switch (javaStringTab[i]) {
-        // case '\n':
-        // SQLStringTab[j++] = '\\';
-        // SQLStringTab[j++] = 'n';
-        // break;
-        // case '\t':
-        // SQLStringTab[j++] = '\\';
-        // SQLStringTab[j++] = 't';
-        // break;
+          // case '\n':
+          // SQLStringTab[j++] = '\\';
+          // SQLStringTab[j++] = 'n';
+          // break;
+          // case '\t':
+          // SQLStringTab[j++] = '\\';
+          // SQLStringTab[j++] = 't';
+          // break;
           case '\r':
             // SQLStringTab[j++] = '\\';
             // SQLStringTab[j++] = 'r';
@@ -94,9 +96,9 @@ public final class StringToSQL {
           // SQLStringTab[j++] = 'b';
           // break;
           case '<':
-            if ((i + THREE) < pJavaString.length() && javaStringTab[i + 1] == 'b' && javaStringTab[i + 2] == 'r'
-                && javaStringTab[i + THREE] == '>') {
-              i += THREE;
+            if ((i + StringToSQL.THREE) < pJavaString.length() && javaStringTab[i + 1] == 'b'
+                && javaStringTab[i + 2] == 'r' && javaStringTab[i + StringToSQL.THREE] == '>') {
+              i += StringToSQL.THREE;
               // SQLStringTab[j++] = '\\';
               // SQLStringTab[j++] = 'n';
               sqlStringTab[pos++] = '\n';
@@ -131,7 +133,7 @@ public final class StringToSQL {
    * @return string as SQL
    */
   public static String convert(final String pJavaString) {
-    return convert(pJavaString, Constants.JDBC_CLASS_MYSQL);
+    return StringToSQL.convert(pJavaString, Constants.JDBC_CLASS_MYSQL);
   }
 
   /**
@@ -145,11 +147,11 @@ public final class StringToSQL {
     String convertedString = null;
 
     if (pJdbcClass == null || pJdbcClass.equals(Constants.JDBC_CLASS_MYSQL)) {
-      convertedString = convertMySQL(pJavaString);
+      convertedString = StringToSQL.convertMySQL(pJavaString);
     } else if (pJdbcClass.equals(Constants.JDBC_CLASS_MSSQL)) {
-      convertedString = convertMSSQL(pJavaString);
+      convertedString = StringToSQL.convertMSSQL(pJavaString);
     } else {
-      convertedString = convertMySQL(pJavaString);
+      convertedString = StringToSQL.convertMySQL(pJavaString);
     }
     return convertedString;
   }
@@ -189,9 +191,9 @@ public final class StringToSQL {
             sqlStringTab[pos++] = 'b';
             break;
           case '<':
-            if ((i + THREE) < pJavaString.length() && javaStringTab[i + 1] == 'b' && javaStringTab[i + 2] == 'r'
-                && javaStringTab[i + THREE] == '>') {
-              i += THREE;
+            if ((i + StringToSQL.THREE) < pJavaString.length() && javaStringTab[i + 1] == 'b'
+                && javaStringTab[i + 2] == 'r' && javaStringTab[i + StringToSQL.THREE] == '>') {
+              i += StringToSQL.THREE;
               sqlStringTab[pos++] = '\\';
               sqlStringTab[pos++] = 'n';
             } else {
@@ -255,9 +257,9 @@ public final class StringToSQL {
             sqlStringTab[pos++] = 'b';
             break;
           case '<':
-            if ((i + THREE) < pJavaString.length() && javaStringTab[i + 1] == 'b' && javaStringTab[i + 2] == 'r'
-                && javaStringTab[i + THREE] == '>') {
-              i += THREE;
+            if ((i + StringToSQL.THREE) < pJavaString.length() && javaStringTab[i + 1] == 'b'
+                && javaStringTab[i + 2] == 'r' && javaStringTab[i + StringToSQL.THREE] == '>') {
+              i += StringToSQL.THREE;
               sqlStringTab[pos++] = '\\';
               sqlStringTab[pos++] = 'n';
             } else {
@@ -291,7 +293,7 @@ public final class StringToSQL {
    * @return string as SQL
    */
   public static String convertString(final String pJavaString) {
-    return convert(pJavaString);
+    return StringToSQL.convert(pJavaString);
   }
 
   /**
@@ -302,7 +304,7 @@ public final class StringToSQL {
    * @return string as SQL
    */
   public static String convertString(final String pJavaString, final String pJdbcClass) {
-    return convert(pJavaString, pJdbcClass);
+    return StringToSQL.convert(pJavaString, pJdbcClass);
   }
 
   /**
@@ -312,7 +314,7 @@ public final class StringToSQL {
    * @return string as SQL
    */
   public static String convertNumber(final String pJavaString) {
-    return convertNumber(pJavaString, Constants.JDBC_CLASS_MYSQL);
+    return StringToSQL.convertNumber(pJavaString, Constants.JDBC_CLASS_MYSQL);
   }
 
   /**
@@ -359,46 +361,50 @@ public final class StringToSQL {
   }
 
   /**
-   * The <code>searchString</code> method prepares a string for searching in a SQL database using = or like.
+   * The <code>searchString</code> method prepares a string for searching in a SQL database using =
+   * or like.
    *
    * @param pDbFieldname database fieldname
    * @param pJavaString Java string to convert
    * @return string as SQL
    */
   public static String searchString(final String pDbFieldname, final String pJavaString) {
-    return searchString(pDbFieldname, pJavaString, Constants.JDBC_CLASS_MYSQL);
+    return StringToSQL.searchString(pDbFieldname, pJavaString, Constants.JDBC_CLASS_MYSQL);
   }
 
   /**
-   * The <code>SearchString</code> method prepares a string for searching in a SQL database using = or like.
+   * The <code>SearchString</code> method prepares a string for searching in a SQL database using =
+   * or like.
    *
    * @param pDbFieldname database fieldname
    * @param pJavaString Java string to convert
    * @param pJdbcClass name of the JDBC class to detect DataBase
    * @return string as SQL
    */
-  public static String searchString(final String pDbFieldname, final String pJavaString, final String pJdbcClass) {
+  public static String searchString(final String pDbFieldname, final String pJavaString,
+      final String pJdbcClass) {
     String convertedString = null;
 
     if (pJdbcClass == null || pJdbcClass.equals(Constants.JDBC_CLASS_MYSQL)) {
-      convertedString = searchStringMySQL(pDbFieldname, pJavaString);
+      convertedString = StringToSQL.searchStringMySQL(pDbFieldname, pJavaString);
     } else if (pJdbcClass.equals(Constants.JDBC_CLASS_MSSQL)) {
-      convertedString = searchStringMSSQL(pDbFieldname, pJavaString);
+      convertedString = StringToSQL.searchStringMSSQL(pDbFieldname, pJavaString);
     } else {
-      convertedString = searchStringMySQL(pDbFieldname, pJavaString);
+      convertedString = StringToSQL.searchStringMySQL(pDbFieldname, pJavaString);
     }
     return convertedString;
   }
 
   /**
-   * The <code>searchStringMySQL</code> method prepares a string for searching in a SQL database using = or like.
+   * The <code>searchStringMySQL</code> method prepares a string for searching in a SQL database
+   * using = or like.
    *
    * @param pDbFieldname database fieldname
    * @param pJavaString Java string to convert
    * @return string as SQL MySQL style
    */
   public static String searchStringMySQL(final String pDbFieldname, final String pJavaString) {
-    String sqlString = "";
+    String sqlString = StringUtils.EMPTY;
 
     if (StringUtils.isNotEmpty(pJavaString)) {
       final char[] sqlStringTab = new char[2 + (2 * pJavaString.length())];
@@ -427,9 +433,9 @@ public final class StringToSQL {
             sqlStringTab[pos++] = 'b';
             break;
           case '<':
-            if ((i + THREE) < pJavaString.length() && javaStringTab[i + 1] == 'b' && javaStringTab[i + 2] == 'r'
-                && javaStringTab[i + THREE] == '>') {
-              i += THREE;
+            if ((i + StringToSQL.THREE) < pJavaString.length() && javaStringTab[i + 1] == 'b'
+                && javaStringTab[i + 2] == 'r' && javaStringTab[i + StringToSQL.THREE] == '>') {
+              i += StringToSQL.THREE;
               sqlStringTab[pos++] = '\\';
               sqlStringTab[pos++] = 'n';
             } else {
@@ -471,14 +477,15 @@ public final class StringToSQL {
   }
 
   /**
-   * The <code>searchStringMSSQL</code> method prepares a string for searching in a SQL database using = or like.
+   * The <code>searchStringMSSQL</code> method prepares a string for searching in a SQL database
+   * using = or like.
    *
    * @param pDbFieldname database fieldname
    * @param pJavaString Java string to convert
    * @return string as SQL MSSQL style
    */
   public static String searchStringMSSQL(final String pDbFieldname, final String pJavaString) {
-    String sqlString = "";
+    String sqlString = StringUtils.EMPTY;
 
     if (StringUtils.isNotEmpty(pJavaString)) {
       final char[] sqlStringTab = new char[2 + (2 * pJavaString.length())];
@@ -507,9 +514,9 @@ public final class StringToSQL {
             sqlStringTab[pos++] = 'b';
             break;
           case '<':
-            if ((i + THREE) < pJavaString.length() && javaStringTab[i + 1] == 'b' && javaStringTab[i + 2] == 'r'
-                && javaStringTab[i + THREE] == '>') {
-              i += THREE;
+            if ((i + StringToSQL.THREE) < pJavaString.length() && javaStringTab[i + 1] == 'b'
+                && javaStringTab[i + 2] == 'r' && javaStringTab[i + StringToSQL.THREE] == '>') {
+              i += StringToSQL.THREE;
               sqlStringTab[pos++] = '\\';
               sqlStringTab[pos++] = 'n';
             } else {
@@ -559,11 +566,11 @@ public final class StringToSQL {
     String convertedString = null;
 
     if (pJdbcClass == null || pJdbcClass.equals(Constants.JDBC_CLASS_MYSQL)) {
-      convertedString = convertDatetimeMySQL(pJavaDateTime);
+      convertedString = StringToSQL.convertDatetimeMySQL(pJavaDateTime);
     } else if (pJdbcClass.equals(Constants.JDBC_CLASS_MSSQL)) {
-      convertedString = convertDatetimeMSSQL(pJavaDateTime);
+      convertedString = StringToSQL.convertDatetimeMSSQL(pJavaDateTime);
     } else {
-      convertedString = convertDatetimeMySQL(pJavaDateTime);
+      convertedString = StringToSQL.convertDatetimeMySQL(pJavaDateTime);
     }
     return convertedString;
   }
@@ -580,7 +587,9 @@ public final class StringToSQL {
     if (pJavaDateTime == null) {
       sqlString = "null";
     } else {
-      sqlString = "\'" + (new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")).format(pJavaDateTime) + "\'";
+      sqlString =
+          "\'" + (new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")).format(pJavaDateTime)
+              + "\'";
     }
 
     return sqlString;
@@ -598,8 +607,9 @@ public final class StringToSQL {
     if (pJavaDateTime == null) {
       sqlString = "null";
     } else {
-      sqlString =
-          "CONVERT(DATETIME, '" + (new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")).format(pJavaDateTime) + "', 121)";
+      sqlString = "CONVERT(DATETIME, '"
+          + (new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")).format(pJavaDateTime)
+          + "', 121)";
     }
 
     return sqlString;

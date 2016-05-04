@@ -80,7 +80,6 @@ public abstract class AbstractDBHeadPosTemplateUI<E extends AbstractDomainHeadPo
   /**
    * Constructor.
    *
-   * @param pParentwidget the parent widget, where this frame is displayed
    * @param pWidgetlist list of widgets to display
    * @param pUserdefinedfunction special function to include into the navigation bar
    */

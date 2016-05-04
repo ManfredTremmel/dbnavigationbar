@@ -1,14 +1,16 @@
 /**
  * This file is part of DBNavigationBar.
  *
- * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
  *
- * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with DBNavigationBar. If not, see <a
- * href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
+ * You should have received a copy of the GNU General Public License along with DBNavigationBar. If
+ * not, see <a href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
  *
  *
  * Copyright (c) 2011-2015 Manfred Tremmel
@@ -42,6 +44,8 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Database Navigation.
  *
@@ -53,7 +57,8 @@ public class DBNaviBarWidget extends Composite implements HasClickHandlers {
   /**
    * pictures.
    */
-  private static final DBNavigationBarImages IMAGES = (DBNavigationBarImages) GWT.create(DBNavigationBarImages.class);
+  private static final DBNavigationBarImages IMAGES =
+      (DBNavigationBarImages) GWT.create(DBNavigationBarImages.class);
 
   /**
    * search methods small.
@@ -85,7 +90,7 @@ public class DBNaviBarWidget extends Composite implements HasClickHandlers {
       PushButton eventPushButton = null;
       eventPushButton = (PushButton) pEvent.getSource();
 
-      DBNaviBarWidget.this.hintText.setText("");
+      DBNaviBarWidget.this.hintText.setText(StringUtils.EMPTY);
 
       int fieldSelectedIndex = DBNaviBarWidget.this.fieldSelect.getSelectedIndex();
       if (fieldSelectedIndex < 0) {
@@ -111,10 +116,12 @@ public class DBNaviBarWidget extends Composite implements HasClickHandlers {
       } else if (DBNaviBarWidget.this.fbackPushButton.equals(eventPushButton)) {
         DBNaviBarWidget.this.buttonState = ButtonState.FAST_BACK;
         if (DBNaviBarWidget.this.findToggleButton.isDown()) {
-          DBNaviBarWidget.this.searchFieldString = DBNaviBarWidget.this.searchFieldsRemember[fieldSelectedIndex];
-          DBNaviBarWidget.this.searchFieldMethod = DBNaviBarWidget.SEARCH_METHODS_SMALL[searchMethodeSelectedIndex];
+          DBNaviBarWidget.this.searchFieldString =
+              DBNaviBarWidget.this.searchFieldsRemember[fieldSelectedIndex];
+          DBNaviBarWidget.this.searchFieldMethod =
+              DBNaviBarWidget.SEARCH_METHODS_SMALL[searchMethodeSelectedIndex];
           DBNaviBarWidget.this.searchFieldEntry = DBNaviBarWidget.this.fieldEntry.getText();
-          if (DBNaviBarWidget.this.searchFieldEntry != null && !"".equals(DBNaviBarWidget.this.searchFieldEntry)) {
+          if (StringUtils.isNotEmpty(DBNaviBarWidget.this.searchFieldEntry)) {
             DBNaviBarWidget.this.buttonState = ButtonState.FAST_BACK_FIND;
           }
         }
@@ -122,10 +129,12 @@ public class DBNaviBarWidget extends Composite implements HasClickHandlers {
       } else if (DBNaviBarWidget.this.backPushButton.equals(eventPushButton)) {
         DBNaviBarWidget.this.buttonState = ButtonState.BACK;
         if (DBNaviBarWidget.this.findToggleButton.isDown()) {
-          DBNaviBarWidget.this.searchFieldString = DBNaviBarWidget.this.searchFieldsRemember[fieldSelectedIndex];
-          DBNaviBarWidget.this.searchFieldMethod = DBNaviBarWidget.SEARCH_METHODS_SMALL[searchMethodeSelectedIndex];
+          DBNaviBarWidget.this.searchFieldString =
+              DBNaviBarWidget.this.searchFieldsRemember[fieldSelectedIndex];
+          DBNaviBarWidget.this.searchFieldMethod =
+              DBNaviBarWidget.SEARCH_METHODS_SMALL[searchMethodeSelectedIndex];
           DBNaviBarWidget.this.searchFieldEntry = DBNaviBarWidget.this.fieldEntry.getText();
-          if (DBNaviBarWidget.this.searchFieldEntry != null && !"".equals(DBNaviBarWidget.this.searchFieldEntry)) {
+          if (StringUtils.isNotEmpty(DBNaviBarWidget.this.searchFieldEntry)) {
             DBNaviBarWidget.this.buttonState = ButtonState.BACK_FIND;
           }
         }
@@ -137,10 +146,12 @@ public class DBNaviBarWidget extends Composite implements HasClickHandlers {
       } else if (DBNaviBarWidget.this.forwardPushButton.equals(eventPushButton)) {
         DBNaviBarWidget.this.buttonState = ButtonState.FORWARD;
         if (DBNaviBarWidget.this.findToggleButton.isDown()) {
-          DBNaviBarWidget.this.searchFieldString = DBNaviBarWidget.this.searchFieldsRemember[fieldSelectedIndex];
-          DBNaviBarWidget.this.searchFieldMethod = DBNaviBarWidget.SEARCH_METHODS_SMALL[searchMethodeSelectedIndex];
+          DBNaviBarWidget.this.searchFieldString =
+              DBNaviBarWidget.this.searchFieldsRemember[fieldSelectedIndex];
+          DBNaviBarWidget.this.searchFieldMethod =
+              DBNaviBarWidget.SEARCH_METHODS_SMALL[searchMethodeSelectedIndex];
           DBNaviBarWidget.this.searchFieldEntry = DBNaviBarWidget.this.fieldEntry.getText();
-          if (DBNaviBarWidget.this.searchFieldEntry != null && !"".equals(DBNaviBarWidget.this.searchFieldEntry)) {
+          if (StringUtils.isNotEmpty(DBNaviBarWidget.this.searchFieldEntry)) {
             DBNaviBarWidget.this.buttonState = ButtonState.FORWARD_FIND;
           }
         }
@@ -148,10 +159,12 @@ public class DBNaviBarWidget extends Composite implements HasClickHandlers {
       } else if (DBNaviBarWidget.this.fforwardPushButton.equals(eventPushButton)) {
         DBNaviBarWidget.this.buttonState = ButtonState.FAST_FORWARD;
         if (DBNaviBarWidget.this.findToggleButton.isDown()) {
-          DBNaviBarWidget.this.searchFieldString = DBNaviBarWidget.this.searchFieldsRemember[fieldSelectedIndex];
-          DBNaviBarWidget.this.searchFieldMethod = DBNaviBarWidget.SEARCH_METHODS_SMALL[searchMethodeSelectedIndex];
+          DBNaviBarWidget.this.searchFieldString =
+              DBNaviBarWidget.this.searchFieldsRemember[fieldSelectedIndex];
+          DBNaviBarWidget.this.searchFieldMethod =
+              DBNaviBarWidget.SEARCH_METHODS_SMALL[searchMethodeSelectedIndex];
           DBNaviBarWidget.this.searchFieldEntry = DBNaviBarWidget.this.fieldEntry.getText();
-          if (DBNaviBarWidget.this.searchFieldEntry != null && !"".equals(DBNaviBarWidget.this.searchFieldEntry)) {
+          if (StringUtils.isNotEmpty(DBNaviBarWidget.this.searchFieldEntry)) {
             DBNaviBarWidget.this.buttonState = ButtonState.FAST_FORWARD_FIND;
           }
         }
@@ -202,7 +215,8 @@ public class DBNaviBarWidget extends Composite implements HasClickHandlers {
         class OurClickEvent extends ClickEvent {
         }
 
-        if (DBNaviBarWidget.this.fbackPushButton.isEnabled() && DBNaviBarWidget.this.fbackPushButton.isVisible()) {
+        if (DBNaviBarWidget.this.fbackPushButton.isEnabled()
+            && DBNaviBarWidget.this.fbackPushButton.isVisible()) {
           DBNaviBarWidget.this.fbackPushButton.fireEvent(new OurClickEvent());
         } else {
           DBNaviBarWidget.this.forwardPushButton.fireEvent(new OurClickEvent());
@@ -224,16 +238,24 @@ public class DBNaviBarWidget extends Composite implements HasClickHandlers {
     public void onClick(final ClickEvent pEvent) {
       if (((ToggleButton) pEvent.getSource()).isDown()) {
         DBNaviBarWidget.this.searchpanel.setVisible(true);
-        DBNaviBarWidget.this.fbackPushButton.setTitle(DBNaviBarWidget.this.constants.buttonFBackMessageFind());
-        DBNaviBarWidget.this.backPushButton.setTitle(DBNaviBarWidget.this.constants.buttonBackMessageFind());
-        DBNaviBarWidget.this.forwardPushButton.setTitle(DBNaviBarWidget.this.constants.buttonForwardMessageFind());
-        DBNaviBarWidget.this.fforwardPushButton.setTitle(DBNaviBarWidget.this.constants.buttonFForwardMessageFind());
+        DBNaviBarWidget.this.fbackPushButton
+            .setTitle(DBNaviBarWidget.this.constants.buttonFBackMessageFind());
+        DBNaviBarWidget.this.backPushButton
+            .setTitle(DBNaviBarWidget.this.constants.buttonBackMessageFind());
+        DBNaviBarWidget.this.forwardPushButton
+            .setTitle(DBNaviBarWidget.this.constants.buttonForwardMessageFind());
+        DBNaviBarWidget.this.fforwardPushButton
+            .setTitle(DBNaviBarWidget.this.constants.buttonFForwardMessageFind());
       } else {
         DBNaviBarWidget.this.searchpanel.setVisible(false);
-        DBNaviBarWidget.this.fbackPushButton.setTitle(DBNaviBarWidget.this.constants.buttonFBackMessage());
-        DBNaviBarWidget.this.backPushButton.setTitle(DBNaviBarWidget.this.constants.buttonBackMessage());
-        DBNaviBarWidget.this.forwardPushButton.setTitle(DBNaviBarWidget.this.constants.buttonForwardMessage());
-        DBNaviBarWidget.this.fforwardPushButton.setTitle(DBNaviBarWidget.this.constants.buttonFForwardMessage());
+        DBNaviBarWidget.this.fbackPushButton
+            .setTitle(DBNaviBarWidget.this.constants.buttonFBackMessage());
+        DBNaviBarWidget.this.backPushButton
+            .setTitle(DBNaviBarWidget.this.constants.buttonBackMessage());
+        DBNaviBarWidget.this.forwardPushButton
+            .setTitle(DBNaviBarWidget.this.constants.buttonForwardMessage());
+        DBNaviBarWidget.this.fforwardPushButton
+            .setTitle(DBNaviBarWidget.this.constants.buttonFForwardMessage());
       }
     }
   };
@@ -456,31 +478,38 @@ public class DBNaviBarWidget extends Composite implements HasClickHandlers {
   /**
    * new button.
    */
-  private final PushButton newPushButton = new PushButton(new Image(IMAGES.filenew()));
+  private final PushButton newPushButton =
+      new PushButton(new Image(DBNaviBarWidget.IMAGES.filenew()));
   /**
    * save button.
    */
-  private final PushButton savePushButton = new PushButton(new Image(IMAGES.save()));
+  private final PushButton savePushButton =
+      new PushButton(new Image(DBNaviBarWidget.IMAGES.save()));
   /**
    * delete button.
    */
-  private final PushButton deletePushButton = new PushButton(new Image(IMAGES.delete()));
+  private final PushButton deletePushButton =
+      new PushButton(new Image(DBNaviBarWidget.IMAGES.delete()));
   /**
    * find button.
    */
-  private final ToggleButton findToggleButton = new ToggleButton(new Image(IMAGES.find()));
+  private final ToggleButton findToggleButton =
+      new ToggleButton(new Image(DBNaviBarWidget.IMAGES.find()));
   /**
    * stop button.
    */
-  private final PushButton stopPushButton = new PushButton(new Image(IMAGES.stop()));
+  private final PushButton stopPushButton =
+      new PushButton(new Image(DBNaviBarWidget.IMAGES.stop()));
   /**
    * fast back button.
    */
-  private final PushButton fbackPushButton = new PushButton(new Image(IMAGES.fback()));
+  private final PushButton fbackPushButton =
+      new PushButton(new Image(DBNaviBarWidget.IMAGES.fback()));
   /**
    * back button.
    */
-  private final PushButton backPushButton = new PushButton(new Image(IMAGES.back()));
+  private final PushButton backPushButton =
+      new PushButton(new Image(DBNaviBarWidget.IMAGES.back()));
   /**
    * min/max grid.
    */
@@ -513,19 +542,22 @@ public class DBNaviBarWidget extends Composite implements HasClickHandlers {
   /**
    * ok button.
    */
-  private final PushButton okPushButton = new PushButton(new Image(IMAGES.ok()));
+  private final PushButton okPushButton = new PushButton(new Image(DBNaviBarWidget.IMAGES.ok()));
   /**
    * forward button.
    */
-  private final PushButton forwardPushButton = new PushButton(new Image(IMAGES.forward()));
+  private final PushButton forwardPushButton =
+      new PushButton(new Image(DBNaviBarWidget.IMAGES.forward()));
   /**
    * fast forward button.
    */
-  private final PushButton fforwardPushButton = new PushButton(new Image(IMAGES.fforward()));
+  private final PushButton fforwardPushButton =
+      new PushButton(new Image(DBNaviBarWidget.IMAGES.fforward()));
   /**
    * user defined button.
    */
-  private final PushButton userdefinedPushButton = new PushButton(new Image(IMAGES.userdefined()));
+  private final PushButton userdefinedPushButton =
+      new PushButton(new Image(DBNaviBarWidget.IMAGES.userdefined()));
   /**
    * hint text.
    */
@@ -626,7 +658,8 @@ public class DBNaviBarWidget extends Composite implements HasClickHandlers {
    * @param pSearchFieldsDisplay fields to search for display names
    * @param pUserdefinedText user defined functions (null if not wanted)
    */
-  public DBNaviBarWidget(final String[] pSearchfields, final String[] pSearchFieldsDisplay, final String pUserdefinedText) {
+  public DBNaviBarWidget(final String[] pSearchfields, final String[] pSearchFieldsDisplay,
+      final String pUserdefinedText) {
     super();
 
     this.constants = (DBNaviBarWidgetConstants) GWT.create(DBNaviBarWidgetConstants.class);
@@ -638,15 +671,15 @@ public class DBNaviBarWidget extends Composite implements HasClickHandlers {
 
     this.initWidget(this.bigpanel);
     this.bigpanel.setBorderWidth(1);
-    this.bigpanel.setStyleName(PANELSTYLE);
-    this.panel.setSpacing(SPACING);
+    this.bigpanel.setStyleName(DBNaviBarWidget.PANELSTYLE);
+    this.panel.setSpacing(DBNaviBarWidget.SPACING);
     this.minLabel.setText(this.constants.labelMin());
-    this.minEntry.setText("");
+    this.minEntry.setText(StringUtils.EMPTY);
     this.maxLabel.setText(this.constants.labelMax());
-    this.maxEntry.setText("");
+    this.maxEntry.setText(StringUtils.EMPTY);
     this.currentLabel.setText(this.constants.labelCur());
-    this.currentEntry.setText("");
-    this.hintText.setText("");
+    this.currentEntry.setText(StringUtils.EMPTY);
+    this.hintText.setText(StringUtils.EMPTY);
 
     int smi = 0;
     DBNaviBarWidget.SEARCH_METHODS[smi++] = this.constants.findEquals();
@@ -690,7 +723,8 @@ public class DBNaviBarWidget extends Composite implements HasClickHandlers {
     this.fforwardPushButton.setAccessKey(this.constants.buttonFForwardAccessKey().trim().charAt(0));
     this.fforwardPushButton.setTitle(this.constants.buttonFForwardMessage());
 
-    this.userdefinedPushButton.setAccessKey(this.constants.buttonUserDefinedAccessKey().trim().charAt(0));
+    this.userdefinedPushButton
+        .setAccessKey(this.constants.buttonUserDefinedAccessKey().trim().charAt(0));
 
     this.fieldSelectLabel.setText(this.constants.fieldNameLabel());
     this.fieldEntryLabel.setText(this.constants.fieldEntryLabel());
@@ -700,7 +734,7 @@ public class DBNaviBarWidget extends Composite implements HasClickHandlers {
       }
     }
     this.searchMethodsLabel.setText(this.constants.findTypeLabel());
-    for (final String element2 : SEARCH_METHODS) {
+    for (final String element2 : DBNaviBarWidget.SEARCH_METHODS) {
       this.searchMethodSelect.addItem(element2);
     }
     this.fieldSelect.setAccessKey(this.constants.findFieldKey().trim().charAt(0));
@@ -807,9 +841,10 @@ public class DBNaviBarWidget extends Composite implements HasClickHandlers {
     /*
      * VerticalPanel Searchfield = new VerticalPanel(); Searchfield.add(this.fieldSelectLabel);
      * Searchfield.add(this.fieldSelect); VerticalPanel Searchmethodes = new VerticalPanel();
-     * Searchmethodes.add(this.SearchMethodesLabel); Searchmethodes.add(this.searchMethodeSelect); VerticalPanel Searchentry =
-     * new VerticalPanel(); Searchentry.add(this.fieldEntryLabel); Searchentry.add(this.fieldEntry);
-     * this.searchpanel.add(Searchfield); this.searchpanel.add(Searchmethodes); this.searchpanel.add(Searchentry);
+     * Searchmethodes.add(this.SearchMethodesLabel); Searchmethodes.add(this.searchMethodeSelect);
+     * VerticalPanel Searchentry = new VerticalPanel(); Searchentry.add(this.fieldEntryLabel);
+     * Searchentry.add(this.fieldEntry); this.searchpanel.add(Searchfield);
+     * this.searchpanel.add(Searchmethodes); this.searchpanel.add(Searchentry);
      */
     this.bigpanel.add(this.panel);
     this.bigpanel.add(this.searchpanel);
@@ -943,23 +978,23 @@ public class DBNaviBarWidget extends Composite implements HasClickHandlers {
       } else {
         this.newPushButton.setEnabled(this.newPushButtonEnabled);
         if (this.newPushButtonEnabled) {
-          this.newPushButton.getUpFace().setImage(new Image(IMAGES.filenew()));
+          this.newPushButton.getUpFace().setImage(new Image(DBNaviBarWidget.IMAGES.filenew()));
         }
         this.savePushButton.setEnabled(this.savePushButtonEnabled);
         if (this.savePushButtonEnabled) {
-          this.savePushButton.getUpFace().setImage(new Image(IMAGES.save()));
+          this.savePushButton.getUpFace().setImage(new Image(DBNaviBarWidget.IMAGES.save()));
         }
         this.deletePushButton.setEnabled(this.deletePushButtonEnabled);
         if (this.deletePushButtonEnabled) {
-          this.deletePushButton.getUpFace().setImage(new Image(IMAGES.delete()));
+          this.deletePushButton.getUpFace().setImage(new Image(DBNaviBarWidget.IMAGES.delete()));
         }
         this.findToggleButton.setEnabled(this.findPushButtonEnabled);
         if (this.findPushButtonEnabled) {
-          this.findToggleButton.getUpFace().setImage(new Image(IMAGES.find()));
+          this.findToggleButton.getUpFace().setImage(new Image(DBNaviBarWidget.IMAGES.find()));
         }
         this.stopPushButton.setEnabled(this.stopPushButtonEnabled);
         if (this.stopPushButtonEnabled) {
-          this.stopPushButton.getUpFace().setImage(new Image(IMAGES.stop()));
+          this.stopPushButton.getUpFace().setImage(new Image(DBNaviBarWidget.IMAGES.stop()));
         }
 
         if (this.oldDBNumber.equals(this.minDBNumber)) {
@@ -969,16 +1004,16 @@ public class DBNaviBarWidget extends Composite implements HasClickHandlers {
           this.fbackPushButton.setEnabled(this.fbackPushButtonEnabled);
           this.backPushButton.setEnabled(this.backPushButtonEnabled);
           if (this.fbackPushButtonEnabled) {
-            this.fbackPushButton.getUpFace().setImage(new Image(IMAGES.fback()));
+            this.fbackPushButton.getUpFace().setImage(new Image(DBNaviBarWidget.IMAGES.fback()));
           }
           if (this.backPushButtonEnabled) {
-            this.backPushButton.getUpFace().setImage(new Image(IMAGES.back()));
+            this.backPushButton.getUpFace().setImage(new Image(DBNaviBarWidget.IMAGES.back()));
           }
         }
         this.currentEntry.setEnabled(this.currentEntryEnabled);
         this.okPushButton.setEnabled(this.okPushButtonEnabled);
         if (this.okPushButtonEnabled) {
-          this.okPushButton.getUpFace().setImage(new Image(IMAGES.ok()));
+          this.okPushButton.getUpFace().setImage(new Image(DBNaviBarWidget.IMAGES.ok()));
         }
         if (this.oldDBNumber.equals(this.maxDBNumber)) {
           this.forwardPushButton.setEnabled(false);
@@ -987,10 +1022,12 @@ public class DBNaviBarWidget extends Composite implements HasClickHandlers {
           this.forwardPushButton.setEnabled(this.forwardPushButtonEnabled);
           this.fforwardPushButton.setEnabled(this.fforwardPushButtonEnabled);
           if (this.forwardPushButtonEnabled) {
-            this.forwardPushButton.getUpFace().setImage(new Image(IMAGES.forward()));
+            this.forwardPushButton.getUpFace()
+                .setImage(new Image(DBNaviBarWidget.IMAGES.forward()));
           }
           if (this.fforwardPushButtonEnabled) {
-            this.fforwardPushButton.getUpFace().setImage(new Image(IMAGES.fforward()));
+            this.fforwardPushButton.getUpFace()
+                .setImage(new Image(DBNaviBarWidget.IMAGES.fforward()));
           }
         }
         this.userdefinedPushButton.setEnabled(this.userdefinedPushButtonEnabled);
@@ -1028,8 +1065,8 @@ public class DBNaviBarWidget extends Composite implements HasClickHandlers {
    * @param pSearchFields new search fields
    */
   public final void changeSearchfields(final String[] pSearchFields) {
-    if (pSearchFields != null
-        && (this.fieldSelect.getItemCount() != pSearchFields.length || this.fieldSelect.getItemText(0) != pSearchFields[0])) {
+    if (pSearchFields != null && (this.fieldSelect.getItemCount() != pSearchFields.length
+        || this.fieldSelect.getItemText(0) != pSearchFields[0])) {
 
       for (int j = this.fieldSelect.getItemCount() - 1; j >= 0; j--) {
         this.fieldSelect.removeItem(j);
