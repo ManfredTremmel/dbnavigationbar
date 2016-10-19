@@ -1,14 +1,16 @@
 /**
  * This file is part of DBNavigationBar.
  *
- * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
  *
- * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with DBNavigationBar. If not, see <a
- * href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
+ * You should have received a copy of the GNU General Public License along with DBNavigationBar. If
+ * not, see <a href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
  *
  *
  * Copyright (c) 2011-2015 Manfred Tremmel
@@ -23,24 +25,28 @@ import de.knightsoft.dbnavigationbar.shared.Constants;
 
 import com.google.gwt.user.server.rpc.UnexpectedException;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
+import org.apache.commons.lang3.StringUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 /**
  *
- * The <code>RiPhoneDBHeadDateTemplate</code> class is the server side implementation. template for a simple database
+ * The <code>RiPhoneDBHeadDateTemplate</code> class is the server side implementation. template for
+ * a simple database
  *
  * @param <E> Structure of the database
  * @author Manfred Tremmel
  * @version $Rev$, $Date$
  */
-public abstract class AbstractDBHeadPosDateTemplateR<E extends DomainHeadPosDataBaseInt> extends AbstractDBTemplate<E> {
+public abstract class AbstractDBHeadPosDateTemplateR<E extends DomainHeadPosDataBaseInt>
+    extends AbstractDBTemplate<E> {
 
   /**
    * Serial version id.
@@ -78,15 +84,16 @@ public abstract class AbstractDBHeadPosDateTemplateR<E extends DomainHeadPosData
    * @param pReadPosSQL sql statement to read position entry
    * @param pInvalidatePosSQL sql statement to invalidate position entry
    */
-  public AbstractDBHeadPosDateTemplateR(final Class<E> pType, final String pLookUpDataBase, final String pSessionUser,
-      final String pDataBaseTableName, final String pKeyFieldName, final String pInsertHeadSQL, final String pInsertPosSQL,
+  public AbstractDBHeadPosDateTemplateR(final Class<E> pType, final String pLookUpDataBase,
+      final String pSessionUser, final String pDataBaseTableName, final String pKeyFieldName,
+      final String pInsertHeadSQL, final String pInsertPosSQL,
 
-      final String pReadMinMaxSQL, final String pReadNextSQL, final String pReadPrevSQL, final String pReadHeadSQL,
-      final String pInvalidateHeadSQL,
+      final String pReadMinMaxSQL, final String pReadNextSQL, final String pReadPrevSQL,
+      final String pReadHeadSQL, final String pInvalidateHeadSQL,
 
       final String pReadPosSQL, final String pInvalidatePosSQL) {
-    super(pType, pLookUpDataBase, pSessionUser, pDataBaseTableName, pKeyFieldName, pInsertHeadSQL, pReadMinMaxSQL,
-        pReadNextSQL, pReadPrevSQL, pReadHeadSQL, pInvalidateHeadSQL);
+    super(pType, pLookUpDataBase, pSessionUser, pDataBaseTableName, pKeyFieldName, pInsertHeadSQL,
+        pReadMinMaxSQL, pReadNextSQL, pReadPrevSQL, pReadHeadSQL, pInvalidateHeadSQL);
 
     try {
       // connect to database
@@ -101,24 +108,24 @@ public abstract class AbstractDBHeadPosDateTemplateR<E extends DomainHeadPosData
           this.readPosSQL = null;
         } else {
           this.readPosSQL =
-              pReadPosSQL.replace("OUTDATE()", myDataBaseDepending.getSQLTimeOutdate()).replace("NOW()",
-                  myDataBaseDepending.getSQLTimeNow());
+              pReadPosSQL.replace("OUTDATE()", myDataBaseDepending.getSQLTimeOutdate())
+                  .replace("NOW()", myDataBaseDepending.getSQLTimeNow());
         }
 
         if (pInvalidatePosSQL == null) {
           this.invalidatePosSQL = null;
         } else {
           this.invalidatePosSQL =
-              pInvalidatePosSQL.replace("OUTDATE()", myDataBaseDepending.getSQLTimeOutdate()).replace("NOW()",
-                  myDataBaseDepending.getSQLTimeNow());
+              pInvalidatePosSQL.replace("OUTDATE()", myDataBaseDepending.getSQLTimeOutdate())
+                  .replace("NOW()", myDataBaseDepending.getSQLTimeNow());
         }
 
         if (pInsertPosSQL == null) {
           this.insertPosSQL = null;
         } else {
           this.insertPosSQL =
-              pInsertPosSQL.replace("OUTDATE()", myDataBaseDepending.getSQLTimeOutdate()).replace("NOW()",
-                  myDataBaseDepending.getSQLTimeNow());
+              pInsertPosSQL.replace("OUTDATE()", myDataBaseDepending.getSQLTimeOutdate())
+                  .replace("NOW()", myDataBaseDepending.getSQLTimeNow());
         }
       }
       ic.close();
@@ -142,60 +149,62 @@ public abstract class AbstractDBHeadPosDateTemplateR<E extends DomainHeadPosData
    * @param pPosKeyfieldName key field of the database (position)
    * @param pInsertPosSQL sql statement to insert a new head entry (position)
    */
-  public AbstractDBHeadPosDateTemplateR(final Class<E> pType, final String pLookUpDataBase, final String pSessionUser,
-      final String pDataBaseTableName, final String pKeyFieldName, final String pInsertHeadSQL,
-      final String pPosDataBaseTableName, final String pPosKeyfieldName, final String pInsertPosSQL) {
-    this(pType, pLookUpDataBase, pSessionUser, pDataBaseTableName, pKeyFieldName, pInsertHeadSQL, pInsertPosSQL,
+  public AbstractDBHeadPosDateTemplateR(final Class<E> pType, final String pLookUpDataBase,
+      final String pSessionUser, final String pDataBaseTableName, final String pKeyFieldName,
+      final String pInsertHeadSQL, final String pPosDataBaseTableName,
+      final String pPosKeyfieldName, final String pInsertPosSQL) {
+    this(pType, pLookUpDataBase, pSessionUser, pDataBaseTableName, pKeyFieldName, pInsertHeadSQL,
+        pInsertPosSQL,
 
-    "SELECT MIN(" + pKeyFieldName + ") AS min, " //
-        + "       MAX(" + pKeyFieldName + ") AS max " //
-        + "FROM   " + pDataBaseTableName + " " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > NOW()",
+        "SELECT MIN(" + pKeyFieldName + ") AS min, " //
+            + "       MAX(" + pKeyFieldName + ") AS max " //
+            + "FROM   " + pDataBaseTableName + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > NOW()",
 
-    "SELECT MIN(" + pKeyFieldName + ") AS dbnumber " //
-        + "FROM   " + pDataBaseTableName + " " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
-        + "  AND  " + pKeyFieldName + " > ? " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > NOW()",
+        "SELECT MIN(" + pKeyFieldName + ") AS dbnumber " //
+            + "FROM   " + pDataBaseTableName + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
+            + "  AND  " + pKeyFieldName + " > ? " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > NOW()",
 
-    "SELECT MAX(" + pKeyFieldName + ") AS dbnumber " //
-        + "FROM   " + pDataBaseTableName + " " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
-        + "  AND  " + pKeyFieldName + " < ? " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > NOW()",
+        "SELECT MAX(" + pKeyFieldName + ") AS dbnumber " //
+            + "FROM   " + pDataBaseTableName + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
+            + "  AND  " + pKeyFieldName + " < ? " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > NOW()",
 
-    "SELECT * " //
-        + "FROM   " + pDataBaseTableName + " " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
-        + "  AND  " + pKeyFieldName + " = ? " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > NOW()",
+        "SELECT * " //
+            + "FROM   " + pDataBaseTableName + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
+            + "  AND  " + pKeyFieldName + " = ? " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > NOW()",
 
-    "UPDATE " + pDataBaseTableName + " " //
-        + "SET    " + Constants.DB_FIELD_GLOBAL_DATE_TO + " = OUTDATE() " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
-        + "  AND  " + pKeyFieldName + " = ? " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + "   > NOW()",
+        "UPDATE " + pDataBaseTableName + " " //
+            + "SET    " + Constants.DB_FIELD_GLOBAL_DATE_TO + " = OUTDATE() " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
+            + "  AND  " + pKeyFieldName + " = ? " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + "   > NOW()",
 
-    "SELECT * " //
-        + "FROM   " + pPosDataBaseTableName + " " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
-        + "  AND  " + pKeyFieldName + " = ? " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > NOW()",
+        "SELECT * " //
+            + "FROM   " + pPosDataBaseTableName + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
+            + "  AND  " + pKeyFieldName + " = ? " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > NOW()",
 
-    "UPDATE " + pPosDataBaseTableName + " " //
-        + "SET    " + Constants.DB_FIELD_GLOBAL_DATE_TO + "= OUTDATE() " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
-        + "  AND  " + pKeyFieldName + " = ? " //
-        + "  AND  " + pPosKeyfieldName + " = ? " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + "   > NOW()");
+        "UPDATE " + pPosDataBaseTableName + " " //
+            + "SET    " + Constants.DB_FIELD_GLOBAL_DATE_TO + "= OUTDATE() " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
+            + "  AND  " + pKeyFieldName + " = ? " //
+            + "  AND  " + pPosKeyfieldName + " = ? " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + "   > NOW()");
   }
 
   /**
@@ -213,51 +222,53 @@ public abstract class AbstractDBHeadPosDateTemplateR<E extends DomainHeadPosData
    * @param pReadHeadSQL sql statement to read head entry
    * @param pReadPosSQL sql statement to read position entry
    */
-  public AbstractDBHeadPosDateTemplateR(final Class<E> pType, final String pLookUpDataBase, final String pSessionUser,
-      final String pDataBaseTableName, final String pKeyFieldName, final String pInsertHeadSQL,
-      final String pPosDataBaseTableName, final String pPosKeyfieldName, final String pInsertPosSQL, final String pReadHeadSQL,
+  public AbstractDBHeadPosDateTemplateR(final Class<E> pType, final String pLookUpDataBase,
+      final String pSessionUser, final String pDataBaseTableName, final String pKeyFieldName,
+      final String pInsertHeadSQL, final String pPosDataBaseTableName,
+      final String pPosKeyfieldName, final String pInsertPosSQL, final String pReadHeadSQL,
       final String pReadPosSQL) {
-    this(pType, pLookUpDataBase, pSessionUser, pDataBaseTableName, pKeyFieldName, pInsertHeadSQL, pInsertPosSQL,
+    this(pType, pLookUpDataBase, pSessionUser, pDataBaseTableName, pKeyFieldName, pInsertHeadSQL,
+        pInsertPosSQL,
 
-    "SELECT MIN(" + pKeyFieldName + ") AS min, " //
-        + "       MAX(" + pKeyFieldName + ") AS max " //
-        + "FROM   " + pDataBaseTableName + " " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > NOW()",
+        "SELECT MIN(" + pKeyFieldName + ") AS min, " //
+            + "       MAX(" + pKeyFieldName + ") AS max " //
+            + "FROM   " + pDataBaseTableName + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > NOW()",
 
-    "SELECT MIN(" + pKeyFieldName + ") AS dbnumber " //
-        + "FROM   " + pDataBaseTableName + " " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
-        + "  AND  " + pKeyFieldName + " > ? " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > NOW()",
+        "SELECT MIN(" + pKeyFieldName + ") AS dbnumber " //
+            + "FROM   " + pDataBaseTableName + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
+            + "  AND  " + pKeyFieldName + " > ? " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > NOW()",
 
-    "SELECT MAX(" + pKeyFieldName + ") AS dbnumber " //
-        + "FROM   " + pDataBaseTableName + " " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
-        + "  AND  " + pKeyFieldName + " < ? " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > NOW()",
+        "SELECT MAX(" + pKeyFieldName + ") AS dbnumber " //
+            + "FROM   " + pDataBaseTableName + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
+            + "  AND  " + pKeyFieldName + " < ? " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > NOW()",
 
-    pReadHeadSQL,
+        pReadHeadSQL,
 
-    "UPDATE " + pDataBaseTableName + " " //
-        + "SET    " + Constants.DB_FIELD_GLOBAL_DATE_TO + " = OUTDATE() " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
-        + "  AND  " + pKeyFieldName + " = ? " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + "   > NOW()",
+        "UPDATE " + pDataBaseTableName + " " //
+            + "SET    " + Constants.DB_FIELD_GLOBAL_DATE_TO + " = OUTDATE() " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
+            + "  AND  " + pKeyFieldName + " = ? " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + "   > NOW()",
 
-    pReadPosSQL,
+        pReadPosSQL,
 
-    "UPDATE " + pPosDataBaseTableName + " " //
-        + "SET    " + Constants.DB_FIELD_GLOBAL_DATE_TO + "= OUTDATE() " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
-        + "  AND  " + pKeyFieldName + " = ? " //
-        + "  AND  " + pPosKeyfieldName + " = ? " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + "   > NOW()");
+        "UPDATE " + pPosDataBaseTableName + " " //
+            + "SET    " + Constants.DB_FIELD_GLOBAL_DATE_TO + "= OUTDATE() " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
+            + "  AND  " + pKeyFieldName + " = ? " //
+            + "  AND  " + pPosKeyfieldName + " = ? " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + "   > NOW()");
   }
 
   /**
@@ -274,33 +285,39 @@ public abstract class AbstractDBHeadPosDateTemplateR<E extends DomainHeadPosData
    * @throws SQLException when error occurs
    */
   @Override
-  protected final String searchSQLSelect(final Connection pThisDataBase, final String pMinMax, final String pSearchField,
-      final String pSearchMethodeEntry, final String pSearchFieldEntry, final String pDbKeyVGL, final String pDbKey)
-      throws SQLException {
+  protected final String searchSQLSelect(final Connection pThisDataBase, final String pMinMax,
+      final String pSearchField, final String pSearchMethodeEntry, final String pSearchFieldEntry,
+      final String pDbKeyVGL, final String pDbKey) throws SQLException {
     final int mandator = this.getUser().getMandator();
-    final DataBaseDepending myDataBaseDepending = new DataBaseDepending(pThisDataBase.getMetaData().getDatabaseProductName());
+    final DataBaseDepending myDataBaseDepending =
+        new DataBaseDepending(pThisDataBase.getMetaData().getDatabaseProductName());
 
     final int sqlLength = 85;
     final StringBuilder sqlString = new StringBuilder(sqlLength);
     sqlString.append( //
         "SELECT " + pMinMax + "(" + this.getKeyFieldName() + ") AS dbnumber " //
             + "FROM   " + this.getDataBaseTableName() + " " //
-            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = " + Integer.toString(mandator) + " " //
-            + " AND   " + this.getKeyFieldName() + " " + pDbKeyVGL + " " + StringToSQL.convertString(pDbKey, //
-                pThisDataBase.getMetaData().getDatabaseProductName()) + " " //
-            + " AND   " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= " + myDataBaseDepending.getSQLTimeNow() + " " //
-            + " AND   " + Constants.DB_FIELD_GLOBAL_DATE_TO + "   > " + myDataBaseDepending.getSQLTimeNow() + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = " + Integer.toString(mandator)
+            + " " //
+            + " AND   " + this.getKeyFieldName() + " " + pDbKeyVGL + " " //
+            + StringUtils.defaultString(StringToSQL.convertString(pDbKey, //
+                pThisDataBase.getMetaData().getDatabaseProductName()), "''")
+            + " " //
+            + " AND   " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= "
+            + myDataBaseDepending.getSQLTimeNow() + " " //
+            + " AND   " + Constants.DB_FIELD_GLOBAL_DATE_TO + "   > "
+            + myDataBaseDepending.getSQLTimeNow() + " " //
             + " AND   ");
 
     if ("=".equals(pSearchMethodeEntry)) {
-      sqlString.append(StringToSQL.searchString(pSearchField, pSearchFieldEntry, pThisDataBase.getMetaData()
-          .getDatabaseProductName()));
+      sqlString.append(StringToSQL.searchString(pSearchField, pSearchFieldEntry,
+          pThisDataBase.getMetaData().getDatabaseProductName()));
     } else if ("like".equals(pSearchMethodeEntry)) {
-      sqlString.append(StringToSQL.searchString(pSearchField, "*" + pSearchFieldEntry + "*", pThisDataBase.getMetaData()
-          .getDatabaseProductName()));
+      sqlString.append(StringToSQL.searchString(pSearchField, "*" + pSearchFieldEntry + "*",
+          pThisDataBase.getMetaData().getDatabaseProductName()));
     } else {
-      sqlString.append(pSearchField + " " + pSearchMethodeEntry + " "
-          + StringToSQL.convertString(pSearchFieldEntry, pThisDataBase.getMetaData().getDatabaseProductName()));
+      sqlString.append(pSearchField + " " + pSearchMethodeEntry + " " + StringToSQL
+          .convertString(pSearchFieldEntry, pThisDataBase.getMetaData().getDatabaseProductName()));
     }
     return sqlString.toString();
   }
@@ -316,8 +333,9 @@ public abstract class AbstractDBHeadPosDateTemplateR<E extends DomainHeadPosData
    * @param pPosNumber number of the position to save
    * @throws SQLException when error occurs
    */
-  protected abstract void fillInsertPos(final PreparedStatement pInsertPosSQLStatement, final int pMandator,
-      final String pUser, final E pSaveEntry, final boolean pDelete, final int pPosNumber) throws SQLException;
+  protected abstract void fillInsertPos(final PreparedStatement pInsertPosSQLStatement,
+      final int pMandator, final String pUser, final E pSaveEntry, final boolean pDelete,
+      final int pPosNumber) throws SQLException;
 
   /**
    * <code>fillPosFromResultSet</code> set the fields in thisEntry from the given resultSet.
@@ -363,7 +381,8 @@ public abstract class AbstractDBHeadPosDateTemplateR<E extends DomainHeadPosData
               }
             }
 
-            try (PreparedStatement invalidatePosSQLStatement = thisDataBase.prepareStatement(this.invalidatePosSQL)) {
+            try (PreparedStatement invalidatePosSQLStatement =
+                thisDataBase.prepareStatement(this.invalidatePosSQL)) {
               int numPos = 0;
               if (dbEntry.getKeyPos() != null) {
                 numPos = dbEntry.getKeyPos().length;
@@ -404,10 +423,12 @@ public abstract class AbstractDBHeadPosDateTemplateR<E extends DomainHeadPosData
    * @return effected database entries (should always be 1)
    * @throws SQLException when error occurs
    */
-  protected final int insertPositionEntry(final Connection pThisDataBase, final int pMandator, final String pUser,
-      final E pSaveEntry, final boolean pDelete, final int pPosNumber) throws SQLException {
+  protected final int insertPositionEntry(final Connection pThisDataBase, final int pMandator,
+      final String pUser, final E pSaveEntry, final boolean pDelete, final int pPosNumber)
+      throws SQLException {
     int num = -1;
-    try (final PreparedStatement insertPosSQLStatement = pThisDataBase.prepareStatement(this.insertPosSQL)) {
+    try (final PreparedStatement insertPosSQLStatement =
+        pThisDataBase.prepareStatement(this.insertPosSQL)) {
       insertPosSQLStatement.clearParameters();
       this.fillInsertPos(insertPosSQLStatement, pMandator, pUser, pSaveEntry, pDelete, pPosNumber);
       num = insertPosSQLStatement.executeUpdate();
@@ -427,13 +448,17 @@ public abstract class AbstractDBHeadPosDateTemplateR<E extends DomainHeadPosData
    * @throws SQLException if something's going wrong
    */
   @Override
-  protected final void saveEntry(final E pCurrentEntry, final E pDbEntry, final Connection pThisDataBase, final int pMandator,
-      final String pUser, final String pSaveKeyString) throws SQLException {
+  protected final void saveEntry(final E pCurrentEntry, final E pDbEntry,
+      final Connection pThisDataBase, final int pMandator, final String pUser,
+      final String pSaveKeyString) throws SQLException {
     // Entry already exists in Database?
     if (!pCurrentEntry.equals(pDbEntry)) {
 
-      try (final PreparedStatement invalidatePosSQLStatement = pThisDataBase.prepareStatement(this.invalidatePosSQL);
-          final PreparedStatement invalidateHeadSQLStatement = pThisDataBase.prepareStatement(this.getInvalidateHeadSQL())) {
+      try (
+          final PreparedStatement invalidatePosSQLStatement =
+              pThisDataBase.prepareStatement(this.invalidatePosSQL);
+          final PreparedStatement invalidateHeadSQLStatement =
+              pThisDataBase.prepareStatement(this.getInvalidateHeadSQL())) {
 
         if (!pCurrentEntry.equalsEntry(pDbEntry) && (this.getInvalidateHeadSQL() != null)) {
           // Invalidate old entry

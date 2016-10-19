@@ -1,14 +1,16 @@
 /**
  * This file is part of DBNavigationBar.
  *
- * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
  *
- * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with DBNavigationBar. If not, see <a
- * href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
+ * You should have received a copy of the GNU General Public License along with DBNavigationBar. If
+ * not, see <a href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
  *
  *
  * Copyright (c) 2011-2015 Manfred Tremmel
@@ -20,20 +22,23 @@ package de.knightsoft.dbnavigationbar.server;
 import de.knightsoft.dbnavigationbar.client.domain.DomainHeadPosDataBaseInt;
 import de.knightsoft.dbnavigationbar.shared.Constants;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * The <code>RiPhoneDBHeadPosTemplate</code> class is the server side implementation template for a simple database. The same as
- * AbstractDBHeadPosTemplate but without read and save implementations.
+ * The <code>RiPhoneDBHeadPosTemplate</code> class is the server side implementation template for a
+ * simple database. The same as AbstractDBHeadPosTemplate but without read and save implementations.
  *
  * @param <E> DataBase structure type
  * @author Manfred Tremmel
  * @version $Rev$, $Date$
  */
-public abstract class AbstractDBHeadPosTemplateRS<E extends DomainHeadPosDataBaseInt> extends AbstractDBTemplate<E> {
+public abstract class AbstractDBHeadPosTemplateRS<E extends DomainHeadPosDataBaseInt>
+    extends AbstractDBTemplate<E> {
 
   /**
    * Serial version id.
@@ -80,35 +85,36 @@ public abstract class AbstractDBHeadPosTemplateRS<E extends DomainHeadPosDataBas
    * @param pInsertPosSQL insert sql statement position
    * @param pUpdatePosSQL update sql statement position
    */
-  public AbstractDBHeadPosTemplateRS(final Class<E> pType, final String pLookUpDataBase, final String pSessionUser,
-      final String pDataBaseTableName, final String pKeyFieldName, final String pInsertHeadSQL, final String pUpdateHeadSQL,
-      final String pPosDataBaseTableName, final String pPosKeyfieldName, final String pInsertPosSQL, //
+  public AbstractDBHeadPosTemplateRS(final Class<E> pType, final String pLookUpDataBase,
+      final String pSessionUser, final String pDataBaseTableName, final String pKeyFieldName,
+      final String pInsertHeadSQL, final String pUpdateHeadSQL, final String pPosDataBaseTableName,
+      final String pPosKeyfieldName, final String pInsertPosSQL, //
       final String pUpdatePosSQL) {
     super(pType, pLookUpDataBase, pSessionUser, pDataBaseTableName, pKeyFieldName, pInsertHeadSQL,
 
-    "SELECT MIN(" + pKeyFieldName + ") AS min, " //
-        + "       MAX(" + pKeyFieldName + ") AS max " //
-        + "FROM   " + pDataBaseTableName + " " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? ",
+        "SELECT MIN(" + pKeyFieldName + ") AS min, " //
+            + "       MAX(" + pKeyFieldName + ") AS max " //
+            + "FROM   " + pDataBaseTableName + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? ",
 
-    "SELECT MIN(" + pKeyFieldName + ") AS dbnumber " //
-        + "FROM   " + pDataBaseTableName + " " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
-        + "  AND  " + pKeyFieldName + " > ? ",
+        "SELECT MIN(" + pKeyFieldName + ") AS dbnumber " //
+            + "FROM   " + pDataBaseTableName + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
+            + "  AND  " + pKeyFieldName + " > ? ",
 
-    "SELECT MAX(" + pKeyFieldName + ") AS dbnumber " //
-        + "FROM   " + pDataBaseTableName + " " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
-        + "  AND  " + pKeyFieldName + " < ? ",
+        "SELECT MAX(" + pKeyFieldName + ") AS dbnumber " //
+            + "FROM   " + pDataBaseTableName + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
+            + "  AND  " + pKeyFieldName + " < ? ",
 
-    "SELECT * " //
-        + "FROM   " + pDataBaseTableName + " " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
-        + "  AND  " + pKeyFieldName + " = ? ",
+        "SELECT * " //
+            + "FROM   " + pDataBaseTableName + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
+            + "  AND  " + pKeyFieldName + " = ? ",
 
-    "DELETE FROM " + pDataBaseTableName + " " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
-        + "  AND  " + pKeyFieldName + " = ? ");
+        "DELETE FROM " + pDataBaseTableName + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
+            + "  AND  " + pKeyFieldName + " = ? ");
 
     this.readPosSQL = //
         "SELECT * " //
@@ -141,9 +147,9 @@ public abstract class AbstractDBHeadPosTemplateRS<E extends DomainHeadPosDataBas
    * @throws SQLException when error occurs
    */
   @Override
-  protected final String searchSQLSelect(final Connection pThisDataBase, final String pMinMax, final String pSearchField,
-      final String pSearchMethodeEntry, final String pSearchFieldEntry, final String pDbKeyVGL, final String pDbKey)
-      throws SQLException {
+  protected final String searchSQLSelect(final Connection pThisDataBase, final String pMinMax,
+      final String pSearchField, final String pSearchMethodeEntry, final String pSearchFieldEntry,
+      final String pDbKeyVGL, final String pDbKey) throws SQLException {
     final int mandator = this.getUser().getMandator();
 
     final int sqlLength = 60;
@@ -151,20 +157,24 @@ public abstract class AbstractDBHeadPosTemplateRS<E extends DomainHeadPosDataBas
     sqlString.append( //
         "SELECT " + pMinMax + "(" + this.getKeyFieldName() + ") AS dbnumber " //
             + "FROM   " + this.getDataBaseTableName() + " " //
-            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = " + Integer.toString(mandator) + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = " + Integer.toString(mandator)
+            + " " //
             + " AND   " + this.getKeyFieldName() + " " + pDbKeyVGL //
-            + " " + StringToSQL.convertString(pDbKey, pThisDataBase.getMetaData().getDatabaseProductName()) + " " //
+            + " "
+            + StringUtils.defaultString(StringToSQL.convertString(pDbKey,
+                pThisDataBase.getMetaData().getDatabaseProductName()), "''")
+            + " " //
             + " AND   ");
 
     if ("=".equals(pSearchMethodeEntry)) {
-      sqlString.append(StringToSQL.searchString(pSearchField, pSearchFieldEntry, pThisDataBase.getMetaData()
-          .getDatabaseProductName()));
+      sqlString.append(StringToSQL.searchString(pSearchField, pSearchFieldEntry,
+          pThisDataBase.getMetaData().getDatabaseProductName()));
     } else if ("like".equals(pSearchMethodeEntry)) {
-      sqlString.append(StringToSQL.searchString(pSearchField, "*" + pSearchFieldEntry + "*", pThisDataBase.getMetaData()
-          .getDatabaseProductName()));
+      sqlString.append(StringToSQL.searchString(pSearchField, "*" + pSearchFieldEntry + "*",
+          pThisDataBase.getMetaData().getDatabaseProductName()));
     } else {
-      sqlString.append(pSearchField + " " + pSearchMethodeEntry + " "
-          + StringToSQL.convertString(pSearchFieldEntry, pThisDataBase.getMetaData().getDatabaseProductName()));
+      sqlString.append(pSearchField + " " + pSearchMethodeEntry + " " + StringToSQL
+          .convertString(pSearchFieldEntry, pThisDataBase.getMetaData().getDatabaseProductName()));
     }
     return sqlString.toString();
   }
@@ -187,8 +197,8 @@ public abstract class AbstractDBHeadPosTemplateRS<E extends DomainHeadPosDataBas
    * @param pSaveEntry entry to save
    * @throws SQLException if fill up fails
    */
-  protected abstract void fillUpdateHead(PreparedStatement pUpdateHeadSQLStatement, int pMandator, String pUser, E pSaveEntry)
-      throws SQLException;
+  protected abstract void fillUpdateHead(PreparedStatement pUpdateHeadSQLStatement, int pMandator,
+      String pUser, E pSaveEntry) throws SQLException;
 
   /**
    * <code>fillUpdatePos</code> fills the parameters of the update prepared statement.
@@ -200,8 +210,8 @@ public abstract class AbstractDBHeadPosTemplateRS<E extends DomainHeadPosDataBas
    * @param pPosNumber position number to save
    * @throws SQLException when sql error occurs
    */
-  protected abstract void fillUpdatePos(PreparedStatement pUpdatePosSQLStatement, int pMandator, String pUser, E pSaveEntry,
-      int pPosNumber) throws SQLException;
+  protected abstract void fillUpdatePos(PreparedStatement pUpdatePosSQLStatement, int pMandator,
+      String pUser, E pSaveEntry, int pPosNumber) throws SQLException;
 
   /**
    * <code>fillInsertPos</code> fills the parameters of the insert prepared statement.
@@ -214,8 +224,9 @@ public abstract class AbstractDBHeadPosTemplateRS<E extends DomainHeadPosDataBas
    * @param pPosNumber number of the position to save
    * @throws SQLException when error occurs
    */
-  protected abstract void fillInsertPos(final PreparedStatement pInsertPosSQLStatement, final int pMandator,
-      final String pUser, final E pSaveEntry, final boolean pDelete, final int pPosNumber) throws SQLException;
+  protected abstract void fillInsertPos(final PreparedStatement pInsertPosSQLStatement,
+      final int pMandator, final String pUser, final E pSaveEntry, final boolean pDelete,
+      final int pPosNumber) throws SQLException;
 
   /**
    * <code>fillPosFromResultSet</code> set the fields in thisEntry from the given resultSet.
@@ -239,10 +250,12 @@ public abstract class AbstractDBHeadPosTemplateRS<E extends DomainHeadPosDataBas
    * @return effected database entries (should always be 1)
    * @throws SQLException when error occurs
    */
-  protected final int insertPositionEntry(final Connection pThisDataBase, final int pMandator, final String pUser,
-      final E pSaveEntry, final boolean pDelete, final int pPosNumber) throws SQLException {
+  protected final int insertPositionEntry(final Connection pThisDataBase, final int pMandator,
+      final String pUser, final E pSaveEntry, final boolean pDelete, final int pPosNumber)
+      throws SQLException {
     int num = -1;
-    try (final PreparedStatement insertPosSQLStatement = pThisDataBase.prepareStatement(this.insertPosSQL)) {
+    try (final PreparedStatement insertPosSQLStatement =
+        pThisDataBase.prepareStatement(this.insertPosSQL)) {
       insertPosSQLStatement.clearParameters();
       this.fillInsertPos(insertPosSQLStatement, pMandator, pUser, pSaveEntry, pDelete, pPosNumber);
       num = insertPosSQLStatement.executeUpdate();
@@ -262,8 +275,9 @@ public abstract class AbstractDBHeadPosTemplateRS<E extends DomainHeadPosDataBas
    * @throws SQLException if something's going wrong
    */
   @Override
-  protected final void saveEntry(final E pCurrentEntry, final E pDbEntry, final Connection pThisDataBase, final int pMandator,
-      final String pUser, final String pSaveKeyString) throws SQLException {
+  protected final void saveEntry(final E pCurrentEntry, final E pDbEntry,
+      final Connection pThisDataBase, final int pMandator, final String pUser,
+      final String pSaveKeyString) throws SQLException {
     // Entry already exists in Database?
     if (!pCurrentEntry.equals(pDbEntry)) {
       int numPos = 0;
@@ -285,7 +299,8 @@ public abstract class AbstractDBHeadPosTemplateRS<E extends DomainHeadPosDataBas
         if (!pCurrentEntry.equals(pDbEntry)) {
           if (!pCurrentEntry.equalsEntry(pDbEntry) && (this.updateHeadSQL != null)) {
             // Invalidate old entry
-            try (final PreparedStatement updateHeadSQLStatement = pThisDataBase.prepareStatement(this.updateHeadSQL)) {
+            try (final PreparedStatement updateHeadSQLStatement =
+                pThisDataBase.prepareStatement(this.updateHeadSQL)) {
               updateHeadSQLStatement.clearParameters();
               this.fillUpdateHead(updateHeadSQLStatement, pMandator, pUser, pCurrentEntry);
               updateHeadSQLStatement.executeUpdate();
@@ -294,8 +309,11 @@ public abstract class AbstractDBHeadPosTemplateRS<E extends DomainHeadPosDataBas
           }
 
           // Positions
-          try (final PreparedStatement invalidatePosSQLStatement = pThisDataBase.prepareStatement(this.getInvalidatePosSQL());
-              final PreparedStatement updatePosSQLStatement = pThisDataBase.prepareStatement(this.updatePosSQL)) {
+          try (
+              final PreparedStatement invalidatePosSQLStatement =
+                  pThisDataBase.prepareStatement(this.getInvalidatePosSQL());
+              final PreparedStatement updatePosSQLStatement =
+                  pThisDataBase.prepareStatement(this.updatePosSQL)) {
             // Take a look if position differ and invalidate old
             for (int i = 0; i < numDbPos; i++) {
               boolean isremoved = true;

@@ -16,7 +16,7 @@
 	<groupId>de.knightsoft-net</groupId>
 	<artifactId>dbnavigationbar</artifactId>
 	<packaging>jar</packaging>
-	<version>0.8.9</version>
+	<version>0.8.10</version>
 	<name>DBNavigationBar</name>
 	<inceptionYear>2011</inceptionYear>
 	<description>

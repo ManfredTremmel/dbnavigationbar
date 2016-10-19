@@ -1,14 +1,16 @@
 /**
  * This file is part of DBNavigationBar.
  *
- * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
  *
- * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with DBNavigationBar. If not, see <a
- * href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
+ * You should have received a copy of the GNU General Public License along with DBNavigationBar. If
+ * not, see <a href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
  *
  *
  * Copyright (c) 2011-2015 Manfred Tremmel
@@ -21,23 +23,27 @@ import de.knightsoft.dbnavigationbar.client.domain.AbstractDomainUser;
 import de.knightsoft.dbnavigationbar.client.domain.DomainHeadDataBaseInterface;
 import de.knightsoft.dbnavigationbar.shared.Constants;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
+import org.apache.commons.lang3.StringUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 /**
  *
- * The <code>RiPhoneDBHeadDateTemplate</code> class is the server side implementation template for a simple database.
+ * The <code>RiPhoneDBHeadDateTemplate</code> class is the server side implementation template for a
+ * simple database.
  *
  * @param <E> structure
  * @author Manfred Tremmel
  * @version $Rev$, $Date$
  */
-public abstract class AbstractDBHeadDateTemplateR<E extends DomainHeadDataBaseInterface> extends AbstractDBTemplate<E> {
+public abstract class AbstractDBHeadDateTemplateR<E extends DomainHeadDataBaseInterface>
+    extends AbstractDBTemplate<E> {
 
   /**
    * Serial version id.
@@ -59,11 +65,12 @@ public abstract class AbstractDBHeadDateTemplateR<E extends DomainHeadDataBaseIn
    * @param pReadHeadSQL sql statement to read head entry
    * @param pInvalidateHeadSQL sql statement to invalidate head entry
    */
-  public AbstractDBHeadDateTemplateR(final Class<E> pType, final String pLookUpDataBase, final String pSessionUser,
-      final String pDataBaseTableName, final String pKeyFieldName, final String pInsertHeadSQL, final String pReadMinMaxSQL,
-      final String pReadNextSQL, final String pReadPrevSQL, final String pReadHeadSQL, final String pInvalidateHeadSQL) {
-    super(pType, pLookUpDataBase, pSessionUser, pDataBaseTableName, pKeyFieldName, pInsertHeadSQL, pReadMinMaxSQL,
-        pReadNextSQL, pReadPrevSQL, pReadHeadSQL, pInvalidateHeadSQL);
+  public AbstractDBHeadDateTemplateR(final Class<E> pType, final String pLookUpDataBase,
+      final String pSessionUser, final String pDataBaseTableName, final String pKeyFieldName,
+      final String pInsertHeadSQL, final String pReadMinMaxSQL, final String pReadNextSQL,
+      final String pReadPrevSQL, final String pReadHeadSQL, final String pInvalidateHeadSQL) {
+    super(pType, pLookUpDataBase, pSessionUser, pDataBaseTableName, pKeyFieldName, pInsertHeadSQL,
+        pReadMinMaxSQL, pReadNextSQL, pReadPrevSQL, pReadHeadSQL, pInvalidateHeadSQL);
   }
 
   /**
@@ -76,44 +83,45 @@ public abstract class AbstractDBHeadDateTemplateR<E extends DomainHeadDataBaseIn
    * @param pKeyFieldName key field of the database
    * @param pInsertHeadSQL sql statement to insert a new head entry
    */
-  public AbstractDBHeadDateTemplateR(final Class<E> pType, final String pLookUpDataBase, final String pSessionUser,
-      final String pDataBaseTableName, final String pKeyFieldName, final String pInsertHeadSQL) {
+  public AbstractDBHeadDateTemplateR(final Class<E> pType, final String pLookUpDataBase,
+      final String pSessionUser, final String pDataBaseTableName, final String pKeyFieldName,
+      final String pInsertHeadSQL) {
     this(pType, pLookUpDataBase, pSessionUser, pDataBaseTableName, pKeyFieldName, pInsertHeadSQL,
 
-    "SELECT MIN(" + pKeyFieldName + ") AS min, " //
-        + "       MAX(" + pKeyFieldName + ") AS max " //
-        + "FROM   " + pDataBaseTableName + " " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > NOW()",
+        "SELECT MIN(" + pKeyFieldName + ") AS min, " //
+            + "       MAX(" + pKeyFieldName + ") AS max " //
+            + "FROM   " + pDataBaseTableName + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > NOW()",
 
-    "SELECT MIN(" + pKeyFieldName + ") AS dbnumber " //
-        + "FROM   " + pDataBaseTableName + " " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
-        + "  AND  " + pKeyFieldName + " > ? " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > NOW()",
+        "SELECT MIN(" + pKeyFieldName + ") AS dbnumber " //
+            + "FROM   " + pDataBaseTableName + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
+            + "  AND  " + pKeyFieldName + " > ? " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > NOW()",
 
-    "SELECT MAX(" + pKeyFieldName + ") AS dbnumber " //
-        + "FROM   " + pDataBaseTableName + " " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
-        + "  AND  " + pKeyFieldName + " < ? " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > NOW()",
+        "SELECT MAX(" + pKeyFieldName + ") AS dbnumber " //
+            + "FROM   " + pDataBaseTableName + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
+            + "  AND  " + pKeyFieldName + " < ? " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > NOW()",
 
-    "SELECT * " //
-        + "FROM   " + pDataBaseTableName + " " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
-        + "  AND  " + pKeyFieldName + " = ? " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > NOW()",
+        "SELECT * " //
+            + "FROM   " + pDataBaseTableName + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
+            + "  AND  " + pKeyFieldName + " = ? " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + " > NOW()",
 
-    "UPDATE " + pDataBaseTableName + " " //
-        + "SET    " + Constants.DB_FIELD_GLOBAL_DATE_TO + " = OUTDATE() " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
-        + "  AND  " + pKeyFieldName + " = ? " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
-        + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + "   > NOW()"
+        "UPDATE " + pDataBaseTableName + " " //
+            + "SET    " + Constants.DB_FIELD_GLOBAL_DATE_TO + " = OUTDATE() " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
+            + "  AND  " + pKeyFieldName + " = ? " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= NOW() " //
+            + "  AND  " + Constants.DB_FIELD_GLOBAL_DATE_TO + "   > NOW()"
 
     );
   }
@@ -132,33 +140,39 @@ public abstract class AbstractDBHeadDateTemplateR<E extends DomainHeadDataBaseIn
    * @throws SQLException when error occurs
    */
   @Override
-  protected final String searchSQLSelect(final Connection pDataBase, final String pMinMax, final String pSearchField,
-      final String pSearchMethodeEntry, final String pSearchFieldEntry, final String pDbKeyVGL, final String pDbKey)
-      throws SQLException {
+  protected final String searchSQLSelect(final Connection pDataBase, final String pMinMax,
+      final String pSearchField, final String pSearchMethodeEntry, final String pSearchFieldEntry,
+      final String pDbKeyVGL, final String pDbKey) throws SQLException {
     final int mandator = this.getUser().getMandator();
-    final DataBaseDepending myDataBaseDepending = new DataBaseDepending(pDataBase.getMetaData().getDatabaseProductName());
+    final DataBaseDepending myDataBaseDepending =
+        new DataBaseDepending(pDataBase.getMetaData().getDatabaseProductName());
 
     final int sqlLength = 85;
     final StringBuilder sqlString = new StringBuilder(sqlLength);
     sqlString.append( //
         "SELECT " + pMinMax + "(" + this.getKeyFieldName() + ") AS dbnumber " //
             + "FROM   " + this.getDataBaseTableName() + " " //
-            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = " + Integer.toString(mandator) + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = " + Integer.toString(mandator)
+            + " " //
             + " AND   " + this.getKeyFieldName() + " " + pDbKeyVGL + " " //
-            + StringToSQL.convertString(pDbKey, pDataBase.getMetaData().getDatabaseProductName()) + " " //
-            + " AND   " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= " + myDataBaseDepending.getSQLTimeNow() + " " //
-            + " AND   " + Constants.DB_FIELD_GLOBAL_DATE_TO + "   > " + myDataBaseDepending.getSQLTimeNow() + " " //
+            + StringUtils.defaultString(StringToSQL.convertString(pDbKey, //
+                pDataBase.getMetaData().getDatabaseProductName()), "''")
+            + " " //
+            + " AND   " + Constants.DB_FIELD_GLOBAL_DATE_FROM + " <= " //
+            + myDataBaseDepending.getSQLTimeNow() + " " //
+            + " AND   " + Constants.DB_FIELD_GLOBAL_DATE_TO + "   > " //
+            + myDataBaseDepending.getSQLTimeNow() + " " //
             + " AND   ");
 
     if ("=".equals(pSearchMethodeEntry)) {
-      sqlString.append(StringToSQL.searchString(pSearchField, pSearchFieldEntry, pDataBase.getMetaData()
-          .getDatabaseProductName()));
+      sqlString.append(StringToSQL.searchString(pSearchField, pSearchFieldEntry,
+          pDataBase.getMetaData().getDatabaseProductName()));
     } else if ("like".equals(pSearchMethodeEntry)) {
-      sqlString.append(StringToSQL.searchString(pSearchField, "*" + pSearchFieldEntry + "*", pDataBase.getMetaData()
-          .getDatabaseProductName()));
+      sqlString.append(StringToSQL.searchString(pSearchField, "*" + pSearchFieldEntry + "*",
+          pDataBase.getMetaData().getDatabaseProductName()));
     } else {
-      sqlString.append(pSearchField + " " + pSearchMethodeEntry + " "
-          + StringToSQL.convertString(pSearchFieldEntry, pDataBase.getMetaData().getDatabaseProductName()));
+      sqlString.append(pSearchField + " " + pSearchMethodeEntry + " " + StringToSQL
+          .convertString(pSearchFieldEntry, pDataBase.getMetaData().getDatabaseProductName()));
     }
     return sqlString.toString();
   }
@@ -219,11 +233,13 @@ public abstract class AbstractDBHeadDateTemplateR<E extends DomainHeadDataBaseIn
    * @throws SQLException if something's going wrong
    */
   @Override
-  protected final void saveEntry(final E pCurrentEntry, final E pDbEntry, final Connection pThisDataBase, final int pMandator,
-      final String pUser, final String pSaveKeyString) throws SQLException {
+  protected final void saveEntry(final E pCurrentEntry, final E pDbEntry,
+      final Connection pThisDataBase, final int pMandator, final String pUser,
+      final String pSaveKeyString) throws SQLException {
     // Entry already exists in Database?
     if (!pCurrentEntry.equals(pDbEntry)) {
-      try (PreparedStatement invalidateHeadSQLStatement = pThisDataBase.prepareStatement(this.getInvalidateHeadSQL())) {
+      try (PreparedStatement invalidateHeadSQLStatement =
+          pThisDataBase.prepareStatement(this.getInvalidateHeadSQL())) {
         invalidateHeadSQLStatement.clearParameters();
         invalidateHeadSQLStatement.setInt(1, pMandator);
         invalidateHeadSQLStatement.setString(2, pSaveKeyString);

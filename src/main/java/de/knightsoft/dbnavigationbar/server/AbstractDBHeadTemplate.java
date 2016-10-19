@@ -1,14 +1,16 @@
 /**
  * This file is part of DBNavigationBar.
  *
- * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
  *
- * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with DBNavigationBar. If not, see <a
- * href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
+ * You should have received a copy of the GNU General Public License along with DBNavigationBar. If
+ * not, see <a href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
  *
  *
  * Copyright (c) 2011-2015 Manfred Tremmel
@@ -21,22 +23,26 @@ import de.knightsoft.dbnavigationbar.client.domain.AbstractDomainUser;
 import de.knightsoft.dbnavigationbar.client.domain.DomainHeadDataBaseInterface;
 import de.knightsoft.dbnavigationbar.shared.Constants;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
+import org.apache.commons.lang3.StringUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 /**
- * The <code>RiPhoneDBHeadDateTemplate</code> class is the server side implementation template for a simple database.
+ * The <code>RiPhoneDBHeadDateTemplate</code> class is the server side implementation template for a
+ * simple database.
  *
  * @param <E> DataBase structure type
  * @author Manfred Tremmel
  * @version $Rev$, $Date$
  */
-public abstract class AbstractDBHeadTemplate<E extends DomainHeadDataBaseInterface> extends AbstractDBTemplate<E> {
+public abstract class AbstractDBHeadTemplate<E extends DomainHeadDataBaseInterface>
+    extends AbstractDBTemplate<E> {
 
   /**
    * Serial version id.
@@ -64,12 +70,13 @@ public abstract class AbstractDBHeadTemplate<E extends DomainHeadDataBaseInterfa
    * @param pReadHeadSQL sql statement to read the head data
    * @param pInvalidateHeadSQL sql statement to invalidate/delete a entry
    */
-  public AbstractDBHeadTemplate(final Class<E> pType, final String pLookUpDataBase, final String pSessionUser,
-      final String pDataBaseTableName, final String pKeyFieldName, final String pInsertHeadSQL, final String pUpdateHeadSQL,
-      final String pReadMinMaxSQL, final String pReadNextSQL, final String pReadPrevSQL, final String pReadHeadSQL,
+  public AbstractDBHeadTemplate(final Class<E> pType, final String pLookUpDataBase,
+      final String pSessionUser, final String pDataBaseTableName, final String pKeyFieldName,
+      final String pInsertHeadSQL, final String pUpdateHeadSQL, final String pReadMinMaxSQL,
+      final String pReadNextSQL, final String pReadPrevSQL, final String pReadHeadSQL,
       final String pInvalidateHeadSQL) {
-    super(pType, pLookUpDataBase, pSessionUser, pDataBaseTableName, pKeyFieldName, pInsertHeadSQL, pReadMinMaxSQL,
-        pReadNextSQL, pReadPrevSQL, pReadHeadSQL, pInvalidateHeadSQL);
+    super(pType, pLookUpDataBase, pSessionUser, pDataBaseTableName, pKeyFieldName, pInsertHeadSQL,
+        pReadMinMaxSQL, pReadNextSQL, pReadPrevSQL, pReadHeadSQL, pInvalidateHeadSQL);
 
     this.updateHeadSQL = pUpdateHeadSQL;
   }
@@ -85,33 +92,35 @@ public abstract class AbstractDBHeadTemplate<E extends DomainHeadDataBaseInterfa
    * @param pInsertHeadSQL insert sql statement
    * @param pUpdateHeadSQL update sql statement
    */
-  public AbstractDBHeadTemplate(final Class<E> pType, final String pLookUpDataBase, final String pSessionUser,
-      final String pDataBaseTableName, final String pKeyFieldName, final String pInsertHeadSQL, final String pUpdateHeadSQL) {
-    this(pType, pLookUpDataBase, pSessionUser, pDataBaseTableName, pKeyFieldName, pInsertHeadSQL, pUpdateHeadSQL,
+  public AbstractDBHeadTemplate(final Class<E> pType, final String pLookUpDataBase,
+      final String pSessionUser, final String pDataBaseTableName, final String pKeyFieldName,
+      final String pInsertHeadSQL, final String pUpdateHeadSQL) {
+    this(pType, pLookUpDataBase, pSessionUser, pDataBaseTableName, pKeyFieldName, pInsertHeadSQL,
+        pUpdateHeadSQL,
 
-    "SELECT MIN(" + pKeyFieldName + ") AS min, " //
-        + "       MAX(" + pKeyFieldName + ") AS max " //
-        + "FROM   " + pDataBaseTableName + " " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? ",
+        "SELECT MIN(" + pKeyFieldName + ") AS min, " //
+            + "       MAX(" + pKeyFieldName + ") AS max " //
+            + "FROM   " + pDataBaseTableName + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? ",
 
-    "SELECT MIN(" + pKeyFieldName + ") AS dbnumber " //
-        + "FROM   " + pDataBaseTableName + " " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
-        + "  AND  " + pKeyFieldName + " > ? ",
+        "SELECT MIN(" + pKeyFieldName + ") AS dbnumber " //
+            + "FROM   " + pDataBaseTableName + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
+            + "  AND  " + pKeyFieldName + " > ? ",
 
-    "SELECT MAX(" + pKeyFieldName + ") AS dbnumber " //
-        + "FROM   " + pDataBaseTableName + " " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
-        + "  AND  " + pKeyFieldName + " < ? ",
+        "SELECT MAX(" + pKeyFieldName + ") AS dbnumber " //
+            + "FROM   " + pDataBaseTableName + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
+            + "  AND  " + pKeyFieldName + " < ? ",
 
-    "SELECT * " //
-        + "FROM   " + pDataBaseTableName + " " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
-        + "  AND  " + pKeyFieldName + " = ? ",
+        "SELECT * " //
+            + "FROM   " + pDataBaseTableName + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
+            + "  AND  " + pKeyFieldName + " = ? ",
 
-    "DELETE FROM " + pDataBaseTableName + " " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
-        + "  AND  " + pKeyFieldName + " = ? ");
+        "DELETE FROM " + pDataBaseTableName + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
+            + "  AND  " + pKeyFieldName + " = ? ");
   }
 
   /**
@@ -126,31 +135,32 @@ public abstract class AbstractDBHeadTemplate<E extends DomainHeadDataBaseInterfa
    * @param pUpdateHeadSQL update sql statement
    * @param pReadHeadSQL sql statement to read the head data
    */
-  public AbstractDBHeadTemplate(final Class<E> pType, final String pLookUpDataBase, final String pSessionUser,
-      final String pDataBaseTableName, final String pKeyFieldName, final String pInsertHeadSQL, final String pUpdateHeadSQL,
-      final String pReadHeadSQL) {
-    this(pType, pLookUpDataBase, pSessionUser, pDataBaseTableName, pKeyFieldName, pInsertHeadSQL, pUpdateHeadSQL,
+  public AbstractDBHeadTemplate(final Class<E> pType, final String pLookUpDataBase,
+      final String pSessionUser, final String pDataBaseTableName, final String pKeyFieldName,
+      final String pInsertHeadSQL, final String pUpdateHeadSQL, final String pReadHeadSQL) {
+    this(pType, pLookUpDataBase, pSessionUser, pDataBaseTableName, pKeyFieldName, pInsertHeadSQL,
+        pUpdateHeadSQL,
 
-    "SELECT MIN(" + pKeyFieldName + ") AS min, " //
-        + "       MAX(" + pKeyFieldName + ") AS max " //
-        + "FROM   " + pDataBaseTableName + " " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? ",
+        "SELECT MIN(" + pKeyFieldName + ") AS min, " //
+            + "       MAX(" + pKeyFieldName + ") AS max " //
+            + "FROM   " + pDataBaseTableName + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? ",
 
-    "SELECT MIN(" + pKeyFieldName + ") AS dbnumber " //
-        + "FROM   " + pDataBaseTableName + " " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
-        + "  AND  " + pKeyFieldName + " > ? ",
+        "SELECT MIN(" + pKeyFieldName + ") AS dbnumber " //
+            + "FROM   " + pDataBaseTableName + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
+            + "  AND  " + pKeyFieldName + " > ? ",
 
-    "SELECT MAX(" + pKeyFieldName + ") AS dbnumber " //
-        + "FROM   " + pDataBaseTableName + " " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
-        + "  AND  " + pKeyFieldName + " < ? ",
+        "SELECT MAX(" + pKeyFieldName + ") AS dbnumber " //
+            + "FROM   " + pDataBaseTableName + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
+            + "  AND  " + pKeyFieldName + " < ? ",
 
-    pReadHeadSQL,
+        pReadHeadSQL,
 
-    "DELETE FROM " + pDataBaseTableName + " " //
-        + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
-        + "  AND  " + pKeyFieldName + " = ? ");
+        "DELETE FROM " + pDataBaseTableName + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = ? " //
+            + "  AND  " + pKeyFieldName + " = ? ");
   }
 
   /**
@@ -167,9 +177,9 @@ public abstract class AbstractDBHeadTemplate<E extends DomainHeadDataBaseInterfa
    * @throws SQLException when error occurs
    */
   @Override
-  protected final String searchSQLSelect(final Connection pDataBase, final String pMinMax, final String pSearchField,
-      final String pSearchMethodeEntry, final String pSearchFieldEntry, final String pDbKeyVGL, final String pDbKey)
-      throws SQLException {
+  protected final String searchSQLSelect(final Connection pDataBase, final String pMinMax,
+      final String pSearchField, final String pSearchMethodeEntry, final String pSearchFieldEntry,
+      final String pDbKeyVGL, final String pDbKey) throws SQLException {
     final int mandator = this.getUser().getMandator();
 
     final int sqlLength = 60;
@@ -177,20 +187,23 @@ public abstract class AbstractDBHeadTemplate<E extends DomainHeadDataBaseInterfa
     sqlString.append( //
         "SELECT " + pMinMax + "(" + this.getKeyFieldName() + ") AS dbnumber " //
             + "FROM   " + this.getDataBaseTableName() + " " //
-            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = " + Integer.toString(mandator) + " " //
-            + " AND   " + this.getKeyFieldName() + " " + pDbKeyVGL + " " + StringToSQL.convertString(pDbKey, //
-                pDataBase.getMetaData().getDatabaseProductName()) + " " //
+            + "WHERE  " + Constants.DB_FIELD_GLOBAL_MANDATOR + " = " + Integer.toString(mandator)
+            + " " //
+            + " AND   " + this.getKeyFieldName() + " " + pDbKeyVGL + " " //
+            + StringUtils.defaultString(StringToSQL.convertString(pDbKey, //
+                pDataBase.getMetaData().getDatabaseProductName()), "''")
+            + " " //
             + " AND   ");
 
     if ("=".equals(pSearchMethodeEntry)) {
-      sqlString.append(StringToSQL.searchString(pSearchField, pSearchFieldEntry, pDataBase.getMetaData()
-          .getDatabaseProductName()));
+      sqlString.append(StringToSQL.searchString(pSearchField, pSearchFieldEntry,
+          pDataBase.getMetaData().getDatabaseProductName()));
     } else if ("like".equals(pSearchMethodeEntry)) {
-      sqlString.append(StringToSQL.searchString(pSearchField, "*" + pSearchFieldEntry + "*", pDataBase.getMetaData()
-          .getDatabaseProductName()));
+      sqlString.append(StringToSQL.searchString(pSearchField, "*" + pSearchFieldEntry + "*",
+          pDataBase.getMetaData().getDatabaseProductName()));
     } else {
-      sqlString.append(pSearchField + " " + pSearchMethodeEntry + " "
-          + StringToSQL.convertString(pSearchFieldEntry, pDataBase.getMetaData().getDatabaseProductName()));
+      sqlString.append(pSearchField + " " + pSearchMethodeEntry + " " + StringToSQL
+          .convertString(pSearchFieldEntry, pDataBase.getMetaData().getDatabaseProductName()));
     }
     return sqlString.toString();
   }
@@ -213,8 +226,8 @@ public abstract class AbstractDBHeadTemplate<E extends DomainHeadDataBaseInterfa
    * @param pSaveEntry entry to save
    * @throws SQLException if fill up fails
    */
-  protected abstract void fillUpdateHead(PreparedStatement pUpdateHeadSQLStatement, int pMandator, String pUser, E pSaveEntry)
-      throws SQLException;
+  protected abstract void fillUpdateHead(PreparedStatement pUpdateHeadSQLStatement, int pMandator,
+      String pUser, E pSaveEntry) throws SQLException;
 
   /**
    * <code>readOneEntry</code> is used to read a given entry from database.
@@ -226,7 +239,8 @@ public abstract class AbstractDBHeadTemplate<E extends DomainHeadDataBaseInterfa
    * @return the filled structure
    */
   @Override
-  protected final E readOneEntry(final Connection pDataBase, final int pMandator, final String pEntry, final E pThisEntry) {
+  protected final E readOneEntry(final Connection pDataBase, final int pMandator,
+      final String pEntry, final E pThisEntry) {
     return super.readHeadEntry(pDataBase, pMandator, pEntry, pThisEntry);
   }
 
@@ -286,8 +300,9 @@ public abstract class AbstractDBHeadTemplate<E extends DomainHeadDataBaseInterfa
    * @throws SQLException if something's going wrong
    */
   @Override
-  protected final void saveEntry(final E pCurrentEntry, final E pDbEntry, final Connection pThisDataBase, final int pMandator,
-      final String pUser, final String pSaveKeyString) throws SQLException {
+  protected final void saveEntry(final E pCurrentEntry, final E pDbEntry,
+      final Connection pThisDataBase, final int pMandator, final String pUser,
+      final String pSaveKeyString) throws SQLException {
     // Entry already exists in Database?
     if (!pCurrentEntry.equals(pDbEntry)) {
       if ((pDbEntry == null) || (pDbEntry.getKeyCur() == null)) {
@@ -297,7 +312,8 @@ public abstract class AbstractDBHeadTemplate<E extends DomainHeadDataBaseInterfa
         // Entry already exists, update it, if necessary
         if (!pCurrentEntry.equals(pDbEntry) && !pCurrentEntry.equalsEntry(pDbEntry)) {
           // Invalidate old entry
-          try (final PreparedStatement updateHeadSQLStatement = pThisDataBase.prepareStatement(this.updateHeadSQL)) {
+          try (final PreparedStatement updateHeadSQLStatement =
+              pThisDataBase.prepareStatement(this.updateHeadSQL)) {
             updateHeadSQLStatement.clearParameters();
             this.fillUpdateHead(updateHeadSQLStatement, pMandator, pUser, pCurrentEntry);
             updateHeadSQLStatement.executeUpdate();
