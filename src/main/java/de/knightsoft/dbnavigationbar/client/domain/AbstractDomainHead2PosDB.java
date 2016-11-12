@@ -1,14 +1,16 @@
 /**
  * This file is part of DBNavigationBar.
  *
- * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
  *
- * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with DBNavigationBar. If not, see <a
- * href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
+ * You should have received a copy of the GNU General Public License along with DBNavigationBar. If
+ * not, see <a href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
  *
  *
  * Copyright (c) 2011-2015 Manfred Tremmel
@@ -21,13 +23,14 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <code>RiPhoneDomaneHeadPosDataBase</code> class is a exchange structure between the client and the servlet on the server.
+ * The <code>RiPhoneDomaneHeadPosDataBase</code> class is a exchange structure between the client
+ * and the servlet on the server.
  *
  * @author Manfred Tremmel
  * @version $Rev$, $Date$
  */
-public abstract class AbstractDomainHead2PosDB extends AbstractDomainDBBasics implements DomainHeadDataBaseInterface,
-    DomainHeadPosDataBaseInt, DomainHead2PosDataBaseInt, Serializable {
+public abstract class AbstractDomainHead2PosDB extends AbstractDomainDBBasics implements
+    DomainHeadDataBaseInterface, DomainHeadPosDataBaseInt, DomainHead2PosDataBaseInt, Serializable {
 
   /**
    * Serial version id.
@@ -115,7 +118,8 @@ public abstract class AbstractDomainHead2PosDB extends AbstractDomainDBBasics im
    * @return true if equal otherwise false
    */
   @Override
-  public abstract boolean equalsPosition(DomainHeadPosDataBaseInt pCompare, int pPosThis, int pPosCompare);
+  public abstract boolean equalsPosition(DomainHeadPosDataBaseInt pCompare, int pPosThis,
+      int pPosCompare);
 
   /**
    * compare two positions.
@@ -126,7 +130,8 @@ public abstract class AbstractDomainHead2PosDB extends AbstractDomainDBBasics im
    * @return true if equal otherwise false
    */
   @Override
-  public abstract boolean equalsPosition2(DomainHead2PosDataBaseInt pCompare, int pPosThis, int pPosCompare);
+  public abstract boolean equalsPosition2(DomainHead2PosDataBaseInt pCompare, int pPosThis,
+      int pPosCompare);
 
   /**
    * hashCode implementation.

@@ -230,33 +230,27 @@ public class DBNaviBarWidget extends Composite implements HasClickHandlers {
    *
    * @author Manfred Tremmel
    */
-  private final ClickHandler myFindToggleClick = new ClickHandler() {
-    /**
-     * on Click handler.
-     */
-    @Override
-    public void onClick(final ClickEvent pEvent) {
-      if (((ToggleButton) pEvent.getSource()).isDown()) {
-        DBNaviBarWidget.this.searchpanel.setVisible(true);
-        DBNaviBarWidget.this.fbackPushButton
-            .setTitle(DBNaviBarWidget.this.constants.buttonFBackMessageFind());
-        DBNaviBarWidget.this.backPushButton
-            .setTitle(DBNaviBarWidget.this.constants.buttonBackMessageFind());
-        DBNaviBarWidget.this.forwardPushButton
-            .setTitle(DBNaviBarWidget.this.constants.buttonForwardMessageFind());
-        DBNaviBarWidget.this.fforwardPushButton
-            .setTitle(DBNaviBarWidget.this.constants.buttonFForwardMessageFind());
-      } else {
-        DBNaviBarWidget.this.searchpanel.setVisible(false);
-        DBNaviBarWidget.this.fbackPushButton
-            .setTitle(DBNaviBarWidget.this.constants.buttonFBackMessage());
-        DBNaviBarWidget.this.backPushButton
-            .setTitle(DBNaviBarWidget.this.constants.buttonBackMessage());
-        DBNaviBarWidget.this.forwardPushButton
-            .setTitle(DBNaviBarWidget.this.constants.buttonForwardMessage());
-        DBNaviBarWidget.this.fforwardPushButton
-            .setTitle(DBNaviBarWidget.this.constants.buttonFForwardMessage());
-      }
+  private final ClickHandler myFindToggleClick = pEvent -> {
+    if (((ToggleButton) pEvent.getSource()).isDown()) {
+      DBNaviBarWidget.this.searchpanel.setVisible(true);
+      DBNaviBarWidget.this.fbackPushButton
+          .setTitle(DBNaviBarWidget.this.constants.buttonFBackMessageFind());
+      DBNaviBarWidget.this.backPushButton
+          .setTitle(DBNaviBarWidget.this.constants.buttonBackMessageFind());
+      DBNaviBarWidget.this.forwardPushButton
+          .setTitle(DBNaviBarWidget.this.constants.buttonForwardMessageFind());
+      DBNaviBarWidget.this.fforwardPushButton
+          .setTitle(DBNaviBarWidget.this.constants.buttonFForwardMessageFind());
+    } else {
+      DBNaviBarWidget.this.searchpanel.setVisible(false);
+      DBNaviBarWidget.this.fbackPushButton
+          .setTitle(DBNaviBarWidget.this.constants.buttonFBackMessage());
+      DBNaviBarWidget.this.backPushButton
+          .setTitle(DBNaviBarWidget.this.constants.buttonBackMessage());
+      DBNaviBarWidget.this.forwardPushButton
+          .setTitle(DBNaviBarWidget.this.constants.buttonForwardMessage());
+      DBNaviBarWidget.this.fforwardPushButton
+          .setTitle(DBNaviBarWidget.this.constants.buttonFForwardMessage());
     }
   };
 
@@ -649,7 +643,7 @@ public class DBNaviBarWidget extends Composite implements HasClickHandlers {
   /**
    * constants.
    */
-  private final DBNaviBarWidgetConstants constants;
+  private final DBNaviBarWidgetConstants constants = GWT.create(DBNaviBarWidgetConstants.class);
 
   /**
    * Constructor.
@@ -661,8 +655,6 @@ public class DBNaviBarWidget extends Composite implements HasClickHandlers {
   public DBNaviBarWidget(final String[] pSearchfields, final String[] pSearchFieldsDisplay,
       final String pUserdefinedText) {
     super();
-
-    this.constants = (DBNaviBarWidgetConstants) GWT.create(DBNaviBarWidgetConstants.class);
 
     this.dialogYesNoBox = this.createYesNoDialogBox(this.constants);
     this.dialogYesNoBox.hide();
@@ -681,13 +673,12 @@ public class DBNaviBarWidget extends Composite implements HasClickHandlers {
     this.currentEntry.setText(StringUtils.EMPTY);
     this.hintText.setText(StringUtils.EMPTY);
 
-    int smi = 0;
-    DBNaviBarWidget.SEARCH_METHODS[smi++] = this.constants.findEquals();
-    DBNaviBarWidget.SEARCH_METHODS[smi++] = this.constants.findGreater();
-    DBNaviBarWidget.SEARCH_METHODS[smi++] = this.constants.findGreaterEquals();
-    DBNaviBarWidget.SEARCH_METHODS[smi++] = this.constants.findLowerEquals();
-    DBNaviBarWidget.SEARCH_METHODS[smi++] = this.constants.findLower();
-    DBNaviBarWidget.SEARCH_METHODS[smi++] = this.constants.findContains();
+    DBNaviBarWidget.SEARCH_METHODS[0] = this.constants.findEquals();
+    DBNaviBarWidget.SEARCH_METHODS[1] = this.constants.findGreater();
+    DBNaviBarWidget.SEARCH_METHODS[2] = this.constants.findGreaterEquals();
+    DBNaviBarWidget.SEARCH_METHODS[3] = this.constants.findLowerEquals();
+    DBNaviBarWidget.SEARCH_METHODS[4] = this.constants.findLower();
+    DBNaviBarWidget.SEARCH_METHODS[5] = this.constants.findContains();
 
     this.newPushButton.setAccessKey(this.constants.buttonNewAccessKey().trim().charAt(0));
     this.newPushButton.setTitle(this.constants.buttonNewMessage());
@@ -1343,24 +1334,16 @@ public class DBNaviBarWidget extends Composite implements HasClickHandlers {
 
     final HorizontalPanel dialogButtons = new HorizontalPanel();
     // Add a yes button at the bottom of the dialog
-    final Button yesButton = new Button(pConstants.yes(), new ClickHandler() {
-      @Override
-      public void onClick(final ClickEvent pEvent) {
-        dialogBox.hide();
-        DBNaviBarWidget.this.buttonState = ButtonState.DELETE;
-        DBNaviBarWidget.this.fireEvent(pEvent);
-      }
+    final Button yesButton = new Button(pConstants.yes(), (ClickHandler) pEvent -> {
+      dialogBox.hide();
+      DBNaviBarWidget.this.buttonState = ButtonState.DELETE;
+      DBNaviBarWidget.this.fireEvent(pEvent);
     });
     yesButton.setAccessKey(pConstants.yesKey().trim().charAt(0));
     dialogButtons.add(yesButton);
     dialogButtons.setCellHorizontalAlignment(yesButton, HasHorizontalAlignment.ALIGN_LEFT);
     // Add a no button at the bottom of the dialog
-    final Button noButton = new Button(pConstants.no(), new ClickHandler() {
-      @Override
-      public void onClick(final ClickEvent pEvent) {
-        dialogBox.hide();
-      }
-    });
+    final Button noButton = new Button(pConstants.no(), (ClickHandler) pEvent -> dialogBox.hide());
     noButton.setAccessKey(pConstants.noKey().trim().charAt(0));
     dialogButtons.add(noButton);
     dialogButtons.setCellHorizontalAlignment(noButton, HasHorizontalAlignment.ALIGN_RIGHT);

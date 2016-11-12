@@ -1,14 +1,16 @@
 /**
  * This file is part of DBNavigationBar.
  *
- * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
  *
- * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with DBNavigationBar. If not, see <a
- * href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
+ * You should have received a copy of the GNU General Public License along with DBNavigationBar. If
+ * not, see <a href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
  *
  *
  * Copyright (c) 2011-2015 Manfred Tremmel
@@ -23,7 +25,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
  *
- * The <code>DBTemplateRemoteServiceAsync</code> class is the asynchronous interface template for DataBase Head.
+ * The <code>DBTemplateRemoteServiceAsync</code> class is the asynchronous interface template for
+ * DataBase Head.
  *
  * @param <E> database structure
  * @author Manfred Tremmel
@@ -92,7 +95,8 @@ public interface DBTemplateRemoteServiceAsync<E extends AbstractDomainDBBasics> 
    * @param pSearchFieldEntry search text
    * @param pCallback class which gets back response
    */
-  void findFirstEntry(String pSearchField, String pSearchMethodEntry, String pSearchFieldEntry, AsyncCallback<E> pCallback);
+  void findFirstEntry(String pSearchField, String pSearchMethodEntry, String pSearchFieldEntry,
+      AsyncCallback<E> pCallback);
 
   /**
    * find a entry in the database backward, start with the current one.
@@ -103,8 +107,8 @@ public interface DBTemplateRemoteServiceAsync<E extends AbstractDomainDBBasics> 
    * @param pCurrentEntry key of the current entry
    * @param pCallback class which gets back response
    */
-  void findPreviousEntry(String pSearchField, String pSearchMethodEntry, String pSearchFieldEntry, String pCurrentEntry,
-      AsyncCallback<E> pCallback);
+  void findPreviousEntry(String pSearchField, String pSearchMethodEntry, String pSearchFieldEntry,
+      String pCurrentEntry, AsyncCallback<E> pCallback);
 
   /**
    * find a entry in the database forward, start with the current one.
@@ -115,8 +119,8 @@ public interface DBTemplateRemoteServiceAsync<E extends AbstractDomainDBBasics> 
    * @param pCurrentEntry key of the current entry
    * @param pCallback class which gets back response
    */
-  void findNextEntry(String pSearchField, String pSearchMethodEntry, String pSearchFieldEntry, String pCurrentEntry,
-      AsyncCallback<E> pCallback);
+  void findNextEntry(String pSearchField, String pSearchMethodEntry, String pSearchFieldEntry,
+      String pCurrentEntry, AsyncCallback<E> pCallback);
 
   /**
    * find a entry in the database backward, start with the last one.
@@ -126,5 +130,6 @@ public interface DBTemplateRemoteServiceAsync<E extends AbstractDomainDBBasics> 
    * @param pSearchFieldEntry search text
    * @param pCallback class which gets back response
    */
-  void findLastEntry(String pSearchField, String pSearchMethodEntry, String pSearchFieldEntry, AsyncCallback<E> pCallback);
+  void findLastEntry(String pSearchField, String pSearchMethodEntry, String pSearchFieldEntry,
+      AsyncCallback<E> pCallback);
 }

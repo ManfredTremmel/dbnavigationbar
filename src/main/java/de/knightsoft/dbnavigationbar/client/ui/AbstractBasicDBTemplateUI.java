@@ -25,8 +25,6 @@ import de.knightsoft.dbnavigationbar.client.ui.widget.DBNaviBarWidget;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Overflow;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -173,84 +171,81 @@ public abstract class AbstractBasicDBTemplateUI<E extends AbstractDomainDBBasics
       this.form.setHeight("100%");
       this.form.getElement().getStyle().setOverflow(Overflow.AUTO);
 
-      this.myNavigationBar.addClickHandler(new ClickHandler() {
-        @Override
-        public void onClick(final ClickEvent pEvent) {
-          AbstractBasicDBTemplateUI.this.dosave = false;
-          final DBTemplateRemoteServiceAsync<E> service =
-              AbstractBasicDBTemplateUI.this.getServiceFactory();
+      this.myNavigationBar.addClickHandler(pEvent -> {
+        AbstractBasicDBTemplateUI.this.dosave = false;
+        final DBTemplateRemoteServiceAsync<E> service =
+            AbstractBasicDBTemplateUI.this.getServiceFactory();
 
-          switch (AbstractBasicDBTemplateUI.this.myNavigationBar.getButtonState()) {
-            case NEW:
-              AbstractBasicDBTemplateUI.this.newEntry();
-              break;
-            case DELETE:
-              service.deleteEntry(AbstractBasicDBTemplateUI.this.myNavigationBar.getOldDBNumber(),
-                  AbstractBasicDBTemplateUI.this);
-              break;
-            case STOP:
-              AbstractBasicDBTemplateUI.this.fillEntry(AbstractBasicDBTemplateUI.this.dbEntry);
-              break;
-            case FAST_BACK:
-              service.readFirstEntry(AbstractBasicDBTemplateUI.this);
-              break;
-            case FAST_BACK_FIND:
-              service.findFirstEntry(
-                  AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldField(),
-                  AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldMethode(),
-                  AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldEntry(),
-                  AbstractBasicDBTemplateUI.this);
-              break;
-            case BACK:
-              service.readPreviousEntry(
-                  AbstractBasicDBTemplateUI.this.myNavigationBar.getOldDBNumber(),
-                  AbstractBasicDBTemplateUI.this);
-              break;
-            case BACK_FIND:
-              service.findPreviousEntry(
-                  AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldField(),
-                  AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldMethode(),
-                  AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldEntry(),
-                  AbstractBasicDBTemplateUI.this.myNavigationBar.getCurrentDBNumber(),
-                  AbstractBasicDBTemplateUI.this);
-              break;
-            case FORWARD:
-              service.readNextEntry(AbstractBasicDBTemplateUI.this.myNavigationBar.getOldDBNumber(),
-                  AbstractBasicDBTemplateUI.this);
-              break;
-            case FORWARD_FIND:
-              service.findNextEntry(
-                  AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldField(),
-                  AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldMethode(),
-                  AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldEntry(),
-                  AbstractBasicDBTemplateUI.this.myNavigationBar.getCurrentDBNumber(),
-                  AbstractBasicDBTemplateUI.this);
-              break;
-            case FAST_FORWARD:
-              service.readLastEntry(AbstractBasicDBTemplateUI.this);
-              break;
-            case FAST_FORWARD_FIND:
-              service.findLastEntry(
-                  AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldField(),
-                  AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldMethode(),
-                  AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldEntry(),
-                  AbstractBasicDBTemplateUI.this);
-              break;
-            case CHANGE:
-              service.readEntry(AbstractBasicDBTemplateUI.this.myNavigationBar.getCurrentDBNumber(),
-                  AbstractBasicDBTemplateUI.this);
-              break;
-            case USER_DEFINED:
-              AbstractBasicDBTemplateUI.this.userDefinedFunction();
-              break;
-            default:
-              final E saveentry = AbstractBasicDBTemplateUI.this.checkInput();
-              if (saveentry != null && !saveentry.equals(AbstractBasicDBTemplateUI.this.dbEntry)) {
-                AbstractBasicDBTemplateUI.this.dosave = true;
-                service.saveEntry(saveentry, AbstractBasicDBTemplateUI.this);
-              }
-              break;
-          }
+        switch (AbstractBasicDBTemplateUI.this.myNavigationBar.getButtonState()) {
+          case NEW:
+            AbstractBasicDBTemplateUI.this.newEntry();
+            break;
+          case DELETE:
+            service.deleteEntry(AbstractBasicDBTemplateUI.this.myNavigationBar.getOldDBNumber(),
+                AbstractBasicDBTemplateUI.this);
+            break;
+          case STOP:
+            AbstractBasicDBTemplateUI.this.fillEntry(AbstractBasicDBTemplateUI.this.dbEntry);
+            break;
+          case FAST_BACK:
+            service.readFirstEntry(AbstractBasicDBTemplateUI.this);
+            break;
+          case FAST_BACK_FIND:
+            service.findFirstEntry(
+                AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldField(),
+                AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldMethode(),
+                AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldEntry(),
+                AbstractBasicDBTemplateUI.this);
+            break;
+          case BACK:
+            service.readPreviousEntry(
+                AbstractBasicDBTemplateUI.this.myNavigationBar.getOldDBNumber(),
+                AbstractBasicDBTemplateUI.this);
+            break;
+          case BACK_FIND:
+            service.findPreviousEntry(
+                AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldField(),
+                AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldMethode(),
+                AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldEntry(),
+                AbstractBasicDBTemplateUI.this.myNavigationBar.getCurrentDBNumber(),
+                AbstractBasicDBTemplateUI.this);
+            break;
+          case FORWARD:
+            service.readNextEntry(AbstractBasicDBTemplateUI.this.myNavigationBar.getOldDBNumber(),
+                AbstractBasicDBTemplateUI.this);
+            break;
+          case FORWARD_FIND:
+            service.findNextEntry(
+                AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldField(),
+                AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldMethode(),
+                AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldEntry(),
+                AbstractBasicDBTemplateUI.this.myNavigationBar.getCurrentDBNumber(),
+                AbstractBasicDBTemplateUI.this);
+            break;
+          case FAST_FORWARD:
+            service.readLastEntry(AbstractBasicDBTemplateUI.this);
+            break;
+          case FAST_FORWARD_FIND:
+            service.findLastEntry(
+                AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldField(),
+                AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldMethode(),
+                AbstractBasicDBTemplateUI.this.myNavigationBar.getSearchFieldEntry(),
+                AbstractBasicDBTemplateUI.this);
+            break;
+          case CHANGE:
+            service.readEntry(AbstractBasicDBTemplateUI.this.myNavigationBar.getCurrentDBNumber(),
+                AbstractBasicDBTemplateUI.this);
+            break;
+          case USER_DEFINED:
+            AbstractBasicDBTemplateUI.this.userDefinedFunction();
+            break;
+          default:
+            final E saveentry = AbstractBasicDBTemplateUI.this.checkInput();
+            if (saveentry != null && !saveentry.equals(AbstractBasicDBTemplateUI.this.dbEntry)) {
+              AbstractBasicDBTemplateUI.this.dosave = true;
+              service.saveEntry(saveentry, AbstractBasicDBTemplateUI.this);
+            }
+            break;
         }
       });
     }

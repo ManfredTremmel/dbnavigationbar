@@ -1,14 +1,16 @@
 /**
  * This file is part of DBNavigationBar.
  *
- * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
  *
- * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with DBNavigationBar. If not, see <a
- * href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
+ * You should have received a copy of the GNU General Public License along with DBNavigationBar. If
+ * not, see <a href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
  *
  *
  * Copyright (c) 2011-2015 Manfred Tremmel
@@ -23,13 +25,15 @@ import java.sql.Connection;
 
 /**
  *
- * The <code>RiPhoneDBHeadDateTemplate</code> class is the server side implementation template for a simple database.
+ * The <code>RiPhoneDBHeadDateTemplate</code> class is the server side implementation template for a
+ * simple database.
  *
  * @param <E> structure
  * @author Manfred Tremmel
  * @version $Rev$, $Date$
  */
-public abstract class AbstractDBHeadDateTemplate<E extends DomainHeadDataBaseInterface> extends AbstractDBHeadDateTemplateR<E> {
+public abstract class AbstractDBHeadDateTemplate<E extends DomainHeadDataBaseInterface>
+    extends AbstractDBHeadDateTemplateR<E> {
 
   /**
    * Serial version id.
@@ -51,11 +55,12 @@ public abstract class AbstractDBHeadDateTemplate<E extends DomainHeadDataBaseInt
    * @param pReadHeadSQL sql statement to read head entry
    * @param pInvalidateHeadSQL sql statement to invalidate head entry
    */
-  public AbstractDBHeadDateTemplate(final Class<E> pType, final String pLookUpDataBase, final String pSessionUser,
-      final String pDataBaseTableName, final String pKeyFieldName, final String pInsertHeadSQL, final String pReadMinMaxSQL,
-      final String pReadNextSQL, final String pReadPrevSQL, final String pReadHeadSQL, final String pInvalidateHeadSQL) {
-    super(pType, pLookUpDataBase, pSessionUser, pDataBaseTableName, pKeyFieldName, pInsertHeadSQL, pReadMinMaxSQL,
-        pReadNextSQL, pReadPrevSQL, pReadHeadSQL, pInvalidateHeadSQL);
+  public AbstractDBHeadDateTemplate(final Class<E> pType, final String pLookUpDataBase,
+      final String pSessionUser, final String pDataBaseTableName, final String pKeyFieldName,
+      final String pInsertHeadSQL, final String pReadMinMaxSQL, final String pReadNextSQL,
+      final String pReadPrevSQL, final String pReadHeadSQL, final String pInvalidateHeadSQL) {
+    super(pType, pLookUpDataBase, pSessionUser, pDataBaseTableName, pKeyFieldName, pInsertHeadSQL,
+        pReadMinMaxSQL, pReadNextSQL, pReadPrevSQL, pReadHeadSQL, pInvalidateHeadSQL);
   }
 
   /**
@@ -68,8 +73,9 @@ public abstract class AbstractDBHeadDateTemplate<E extends DomainHeadDataBaseInt
    * @param pKeyFieldName key field of the database
    * @param pInsertHeadSQL sql statement to insert a new head entry
    */
-  public AbstractDBHeadDateTemplate(final Class<E> pType, final String pLookUpDataBase, final String pSessionUser,
-      final String pDataBaseTableName, final String pKeyFieldName, final String pInsertHeadSQL) {
+  public AbstractDBHeadDateTemplate(final Class<E> pType, final String pLookUpDataBase,
+      final String pSessionUser, final String pDataBaseTableName, final String pKeyFieldName,
+      final String pInsertHeadSQL) {
     super(pType, pLookUpDataBase, pSessionUser, pDataBaseTableName, pKeyFieldName, pInsertHeadSQL);
   }
 
@@ -83,7 +89,8 @@ public abstract class AbstractDBHeadDateTemplate<E extends DomainHeadDataBaseInt
    * @return the filled structure
    */
   @Override
-  protected final E readOneEntry(final Connection pDataBase, final int pMandator, final String pEntry, final E pThisEntry) {
+  protected final E readOneEntry(final Connection pDataBase, final int pMandator,
+      final String pEntry, final E pThisEntry) {
     return super.readHeadEntry(pDataBase, pMandator, pEntry, pThisEntry);
   }
 }

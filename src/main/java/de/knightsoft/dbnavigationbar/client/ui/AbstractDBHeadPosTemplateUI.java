@@ -24,7 +24,6 @@ import de.knightsoft.dbnavigationbar.client.domain.AbstractDomainUser;
 import de.knightsoft.dbnavigationbar.client.ui.widget.DBNaviBarWidgetConstants;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -118,14 +117,9 @@ public abstract class AbstractDBHeadPosTemplateUI<E extends AbstractDomainHeadPo
     }
 
     if (this.newPositionButton == null) {
-      this.newPositionButton =
-          new Button(this.getConstantsPos().addPositionButton(), new ClickHandler() {
-            @Override
-            public void onClick(final ClickEvent pEvent) {
-              AbstractDBHeadPosTemplateUI.this
-                  .fillPosition(AbstractDBHeadPosTemplateUI.this.getPosTable().getRowCount(), null);
-            }
-          });
+      this.newPositionButton = new Button(this.getConstantsPos().addPositionButton(),
+          (ClickHandler) pEvent -> AbstractDBHeadPosTemplateUI.this
+              .fillPosition(AbstractDBHeadPosTemplateUI.this.getPosTable().getRowCount(), null));
     }
   }
 
@@ -206,18 +200,15 @@ public abstract class AbstractDBHeadPosTemplateUI<E extends AbstractDomainHeadPo
    */
   protected final PushButton getDeleteButton() {
     final PushButton deleteButton = new PushButton(
-        new Image(AbstractBasicDBTemplateUI.IMAGES.deletePosition()), new ClickHandler() {
-          @Override
-          public void onClick(final ClickEvent pEvent) {
-            final PushButton sender = (PushButton) pEvent.getSource();
-            for (int i = 1; i < AbstractDBHeadPosTemplateUI.this.getPosTable().getRowCount(); i++) {
-              if (sender.equals(AbstractDBHeadPosTemplateUI.this.getPosTable().getWidget(i,
-                  AbstractDBHeadPosTemplateUI.this.getPosTable().getCellCount(i) - 1))) {
-                AbstractDBHeadPosTemplateUI.this.rowToDelete = i;
-                AbstractDBHeadPosTemplateUI.this.dialogYesNoBox.center();
-                AbstractDBHeadPosTemplateUI.this.dialogYesNoBox.show();
-                i = AbstractDBHeadPosTemplateUI.this.getPosTable().getRowCount();
-              }
+        new Image(AbstractBasicDBTemplateUI.IMAGES.deletePosition()), (ClickHandler) pEvent -> {
+          final PushButton sender = (PushButton) pEvent.getSource();
+          for (int i = 1; i < AbstractDBHeadPosTemplateUI.this.getPosTable().getRowCount(); i++) {
+            if (sender.equals(AbstractDBHeadPosTemplateUI.this.getPosTable().getWidget(i,
+                AbstractDBHeadPosTemplateUI.this.getPosTable().getCellCount(i) - 1))) {
+              AbstractDBHeadPosTemplateUI.this.rowToDelete = i;
+              AbstractDBHeadPosTemplateUI.this.dialogYesNoBox.center();
+              AbstractDBHeadPosTemplateUI.this.dialogYesNoBox.show();
+              i = AbstractDBHeadPosTemplateUI.this.getPosTable().getRowCount();
             }
           }
         });
@@ -247,24 +238,16 @@ public abstract class AbstractDBHeadPosTemplateUI<E extends AbstractDomainHeadPo
 
     final HorizontalPanel dialogButtons = new HorizontalPanel();
     // Add a yes button at the bottom of the dialog
-    final Button yesButton = new Button(pConstants.yes(), new ClickHandler() {
-      @Override
-      public void onClick(final ClickEvent pEvent) {
-        dialogBox.hide();
-        AbstractDBHeadPosTemplateUI.this.getPosTable()
-            .removeRow(AbstractDBHeadPosTemplateUI.this.rowToDelete);
-      }
+    final Button yesButton = new Button(pConstants.yes(), (ClickHandler) pEvent -> {
+      dialogBox.hide();
+      AbstractDBHeadPosTemplateUI.this.getPosTable()
+          .removeRow(AbstractDBHeadPosTemplateUI.this.rowToDelete);
     });
     yesButton.setAccessKey(pConstants.yesKey().trim().charAt(0));
     dialogButtons.add(yesButton);
     dialogButtons.setCellHorizontalAlignment(yesButton, HasHorizontalAlignment.ALIGN_LEFT);
     // Add a no button at the bottom of the dialog
-    final Button noButton = new Button(pConstants.no(), new ClickHandler() {
-      @Override
-      public void onClick(final ClickEvent pEvent) {
-        dialogBox.hide();
-      }
-    });
+    final Button noButton = new Button(pConstants.no(), (ClickHandler) pEvent -> dialogBox.hide());
     noButton.setAccessKey(pConstants.noKey().trim().charAt(0));
     dialogButtons.add(noButton);
     dialogButtons.setCellHorizontalAlignment(noButton, HasHorizontalAlignment.ALIGN_RIGHT);

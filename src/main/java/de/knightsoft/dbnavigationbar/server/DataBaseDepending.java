@@ -1,14 +1,16 @@
 /**
  * This file is part of DBNavigationBar.
  *
- * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * DBNavigationBar is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
  *
- * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * DBNavigationBar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with DBNavigationBar. If not, see <a
- * href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
+ * You should have received a copy of the GNU General Public License along with DBNavigationBar. If
+ * not, see <a href="http://www.gnu.org/licenses>http://www.gnu.org/licenses</a>
  *
  *
  * Copyright (c) 2011-2015 Manfred Tremmel
@@ -23,7 +25,8 @@ import java.sql.SQLException;
 
 /**
  *
- * The <code>DataBaseDepending</code> class contains database specific SQL strings. It supports MySQL and MSSQL at the moment
+ * The <code>DataBaseDepending</code> class contains database specific SQL strings. It supports
+ * MySQL and MSSQL at the moment
  *
  * @author Manfred Tremmel
  * @version $Rev$, $Date$
@@ -32,8 +35,9 @@ public class DataBaseDepending {
   /**
    * JDBC classes.
    */
-  protected static final String[][] JDBC_CLASS = { {"MySQL", Constants.JDBC_CLASS_MYSQL, Constants.JDBC_CLASS_MYSQL_OLD},
-      {"MSSQL", Constants.JDBC_CLASS_MSSQL}};
+  protected static final String[][] JDBC_CLASS =
+      {{"MySQL", Constants.JDBC_CLASS_MYSQL, Constants.JDBC_CLASS_MYSQL_OLD},
+          {"MSSQL", Constants.JDBC_CLASS_MSSQL}};
 
   /**
    * SQL statement to get current time.
@@ -43,7 +47,8 @@ public class DataBaseDepending {
   /**
    * SQL statement to get current time minus one second.
    */
-  protected static final String[] SQL_TIME_OUTDATE = {"(NOW() - INTERVAL 1 SECOND)", "DATEADD(second, -1, GETDATE())"};
+  protected static final String[] SQL_TIME_OUTDATE =
+      {"(NOW() - INTERVAL 1 SECOND)", "DATEADD(second, -1, GETDATE())"};
 
   /**
    * database number.
@@ -62,9 +67,9 @@ public class DataBaseDepending {
     if (Constants.JDBC_CLASS_MYSQL_OLD.equalsIgnoreCase(myJDBCClassToUse)) {
       myJDBCClassToUse = Constants.JDBC_CLASS_MYSQL;
     }
-    for (int i = 0; i < JDBC_CLASS.length && tmpDBnumber == -1; i++) {
-      for (int j = 0; j < JDBC_CLASS[i].length && tmpDBnumber == -1; j++) {
-        if (myJDBCClassToUse.equals(JDBC_CLASS[i][j])) {
+    for (int i = 0; i < DataBaseDepending.JDBC_CLASS.length && tmpDBnumber == -1; i++) {
+      for (int j = 0; j < DataBaseDepending.JDBC_CLASS[i].length && tmpDBnumber == -1; j++) {
+        if (myJDBCClassToUse.equals(DataBaseDepending.JDBC_CLASS[i][j])) {
           tmpDBnumber = i;
         }
       }
@@ -81,30 +86,32 @@ public class DataBaseDepending {
    * @return name of the JDBC Class
    */
   public final String getJDBCClass() {
-    return JDBC_CLASS[this.dbnumber][1];
+    return DataBaseDepending.JDBC_CLASS[this.dbnumber][1];
   }
 
   /**
-   * The <code>getSQLTimeNow</code> class returns the SQL function used to get current date/time for the currently used
-   * database.
+   * The <code>getSQLTimeNow</code> class returns the SQL function used to get current date/time for
+   * the currently used database.
    *
    * @return SQL function
    */
   public final String getSQLTimeNow() {
-    return SQL_TIME_NOW[this.dbnumber];
+    return DataBaseDepending.SQL_TIME_NOW[this.dbnumber];
   }
 
   /**
-   * The <code>getSQLTimeOutdate</code> class returns SQL function to get current date/time - one second to outdate entries.
+   * The <code>getSQLTimeOutdate</code> class returns SQL function to get current date/time - one
+   * second to outdate entries.
    *
    * @return SQL function
    */
   public final String getSQLTimeOutdate() {
-    return SQL_TIME_OUTDATE[this.dbnumber];
+    return DataBaseDepending.SQL_TIME_OUTDATE[this.dbnumber];
   }
 
   /**
-   * The <code>getSQLDiffFromNow</code> class returns SQL function to get the difference from a given date/time to now in days.
+   * The <code>getSQLDiffFromNow</code> class returns SQL function to get the difference from a
+   * given date/time to now in days.
    *
    * @param pCompareField field to compare with current date
    * @return SQL function
@@ -126,8 +133,8 @@ public class DataBaseDepending {
   }
 
   /**
-   * The <code>getSQLDiffFromNow</code> class returns SQL function to encrypt passwords if database can do, otherwise fieldname
-   * is unchanged.
+   * The <code>getSQLDiffFromNow</code> class returns SQL function to encrypt passwords if database
+   * can do, otherwise fieldname is unchanged.
    *
    * @param pEncryptField field to encrypt
    * @return SQL function
