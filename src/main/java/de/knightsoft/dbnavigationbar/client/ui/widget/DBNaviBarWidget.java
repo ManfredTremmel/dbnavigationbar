@@ -259,7 +259,7 @@ public class DBNaviBarWidget extends Composite implements HasClickHandlers {
    *
    * @author Manfred Tremmel
    */
-  public enum ButtonState {
+  public enum ButtonState { // NOPMD
     /**
      * New.
      */

@@ -142,6 +142,7 @@
 			<groupId>de.knightsoft-net</groupId>
 			<artifactId>gwt-commons-lang3</artifactId>
 			<version>${gwt-commons-lang3.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.gwtplatform</groupId>

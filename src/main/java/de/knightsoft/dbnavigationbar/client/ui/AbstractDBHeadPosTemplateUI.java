@@ -199,8 +199,8 @@ public abstract class AbstractDBHeadPosTemplateUI<E extends AbstractDomainHeadPo
    * @return PushButton
    */
   protected final PushButton getDeleteButton() {
-    final PushButton deleteButton = new PushButton(
-        new Image(AbstractBasicDBTemplateUI.IMAGES.deletePosition()), (ClickHandler) pEvent -> {
+    return new PushButton(new Image(AbstractBasicDBTemplateUI.IMAGES.deletePosition()),
+        (ClickHandler) pEvent -> {
           final PushButton sender = (PushButton) pEvent.getSource();
           for (int i = 1; i < AbstractDBHeadPosTemplateUI.this.getPosTable().getRowCount(); i++) {
             if (sender.equals(AbstractDBHeadPosTemplateUI.this.getPosTable().getWidget(i,
@@ -212,7 +212,6 @@ public abstract class AbstractDBHeadPosTemplateUI<E extends AbstractDomainHeadPo
             }
           }
         });
-    return deleteButton;
   }
 
   /**
