@@ -16,7 +16,7 @@
 	<groupId>de.knightsoft-net</groupId>
 	<artifactId>dbnavigationbar</artifactId>
 	<packaging>jar</packaging>
-	<version>0.8.12</version>
+	<version>0.8.13</version>
 	<name>DBNavigationBar</name>
 	<inceptionYear>2011</inceptionYear>
 	<description>
@@ -87,7 +87,7 @@
 		<!-- Convenience property to set the GWT version -->
 		<gwt.version>2.8.1</gwt.version>
 		<junit.version>4.12</junit.version>
-		<gwt-commons-lang3.version>3.5-1</gwt-commons-lang3.version>
+		<gwt-commons-lang3.version>3.6-0</gwt-commons-lang3.version>
 		<gwtp.version>1.6</gwtp.version>
 		<gin.version>2.1.2</gin.version>
 		<maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
