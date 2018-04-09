@@ -95,7 +95,7 @@
 		<maven-javadoc-plugin.version>3.0.0</maven-javadoc-plugin.version>
 		<maven-surefire-plugin.version>2.21.0</maven-surefire-plugin.version>
 		<maven-checkstyle-plugin.version>3.0.0</maven-checkstyle-plugin.version>
-		<checkstyle.version>8.8</checkstyle.version>
+		<checkstyle.version>8.9</checkstyle.version>
 		<maven-pmd-plugin.version>3.8</maven-pmd-plugin.version>
 		<findbugs-maven-plugin.version>3.0.5</findbugs-maven-plugin.version>
 		<cobertura-maven-plugin.version>2.7</cobertura-maven-plugin.version>
